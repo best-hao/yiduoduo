@@ -1,0 +1,303 @@
+﻿@model Yitao.Web.Mobile.Models.FindPwdModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>找回支付密码-@{@WorkContext.SellerInfo.SellerName}</title>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weuix.min.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/icon.css"/>
+		<script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script> 
+		<style type="text/css">
+			body{background:#fff;width:7.5rem;margin:0 auto;font-size: 0.32rem;}
+			li,ul{list-style:none}
+			#Bind{display: none;}
+			.fl{float:left}
+			.fr{float:right}
+			.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
+			a{text-decoration:none}
+			a:active{background:#94e6f5;color:#fff!important}
+			.form-box,.form-box *{z-index: 1;}
+			.form-box{font-size: 0.32rem;color: #666;}
+			.input-box{height: 0.6rem;padding: 0.2rem;position: relative;}
+			.input-box:after{position: absolute;bottom: 0;left: .2rem;right: .2rem;width: 7.1rem;content: "";height: 1px;background: #f2f2f2;}
+			.input-box *{vertical-align: middle;display: inline-block;}
+			.input{height: 0.6rem;line-height: 0.6rem;border: 0;outline: none;width: 3.8rem;}
+			.input-box .icon{width: 0.6rem;font-size: 0.4rem;}
+			.input-box .label{width: 2.3rem;height: 0.6rem;line-height: 0.6rem;text-align: center;position: relative;font-size: 0.28rem;color: #f00;}
+			.input-box .label:after{position: absolute;top: 0; bottom: 0;left: 0;width: 1px;content: "";height: 0.6rem;background: #f2f2f2;}
+			.input-box .label:hover{background: #f2f2f2;}
+			.lang-input{width: 6.3rem;}
+			.confirm{position: fixed;z-index: 2; width: 7.5rem;bottom: 0;left: 50%;margin-left: -3.75rem;height: 0.9rem;line-height: 0.9rem;background: #fd4c60;color: #fff;font-size: 0.32rem;font-weight: bold; text-align: center;}
+			.shade{display: none; position: fixed;top: 0;left: 50%;bottom: 0;width: 7.5rem;margin-left: -3.75rem;z-index: 3;background: rgba(0,0,0,0.5);height: 100%;font-size: 0.24rem;}
+			.get-code-box{position: absolute;top: 50%;left: 50%;width: 7.1rem;margin-left: -3.55rem;height: 5rem;margin-top: -2.5rem;background: #fff;}
+			.get-code-header{height: 1rem;line-height: 1rem;text-align: center;font-size: 0.28rem;position: relative;}
+			.close-code-box{position:absolute;display:block;width:0.4rem;height:0.4rem;line-height:0.4rem;font-size:0.3rem;top:0.3rem;right:0.2rem;border:1px solid #f00;border-radius:50%;color:#f00;}
+			.get-code-form{width: 6.1rem;margin: 0 auto;}
+			.get-code-form .input-box{width: 6.1rem;margin: .3rem auto;padding: 0.2rem 0;}
+			.get-code-form .input-box:after{left: 0;right: 0;width: 4rem;}
+			.get-code-form .input-box .input{width: 4rem;}
+			.get-code-form .input-box .code-img{width: 2rem;height: 0.6rem;}
+			.btn-close{width:6.1rem;height:.8rem;text-align:center;background:red;color:#fff;line-height:.8rem;margin:0.8rem auto;border-radius: 5px;}
+			.assign-code-txt{background: #e6e6e6;color: #999;}
+		</style>
+	</head>
+	<body>
+		<div id="Bind">
+			<div class="header">
+				<div class="bg-orange weui-header "> 
+				    <div class="weui-header-left"> <a href="javascript:history.back()" class="icon icon-109 f-white">返回</a>  </div>
+				    <h1 class="weui-header-title">找回支付密码</h1>
+				    <div class="weui-header-right"></div> 
+				</div> 
+			</div>
+			<div class="form-box">
+				
+				<div class="input-box" v-if="mobile">
+					<span class="icon icon-90"></span>
+					<span class="input">@WorkContext.UserInfo.Mobile</span>
+					<input  id="tel" type="hidden" name="tel" value="@WorkContext.UserInfo.Mobile" placeholder="请输入手机号"/>
+					<label class="label" id="get-code"><span>获取验证码</span></label>
+				</div>
+				<div class="input-box" v-else>
+					<span class="icon icon-90"></span>
+					<input class="input" id="tel" type="tel" name="tel" v-model="mobile" placeholder="请输入手机号"/>
+					<label class="label" id="get-code"><span>获取验证码</span></label>
+				</div>
+				<div class="input-box">
+					<span class="icon icon-115"></span>
+					<input class="input" id="code1" type="tel" name="code"  style="display: none;"/>
+					<input class="input lang-input" id="code" name="code" v-model="code" type="tel" placeholder="请输入短信验证码"/>
+				</div>
+				<div class="input-box">
+					<span class="icon icon-64"></span>
+					<input class="input" id="newpaypwd1" name="newpaypwd" type="tel"  style="display: none;"/>
+					<input class="input lang-input" name="newpaypwd" id="newpaypwd" v-model="newpaypwd" type="password" placeholder="请输入6位纯数字新支付密码"/>
+				</div>
+			</div>
+			<div class="confirm" id="confirm">确定</div>
+			<div class="shade">
+					
+			</div>
+			<script id="tpl-get-code" type="text/html">
+				
+				<div class="get-code-box">
+					<div class="get-code-header">
+						输入图形验证码
+						<span class="icon icon-95 close-code-box" onclick="closeImgCode()"></span>
+					</div>
+					<div class="get-code-form">
+						<div class="input-box">
+							<input class="input" id="imgcode1" type="tel" name="imgcode" style="display: none;"/>
+							<input class="input lang-input" maxlength="4" name="imgcode" id="imgcode" type="tel" v-model="imgcode" placeholder="请输入图片上的数字"/>
+							<img class="code-img" onclick="getImgCode()" src="/m/tool/verifyimage?width=100&height=30"/>
+						</div>
+						<div class="btn-close" onclick="ConfirmImgCode()">确定</div>
+					</div>
+				</div>
+			</script>
+			<script id="code-txt" type="text/html">
+				<span>获取验证码</span>
+			</script>
+			<script id="assign-code-txt" type="text/html">
+				<span class="assign-code-txt"><span id="count-down"><%=time%></span>秒后重新获取</span>
+			</script>
+		</div>
+		<script type="text/javascript">
+			var timer;
+			var time = 60;
+			var isClick = 0;
+			function getImgCode() {
+				$('.code-img').attr('src', '/m/tool/verifyimage?width=100&height=30&T=' + Math.random());
+			}
+			function countDown(){
+				if(time>0){
+					time--;
+					$("#count-down").text(time);
+				}else{
+					clearInterval(timer);
+					time = 60;
+					isClick = 0;
+					var html = $("#code-txt").html();
+					$("#get-code").html(html);
+				}
+			}
+			//手机验证函数
+            function IsTel(Tel) {
+                var re = new RegExp(/^1(3|4|5|6|7|8|9)\d{9}$/);
+                var retu = Tel.match(re);
+                if (retu) {
+                    return true;
+                } else {
+                    return false;
+                };
+            };
+			function getCode() {
+				var Tel = $("#tel").val();
+				$.ajax({
+                    type: "post",
+                    url: "/API/Tool/SendCode",
+                    async: false,
+                    data: { phone: Tel , sellerid: 14},
+                    dataType: "json",
+                    success: function (rel) {
+                        console.log(rel);
+                        if (rel.Code == 0) {
+                            $.toast(rel.Message,"cancel");
+                            return false;
+                        }else{
+                        	$.toast("发送成功，请注意查收短信");
+                        	timer = setInterval(countDown, 1000);
+                        }
+                    }
+                });
+				
+			}
+			function ConfirmImgCode() {
+				var imgcode = $("#imgcode").val();
+				if(imgcode){
+					$.ajax({
+						type:"post",
+						url:"/m/tool/VerifyInputStr",
+						async:true,
+						data:{inputstr:imgcode},
+						dataType:"json",
+						success:function(rel) {
+							if(rel.Code==1){
+								
+								isClick = 1;
+								$(".shade").hide();
+								var tplx = document.getElementById("assign-code-txt").innerHTML;
+								var html = tpl(tplx, time);
+								$("#get-code").html(html);
+								getCode();
+							}else{
+								$.alert(rel.Message);
+							}
+						}
+					});
+				}else{
+					$.toast("请填写图片验证码","cancel");
+				}
+			}
+			function closeImgCode() {
+				$(".shade").hide();
+			}
+			function ajaxConfirm() {
+				var Tel = $("#tel").val();
+				var Code = $("#code").val();
+				var newpaypwd = $("#newpaypwd").val();
+				console.log(newpaypwd);
+				$.ajax({
+					type:"post",
+					url:"/Api/User/EditPayPwd",
+					async:true,
+					data:{mobile:Tel, code:Code, newpaypwd:newpaypwd},
+					dataType:"json",
+					success:function(rel) {
+						if(rel.code==1){
+							$.toast("修改成功");
+							var backurl = window.location.href;
+                            //backurl = backurl.split("returnUrl=")[1];
+                            //backurl = decodeURIComponent(backurl);
+                            backurl = "@WorkContext.UrlReferrer.ToString()";
+                            if(backurl){
+                            	window.location.href = backurl;
+                            }else{
+                            	window.location.href = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m/usercenter/home';
+                            }
+						}else{
+							$.alert(rel.message);
+						}
+					}
+				});
+			}
+			
+			
+			var vm = new Vue({
+				el: "#Bind",
+				data: {
+					mobile: "@WorkContext.UserInfo.Mobile",
+					code: "",
+					newpaypwd: "",
+					imgcode: ""
+				},
+				created: function() {
+					
+				},
+				watch: {
+					mobile: function(val,oldval) {
+	        			this.mobile = val.replace(/[^\d]/g,"");
+	        			if(this.mobile.length>11){
+	        				this.mobile = oldval;
+	        			}
+	        		},
+					code: function(val,oldval) {
+	        			this.code = val.replace(/[^\d]/g,"");
+	        			if(this.code.length>6){
+	        				this.code = oldval;
+	        			}
+	        		},
+	        		imgcode: function(val,oldval) {
+	        			this.imgcode = val.replace(/[^\d]/g,"");
+	        			if(this.imgcode.length>4){
+	        				this.imgcode = oldval;
+	        			}
+	        		},
+					newpaypwd: function(val,oldval) {
+	        			this.newpaypwd = val.replace(/[^\d]/g,"");
+	        			if(this.newpaypwd.length>6){
+	        				this.newpaypwd = oldval;
+	        			}
+	        		}
+				},
+				methods: {
+					
+				}
+			});
+			
+			$(function(){
+				$("#Bind").css("display","block");
+				$("#get-code").on("click",function() {
+					var Tel = $("#tel").val();
+					if(IsTel(Tel)){
+						if(isClick==0){
+							var html = $("#tpl-get-code").html();
+							$(".shade").html(html);
+							$(".shade").show();
+						}
+					}else{
+						$.toast("手机号错误","cancel");
+					}
+				});
+				$("#confirm").on("click",function(){
+					var Tel = $("#tel").val();
+					var Code = $("#code").val();
+					var newpaypwd = $("#newpaypwd").val();
+					if(IsTel(Tel)){
+						
+						if(Code.length==6){
+							if(newpaypwd.length==6){
+								ajaxConfirm();
+							}else{
+								$.alert("支付密码必须是6位纯数字");
+							}
+						}else{
+							$.alert("短信验证码是6位数");
+						}
+					}else{
+						$.toast("手机号错误","cancel");
+					}
+				});
+			})
+		</script>
+	</body>
+</html>
+

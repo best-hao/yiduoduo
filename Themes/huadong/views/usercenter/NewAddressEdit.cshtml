@@ -1,0 +1,87 @@
+﻿@model Yitao.Web.Mobile.Models.ShipAddressModel
+@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>新增地址/编辑地址-@{@WorkContext.ShopConfig.SiteTitle}</title>
+    <meta content="@WorkContext.ShopConfig.SEODescription" name="description">
+    <meta content="@WorkContext.ShopConfig.SEOKeyword" name="keywords">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weuix.min.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/mobile/newadd.css"/>
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Js/mobile/picker.js"></script>
+    <script src="/Js/mobile/picker-city.js"></script>
+    
+</head>
+<body>
+	<!--header部分-->
+		<div class="weui-header"> 
+	    	<div class="weui-header-left">
+	    		<a class="icon icon-109 f-black" href="index.html"></a>
+	    	</div>
+	    	<h1 class="weui-header-title f-black">新建收货地址</h1>
+   		</div>
+    	<form action="index.html">
+    		<!--content部分-->
+	    	<div class="weui_cells  weui_cells_form">
+	 			<div class="weui_cell">
+	            	<div class="weui_cell_bd weui_cell_primary">
+	                    <p>收货人：<input type="text" name="user" id="username"/></p>
+	               </div>
+	            </div>
+	 			<div class="weui_cell">
+	            	<div class="weui_cell_bd weui_cell_primary">
+	                    <p>手机号码：<input type="tel" name="phone" id="tel"/></p>
+	               </div>
+	            </div>
+	 			
+	            <div class="weui_cell">
+	                <div class="weui_cell_hd"><label for="" class="weui_label">所在地区：</label></div>
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <input class="weui_input" type="text" value="" id='ssx'/>
+	                </div>
+              
+            	</div>  
+
+	 			<div class="weui_cell">
+	            	<div class="weui_cell_bd weui_cell_primary">
+	                    <p>详细地址：<input type="text" placeholder="街道、楼牌号等" name="block" id="block"></p>
+	               </div>
+	            </div>
+	 			<div class="weui_cell">
+	            	<div class="weui_cell_bd weui_cell_primary">
+	                    <p class="tag">标签:</p>
+	                    
+	                    <label for="tag1"><input type="radio" name="tag" id="tag1" value="家">家</label>
+                    	
+                    	<label for="tag2"><input type="radio" name="tag" id="tag2" value="公司">公司</label>
+                    	
+                    	<label for="tag3"><input type="radio" name="tag" id="tag3" value="学校">学校</label>
+                    	<a href="#">+</a>
+                    	<div class="search">
+                    		<input type="search" name="" placeholder="请输入标签名称，最多五个字" maxlength="5"/>
+                    		<input type="button" value="确认"/>
+                    	</div>
+	               </div>
+	            </div>
+	             
+			</div> 
+			<!--footer-->
+			<div class="weui-footer weui-footer-fixed-bottom">
+            	<input type="submit" value="保存" class="weui_btn weui_btn_inline weui_btn_warn f-white" id="submit-btn"/>
+    		</div>
+    	</form>
+    	<script src="/Js/mobile/click.js"></script>
+</body>
+</html>

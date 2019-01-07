@@ -1,0 +1,255 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>热卖榜-@{@WorkContext.SellerInfo.SellerName}</title>
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/weui.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/weui2.css" />
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css"/>
+		<script src="/Js/Mobile/boss/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		<script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+		<style type="text/css" media="screen">
+			*{-webkit-box-sizing: border-box; box-sizing: border-box;}
+			.activity-top-page{width: 7.5rem; max-width: 7.5rem; margin: 0 auto; padding-bottom: 0.8rem;}
+			[v-cloak]{display: none;}
+			.common-header{position: relative;background: #fff;height: 0.8rem;line-height: 0.8rem;margin-bottom: 0.06rem;-moz-box-shadow: 0px 2px 10px #d9d9d9;-webkit-box-shadow: 0px 2px 10px #d9d9d9;box-shadow: 0px 2px 10px #d9d9d9; z-index: 100;}
+			.common-header .header-back{position: absolute;top: 0;left: 0;width: .6rem;text-align: center;}
+			.header-back .icon, .header-menu .icon{width: 0.6rem;height: 100%;}
+			.common-header .header-back span, .common-header .header-menu span{display: block;}
+			.ell-1{overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+			.common-header .title{text-align: center;padding: 0 1rem;color: #ff4800;font-size: 0.3rem;}
+			.common-header .header-menu{position: absolute;top: 0;right: 0;width: .6rem;text-align: center;}
+			.category-content{width: 100%; position: relative; z-index: 100;}
+			.category-ul{width: 6.5rem;height: 1rem;line-height: 0.5rem;white-space: nowrap;overflow-x: auto;float: left;}
+			.category-ul li{color: #444; margin-right: 0.2rem;text-align: center;font-size: 0.3rem;display: inline-block;line-height: 0.6rem;height: 0.6rem;}
+			.category-show .category-ul .active{ border-bottom: 2px solid #ff4800; }
+			.category-hide .category-two .active{ background-color:#ff4800; border-color:#ff4800; color:#fff;}
+			.category-show .category-menu,.category-hide .category-menu{width: 0.7rem;height: 1rem;float: right;line-height: 0.6rem;text-align: right;position: relative;}
+			.category-show .category-menu:after,.category-hide .category-menu:after{content:"";width: 1px;height: 0.4rem;position: absolute;top: 0.3rem;left: 0.1rem; background-color: #999;}
+			.category-hide{ background-color:#fff; padding: 0 0.1rem; position: absolute; top: 0; left: 0; right: 0; margin: 0 auto;}
+			.category-show{padding: 0 0.1rem;}
+			.category-banner{width: 100%;}
+			.category-banner img{width: 100%;display: block;}
+			.category-name{width: 100%;line-height: 1rem;text-align: center;background: url(/Images/Mobile/statistic/banner-bottom-bg.png) no-repeat center;background-size: 3.5rem;}
+			.category-name .name{font-size: 0.4rem;background: linear-gradient(to right, #6CCCFC, #884898);-webkit-background-clip: text;color: transparent;}
+			.weui_media_box.weui_media_appmsg .weui_media_hd{margin-right: 0.2rem;width: 2rem;height: 2rem;text-align: center; position: relative;}
+			.weui_panel_bd .sort{ font-size: 0.6rem; color: #ff4800; position: absolute; left: 0.15rem;top: 0; line-height: 1; z-index: 9;}
+			.weui_panel_bd .sort i{width: 100%; text-align: center; font-size: 0.3rem; color:#fff; position: absolute; left: 0;top: 0; line-height: 1.5; font-style: normal;}
+			.weui_panel_bd{background-color:#fff;margin-bottom: 0.2rem;}
+			.weui_media_box{padding: 0.2rem;}
+			.weui_media_box .weui_media_title{font-size: 0.35rem;height: 1rem;line-height: 1.5;overflow: hidden;text-overflow: ellipsis;white-space: normal;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;color:#666; margin-bottom: 0.2rem;}
+			.weui_media_box .weui_media_desc{line-height: 0.5rem;font-size: 0.3rem;}
+			.weui_media_box .weui_media_desc .sold{float: right;}
+			.weui_media_box .weui_media_desc .color, .weui_media_box .weui_media_desc .score .give{font-style: normal;color: #ff4800;}
+			.weui_media_box .weui_media_desc .color-weight{ font-size: 0.4rem; }
+			.weui_media_box .weui_media_desc .del{text-decoration: line-through; font-style: normal;}
+			.weui_media_box .weui_media_desc .score .give{display: inline-block;width: 0.4rem;height: 0.4rem;line-height: 0.4rem;border-radius: 3px;background-color: #ff4800;font-weight: bold;color: #fff;text-align: center;margin-right: 0.1rem;}
+			.clear{ clear: both; float: none; }
+			.category-two{ overflow: hidden; background-color: #fff; padding: 0 0.1rem; }
+			.category-two .cate-name{ float: left; border-radius: 20px; padding: 2px 8px; border: 1px solid #ececec; text-align: center;  font-size: 0.3rem; color:#444; background-color: #fff; margin: 0 0.15rem 0.3rem 0;}
+			.mask{ width: 7.5rem; height: 100%; position: fixed; left: 50%; margin-left: -3.75rem; right: 0; top: 0; background-color: rgba(0,0,0,.7); z-index: 99;}
+			.footer-bar{text-align: center;position: fixed;width: 7.5rem;height: 0.8rem;line-height: 0.8rem;background: #fff;bottom: 0;left: 50%;margin-left: -3.75rem;font-size: 0.32rem;color: #666; z-index: 10;}
+	        .footer-bar a{color: #666;}
+	        .footer-bar .cur{color: #fff;background: #ff4800;}
+	        .footer-bar .icon{font-size: 0.4rem;}
+	        .weui_cell a{color: #666;}
+			/*.category-two .cate-name:nth-child(4n){margin-right: 0;}*/
+		</style>
+	</head>
+
+	<body>
+		<div class="activity-top-page" id="app" v-cloak>
+			<div class="common-header">
+				<div class="header-back" v-on:click="goToBack()"><span class="icon iconfont">&#xe60e;</span></div>
+			    <div class="title ell-1">排行榜</div>
+			    <!--div class="header-menu" v-on:click="share()"><span class="icon iconfont">&#xe620;</span></div-->
+		    </div>
+		    <div class="category-content">
+		    	<div class="category-show" v-if="categoryShow">
+			    	<ul class="category-ul">
+			    		<li v-for="(item,index) of categoryList" v-bind:key="index" v-on:click="openList(item.cateid, item.name, item.imgurl, index, 0)" v-bind:class="[activeClass == index ? 'active' : '']">{{item.name}}</li>
+			    	</ul>
+			    	<div class="category-menu" v-on:click="showCategory(0)">
+			    		<i class="icon iconfont">&#xe619;</i>
+			    	</div>
+			    </div>
+			    <div class="category-hide" v-if="categoryHide">
+			    	<ul class="category-ul">
+			    		<li>分类</li>
+			    	</ul>
+			    	<div class="category-menu" v-on:click="showCategory(1)">
+			    		<i class="icon iconfont">&#xe6a4;</i>
+			    	</div>
+			    	<div class="clear"></div>
+			    	<div class="category-two">
+			    		<div class="cate-name" v-for="(item,index) of categoryList" v-bind:key="index" v-on:click="openList(item.cateid, item.name, item.imgurl, index, 1)" v-bind:class="[activeClass == index ? 'active' : '']">{{item.name}}</div>
+			    	</div>
+			    </div>
+		    </div>
+		    <div class="category-banner" v-if="cateImgUrl != ''">
+		    	<a href="javascript:;">
+		    		<img v-bind:src="'@(WorkContext.ShopConfig.ImageCDN)/'+cateImgUrl+'?w=500'" />
+		    	</a>
+		    </div>
+		    <div class="category-name">
+		    	<div class="name">{{categoryOuterName}}</div>
+		    </div>
+		    <div class="weui_panel_bd" v-for="(item,index) of productList" v-bind:key="index">
+                <a v-bind:href="'/m/product/detail?id='+item.productid+'&IsApp=@WorkContext.IsApp'" class="weui_media_box weui_media_appmsg">
+                	<div class="icon iconfont sort">&#xe77e;<i>{{index+1}}</i></div>
+                    <div class="weui_media_hd">
+                        <img class="weui_media_appmsg_thumb" v-bind:src="item.picurl" alt="">
+                    </div>
+                    <div class="weui_media_bd">
+                        <h4 class="weui_media_title">{{item.productname}}</h4>
+                        <p class="weui_media_desc"><i class="color color-weight">¥{{item.saleprice}}</i></strong></p>
+                        <p class="weui_media_desc"><span class="score"><i class="give">送</i>约 <i class="color">{{item.giftProfits}}</i></span>积分<span class="sold">已售{{item.salecount}}件</span></p>
+                    </div>
+                </a>
+            </div>
+            <div class="mask" v-if="mask"></div>
+		</div>
+		<div class="footer-bar">
+			<div class="weui-flex">
+				<a href="/m/Statistic/ProductTop?IsApp=@WorkContext.IsApp" class="weui-flex-item cur">
+					<span class="icon iconfont">&#xe672;</span>
+					<span>热卖榜</span>
+				</a>
+				<a href="/m/Statistic/ShopTop?IsApp=@WorkContext.IsApp" class="weui-flex-item">
+					<span class="icon iconfont">&#xe66d;</span>
+					<span>店铺榜</span>
+				</a>
+			</div>
+		</div>
+	</body>
+	<script>
+		var IsApp = "@WorkContext.IsApp";
+		var vm = new Vue({
+			el: "#app",
+			data: {
+				categoryShow: true,
+				categoryHide: false,
+				mask: false,
+				categoryList:[],
+				productList:[],
+				categoryOuterName:"",  //分类标题
+				cateImgUrl: "", //分类banner
+				activeClass: 0,  //初始默认选中第一个
+			},
+			created: function() {
+				var that = this;
+					//获取热卖榜系统分类
+					that.getProductTopSysList();
+			},
+			methods: {
+				//分类切换
+				showCategory: function(status){
+					var that = this;
+						if(status == 1){
+							that.mask = false;
+						}else{
+							that.mask = true;
+						}
+						that.categoryShow = !that.categoryShow;
+						that.categoryHide = !that.categoryHide;
+				},
+				//获取热卖榜系统分类
+				getProductTopSysList: function(){
+					var that = this;
+					$.ajax({
+						type: "get",
+						url: "/Api/Category/GetProductTopSysList?v="+Math.random(),
+						dataType: "json",
+						async: true,
+						success: function(res){
+							if(res.code == 1){
+								//console.log(res);
+								var data = res.data;
+								data.forEach(function(element, index){
+									that.categoryList.push(element);
+								});
+								/*
+									初始获取data[0].cateid以获取对应商品列表以及分类名称data[0].name,
+									that.activeClass为初始默认选中第一个， 0表示class="category-show" 默认样式初始化
+									data[0].imgurl为初始化分类banner
+								*/
+								that.openList(data[0].cateid, data[0].name, data[0].imgurl, that.activeClass, 0);
+							}
+						},
+					});
+				},
+				/*
+					openList方法index参数表示切换时需要传的下标，value==0表示category-show内的分类，1表示
+					category-two内的分类，当为1时，切换时需要隐藏categoryHide，mask层，同时categoryShow分类列表展示
+					cateimgurl为分类banner
+				*/
+				openList: function(cateid, catename, cateimgurl, index, value){
+					var that = this;
+					if(value == 1){
+						that.categoryHide = false;
+						that.categoryShow = true;
+						that.mask = false;
+					}
+					that.activeClass = index;
+					that.cateImgUrl = cateimgurl;  //给分类banner赋值
+					$.ajax({
+						type: "get",
+						url: "/Api/Statistic/ProductTop?v="+Math.random(),
+						dataType: "json",
+						async: true,
+						data: {
+							CateId: cateid,
+						},
+						success: function(res){
+							if(res.code == 1){
+								//console.log(res);
+								var data = res.data;
+								//清空数组，重新循环选择的分类下商品列表
+								that.productList = [];
+								data.forEach(function(element, index){
+									that.productList.push(element);
+									that.categoryOuterName = catename;
+									//积分赠送
+									element.giftProfits = Number((element.profits/100)*5*element.saleprice).toFixed(2);
+									//判断商品图片
+		                            if(element.picurl.indexOf("http") > -1){
+		                                element.picurl = element.picurl+'?w=120&h=120';
+		                            }else if (element.picurl.indexOf("upload") > -1) {
+		                                element.picurl = '@(WorkContext.ShopConfig.ImageCDN)/'+element.picurl+'?w=120&h=120';
+		                            }else{
+		                                element.picurl = "/Images/Mobile/statistic/nopicture.jpg?w=120&h=120";
+		                            }
+								});
+							}
+						},
+					});
+				},
+				//返回交互
+				goToBack: function() {
+					var that = this;
+					if(IsApp==1){
+						if(navigator.userAgent.indexOf("iPhone")>0){
+							gobacklastpage();
+						}
+						if(navigator.userAgent.indexOf("Android")>0){
+			                window.js.goBack();
+						}
+					}else{
+						window.location.href="/m/home/index";
+					}
+				},
+			}
+		});
+	</script>
+</html>

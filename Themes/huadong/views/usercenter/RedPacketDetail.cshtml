@@ -1,0 +1,638 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+	    
+	    <meta name="format-detection" content="telephone=no">
+	    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	    <meta name="apple-mobile-web-app-capable" content="yes" />
+	    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+	    <meta http-equiv="Pragma" content="no-cache" />
+	    <meta http-equiv="Cache-Control" content="no-cache" />
+	    <meta http-equiv="Expires" content="0" />
+	    <title>我的分润-@{@WorkContext.SellerInfo.SellerName}</title>
+	    <link rel="stylesheet" href="/Mobile/weui/style/weui.css" />
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css" />
+	    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/usercenter/red-packet/red_packet_detail.css?v=0.20"/>
+	    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+	    <script src="/Mobile/weui/zepto.min.js"></script>
+		<script src="/Mobile/weui/picker.js"></script>
+		<script src="/Mobile/weui/picker-city.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/loading.css"/>
+		<style type="text/css">
+			.detail-right{font-size: 0.28rem;}
+			.shaixuan-box .item{width: 85%;}
+		</style>
+	</head>
+
+	<body>
+		
+		<div class="wapper">
+			<div id="packet">
+				<div class="header">
+					<div class="weui-header bg-white">
+						<div class="weui-header-left">
+							<a href="javascript:window.history.back()" class="f-black">
+								<span class="icon iconfont">&#xe60e;</span>
+							</a>
+						</div>
+						<h1 class="weui-header-title">分润明细</h1>
+						<!--div class="weui-header-right" v-on:click="showShaixuan()">
+							<a class="f-black">筛选</a>
+						</div-->
+					</div>
+				</div>
+				<div class="shaixuan-box">
+					<div class="weui-header">
+						<div class="weui-header-left" v-on:click="closeShaixuan()">
+							<a><span class="icon iconfont">&#xe60e;</span></a>
+						</div>
+						<h1 class="weui-header-title">筛选</h1>
+						<div class="weui-header-right"></div>
+					</div>
+					<div class="title">选择条件</div>
+					<div class="lists">
+						<div class="weui-flex">
+							<div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index<3">
+								<div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+							</div>
+						</div>
+						<div class="weui-flex">
+							<div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=3 && index<6">
+								<div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+							</div>
+						</div>
+						<div class="weui-flex">
+							<div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=6 && index<9">
+								<div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+							</div>
+						</div>
+						<div class="weui-flex">
+							<div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=9 && index<11">
+								<div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+							</div>
+						</div>
+						<div class="weui-flex">
+							<div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=11 && index<13">
+								<div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+							</div>
+						</div>
+						<div class="weui-flex">
+							<div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=13 && index<15">
+								<div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+							</div>
+						</div>
+						<div class="weui-flex">
+							<div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=15 && index<17">
+								<div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+							</div>
+						</div>
+						<div class="weui-flex">
+							<div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=17 && index<19">
+								<div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+							</div>
+						</div>
+						<div class="weui-flex">
+							<div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=19 && index<21">
+								<div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+							</div>
+						</div>
+						<div class="weui-flex">
+							<div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=21 && index<23">
+								<div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+							</div>
+						</div>
+						<div class="weui-flex">
+							<div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=23 && index<25">
+								<div class="item" :class="{'cur':(index==24 && FlowType=='') || (index!=24 && FlowType==item.id)}" v-on:click="getLists(item)">{{item.title}}</div>
+							</div>
+						</div>
+						<!--<div class="weui-flex">
+							<div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=23 && index<24">
+								<div class="item" :class="{'cur':(index==23 && FlowType=='') || (index!=23 && FlowType==item.id)}" v-on:click="getLists(item)">{{item.title}}</div>
+							</div>
+						</div>-->
+						
+					</div>
+				</div>
+				<div class="content-box">
+					<div class="data-header top-data">
+						<div class="infos">
+							<div class="time">{{curData.day}}</div>
+							<!--<div class="detail">
+								<span>收入分润：{{curData.getMoney}}</span>
+								<span>支出分润：{{curData.payMoney}}</span>
+							</div>-->
+							<div class="time-select">
+								<span class="icon iconfont rili">&#xe639;</span>
+								<input class="weui_input" type="text"  value="" id='date' readonly />
+							</div>
+						</div>
+						<div class="infos" v-if="lists.length<=0" style="height: 1rem;line-height: 1rem;text-align: center;color: #999;">
+							暂无数据
+						</div>
+					</div>
+					<div class="boxies">
+						<!--<div class="data-header" >
+							<div class="infos">
+								<div class="time">{{curData.day}}</div>
+								<div class="detail">
+									<span>收入分润：{{curData.getMoney}}</span>
+									<span>支出分润：{{curData.payMoney}}</span>
+								</div>
+							</div>
+						</div>-->
+						<div class="lists-box">
+							<ul>
+								<li v-for="(itemLi, indexLi) of lists" :key="indexLi" v-on:click="showDetail(itemLi)">
+									<div class="detail-left">
+										<span class="icon iconfont redpacket">&#xe610;</span>
+									</div>
+									<div class="detail-center">
+										<div class="title" >{{nameByType(itemLi.flowtype)}}</div>
+										<div class="time">{{itemLi.addtime}}</div>
+									</div>
+									<div class="detail-right" :style="{'color':colorByType(itemLi.flowtype)}">
+										<span class="fuhao" >{{fuhaoByType(itemLi.flowtype)}}</span><span>{{itemLi.savingmoney}}</span>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!--<div v-for="(item, index) of lists" 
+						:data-index="index" 
+						:data-getMoney="item.getMoney"
+						:data-payMoney="item.payMoney"
+						:data-day="item.day" 
+						class="boxies" :class="{'cur-list':index==0}">
+						<div class="data-header">
+							<div class="infos">
+								<div class="time">{{item.day}}</div>
+								<div class="detail">
+									<span>收入分润：{{item.getMoney}}</span>
+									<span>支出分润：{{item.payMoney}}</span>
+								</div>
+							</div>
+						</div>
+						
+						<div class="lists-box" :class="{'first':index==0}">
+							<ul>
+								<li v-for="(itemLi, indexLi) of item.data" :key="indexLi" v-on:click="showDetail(itemLi)">
+									<div class="detail-left">
+										<span class="icon iconfont redpacket">&#xe632;</span>
+									</div>
+									<div class="detail-center">
+										<div class="title" >{{nameByType(itemLi.flowtype)}}</div>
+										<div class="time">{{itemLi.addtime}}</div>
+									</div>
+									<div class="detail-right">
+										<span class="fuhao">{{fuhaoByType(itemLi.flowtype)}}</span><span>{{itemLi.savingmoney}}</span>
+									</div>
+								</li>
+								
+							</ul>
+						</div>
+					</div>-->
+				</div>
+				
+				<div class="data-detail-box">
+					<div class="weui-header">
+						<div class="weui-header-left" v-on:click="closeDetail()">
+							<a><span class="icon iconfont">&#xe60e;</span></a>
+						</div>
+						<h1 class="weui-header-title">明细详情</h1>
+						<div class="weui-header-right"></div>
+					</div>
+					<div class="detail-infos-box">
+						<div class="title ell">
+							<span class="icon iconfont">&#xe610;</span>
+							<span>{{curDetail.shopname}}</span>
+						</div>
+						<h1>
+							<span>{{fuhaoByType(curDetail.flowtype)}}</span>
+							{{curDetail.savingmoney}}
+						</h1>
+						<div class="infos-line ell">
+							<div class="left">订单编号</div>
+							<div class="right tright">{{curDetail.paymentsn}}</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="infos-line ell">
+							<div class="left">交易类型</div>
+							<div class="right tright">{{nameByType(curDetail.flowtype)}}</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="infos-line ell">
+							<div class="left">订单时间</div>
+							<div class="right tright">{{curDetail.addtime}}</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="infos-line ell">
+							<div class="left">备注</div>
+							<div class="right tright">{{curDetail.memo}}</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+				<div class="loading" :style="{'margin-top':loadingTop+'rem'}">
+					<div class="weui_cells_title tcenter hide" id="more">
+						<div class="weui-loadmore">
+				            <i class="weui-loading"></i>
+				            <span class="weui-loadmore-tips">正在加载</span>
+				        </div>
+					</div>
+					<div v-if="page==1" class="weui_cells_title tcenter hide" id="nomore">
+						暂无数据
+					</div>
+					<div v-else class="weui_cells_title tcenter hide" id="nomore">
+						没有更多数据了
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="curtain hide">
+			<div class="loader Rotation"></div>
+			<div class="loadTit"><icon class='icon iconfont'>&#xe649;</icon></div>
+		</div>
+	</body>
+	<script type="text/javascript">
+//		$.showLoading();
+ $('.curtain').removeClass("hide");
+		var curcurtime = new Date();
+		var curyear = curcurtime.getFullYear();
+		var curmon = curcurtime.getMonth()+1;
+		if(curmon<=9){
+			curmon = "0"+curmon;
+		}
+		curcurT = curyear+"-"+curmon;
+		var curstartTime = curcurT+"-"+"01";
+		$("#date").val(curstartTime);
+		var curtimearr = curstartTime.split("-");
+		if(curtimearr[1]>=12){
+			curtimearr[0] = Number(curtimearr[0])+1;
+			curtimearr[1] = "01";
+		}else{
+			curtimearr[1] = Number(curtimearr[1])+1;
+			if(curtimearr[1]<10){
+				curtimearr[1] = "0"+curtimearr[1];
+			}
+		}
+		
+		var curendTime = curtimearr[0]+"-"+curtimearr[1]+"-"+curtimearr[2];
+		var vm = new Vue({
+			el: '#packet',
+			data: {
+				isShow: false,
+				curType: 1,
+				page: 1,
+				loadingTop: 0,
+				today: curcurT,
+				curData: {day:curcurT, getMoney:0, payMoney:0},
+				dayStr: curcurT,
+				scrollHeight: 0,
+				curDetail: {},
+				curTypeName: {},
+				curFuhao: "",
+				FlowType: "",
+				StartTime: curstartTime,
+				EndTime: curendTime,
+				firstYear: 201806,
+				dataMon: {},
+				shaixuan: [
+					{id: 1,title: "充值"},
+					{id: 2,title: "消费"},
+					{id: 3,title: "退款"},
+					{id: 4,title: "缴费"},
+					{id: 5, title: "营收"},
+					/*{id: 6, title: "互动获得"},
+					{id: 7, title: "分成"},*/
+					{id: 8, title: "拆分润"},
+					{id: 9, title: "提现"},
+					{id: 10, title: "区域入驻奖励"},
+					{id: 11, title: "推荐商户奖励"},
+					/*{id: 12, title: "系统退款"},*/
+					{id: 13, title: "特惠推荐赠送"},
+					{id: 14, title: "超级码特惠推荐赠送"},
+					{id: 15, title: "转转扣除"},
+					{id: 16, title: "转转增加"},
+					{id: 17, title: "商家积分购销售增加"},
+					{id: 18, title: "系统增加"},
+					{id: 19, title: "系统扣除"},
+					{id: 20, title: "区代分润分红"},
+					{id: 21, title: "市代分润分红"},
+					{id: 22, title: "省代分润分红"},
+					{id: 23, title: "超级码收益"},
+					{id: 24, title: "一级超级码收益"},
+					{id: 25, title: "幸运购扣除"},
+					{id: 26, title: "粉丝购买分成"},
+					{id: 27, title: "粉丝销售分成"},
+					{id: 99, title: "全部"}
+				],
+				day: [],
+				lists: [
+					
+				]
+			},
+			created: function() {
+				this.initGetData();
+			},
+			methods: {
+				initGetData: function() {
+					var _this = this;
+					_this.loadingTop = 0;
+					//var url = "/Api/User/GetUserCardFlow?v="+Math.random()+"&userid="+"@WorkContext.Uid&FlowType="+_this.FlowType+"&StartTime="+_this.StartTime+"&EndTime="+_this.EndTime+"&page="+_this.page+"&size=15";
+					url = "/Api/User/GetUserCardFlow?v="+Math.random()+"&userid="+"@WorkContext.Uid&FlowType=8&StartTime="+_this.StartTime+"&EndTime="+_this.EndTime+"&page="+_this.page+"&size=15";
+					// if(_this.FlowType==""){
+					// 	if(_this.StartTime==""){
+					// 		url = "/Api/User/GetUserCardFlow?v="+Math.random()+"&userid="+"@WorkContext.Uid&page="+_this.page+"&size=15";
+					// 	}else{
+					// 		url = "/Api/User/GetUserCardFlow?v="+Math.random()+"&userid="+"@WorkContext.Uid&StartTime="+_this.StartTime+"&EndTime="+_this.EndTime+"&page="+_this.page+"&size=15";
+					// 	}
+					// }else{
+					// 	if(_this.StartTime==""){
+					// 		url = "/Api/User/GetUserCardFlow?v="+Math.random()+"&userid="+"@WorkContext.Uid&FlowType="+_this.FlowType+"&page="+_this.page+"&size=15";
+					// 	}else{
+					// 		url = "/Api/User/GetUserCardFlow?v="+Math.random()+"&userid="+"@WorkContext.Uid&FlowType="+_this.FlowType+"&StartTime="+_this.StartTime+"&EndTime="+_this.EndTime+"&page="+_this.page+"&size=15";
+					// 	}
+					// }
+					
+					
+					$.ajax({
+						type:"get",
+						url:url,
+						async:true,
+						success: function(rel) {
+							$("#more").addClass("hide");
+							if(rel.code==1){
+								rel.data.forEach(function(v, i){
+									_this.lists.push(v);
+								});
+								_this.page++;
+							}else{
+								if(_this.page==1){
+									_this.loadingTop = 1;
+								}
+								$("#nomore").removeClass("hide");
+							}
+							//_this.dayStr = _this.lists[_this.lists.length-1].addtime.substring(0,7);
+						}
+					});
+				},
+				getDataByParams: function() {
+					this.page=1;
+					this.day = [];
+					this.lists = [];
+					this.curData = {};
+					this.initGetData();
+				},
+				nameByType: function(type) {
+					var _this = this;
+					switch(type)
+					{
+					    case 1:
+					       return "充值";
+					        break;
+					    case 2:
+					       return "消费";
+					        break;
+					    case 3:
+					       return "退款";
+					        break;
+						case 4:
+					       return "缴费";
+					        break;
+						case 5:
+					       return "营收";
+					        break;
+						case 6:
+					       return "互动获得";
+					        break;
+						case 7:
+					       return "分成";
+					        break;
+						case 8:
+					       return "拆分润";
+					        break;
+						case 9:
+					       return "提现";
+					        break;
+					    case 10:
+					       return "区域入驻奖励";
+					        break;
+					    case 11:
+					       return "推荐商户奖励";
+					        break;
+					    case 12:
+					       return "系统退款";
+					        break;
+					    case 13:
+					       return "特惠推荐赠送";
+					        break;
+					    case 14:
+					       return "超级码特惠推荐赠送";
+					        break;
+					    case 15:
+					       return "转转扣除";
+					        break;    
+					    case 16:
+					       return "转转增加";
+					        break;    
+					    case 17:
+					       return "商家积分购销售增加";
+					        break;    
+						case 18:
+					       return "系统增加";
+					        break;  
+					    case 19:
+					       return "系统扣除";
+					        break;  
+					    case 20:
+					       return "区代分润分红";
+					        break;  
+					    case 21:
+					       return "市代分润分红";
+					        break;  
+					    case 22:
+					       return "省代分润分红";
+					        break;  
+					    case 23:
+					       return "超级码收益";
+					        break;  
+					    case 24:
+					       return "一级超级码收益";
+					        break;  
+					    case 25:
+					       return "幸运购扣除";
+					        break;
+					    case 26:
+					       return "粉丝购买分成";
+					        break;
+					    case 27:
+					       return "粉丝销售分成";
+					        break;
+					    default:
+					        
+					}
+				},
+				fuhaoByType: function(type) {
+					if(type==2 || type==4 || type==9 || type==15 || type==19 || type==25){
+						return "-";
+					}else{
+						return "+";
+					}
+				},
+				colorByType: function(type) {
+					if(type==2 || type==4 || type==9 || type==15 || type==19 || type==25){
+						return "#f00";
+					}else{
+						return "#09bb07";
+					}
+				},
+				showShaixuan: function() {
+					$(".shaixuan-box").animate({
+						left: "50%",
+						"margin-left": "-3.75rem"
+					}, 300);
+				},
+				closeShaixuan: function() {
+					$(".shaixuan-box").animate({
+						left: "100%",
+						"margin-left": 0
+					}, 300);
+				},
+				getLists: function(item) {
+					var curT = this.StartTime.substring(0,7);
+					if(this.StartTime==""){
+						var curtime = new Date();
+						var year = curtime.getFullYear();
+						var mon = curtime.getMonth()+1;
+						if(mon<=9){
+							mon = "0"+mon;
+						}
+						curT = year+"-"+mon;
+					}
+					this.page=1;
+					this.day = [];
+					this.lists = [];
+					this.curData = {day:curT, getMoney:0, payMoney:0};
+					this.FlowType = item.id;
+					if(item.id==99){
+						this.FlowType = "";
+					}
+					//this.getDataByParams();
+					this.initGetData();
+					this.closeShaixuan();
+				},
+				showDetail: function(itemLi){
+					this.curDetail = itemLi;
+					$(".data-detail-box").animate({
+						left: "50%",
+						"margin-left": "-3.75rem"
+					}, 300);
+				},
+				closeDetail: function() {
+					$(".data-detail-box").animate({
+						left: "100%",
+						"margin-left": 0
+					}, 300);
+				}
+				
+			}
+		});
+		$(function() {
+			
+			setTimeout(function(){
+//				$.hideLoading();
+ $('.curtain').addClass("hide")
+				$(".wapper").css("display","block");
+				$("#date").datetimePicker({
+					title: "选择日期",
+					m: 1
+				});
+				$("#date").on("click", function() {
+					$(".weui-picker-modal .picker-items-col").eq(2).remove();
+				});
+				$(document).on("click", ".close-picker", function() {
+					vm.StartTime = $("#date").val().substring(0,7)+"-01";
+					
+					var timearr = vm.StartTime.split("-");
+					vm.curData.day = timearr[0]+"-"+timearr[1];
+					vm.curData.getMoney = 0;
+					vm.curData.payMoney = 0;
+					if(timearr[1]>=12){
+						timearr[0] = Number(timearr[0])+1;
+						timearr[1] = "01";
+					}else{
+						timearr[1] = Number(timearr[1])+1;
+						if(timearr[1]<10){
+							timearr[1] = "0"+timearr[1];
+						}
+					}
+					vm.EndTime = timearr[0]+"-"+timearr[1]+"-"+"01";
+					vm.page=1;
+					vm.day = [];
+					vm.lists = [];
+					vm.initGetData();
+					
+				});
+			},500);
+			
+			var before = 0;
+			var after = 1;
+			var contentHeight = $(".content-box").height();
+			$(window).scroll(function(){
+                after = $(window).scrollTop();
+                if(after>before){
+                	//页面往上滚动
+                	before = after-1;
+                	var len = $(".boxies").length;
+                	var height = [];
+                	var allHeight = 0;
+                	var scrolltop = $(window).scrollTop();
+                	for(var i=0; i<len-1; i++){
+                		height[i] = allHeight+$(".boxies").eq(i).height();
+                		allHeight = height[i];
+                		if( scrolltop >= height[i]){
+                			vm.curData.day = $(".boxies").eq(i+1).data("day");
+                			vm.curData.getMoney = $(".boxies").eq(i+1).data("getmoney");
+                			vm.curData.payMoney = $(".boxies").eq(i+1).data("paymoney");
+                		}
+                	}
+                	
+                	var scrollTop = $(window).scrollTop();
+			        var scrollHeight = $(document).height();
+			        var windowHeight = $(this).height();
+			        
+			        if (scrollTop + windowHeight == scrollHeight) {
+			        	$("#nomore").addClass("hide");
+			        	$("#more").removeClass("hide");
+			            vm.initGetData();    	
+			        }        	
+                }else{
+                	//页面往下滚动
+                	before = after+1;
+                	var len = $(".boxies").length;
+                	var height = [];
+                	var scrolltop = $(window).scrollTop();
+                	for(var i=len-1; i>0; i--){
+                		if(i<len-1){
+                			height[i] = height[i+1]-$(".boxies").eq(i).height();
+                		}else{
+                			height[i] = contentHeight-$(".boxies").eq(i).height();
+                		}
+                		if( scrolltop < height[i]){
+                			vm.curData.day = $(".boxies").eq(i-1).data("day");
+                			vm.curData.getMoney = $(".boxies").eq(i-1).data("getmoney");
+                			vm.curData.payMoney = $(".boxies").eq(i-1).data("paymoney");
+                		}
+                	}
+                }
+            });
+		})
+	</script>
+
+</html>

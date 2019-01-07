@@ -1,0 +1,296 @@
+﻿@{ 
+    Layout = null; 
+}   
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>会员签到-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta content="@WorkContext.ShopConfig.SEODescription" name="description">
+    <meta content="@WorkContext.ShopConfig.SEOKeyword" name="keywords">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="stylesheet" type="text/css" href="/Css/Mobile/sign2.css" />
+		<style>
+		.con_btn1:disabled{
+			background: #eeeeee;
+		}
+		.i_konw{
+			bottom: 30px;
+		}
+		.leiji{
+			font-size: 4rem;
+			
+		}
+		.con_p1{
+			font-weight: inherit;
+		}
+		.bgs{
+			display: none;
+		}
+  	.mask {
+    background: #FFFFFF;
+    width: 80%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 15%;
+    bottom: 5%;
+    margin: auto;
+    z-index: 55;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+}
+  </style>
+</head>
+<body>
+    	<header>
+			<i class="iconfont" onclick="goToBack()">&#xe631;</i>
+			<h3>每日签到</h3>
+							<input type="hidden" id="IsSign" value="@ViewData["IsSign"]">
+							<input type="hidden" id="SignCount" value="@ViewData["SignCount"]">
+							<input type="hidden" id="Description" value="@ViewData["Description"]">
+							<input type="hidden" id="TimesJson" value = '@ViewData["TimesJson"]'> 
+							<input type="hidden" id="UserScore" value = '@ViewData["UserScore"]'>
+		</header>
+		<div class="content">
+			<div class="con_head">
+				<div class="con_p1">每日签到领取奖励</div>
+				<button type="button" class="con_btn1">签到</button>
+				<p class="con_p2">累计积分 <span class="jifen">@ViewData["UserScore"]</span></p>
+
+				<span class="guize">签到规则</span>
+			</div>
+
+			<div id="calendar"></div>
+
+			<!-- <div id="sign_note" style="text-align:center;position: relative;padding: 15px;font-size: 14px;">
+				<span style="color:red;">*规则：本月签到21天即可领取奖品</span>
+			</div> -->  
+		</div>
+
+		<div class="bgs">
+		<div class="mask">
+			
+
+			
+			<div class="mask_head">
+				签到规则
+			</div>
+			<div class="mask_content">
+				<ul>
+					<li style="font-size: 14px;">
+						<p>亲们大家好！</p>
+						<p>秦商未来即日起每天签到即可获得商城赠送1积分，连续签到28天将获得100积分，所获得积分可在积分应用区兑换精美商品哦。</p>
+						<!-- <p>注：如中断签到，累计天数将重新计算</p> -->
+						<p>最终解释权归（陕西秦林商务信息咨询有限公司）所有</p>
+					</li>
+				</ul>
+			</div>
+			<button type="button" class="i_konw">我知道了</button>
+			</div>
+		</div>
+	
+		<script type="text/javascript" src="/Js/Mobile/jquery-2.1.4.js"></script>
+		<script type="text/javascript" src="/Js/Mobile/calendar2.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				//ajax获取日历json数据
+					
+			});
+		</script>
+		<script type="text/javascript">
+				var IsApp = "@WorkContext.IsApp";
+				function goToBack() {
+					var _this = this;
+		    		if(IsApp==1){
+						if(navigator.userAgent.indexOf("iPhone")>0){
+							gobacklastpage();
+						}
+						if(navigator.userAgent.indexOf("Android")>0){
+							window.js.goBack();
+						}
+					}else{
+						window.history.back();
+					}
+						
+				}
+			
+				function Text2Html(str) {
+				    
+				    str = str.replace("2、", "<br />2、");
+				    str = str.replace("3、", "<br />3、");
+				    str = str.replace("4、", "<br />4、");
+				    str = str.replace("5、", "<br />5、");
+				    str = str.replace("6、", "<br />6、");
+				    str = str.replace("7、", "<br />7、");
+				    str = str.replace("8、", "<br />8、");
+				    str = str.replace("9、", "<br />9、");
+				    str = str.replace("10、", "<br />10、");
+				    str = str.replace("2:", "<br />2:");
+				    str = str.replace("3:", "<br />3:");
+				    str = str.replace("4:", "<br />4:");
+				    str = str.replace("5:", "<br />5:");
+				    str = str.replace("6:", "<br />6:");
+				    str = str.replace("7:", "<br />7:");
+				    str = str.replace("8:", "<br />8:");
+				    str = str.replace("9:", "<br />9:");
+				    str = str.replace("10:", "<br />10:");
+				    str = str.replace("2：", "<br />2：");
+				    str = str.replace("3：", "<br />3：");
+				    str = str.replace("4：", "<br />4：");
+				    str = str.replace("5：", "<br />5：");
+				    str = str.replace("6：", "<br />6：");
+				    str = str.replace("7：", "<br />7：");
+				    str = str.replace("8：", "<br />8：");
+				    str = str.replace("9：", "<br />9：");
+				    str = str.replace("10：", "<br />10：");
+				    str = str.replace("2.", "<br />2.");
+				    str = str.replace("3.", "<br />3.");
+				    str = str.replace("4.", "<br />4.");
+				    str = str.replace("5.", "<br />5.");
+				    str = str.replace("6.", "<br />6.");
+				    str = str.replace("7.", "<br />7.");
+				    str = str.replace("8.", "<br />8.");
+				    str = str.replace("9.", "<br />9.");
+				    str = str.replace("10.", "<br />10.");
+				    str = str.replace(";2", "<br />;2");
+				    str = str.replace(";3", "<br />;3");
+				    str = str.replace(";4", "<br />;4");
+				    str = str.replace(";5", "<br />;5");
+				    str = str.replace(";6", "<br />;6");
+				    str = str.replace(";7", "<br />;7");
+				    str = str.replace(";8", "<br />;8");
+				    str = str.replace(";9", "<br />;9");
+				    str = str.replace(";10", "<br />;10");
+				    str = str.replace("；2", "<br />；2");
+				    str = str.replace("；3", "<br />；3");
+				    str = str.replace("；4", "<br />；4");
+				    str = str.replace("；5", "<br />；5");
+				    str = str.replace("；6", "<br />；6");
+				    str = str.replace("；7", "<br />；7");
+				    str = str.replace("；8", "<br />；8");
+				    str = str.replace("；9", "<br />；9");
+				    str = str.replace("；10", "<br />；10");
+				    return str;
+				}
+			
+			
+				var signList = [];
+	
+				$(".bgs").on("click",function(){
+					
+						$(".bgs").hide();
+					    
+				});
+				$(".guize").on("click",function(){
+					
+						$(".bgs").show();
+				});
+				$(".con_btn1").on("click",function(){
+						
+					if($("#IsSign").val() == 0){
+						// 可以签到;
+					 $.post('/m/usercenter/sign', {
+						}, function(data) {
+								console.log(data);
+								if(data.Code == 1){
+											$(".con_p1").text("");
+														
+									var html ='<span class="leiji">'+data.Data+'</span><span class="tian">天</span>';		
+									$(".con_p1").append(html);
+									$(".con_btn1").attr("disabled","disabled");
+									$(".con_btn1").text("今日已签到");
+									$(".jifen").text(data.UserScore);
+
+								//	var 
+								//	sign_cal
+									var getDay =new Date();
+									var day = getDay.getDate();
+									var e = {};
+									e.signDay = day;
+									signList.push(e);
+									calUtil.init(signList);
+									// 找到当前时间
+								
+								}else{
+									console.log("签到失败");
+								};
+						}, 'JSON'); 
+					}else{
+						alert("今天已经签到了");
+					}
+				});
+				$(document).ready(function(){
+			
+					if($("#IsSign").val() == 0){
+						// 可以签到;
+					
+					}else{
+							$(".con_btn1").attr("disabled","disabled");
+							$(".con_btn1").text("今日已签到")
+					};
+					if($("#SignCount").val() != 0){
+						$(".con_p1").text("");
+					var html ='<span class="leiji">'+$("#SignCount").val()+'</span><span class="tian">天</span>';
+					$(".con_p1").append(html);
+					}else{
+
+					};
+					
+					
+					var a = $("#TimesJson").val();
+					var b = JSON.parse(a);
+					if(b.Code != 0){
+						var c = b.Data;
+						for(var i = 0 ; i <c.length; i++){
+							var text = c[i].AddTime;
+							var day  =  text.split("T")[0].split("-")[2];
+							if(day <10){
+								var days = day.split("0")[1];
+							}else{
+								var d = {};
+								d.signDay = day;
+								signList.push(d); 
+							}
+							var d = {};
+							d.signDay = day;
+							signList.push(d);
+						}
+					}else{
+						signList = [];
+					};
+
+					calUtil.init(signList);
+				});		
+
+				$(function(){
+					var text = $("#guize").text();
+					/*console.log(text);
+					var textArr = text.split("；");
+					console.log(textArr);*/
+					
+					var html = Text2Html(text);
+					
+//					var html = '';
+//					if(textArr){
+//						
+//						for(var i =0; i <textArr.length-1; i++){
+//							html += textArr[i]+"；<br>";
+//						}
+//					}else{
+//						html = textArr;
+//					}
+//					console.log(html);
+//					$("#guize").text("");
+					//$("#guize").html(html);
+				});
+
+		</script>
+    </body>
+</html>

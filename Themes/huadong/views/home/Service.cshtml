@@ -1,0 +1,238 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>客服-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weuix.min.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/spin.css" />
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    
+    <style>
+      
+        body {
+            background: #F6D7B8;
+        }
+
+        body {
+            /* font-family: "微软雅黑"; */
+            min-width: 320px;
+            /* max-width: 640px; */
+            margin: 0 auto;
+            font-size: 0.12rem;
+        }
+
+        .l_container {
+            text-align: center;
+            background: #fff;
+            padding: 0.5rem 0 0.3rem 0;
+        }
+
+        .l_box {
+            display: inline-block;
+            width: 27%;
+            border: 1px solid #D9B795;
+            padding: 0.02rem;
+            background: #FFF6ED;
+            margin: 0.1rem 0.2rem;
+        }
+
+        .l_headImgBox {
+            position: relative;
+        }
+
+        .l_headImg {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.25rem;
+            margin: 0 auto;
+        }
+
+        .l_select {
+               width: 1.5rem;
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 1.25rem;
+    display: none;
+        }
+
+        .l_cur .l_nick {
+            color: #FF632D;
+        }
+
+        .l_qqBox {
+            width: 96%;
+            margin: 0 auto;
+            text-align: center;
+            height: 1.5rem;
+            line-height: 1.5rem;
+            background: #81DB39;
+            border-radius: 0.2rem;
+             margin:5px auto;
+        }
+
+        .l_qqIcon {
+            width: 1.2rem;
+            margin: 0.1rem 0.12rem;
+        }
+
+        .l_qqTxt {
+            color: #fff;
+            font-weight: bold;
+            font-size: 14px;
+           
+        }
+
+        .clearfix {
+            zoom: 1;
+        }
+
+        .l_box {
+            display: inline-block;
+            width: 32%;
+            border: 1px solid #D9B795;
+            padding: 0.02rem;
+            background: #FFF6ED;
+            margin: 0.1rem 0.05rem;
+        }
+
+        .l_qrcode {
+            display: block;
+            width: 40%;
+            margin: 1.2rem auto;
+        }
+
+        .l_qrcodeTxt {
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .fl {
+            float: left;
+        }
+
+        .l_block {
+            display: block;
+        }
+        header{
+            line-height: 2.6rem;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 33;
+            box-shadow: 1px 2px 3px #e1e1e1e1;
+            background: #ffffff;
+        }
+        .l_container{
+            padding-top: 2.9rem;
+        }
+    </style>
+</head>
+<body>
+
+        <header>
+		<i class="iconfont back" onclick="goToBack()">&#xe647;</i>
+			<h3>客服中心</h3>
+		</header>
+
+
+    <div class="l_container">
+        <div class="l_box l_cur">
+            @if (WorkContext.SellerInfo.WeChatQrcode != "")
+            {
+                <div class="l_headImgBox" data-url="@(WorkContext.ShopConfig.ImageCDN)/@(WorkContext.SellerInfo.WeChatQrcode)">
+                    <img src="http://weiphp.yxtx100.com/Uploads/Picture/2017-06-03/59327a1dcd2b9.png" alt="" class="l_headImg">
+                    <img src="http://weiphp.yxtx100.com/Addons/Shop/View/default/Wap/Template/tp4/Public/custom service/img/select.png" alt="" class="l_select" style="display: block;">
+                </div>
+            }
+            <div class="l_nick" style="height:40px!important;line-height: 20px;font-size: 16px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">
+            	客服一 QQ:@(WorkContext.SellerInfo.QQ)</div>
+            <a class="l_block l_qqBox" target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=@(WorkContext.SellerInfo.QQ)&amp;site=qq&amp;menu=yes">
+                <img src="http://weiphp.yxtx100.com/Addons/Shop/View/default/Wap/Template/tp4/Public/custom service/img/qq.png" alt="" class="l_qqIcon fl">
+                <div class="l_qqTxt fl">和我联系</div>
+                <div class="clearfix"></div>
+            </a>
+            <div class="clearfix"></div>
+
+        </div>
+    </div>
+    @if (WorkContext.SellerInfo.WeChatQrcode != "")
+    {
+        <img src="@(WorkContext.ShopConfig.ImageCDN)/@(WorkContext.SellerInfo.WeChatQrcode)" alt="微信客服" class="l_qrcode">
+        <div class="l_qrcodeTxt">
+            长按识别二维码
+        </div>
+    }
+    @if(WorkContext.IsApp==1){
+		
+    }else{
+    	<div class="footer"></div>
+    }
+
+    <script>
+    	//alert(window.location.href);
+		var IsApp = "@WorkContext.IsApp";
+		function goToBack() {
+			var _this = this;
+    		if(IsApp==1){
+				if(navigator.userAgent.indexOf("iPhone")>0){
+					gobacklastpage();
+				}
+				if(navigator.userAgent.indexOf("Android")>0){
+						window.js.goBack();
+					}
+			}else{
+				window.history.back();
+			}
+				
+		}
+        $(function () {
+            $(".l_box").eq(0).find(".l_select").show();
+            $(".l_box").eq(0).addClass("l_cur");
+            var first_qrocde = $(".l_headImgBox").eq(0).attr("data-url");
+            $(".l_qrcode").attr("src", first_qrocde);
+            $(".l_headImgBox").click(function () {
+                var qrcode = $(this).attr("data-url");
+                $(".l_box").removeClass("l_cur");
+                $(".l_select").hide();
+                $(this).parents(".l_box").addClass("l_cur");
+                $(this).parents(".l_box").find(".l_select").show();
+                $(".l_qrcode").attr("src", qrcode);
+            });
+        });
+        $(function() {
+				$.ajax({
+					type: "get",
+					url: "/m/tool/navbar",
+					async: true,
+					success: function(rel) {
+						var dete = JSON.parse(rel);
+						console.log(dete);
+						if(dete.Code == 1) {
+							var html = '';
+							html += '<div class="weui_tabbar " style="padding-top: 0.1rem;">';
+							for(var i = 0; i < dete.Data.length; i++) {
+								var doms = dete.Data[i];
+								html += '<a href="' + doms.MenuUrl + '" class="weui_tabbar_item"><div class="weui_tabbar_icon">';
+								html += '<img src="' + doms.MenuPic + '?w=50&amp;h=50" style="display: block; width: 1.5rem; height: 1.5rem; margin: 0px auto;"></div>';
+								html += '<p class="weui_tabbar_label" style="margin: 0px;">' + doms.MenuName + '</p></a>';
+							}
+							html += '</div>';
+							$('.footer').append(html);
+						} else {}
+					}
+				});
+			});
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+﻿@model Yitao.Web.Mobile.Models.RegisterModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <title>会员注册</title>
+    <script type="text/javascript">
+        www_version = 191214451245;
+        var userId=@WorkContext.Uid;
+        var APP = {
+            message: false,
+            goTop: false,
+            url:{ }
+        }
+    </script>
+</head>
+<body>
+    <!--禁止chrome自动填充-->
+    <input type="text" name="regName" style="display:none;">
+    <input type="password" name="regpwd" style="display:none;">
+    <header id="header" style="display:block;">
+        <span class="icon icon-goback"></span>
+        会员注册
+    </header>
+    <section class="page">
+        <div class="wrap regPage">
+            <div class="input-container">
+                <input id="regName" class="acc-input username txt-input J_ping" type="text" placeholder="您的账户名和登录名" autocomplete="off" report-eventid="MLoginRegister_Username">
+                <i class="icon icon-clear"></i>
+            </div>
+            <div class="input-container">
+                <input id="regpwd" type="password" class="acc-input password txt-input J_ping" placeholder="请设置6-20位登录密码" autocomplete="off" report-eventid="MLoginRegister_PasswordInput">
+                <i class="icon icon-clear"></i>
+                <label for="onOff_pwd" class="label-checkbox J_ping" report-eventid="MLoginRegister_RegisterPlaintext">
+                    <input id="onOff_pwd" type="checkbox">
+                    <div class="checkbtn">
+                        <span class="b-text">abc</span>
+                        <span class="b-pwd">...</span>
+                    </div>
+                </label>
+            </div>
+            <div id="input-code" class="input-container" style="display:;">
+                <input id="code" class="acc-input txt-input imgverify" type="text" placeholder="请输入验证码" autocomplete="off" size="11" maxlength="6">
+                <span class="code-box"><img id="imgCode" src="/tool/verifyimage?mod=login" alt=""></span>
+                <i class="icon icon-clear"></i>
+            </div>
+            <div class="notice">&nbsp;</div>
+            <a href="javascript:;" id="regBtn" class="btn J_ping" report-eventid="MLoginRegister_Finish">注 册</a>
+           
+        </div>
+    </section>
+    <input type="hidden" id="ReturnUrl" name="ReturnUrl" value="@Model.ReturnUrl" />
+    <div class="toast-mask">
+        <div class="toast">注册成功</div>
+    </div>
+</body>
+</html>

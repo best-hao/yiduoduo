@@ -1,0 +1,98 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>申请</title>
+		<script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    	<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+		<link rel="stylesheet" type="text/css" href="Css/Mobile/NongHuChanPin/apply.css"/>
+    	<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		<script src="Js/Mobile/vue.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="form" id="apply">
+			<div class="input-box">
+				<label for="">姓名：</label>
+				<input type="text" name="name" id="name" v-model="params.name" />
+			</div>
+			<div class="input-box">
+				<label for="">电话：</label>
+				<input type="tel" name="tel" id="tel" value="" maxlength="11"  v-model="params.tel"/>
+			</div>
+			<div class="input-box">
+				<label for="">身份证号：</label>
+				<input type="tel" name="number" id="number" value="" maxlength="18"  v-model="params.number"/>
+			</div>
+			<div class="input-box">
+				<div class="title">个人介绍：</div>
+				<div class="info"><textarea name="intro"  v-model="params.intro"></textarea></div>
+			</div>
+			<div class="input-box">
+				<div class="title">是否在阎飞农业工作过：</div>
+				<div class="info work">
+					<input type="radio" name="isWork" id="isWork_1" value="1" v-on:change="checkWork(1)"/>
+					<label>是</label>
+					<input type="radio" name="isWork" id="isWork_0" value="0" checked v-on:change="checkWork(0)"/>
+					<label>否</label>
+				</div>
+			</div>
+			<a href="javascript:;" class="confirm" v-on:click="confirmApply()">提交申请</a>
+		</div>
+		
+		
+		<script type="text/javascript">
+			var reg_tel=11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
+			var reg_number=/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+			
+			var vm = new Vue({
+				el: '#apply',
+				data: {  
+					params: {
+						name: '',
+						tel: '',
+						number: '',
+						intro: '',
+						isWork: 0
+					}
+				},
+				methods: {
+					checkWork: function(val){
+						this.params.isWork = val;
+					},
+					confirmApply: function(){
+						if(!(this.params.name)){
+							$.toast("请填写姓名","cancel");return false;
+						}
+						if(!(this.params.tel) || !reg_tel.test(this.params.tel)){
+							$.toast("请填写正确的手机号","cancel");return false;
+						}
+						if(!(this.params.number) || !reg_number.test(this.params.number)){
+							$.toast("请填写正确的身份证号","cancel");return false;
+						}
+						let _this = this;
+						$.ajax({
+							type:"post",
+							url:"ajax_apply",
+							async:false,
+							data: _this.params,
+							dataType: "json",
+							success: function(rel){
+								if(rel.Code==0){
+									$.toast(rel.Message,"cancel");
+								}else{
+									$.toast(rel.Message);
+								}
+							}
+						});
+					}
+				}
+			});
+		</script>
+		
+	</body>
+</html>

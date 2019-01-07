@@ -1,0 +1,627 @@
+﻿@model Yitao.Web.Mobile.Models.OrderListModel
+@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>订单列表-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/order/weui.css" />
+	<link rel="stylesheet" type="text/css" href="/Css/Mobile/order/jquery-weui.min.css" />
+	<link rel="stylesheet" type="text/css" href="/Css/Mobile/order/oder.css" />
+	<style>
+.he_mask{
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0,0,0,0.6);
+	text-align: center;
+	overflow: hidden;
+	z-index: 999;
+	min-width: 320px;
+	max-width: 640px;
+	margin: 0 auto;
+	display: none;
+}
+.hemask_con{
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	text-align: center;
+	min-width: 320px;
+	max-width: 640px;
+	margin: 0 auto;
+}
+.tiao{
+	display: inline-block;
+	width: 86%;
+	height: 80%;
+	position: absolute;
+	top: 10%;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: 0 auto;
+	background: #fff;
+	padding: 10px;
+	border-radius: 14px;
+	border: 4px solid #F1CE28;
+}
+#imgcode{
+	margin: 0 auto;
+	margin-top: 6%;
+}
+#qrCode img{
+	margin: 0 auto;
+	width: 60%;
+	margin-top: 7%;
+}  
+.tiao h3{
+	font-weight: inherit;
+	position: relative;
+	top: 0.4rem;
+	font-size: 0.8rem;
+}
+.loading{height: 50px;line-height: 50px;background: #fff;}
+#more{display: none;}
+.weui_cells_title{margin: 0;}
+.weui-loadmore{margin: 0 auto;height: 45px; line-height: 45px;}
+.weui-tab__bd-item .tab_content{margin-bottom: 60px;}
+.tcenter{text-align: center;}
+.close-qrcode {
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    position: absolute;
+    right: -7px;
+    top: -33px;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 20px;
+    z-index: 1001;
+}
+			</style>
+</head>
+<body>
+    <!--头 -->
+		<header>
+			<a href="javascript:;" class="back" onclick="goToBack()">
+				<i class="iconfont">
+					&#xe647;
+				</i>
+			</a>
+			<h3 class="title">
+				我的订单
+			</h3>
+			<!--<div class="head_right">
+				<a href="javascript:;" class="search">
+					<i class="iconfont">&#xe6c6;</i>
+				</a>
+				<a href="javascript:;" class="word">
+					<i class="iconfont">&#xe613;</i>
+				</a>
+			</div>-->
+
+		</header>
+		<!--end-->
+
+		<div class="content">
+			<!--导航栏-->
+			<div class="weui-tab">
+				<div class="weui-navbar">
+					<div class="weui-navbar__item weui-bar__item--on" >
+						全部
+					</div>
+					<div class="weui-navbar__item" >
+						待付款
+					</div>
+					<div class="weui-navbar__item">
+						待发货
+					</div>
+					
+					<div class="weui-navbar__item" >
+						待收货 
+					</div>
+					<div class="weui-navbar__item" >
+						待评价
+					</div>
+					<div class="weui-navbar__item" >
+						待核销 
+					</div>
+					
+				</div>
+				<!--end-->
+				<!--内容-->
+				<div class="weui-tab__bd">
+					<div id="tab0" class="weui-tab__bd-item weui-tab__bd-item--active">
+						<div class="tab_content">
+							<ul class="weui_ul">
+								
+
+							
+							
+
+							</ul>
+							<div class="loading">
+								<div class="weui_cells_title hide tcenter" id="more">
+									<div class="weui-loadmore">
+							            <i class="weui-loading"></i>
+							            <span class="weui-loadmore-tips">正在加载</span>
+							        </div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div id="tab1" class="weui-tab__bd-item">
+						<ul class="weui_ul">
+							
+						</ul>
+						<div class="loading">
+							<div class="weui_cells_title hide tcenter" id="more">
+								<div class="weui-loadmore">
+						            <i class="weui-loading"></i>
+						            <span class="weui-loadmore-tips">正在加载</span>
+						        </div>
+							</div>
+						</div>
+					</div>
+					<div id="tab2" class="weui-tab__bd-item">
+						<ul class="weui_ul">
+
+							
+
+						</ul>
+						<div class="loading">
+							<div class="weui_cells_title hide tcenter" id="more">
+								<div class="weui-loadmore">
+						            <i class="weui-loading"></i>
+						            <span class="weui-loadmore-tips">正在加载</span>
+						        </div>
+							</div>
+						</div>
+					</div>
+					<div id="tab3" class="weui-tab__bd-item">
+						<ul class="weui_ul">
+							
+						
+
+						</ul>
+						<div class="loading">
+							<div class="weui_cells_title hide tcenter" id="more">
+								<div class="weui-loadmore">
+						            <i class="weui-loading"></i>
+						            <span class="weui-loadmore-tips">正在加载</span>
+						        </div>
+							</div>
+						</div>
+					</div>
+					<div id="tab4" class="weui-tab__bd-item">
+						<ul class="weui_ul">
+						
+						</ul>
+						<div class="loading">
+							<div class="weui_cells_title hide tcenter" id="more">
+								<div class="weui-loadmore">
+						            <i class="weui-loading"></i>
+						            <span class="weui-loadmore-tips">正在加载</span>
+						        </div>
+							</div>
+						</div>
+					</div>
+					<div id="tab5" class="weui-tab__bd-item">
+						<ul class="weui_ul">
+						
+						</ul>
+						<div class="loading">
+							<div class="weui_cells_title hide tcenter" id="more">
+								<div class="weui-loadmore">
+						            <i class="weui-loading"></i>
+						            <span class="weui-loadmore-tips">正在加载</span>
+						        </div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!--end-->
+			</div>
+			
+			
+			
+		</div>
+		 <!--  核销条形码 -->
+    <div class="he_mask">
+        <div class="hemask_con">
+            <div class="tiao">
+            	<div class="close-qrcode">×</div>
+                <h3>收银机核销码</h3>
+                <div id="imgcode"></div>
+                <h3>导购员核销码</h3>
+                <div class="Code_con">
+                        <div id="qrCode">
+                        
+                    </div>
+            </div>
+        </div>
+	</div>
+    </div>
+    <!-- end -->
+	
+	<div id="loadmore" style="display: none;">
+		<div class="weui-loadmore">
+            <i class="weui-loading"></i>
+            <span class="weui-loadmore-tips">正在加载</span>
+        </div>
+	</div>
+	<script type="text/javascript">
+		var IsApp = "@WorkContext.IsApp";
+	</script>
+	
+		<script src="/Js/Mobile/jquery-2.1.4.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/Mobile/barcode.min.js"></script>
+		<script src="/Js/Mobile/qrcode.min.js"></script>
+		<script src="/Js/Mobile/jquery-weui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/Mobile/order.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/Mobile/zepto.min.js"></script>
+		  
+	<script type="text/javascript">
+        var Uid = "@WorkContext.Uid";
+		function goToBack() {
+			var _this = this;
+    		if(IsApp==1){
+				if(navigator.userAgent.indexOf("iPhone")>0){
+					gobacklastpage();
+				}
+				if(navigator.userAgent.indexOf("Android")>0){
+						window.js.goBack();
+					}
+			}else{
+				window.history.back();
+			}
+				
+		}
+		//var pages_arr = [1,1,1,1,1,1];
+		var pages_arr = [1,1,1,1,1,1];
+		
+		var pages_ize = 10;
+		var tab_index = 0;
+		function ajaxpage(pages_arr,pages_ize,tab_index,o_type) {
+			$.ajax({
+				type: "post",
+				url: 'List',
+				data: {page:pages_arr[tab_index],size:pages_ize,type:o_type},
+				dataType: "json",
+				beforeSend: function() {
+					var load_html = $("#loadmore").html();
+					var sid = "#tab"+tab_index+" #more";
+					$(sid).html(load_html);
+					$(".weui-tab__bd-item--active #more").show();
+				},
+				success: function(rs) {
+					var sid = "#tab"+tab_index+" #more";
+					$(sid).hide();
+					if(rs.Code==1){
+							var dete = rs.Data;
+							
+							if(dete.length==0){
+								if(pages_arr[tab_index]==1){
+								
+									$(sid).html("您还没有相关订单!");
+								}else{
+									
+									$(sid).html("没有更多数据了");
+								}
+								$(".weui-tab__bd-item--active #more").show();
+							}else{
+								$('body .weui-tab__bd-item').eq(tab_index).find(".weui_ul .nodata_li").remove();
+								
+								var html = '';
+								// 这里是有数据的dom
+								for(var i = 0; i < dete.length; i++) {
+									if(dete[i].hasOwnProperty("Items")){
+										html += '<li class="items" data-OrderId = "'+dete[i].OrderId +'" data-ordersn="' + dete[i].OrderSN + '" data-detail="'+dete[i].Items[0].Id+'"><div class="item_head"><h3 class="item_h3"><a href="/m/order/detail?id='+dete[i].OrderId+'&IsApp=@WorkContext.IsApp"><i class="iconfont shopicon">&#xe650;</i>';
+										var Items1 = dete[i].Items;
+									}else{
+										html += '<li class="items" data-OrderId = "'+dete[i].OrderId +'" data-ordersn="' + dete[i].OrderSN + '" data-detail=""><div class="item_head"><h3 class="item_h3"><a href="/m/order/detail?id='+dete[i].OrderId+'&IsApp=@WorkContext.IsApp"><i class="iconfont shopicon">&#xe650;</i>';
+									}
+								    
+								    html += dete[i].OrderSN + '<i class="iconfont shopright">&#xe6ab;</i></a></h3><div class="remove"><span class="state">';
+								    if(dete[i].OrderStatus == 0){
+ 										html += "待付款" + '</span></div></div>';
+								    }else if(dete[i].OrderStatus == 1){
+							    		if (dete[i].ShipStatus == 0 && dete[i].ShipMode == 1){
+		                                   html += "待发货" + '</span></div></div>';
+		                                }else if (dete[i].ShipStatus == 4 && dete[i].ShipMode == 2){
+		                                   html += "待核销" + '</span></div></div>';
+		                                }else if (dete[i].ShipStatus == 0 && dete[i].ShipMode == 4){
+		                                   html += "待配送" + '</span></div></div>';
+		                                }else if (dete[i].ShipStatus == 1 && dete[i].ShipMode == 1){
+		                                   html += "待收货" + '</span></div></div>';
+		                                }else if(dete[i].ShipStatus == 1 && dete[i].ShipMode == 0){
+		                                   html += "无需物流" + '</span></div></div>';
+		                                }else{
+		                                   html += "未知状态" + '</span></div></div>';
+		                                }
+								    }else if(dete[i].OrderStatus == 2){
+										html += "部分退货" + '</span></div></div>';
+								    }else if(dete[i].OrderStatus == 3){
+										html += "整单退货" + '</span></div></div>';
+								    }else if(dete[i].OrderStatus == 4){
+										html += "挂单" + '</span></div></div>';
+								    }else if(dete[i].OrderStatus == 5){
+										html += "退货单" + '</span></div></div>';
+								    }else if(dete[i].OrderStatus == 6){
+										html += "无效单" + '</span></div></div>';
+								    }else if(dete[i].OrderStatus == 7){
+										html += "已取消" + '</span></div></div>';
+								    }else if(dete[i].OrderStatus == 8){
+										html += "已完成" + '</span></div></div>';
+								    }
+								    //  这里开始遍历商品
+								    var _html1 = "";
+								    
+								    var Price = 0;
+								    var img_url = '@(WorkContext.ShopConfig.ImageCDN)'
+								    for(var _i1 = 0; _i1 < Items1.length; _i1++) {
+								        _html1 += '<div class="goods"  data-OrderSN="' + dete[i].OrderSN + '" data-Id="' + Items1[_i1].Id + '" ><a href="/m/order/detail?id='+dete[i].OrderId+'&IsApp=@WorkContext.IsApp" onclick="getGoods_sp(this)"><div class="goods_left"><img src="' + img_url + Items1[_i1].Img + '">';
+								        _html1 += '</div><div class="goods_right"><p class="goods_title">' + Items1[_i1].Name + '</p><p class="SKU_1">' + Items1[_i1].Sku + '</p><p style="font-size:12px;color:#999">价格：<span style="margin-right:15px">'+Items1[_i1].Price+'</span>数量：<span>'+Items1[_i1].Count+'</span></p></div></a></div>';
+								        Price += Items1[_i1].Price
+								    }
+								    html += _html1;
+								
+								    // 遍历完商品
+								    if(dete[i].OrderType == 10) {
+								    	html += '<div class="gd_number"><p>金额： <span class="gd_number_2">'+dete[i].OrderAmount + '</span> 积分： <span style="color:#ff4800">'+dete[i].PayCreditMoney + '</span></p>'
+								    }else{
+								    	html += '<div class="gd_number"><p>合计： <span class="gd_number_2">'+dete[i].OrderAmount + '</span></p>'
+								    }
+								    html += '</div><div class="button_con">';
+								
+								    //  下面是遍历按钮
+								    if(dete[i].OrderStatus == "0") {
+								    //   html += '<ul class="btn_ul"><li><a href="javascript:;" onclick="goPay(this)">去支付</a></li><li><a href="javascript:;" onclick="goKefu(this)">联系客服</a></li>';
+								    //   html += '<li><a href="javascript:;" onclick="goShop(this)">进入店铺</a></li>';
+                                        html += '<ul class="btn_ul"><li><a href="javascript:;" onclick="goPay(this)">去支付</a></li><li><a href="javascript:;" onclick="cancelOrder(' + dete[i].OrderId + ',' + i +')">取消订单</a></li>';
+								
+								    }
+								    if(dete[i].OrderStatus == "1"&&dete[i].ShipStatus=='0') {
+								    //    html += '<ul class="btn_ul"><li><a href="javascript:;" onclick="goCar(this)">查看物流</a></li><li><a href="javascript:;" onclick="goGoods(this)">再次购买</a></li>';
+								          /*html += '<ul class="btn_ul"><li><a href="javascript:;" onclick="goKefu(this)">联系客服</a></li>';*/
+								    
+								    }
+								    if(dete[i].OrderStatus == "1"&&dete[i].ShipStatus=='1') {
+								    //    html += '<ul class="btn_ul"><li><a href="javascript:;" onclick="goCar(this)">查看物流</a></li><li><a href="javascript:;" onclick="goKefu(this)">确认收货</a></li>';
+								    //    html += '<li><a href="javascript:;" onclick="goGoods(this)">再次购买</a></li><li><a href="javascript:;" onclick="goKefu(this)">联系客服</a></li>';
+								        if(dete[i].ShipStatus == "1" && dete[i].ShipMode == "0"){
+								    		html += '<ul class="btn_ul"><li><a href="javascript:;" onclick="goshouhuo(this)">确认收货</a></li>';
+								    	}else{
+								          html += '<ul class="btn_ul"><li><a href="/m/order/express?orderid='+dete[i].OrderId+'">查看物流</a></li><li><a href="javascript:;" onclick="goshouhuo(this)">确认收货</a></li>';
+								    	}
+								    }
+								    if(dete[i].OrderStatus == "8"&&dete[i].IsReview=="0") {
+								    //    html += '<ul class="btn_ul"><li><a href="javascript:;" onclick="goGoods(this)">再次购买</a></li><li><a href="javascript:;" onclick="goKefu(this)">评价商品</a></li>';
+								    //    html += '<li><a href="javascript:;" onclick="goKefu(this)">联系客服</a></li><li><a href="javascript:;" onclick="goCar(this)">查看物流</a></li>';
+								          html += '<ul class="btn_ul"><li><a href="javascript:;" onclick="goPingJia(this)">订单评价</a></li>';   
+								    }
+								    if(dete[i].OrderStatus == "4") {
+								        //    html += '<ul class="btn_ul"><li><a href="javascript:;" onclick="goGoods(this)">再次购买</a></li><li><a href="javascript:;" onclick="goKefu(this)">评价商品</a></li>';
+								        //    html += '<li><a href="javascript:;" onclick="goKefu(this)">联系客服</a></li><li><a href="javascript:;" onclick="goCar(this)">查看物流</a></li>';
+								              html += '<ul class="btn_ul"><li><a href="javascript:;" onclick="hexiao(this)">核销订单</a></li><li><a href="javascript:;" onclick="goshouhuo(this)">确认收货</a></li>';   
+								    
+								        }
+								    if(dete[i].OrderStatus == "8"&&dete[i].IsReview=="1") {
+								        //    html += '<ul class="btn_ul"><li><a href="javascript:;" onclick="goGoods(this)">再次购买</a></li><li><a href="javascript:;" onclick="goKefu(this)">评价商品</a></li>';
+								        //    html += '<li><a href="javascript:;" onclick="goKefu(this)">联系客服</a></li><li><a href="javascript:;" onclick="goCar(this)">查看物流</a></li>';
+								              html += '<ul class="btn_ul"><li><a href="javascript:;" onclick="appendComment(this)">追加评论</a></li>';      
+								    
+								       }
+								    html += '</ul></div></li>';
+								   
+								}
+								
+								$('body .weui-tab__bd-item').eq(tab_index).find(".weui_ul").append(html);
+								//$($($('body .weui-tab__bd-item')[tab_index]).find(".weui_ul")).append(html);
+								for(var i =0; i<$("img").length; i++){
+								    if($($("img")[i]).attr("src") == "" || $($("img")[i]).attr("src") == undefined ||$($("img")[i]).attr("src") ==  '@(WorkContext.ShopConfig.ImageCDN)'){
+								        $($("img")[i]).attr("src","/Images/wutu.png")
+								    }
+								}
+								pages_arr[tab_index] = pages_arr[tab_index]+1;
+								
+							}
+							
+						
+					}else{
+						/*if(tab_index==0){
+							console.log("等于1怎么进等于0的");
+						}*/
+						$("#more").hide();
+						if(pages_arr[tab_index]==1){
+							$(sid).html("您还没有相关订单!");
+						}else{
+							$(sid).html("没有更多数据了");
+						}
+						$(".weui-tab__bd-item--active #more").show();
+					}
+					
+				},
+				timeout: 15000
+			});
+		}
+		function GetRequest() {   
+		   var url = location.search; //获取url中"?"符后的字串   
+		   var theRequest = new Object();   
+		   if (url.indexOf("?") != -1) {   
+		      var str = url.substr(1);   
+		      strs = str.split("&");   
+		      for(var i = 0; i < strs.length; i ++) {   
+		         theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);   
+		      }   
+		   }   
+		   return theRequest;   
+		}   
+		var way_type = GetRequest(); 
+		tab_index = way_type.way_type;
+		console.log(tab_index);
+		if(typeof(tab_index)=="undefined"){
+			tab_index = 0;
+		}
+		var o_type = 0;
+		if(tab_index==0){
+			o_type = 0;
+		}else if(tab_index==1){
+			o_type = 3;
+		}else if(tab_index==2){
+			o_type = 2;
+		}else if(tab_index==3){
+			o_type = 8;
+		}else if(tab_index==4){
+			o_type = 4;
+		}else if(tab_index==5){
+			o_type = 11;
+		}
+//		if(tab_index==0){
+//			o_type = 0;
+//		}else if(tab_index==1){
+//			o_type = 3;
+//		}else if(tab_index==2){
+//			o_type = 2;
+//		}else if(tab_index==3){
+//			o_type = 8;
+//		}else if(tab_index==4){
+//			o_type = 11;
+//		}
+
+        function cancelOrder(id,index) {
+            
+            $.confirm("您确定要取消订单吗?", "取消订单?", function () {
+                //$.toast("操作成功!");
+                $.ajax({
+                    type: "post",
+                    url: '/Api/Order/OrderCancle',
+                    data: {OrderId:id,UserId:Uid},
+                    dataType: "json",
+                    success: function (rs) {
+                        if (rs.code==1) {
+                            $.alert("操作成功", function () {
+                                window.location.reload();
+                            });
+                        }
+                    }
+                        
+                });
+                
+            }, function () {
+                //取消操作
+            });
+
+        }
+		$(function(){
+			
+			$(".weui-navbar__item").removeClass("weui-bar__item--on");
+			$(".weui-navbar__item").eq(tab_index).addClass("weui-bar__item--on");
+			$(".weui-tab__bd-item").removeClass("weui-tab__bd-item--active");
+			$(".weui-tab__bd-item").eq(tab_index).addClass("weui-tab__bd-item--active");
+			ajaxpage(pages_arr,pages_ize,tab_index,o_type);
+//			ajaxpage(pages_arr,pages_ize,1,3);
+//			ajaxpage(pages_arr,pages_ize,2,2);
+//			ajaxpage(pages_arr,pages_ize,3,8);
+//			ajaxpage(pages_arr,pages_ize,4,4);
+//			ajaxpage(pages_arr,pages_ize,5,11);
+			$(".weui-navbar .weui-navbar__item").on("click",function(){
+				tab_index = $(this).index();
+				$(".weui-navbar__item").removeClass("weui-bar__item--on");
+				$(".weui-navbar__item").eq(tab_index).addClass("weui-bar__item--on");
+				$(".weui-tab__bd-item").removeClass("weui-tab__bd-item--active");
+				$(".weui-tab__bd-item").eq(tab_index).addClass("weui-tab__bd-item--active");
+				
+				
+				/*if(tab_index==0){
+					o_type = 0;
+				}else if(tab_index==1){
+					o_type = 3;
+				}else if(tab_index==2){
+					o_type = 2;
+				}else if(tab_index==3){
+					o_type = 8;
+				}else if(tab_index==4){
+					o_type = 4;
+				}else if(tab_index==5){
+					o_type = 11;
+				}*/
+				if(tab_index==0){
+					o_type = 0;
+				}else if(tab_index==1){
+					o_type = 3;
+				}else if(tab_index==2){
+					o_type = 2;
+				}else if(tab_index==3){
+					o_type = 8;
+				}else if(tab_index==4){
+					o_type = 4;
+				}else if(tab_index==5){
+					o_type = 11;
+				}
+				console.log("o_type: "+o_type);
+				ajaxpage(pages_arr,pages_ize,tab_index,o_type);
+			});
+			$(window).scroll(function() {
+				var scrollTop = $(this).scrollTop();
+				var scrollHeight = $(document).height();
+				var windowHeight = $(this).height();
+				if (scrollTop + windowHeight == scrollHeight) {
+					ajaxpage(pages_arr,pages_ize,tab_index,o_type);
+				}
+			});
+			
+		});
+		
+		
+// 去评价
+function goPingJia(_this){
+    var url = '/m/order/Comment?id=';
+    var OrderId = $($(_this).parents(".items")).attr("data-orderid");
+    if(IsApp==1){
+        if(navigator.userAgent.indexOf("iPhone")>0){
+            ProductEvaluateByOrderID(OrderId);
+        }
+        if(navigator.userAgent.indexOf("Android")>0){
+            window.js.ProductEvaluateByOrderID(OrderId);
+        }
+    }else{
+        window.location.href = url + OrderId;
+    }
+};
+
+// 追加评价
+function appendComment(_this){
+
+    var url = '/m/order/Comment?id=';
+    var OrderId = $($(_this).parents(".items")).attr("data-orderid");
+    if(IsApp==1){
+        if(navigator.userAgent.indexOf("iPhone")>0){
+            addToOrderReview(OrderId);
+        }
+        if(navigator.userAgent.indexOf("Android")>0){
+            window.js.addToOrderReview(OrderId);
+        }
+    }else{
+        window.location.href = url + OrderId;
+    }
+};
+	</script>
+</body>
+</html>

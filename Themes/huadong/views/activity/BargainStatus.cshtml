@@ -1,0 +1,988 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+
+     <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+        <meta content="telephone=no" name="format-detection">
+        <meta name="apple-touch-fullscreen" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <title>砍价-@{@WorkContext.SellerInfo.SellerName}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+        <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+        <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css" />
+        <link rel="stylesheet" type="text/css" href="/Css/Mobile/begain2.css?t=@(Yitao.Core.WebHelper.RandomD())">
+        <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/Mobile/weui/icon/iconfont.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/Js/Mobile/updown.js" type="text/javascript" charset="utf-8" ></script>
+        <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script> 
+        <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/loading.css"/>
+        <script src="/Mobile/weui/swipe.js" type="text/javascript" charset="utf-8"></script>
+<style type="text/css">
+body{background:transparent;}
+.hdbot{display: flex;justify-content: space-between;}
+.hdtxt h2 .head img:last-child {display: inline-block;width: 0.8rem;height: 0.8rem;line-height:0.8rem;text-align: center;font-size: 0.48rem;border:1px solid #ccc;}
+.hdtxtsx{width:4.4rem}
+.hdtxtsx h4{font-size: 0.26rem;overflow: hidden;text-overflow: ellipsis;-webkit-box-orient: vertical;-webkit-line-clamp: 2;}
+.wx-share {width: 100%;height: 100%;position: fixed;left: 0;right: 0;top: 0;background-color: rgba(0,0,0,0.7);z-index: 100;/*display: none;*/}
+.weui_panel_bd li .goods-title {    height: 1rem;    line-height: 0.5rem;    color: #666;    font-size: 0.28rem;}
+.wxshare {width: 100%;height: 100%;position: fixed;left: 0;right: 0;top: 0;background-color: rgba(0,0,0,0.7);z-index: 99;/*display: none;*/}
+.wx-share .share-img {width: 3rem;height: 4rem;background: url(/Mobile/Themes/huadong/static/images/share.png);background-size: 3rem 4rem;background-position: center;float: right;margin: 0.2rem 0.2rem 0 0;}
+.wx-share .share-tips {width: 100%;text-align: center;line-height: 2rem;color: #fff;font-size: 0.48rem;float: left;margin-top: 1rem;}
+.gospan{position: absolute;right: 0;font-size: 0.48rem;}
+#app{display: none;}
+.dkstl img{display:inline-block;width: 0.8rem;height: 0.8rem;text-align: center;line-height: 0.8rem;font-size: 0.58rem;border:1px solid #ccc;box-sizing: border-box;}
+.hdtxtsx h5 i{font-size: 0.26rem;}
+.gobuy {display: inline-block;width: 1.6rem;line-height: 0.5rem;background-color: #FF4800;text-align: center;border-radius: 3px;overflow: hidden;color: #fff!important;font-size: 0.26rem;z-index: 99;display: inline-block;float: right;}
+.hdtxtsx h5{display: flex;justify-content: space-between;}
+.isappshow{display: flex;justify-content: space-between;padding:0 0.3rem;}
+.isappshow img{width:0.94rem;height:0.8rem}
+.iconname{color:#333;font-size: 0.28rem;}
+.common-header {position: relative;background: #fff;height: 0.8rem;line-height: 0.8rem;-moz-box-shadow: 0px 2px 10px #d9d9d9;-webkit-box-shadow: 0px 2px 10px #d9d9d9;box-shadow: 0px 2px 10px #d9d9d9;}
+.common-header .header-back {position: absolute;top: 0;left: 0;width: .6rem;height: 100%;text-align: center;}
+.common-header .header-back span, .common-header .header-menu span {display: block;}
+.common-header .title {text-align: center;padding: 0 1rem;color: #333;font-size: 0.3rem;}
+.mc{width:7.5rem;text-align: center;color:#fff;font-size: 0.28rem;}
+</style>
+<script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script>
+		    	var wxobj = {
+		    		appId: '@ViewData["AppId"]', /* 必填，公众号的唯一标识*/
+		            timestamp: '@ViewData["Timestamp"]', /* 必填，生成签名的时间戳*/
+		            nonceStr: '@ViewData["NonceStr"]', /* 必填，生成签名的随机串*/
+		            signature: '@ViewData["Signature"]'/* 必填，签名*/
+		    	}
+		    	wxobj = JSON.stringify(wxobj);
+		    	//alert(wxobj);
+		        wx.config({
+		            debug: false, /* 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。*/
+		            appId: '@ViewData["AppId"]', /* 必填，公众号的唯一标识*/
+		            timestamp: '@ViewData["Timestamp"]', /* 必填，生成签名的时间戳*/
+		            nonceStr: '@ViewData["NonceStr"]', /* 必填，生成签名的随机串*/
+		            signature: '@ViewData["Signature"]',/* 必填，签名*/
+		            jsApiList: [
+		                    'checkJsApi',
+		                    'onMenuShareTimeline',
+		                    'onMenuShareAppMessage',
+		                    'onMenuShareQQ',
+		                    'onMenuShareWeibo',
+		                    'hideMenuItems',
+		                    'showMenuItems',
+		                    'hideAllNonBaseMenuItem',
+		                    'showAllNonBaseMenuItem',
+		                    'translateVoice',
+		                    'startRecord',
+		                    'stopRecord',
+		                    'onRecordEnd',
+		                    'playVoice',
+		                    'pauseVoice',
+		                    'stopVoice',
+		                    'uploadVoice',
+		                    'downloadVoice',
+		                    'chooseImage',
+		                    'previewImage',
+		                    'uploadImage',
+		                    'downloadImage',
+		                    'getNetworkType',
+		                    'openLocation',
+		                    'getLocation',
+		                    'hideOptionMenu',
+		                    'showOptionMenu',
+		                    'closeWindow',
+		                    'scanQRCode',
+		                    'chooseWXPay',
+		                    'openProductSpecificView',
+		                    'addCard',
+		                    'chooseCard',
+		                    'openCard'
+		            ]
+		        });
+	
+		        wx.error(function (res) {
+		            /*alert(res);*/
+		            /*console.log(res);*/
+		            /*alert('验证失败');*/
+		        });
+	
+		        wx.ready(function () {
+		        	$(function(){
+		        		 var returnurl = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/activity/BargainStatus?orderid=@ViewData["orderid"]&IsApp=@{@WorkContext.IsApp}';
+		        		if('@WorkContext.Uid'<1){
+		        			var link='https://'+window.location.host+'/m/account/Login?LeaderUid='+'@WorkContext.Uid';
+		        		}else{
+		        			var link = returnurl+'&LeaderUid='+'@WorkContext.Uid';
+		        		}
+			            var Logo = '@WorkContext.SellerInfo.Logo';
+			            var imgUrl = '';
+			            imgUrl = $(".hdbot").find("img").attr("src");
+			            var title=$('.hdbot').find('h4').text()
+			            var desc = "我发现一件好货，快来一起砍价吧";
+		                /*转发到朋友圈*/
+		                wx.onMenuShareTimeline({
+		                    title: desc,
+		                    link: link,
+		                    imgUrl: imgUrl,
+		                    success: function () {
+		                        /*alert('转发成功！');*/
+		                    },
+		                    cancel: function () {
+		                        /*alert('转发失败！');*/
+		                    }
+		                });
+		                wx.onMenuShareAppMessage({
+		                    title: desc,
+		                    desc: title,
+		                    link: link,
+		                    imgUrl: imgUrl,
+		                    type: 'link',
+		                    dataUrl: '',
+		                    success: function () {
+		                        /*alert('转发成功！');*/
+		                    },
+		                    cancel: function () {
+		                       /* alert('转发失败！');*/
+		                    }
+		                });
+		        	});
+	            });
+	</script>
+</head>
+    <body>
+    	<div id="app" >
+    		<div class="common-header">
+			<div class="header-back" onclick="goToBack()"><span class="icon iconfont">&#xe60e;</span></div>
+		    <div class="title ell-1">立即领取</div>
+		    <!--<div class="header-menu" onclick="share()"><span class="icon iconfont">&#xe620;</span></div>-->
+	    </div>
+        <div class="mainbox">
+            <!--h2 class="hdgz">活动规则</h2-->
+            <div class="maincon">
+                <div class="hdtxt">
+                    <h2>
+                        <div class="head">
+                        	<img v-if='userinfo.avatar!=""' :src="userinfo.avatar">
+                        	<img v-else src="/images/photo.png" alt="" />
+                        	<!--<span v-else class='iconfont'>&#xe663;</span>-->
+                        </div>
+                        <div class="head-info">{{userinfo.username}}<br />"我发现一件好货，快来一起砍价吧"</div>
+                    </h2>
+                    <!--发起者看到的商品详情-->
+                    <div class="hdbot" v-if='datadetail.userid==userId'>
+                        <h3><img :src="'@(WorkContext.ShopConfig.ImageCDN)/'+datadetail.productimgurl+'?w=79&h=79'"></h3>
+                        <div class="hdtxtsx">
+                            <h4 v-text='datadetail.productname'></h4>
+                            <h5>
+                            	<span>¥{{datadetail.originalprice}}</span>
+                            	<!--<i>销量{{SaleCount}}</i>-->
+                            	<span v-text='"砍至"+datadetail.canbuyprice.toFixed(2)+"可购买"' v-if='datadetail.bargainprice<datadetail.originalprice-datadetail.canbuyprice'></span>
+                            	<i v-else-if='datadetail.orderstatus==1' >{{SaleCount}}人已砍至最低价</i>
+                            	<span class='gobuy' v-else v-on:click='BargainOrderAdd(datadetail)'>立即购买</span>
+                            </h5>
+                        </div>
+                    </div>
+                      <!--好友看到的商品详情-->
+                     <div class="hdbot" v-else>
+                        <h3><img :src="'@(WorkContext.ShopConfig.ImageCDN)/'+datadetail.productimgurl+'?w=79&h=79'"></h3>
+                        <div class="hdtxtsx">
+                            <h4 v-text='datadetail.productname'></h4>
+                            <h5>
+                            	<span>¥{{datadetail.originalprice}}</span>
+                            	<i>{{SaleCount}}人已砍至最低价</i>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                <h4 class="yikan">已砍<i>{{datadetail.bargainprice}}</i>元，可砍<i>{{datadetail.saleprice}}</i>元</h4>
+                <div class="progress-line">
+                    <div class="progress" v-bind:style="{width:datadetail.bargainprice/(datadetail.originalprice-datadetail.limitprice)*100+'%'}"></div>
+                </div>
+                <div v-if='datadetail.userid==userId'>
+                	 <h5 v-if='datadetail.orderstatus==1' class="kanyid" v-on:click='BargainOrderAdd(datadetail)' >
+                	 	已砍至最低价，立即购买
+                	 </h5>
+                	 <h5 v-else class="kanyid" v-on:click='showshare()' >分享给好友，帮忙砍一刀</h5>
+                </div>
+                <!--好友-->
+                <div  v-else>
+                	   <h5 v-if='datadetail.orderstatus==1' class="kanyid"  style='background: #999;'>活动结束</h5>
+                	   <h5 v-else-if='datadetail.orderstatus>=2' class="kanyid"  style='background: #999;'>砍价成功</h5>
+                	   <h5 v-else class="kanyid" v-on:click='showfriendbargain()' >帮好友砍一刀</h5>
+                </div>
+                <h6 class="djs" v-show='datadetail.orderstatus==0'>还剩
+                    <span id="t_h1"></span>:
+                    <span id="t_m1"></span>:
+                    <span id="t_s1"></span>
+                    结束，快来砍价吧!
+                </h6>
+                <div class="kjbot">
+                    <h1>好友砍价</h1>
+                    <div class="friendbox">
+                    <div class='dkstul'>
+	                    <div class="dkst" v-for='(item,index) in friendbargainList'>
+	                        <div class="dkstl" v-if='item.headimgurl==""'><img  src="/images/photo.png" alt="" /></div>
+	                        <div class="dkstl" v-else>
+	                        	<img :src="item.headimgurl" >
+	                        	<!--<img :src="'@(WorkContext.ShopConfig.ImageCDN)/'+item.headimgurl" v-else>-->
+	                        </div>
+	                        <div class="dkstc">
+	                            <h1>{{item.bargainusername}}</h1>
+	                            <p>{{item.addtime}}</p>
+	                        </div>
+	                        <div class="dkstr">
+	                            <div class="dkstr-icon">
+	                                <svg class="icon" aria-hidden="true">
+	                                    <use xlink:href="#icon-dao"></use>
+	                                </svg>砍掉{{item.bargainprice}}元
+	                            </div>
+	                        </div>
+	                    </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--猜你喜欢-->
+        <div class="guess-list">
+            <h3>
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-yuandian"></use>
+                </svg>
+                猜你喜欢
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-yuandian"></use>
+                </svg>
+            </h3>
+            <ul class="weui_panel_bd">
+                <li v-for='(item,index) in goodsList' :key='index'>
+                	<a :href="'/m/activity/BargainDetail?Id='+item.itemid+'&IsApp=@{@WorkContext.IsApp}'">
+	                	<div class="goods-img-box weui-updown">
+	                		<img :src="'@(WorkContext.ShopConfig.ImageCDN)/'+item.shareimg" alt="" class="goods-img">
+	                	</div> 
+	                	<div class="goods-info-box">
+	                		<div class="goods-title hidetxt1" v-text='item.productname'></div> 
+	                		<div class="goods-info">
+	                			<span class="price">¥ {{item.activityprice}}</span>
+	                			<span class="buy-now">立即抢购</span>
+	                		</div>
+	                	</div> 
+	                	<div class="clearfix"></div>
+                   </a>
+                </li>
+                
+            </ul>
+            <div class='mc'>没有更多数据了...</div>
+        </div>
+        <!--弹出层-->
+        <div class="zhezhao" id="zhezhao1">
+            <div class="zzpos">
+                <span class="close">X</span>
+                <h3><img src="/Images/3.jpg"></h3>
+                <h4>谢谢你帮我砍了<i>10.3</i>元，送你一把宝刀自己砍价时候使用，可多砍一刀</h4>
+                <h5><img src="/Images/1.jpg"></h5>
+                <h6>还剩
+                    <span id="t_h"></span>:
+                    <span id="t_m"></span>:
+                    <span id="t_s"></span>失效
+                </h6>
+                <h2 id="click1">去使用宝刀</h2>
+            </div>
+        </div>
+        <div class="zhezhao" id="zhezhao2">
+            <div class="zzpos">
+                <span class="close">X</span>
+                <h3><img src="/Images/3.jpg"></h3>
+                <h4>宝刀一挥，又砍了<i>12</i>元</h4>
+                <h4>邀请好友继续来砍价吧</h4>
+                <h2 id="click2">继续砍价</h2>
+            </div>
+        </div>
+        <div class="zhezhao" id="zhezhao3">
+            <div class="zzpos">
+                <span class="close">X</span>
+                <h3><img src="/Images/3.jpg"></h3>
+                <h2 class="gzj">关注公众号，我们一起砍价0元拿</h2>
+                <h6 class="ewm"><img src="/Images/4.jpg"></h6>
+            </div>
+        </div>
+        <div class="wxshare" v-if='isbargain' v-on:click='hidebargain()'>
+		      <div class="bargain-for-me">
+		      	<span class='iconfont gospan'>&#xe62d;</span>
+		            <div class="bargain-title">恭喜你</div>
+		            <div class="bargain-content">
+		            	<div class="bargain-price">你已砍了<strong class="price">{{bargaindetail.bargainprice}}元</strong></div>
+		                <div class="bargain-share-text">分享给好友，帮忙砍一刀噢</div>
+		                <div class="bargain-share-content">
+		                	<div class='isappshow'  v-if='IsApp==1'>
+		                		<div>
+		                			<img src="/Images/Mobile/bargain/WEICHAT.png" alt="" />
+		                			<div class='iconname'>微信好友</div>
+		                		</div>
+		                		<div>
+		                			<img src="/Images/Mobile/bargain/WEIFRIENDS.png" alt="" />
+		                			<div class='iconname'>朋友圈</div>
+		                		</div>
+		                		<div >
+		                			<img src="/Images/Mobile/bargain/QQ.png" alt="" />
+		                			<div class='iconname'>QQ好友</div>
+		                		</div>
+		                	</div>
+		                	 <h5 v-else class="kanyid" v-on:click='showshare()' style='margin-top:0'>分享给好友，帮忙砍一刀</h5>
+		                </div>
+		            </div>
+		      </div>
+        </div>
+        <!--好友帮忙砍价弹窗-->
+        <div class="wxshare" v-if='isfriendbargain'  v-on:click='hidefriendbargain()'>
+		      <div class="bargain-for-me">
+		      	<span class='iconfont gospan' >&#xe62d;</span>
+		            <div class="bargain-title">恭喜你</div>
+		            <div class="bargain-content">
+		            	<div class="bargain-price">你已砍了<strong class="price">{{friendbargaindetail.bargainprice}}元</strong></div>
+		                <div class="bargain-share-text">分享给好友，帮忙砍一刀噢</div>
+		                <div class="bargain-share-content">
+		                	<div class='isappshow' v-if='IsApp==1'>
+		                		<div>
+		                			<img src="/Images/Mobile/bargain/WEICHAT.png" alt="" />
+		                			<div class='iconname'>微信好友</div>
+		                		</div>
+		                		<div>
+		                			<img src="/Images/Mobile/bargain/WEIFRIENDS.png" alt="" />
+		                			<div class='iconname'>朋友圈</div>
+		                		</div>
+		                		<div >
+		                			<img src="/Images/Mobile/bargain/QQ.png" alt="" />
+		                			<div class='iconname'>QQ好友</div>
+		                		</div>
+		                	</div>
+		                	<h5 v-else class="kanyid" v-on:click='showshare()' style='margin-top:0'>分享给好友，帮忙砍一刀</h5>
+		                </div>
+		            </div>
+		      </div>
+        </div>
+       
+        <div class="wx-share" v-if='isshare' v-on:click='showshare()'>
+        <div class="share-img"></div>
+        <p class="share-tips">点击右上角分享</p>
+       </div>
+        </div>
+        <div class="curtain hide">
+		<div class="loader Rotation"></div>
+		<div class="loadTit"><icon class='icon iconfont'>&#xe649;</icon></div>
+	    </div>
+        <script type="text/javascript">
+        	var IsApp = "@WorkContext.IsApp";
+			//返回交互
+			function goToBack() {
+				var _this = this;
+				if(IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+		                window.js.goBack();
+					}
+				}else{
+
+                    if (vm.lanuchid == vm.userId) {
+                        window.history.back();
+                    }else{
+                        window.location.href="/m/home/index";
+                    }
+				}
+			}
+        	$('.curtain').removeClass("hide")
+        	 var vm = new Vue({
+		     	el: '#app',
+		     	data:{
+		     	userId:'@WorkContext.Uid',
+     	        IsApp: "@WorkContext.IsApp",
+     	        orderid:'@ViewData["orderid"]',
+     	        weixin:"@WebHelper.IsWeiXin()",
+     	        datadetail:'',
+     	        SaleCount:0,
+     	        userinfo:'',
+     	        addtime:'',
+     	        isshare:false,
+     	        page:1,
+     	        size:10,
+     	        goodsList:[],
+     	        friendbargainList:[  ],//好友列表
+     	        isfriendbargain:false,
+     	        isbargain:false,
+     	        lanuchid:0,
+     	        friendbargaindetail:'',
+     	        bargaindetail:'',
+     	        friendbargain:'',
+     	        freight:0,//运费
+     	        shopuserid:0,
+     	        FullFreeAmount:'@ViewData["FullFreeAmount"]',
+		     	},
+		     	methods:{
+		     		bargain:function(userid,orderid,bargainuid){//砍价方法
+		    	    	var _this=this;
+		    	    	var dataList={
+		    	    		orderid:orderid,//订单id
+		    	    		userid:userid,//发起者用户id
+		    	    		BargainUserId:bargainuid,//砍价用户id
+		    	    	}
+		    	    	$.ajax({
+							type: "post",
+							url: "/Api/Activity/Bargain",
+							async: true,
+							dataType: "json",
+							data:dataList,
+							success: function(rel) {
+								console.log(rel)
+								if(rel.code==1){
+									if(_this.userId==_this.lanuchid){
+										_this.bargaindetail=rel.data
+										_this.isbargain=true;
+//										_this.getorderbargain();
+									}else{
+										_this.friendbargaindetail=rel.data
+										_this.isfriendbargain=true;
+										_this.getorderbargain()
+										_this.givebargain(_this.lanuchid,_this.datadetail.orderid)
+									}
+								}else{
+									$.toast(rel.message);
+								}
+							}
+						});
+    	           },
+    	           givebargain:function(userid,orderid){//帮砍好友列表
+		    	    	var _this=this;
+		    	    	var url="/Api/Activity/GetOrderBargainDetailList?UserId="+userid+'&OrderId='+orderid;
+		    	    	$.ajax({
+							type: "get",
+							url: url,
+							async: true,
+							dataType: "json",
+							success: function(rel) {
+								console.log(rel)
+								if(rel.code==1){
+									var data=rel.data;
+									for(var i=0;i<data.length;i++){
+										if(data[i].headimgurl!=""){
+											if(data[i].headimgurl.indexOf("http")> -1){
+//											   data[i].isweixin=true;
+                                              data[i].headimgurl=data[i].headimgurl
+											}else{
+												data[i].headimgurl='@(WorkContext.ShopConfig.ImageCDN)/'+data[i].headimgurl
+											}
+										}
+									}
+									_this.friendbargainList=rel.data
+								}else{
+									
+								}
+							}
+						});
+    	           },
+    	           BargainDetail:function(userid,orderid){//砍价临时订单详情
+		    	    	var _this=this;
+		    	    	var url="/Api/Activity/GetOrderBargainDetail?BargainUserId="+userid+'&OrderId='+orderid;
+		    	    	$.ajax({
+							type: "get",
+							url: url,
+							async: true,
+							dataType: "json",
+							success: function(rel) {
+								console.log(rel)
+								if(rel.code==1){
+									_this.bargaindetail=rel.data
+								}else{
+									if(_this.userId==_this.lanuchid){
+										_this.bargain(_this.userId,_this.orderid,_this.userId)
+									}
+									
+								}
+							}
+						});
+    	           },
+    	           getShopInfo: function(productid){//获取商户userid
+						var _this = this;
+						$.ajax({
+			    			type:"get",
+			    			url:"/Api/User/GetSaleUidByProductId?ProductId="+productid,
+			    			async:true,
+			    			success: function(rel){
+			    				console.log(rel);
+			    				if(rel.code==1){
+			    					_this.shopuserid=rel.data
+			    				}
+			    			}
+			    		});
+				   },
+		     		showfriendbargain:function(){
+		     			var _this=this;
+		     			var LeaderUid=_this.lanuchid;
+		     			console.log(LeaderUid)
+		     			
+		     			console.log(returnurl)
+		     			if('@WorkContext.Uid'<1){
+//		     				if(_this.weixin=="False"){
+//									if(LeaderUid==null || typeof(LeaderUid)=="undefined"){
+//										url = '/m/account/login?returnUrl='+returnurl;
+//									}else{
+//										url = '/m/account/login?LeaderUid='+LeaderUid+'&returnUrl='+returnurl;
+//									}
+//							}else{
+//								if(LeaderUid==null || typeof(LeaderUid)=="undefined"){
+//									url = '/m/user/bind&returnUrl='+returnurl;
+//								}else{
+//									url = '/m/user/bind?LeaderUid='+LeaderUid+'&returnUrl='+returnurl;
+//								}
+//							}
+		     				var userId=_this.GetRequest().LeaderUid
+		     				if(_this.weixin=="False"){
+							    var url = window.location.href;
+							    var returnurl = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/activity/BargainStatus?orderid=@ViewData["orderid"]&IsApp=@{@WorkContext.IsApp}';
+							    window.location.href = '/m/account/login?returnUrl='+returnurl+'&LeaderUid='+userId;
+							}else{
+								var url = window.location.href;
+								 var returnurl = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/activity/BargainStatus?orderid=@ViewData["orderid"]&IsApp=@{@WorkContext.IsApp}';
+								window.location.href = '/m/user/bind?returnUrl='+returnurl+'&LeaderUid='+userId;
+							}
+		     			}else{
+		     				  _this.bargain(_this.lanuchid,_this.datadetail.orderid,'@WorkContext.Uid')
+		     			}
+		     		},
+		     		 GetRequest:function() {  
+						   var url = location.search; //获取url中"?"符后的字串  
+						   url = decodeURIComponent(url);
+						   var theRequest = new Object();  
+						   if (url.indexOf("?") != -1) {  
+						      var str = url.substr(1);  
+						      strs = str.split("&");  
+						      for(var i = 0; i < strs.length; i ++) {  
+						         theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);  
+						      }  
+						   }  
+			         return theRequest;  
+			        } , 
+		     		hidefriendbargain:function(){
+		     			var _this=this;
+		     			_this.isfriendbargain=false;
+		     		},
+		     		hidebargain:function(){
+		     			var _this=this;
+		     			_this.isbargain=false;
+		     		},
+		     		showshare:function(){
+		     			var _this=this;
+		     			console.log(_this.weixin)
+		     			if(_this.weixin=="False"){
+		     				$.alert('请在微信公众号打开分享')
+		     			}else{
+		     				_this.isshare=!_this.isshare;
+		     			}
+		     			
+		     		},
+		     		rollMessage: function () {
+			    		/* 快报滚动*/
+			            var $this = $(".friendbox");
+			            var scrollTimer;
+			            function scrollNews(obj) {
+			                var $self = obj.find(".dkstul");
+			                var lineHeight = $self.find(".dkst:first").height();
+			                lineHeight = (lineHeight/100)*2;
+			                $self.animate({
+			                    "marginTop": -lineHeight + "rem"
+			                }, 500, function () {
+			                    $self.css({
+			                        marginTop: 0
+			                    }).find(".dkst:first").appendTo($self);
+			                });
+			            }
+			           if($('.dkst').length>3){
+			           	 scrollTimer = setInterval(function () {
+			                 scrollNews($this);
+			             }, 2000);
+			           }
+			           
+		    	    },
+		     		guessLike:function(){//猜你喜欢
+		     			var _this = this;
+						$.ajax({
+							type:"get",
+							url:"/Api/Activity/BargainList?v="+Math.random(),
+							async:true,
+							dataType:"json",
+							data:{
+								page: _this.page,
+								size: _this.size,
+							},
+							success: function(rel) {
+								console.log(rel);
+								$.hideLoading();
+								if(rel.code==1){
+									_this.loadmore = !_this.loadmore;
+									_this.goodsList = _this.goodsList.concat(rel.data);//_this.goodsList追加数据返回数组副本
+									_this.page++;
+								}else{
+									_this.loadmore = false;
+									_this.nomore = true;
+								}
+							},
+							
+						});
+		     		},
+		     		getorderbargain:function(){//获取商品基本信息
+		     			var _this=this;
+		     			var url="/Api/Activity/GetOrderBargain?v="+Math.random()+"&orderid="+_this.orderid;
+		     			$.ajax({
+							type:"get",
+							url:url,
+							async:true,
+							dataType:"json",
+							success: function(rel){
+								console.log(rel)
+								if(rel.code==1){
+									var data=rel.data;
+									//已砍价格
+									//bargainprice=originalprice-limitprice-saleprice;
+									//可购买价格
+									//canbuprice=originalprice*10%+limitprice
+									//if(canbuprice>=gobuyprice>=limitprice){
+										//支付价格 gobuyprice=originalprice-bargainprice;
+									//}
+									_this.getShopInfo(data.productid);
+									_this.freigthByAddr(data.province,data.city,data.country,data.town,data.sellerid,data.weight)
+									data.bargainprice=(data.originalprice-data.limitprice-data.saleprice).toFixed(2);//砍掉价格
+//									if(_this.userId!=data.userid){
+										_this.BargainDetail('@WorkContext.Uid',data.orderid);
+//									}
+									data.canbuyprice=(data.originalprice*0.1)+data.limitprice;//可以购买的价格
+									_this.datadetail=data;
+									_this.addtime=data.addtime;
+									_this.lanuchid=data.userid;
+									_this.getUserInfo(data.userid);
+									_this.givebargain(data.userid,data.orderid);
+									_this.SaleCountnum(data.userid,data.productid);
+								}else{
+									$('#nomore').removeClass('hide')
+								}
+							},
+				        });
+		     		},
+		             SaleCountnum:function(UserId,productid) {//获取销量
+		             	var _this=this;
+						$.ajax({
+							type:"get",
+							url:"/Api/Activity/BargainLowNum?UserId="+UserId+"&ProductId="+productid,
+							async:true,
+							success:function(rel){
+								console.log(rel)
+								if(rel.code==1){
+									_this.SaleCount=parseInt(rel.data);
+								}
+							}
+						});
+					},
+					getUserInfo:function(lanuchid){//获取用户信息
+						var _this=this;
+						$.ajax({
+							type:"get",
+							url:"/Api/User/GetUserByUserId?userid="+lanuchid,
+							async:true,
+							success:function(rel){
+								console.log(rel)
+								if(rel.code==1){
+									if(rel.data.avatar!=""){
+											if(rel.data.avatar.indexOf("http")> -1){
+                                              rel.data.avatar=rel.data.avatar
+											}else{
+												rel.data.avatar='@(WorkContext.ShopConfig.ImageCDN)/'+rel.data.avatar
+											}
+										}
+									_this.userinfo=rel.data;
+								}
+							}
+						});
+					},
+					BargainOrderAdd:function(data){//砍价订单添加
+						var _this=this;
+						var data=_this.datadetail;
+						var ShipFee=0
+						var paybargainprice=data.originalprice-data.bargainprice//支付价格=原价-砍掉价格
+						 if(paybargainprice>=Number(_this.FullFreeAmount) && Number(_this.FullFreeAmount)>0){
+	            	        ShipFee = 0;
+			            }else{
+			            	ShipFee =_this.freight
+			            }
+			            var OrderAmount=paybargainprice+ShipFee;
+						var dataList={
+							AddressId: data.addressid, // 地址
+							RegionId: data.town, // 地区邮寄地区的最后一个的id
+							ShipMode: 1, // 配送方式   1  2  4
+					        //UserMoney: UserMoney,
+							ItemId: data.activityitemid, // 如果是直接过来穿商品ID
+							SkuId: data.skuid, // 如果是直接过来 传产品
+							Quantity: 1, // 如果是直接过来 这里穿数量
+							Memo: data.memo, // 订单备注
+							Consignee: data.consignee, // 收货人姓名
+							Mobile: data.mobile, // 联系电话
+							//ShipTime: ShipTime, // 提货时间
+							//ShopId: ShopId, // 自提店铺
+							Province: data.province, // 选择的省
+							City: data.city, // 选择的市
+							County: data.county, // 选择的区
+							Town: data.town, // 选择的镇
+							Address: data.address, // 详细地址
+							OrderAmount: OrderAmount, // 订单结算后的总金额
+							ShipFee:ShipFee,
+							Weight:data.weight,
+							RequestPayBargainPrice:paybargainprice,//去支付价格
+							BargainOrderId:data.orderid,//订单id
+						}
+						$.ajax({
+							type:"post",
+							url:"/m/Order/BargainOrderAdd",
+							data:dataList,
+							async:true,
+							success:function(rel){
+								var rel=JSON.parse(rel)
+								console.log(rel)
+								console.log(rel.OrderId+','+data.orderid)
+								if(rel.Code==1){
+									if(_this.IsApp==1){
+					                	if(navigator.userAgent.indexOf("iPhone")>0){
+											settleShoppingCart(rel.OrderId,data.orderid);
+										}
+					                	if(navigator.userAgent.indexOf("Android")>0){
+											window.js.settleShoppingCart(rel.OrderId,data.orderid);
+										}
+				                	}else{
+				                		var url = rel.Data;
+				                	   _this.getorderbargain()
+				                		location.href = url;
+				                		return true;
+				                	}
+								}else if(rel.Code==-1){
+									if(_this.IsApp==1){
+					                	if(navigator.userAgent.indexOf("iPhone")>0){
+											settleShoppingCart(rel.Data);
+										}
+					                	if(navigator.userAgent.indexOf("Android")>0){
+											window.js.settleShoppingCart(rel.Data);
+										}
+				                	}else{
+				                		window.location.href = '/m/settlement/order?id='+rel.Data;
+				                	}
+								}else{
+									$.toast(rel.Message)
+								}
+							}
+						});
+					},
+					
+					 freigthByAddr:function(Province,City,County,Town,SellerId,Weight){//计算邮费
+    	            	var _this=this;
+						    $.get('/m/Order/GetShipTemplate', {
+						        Province: Province,
+						        City: City,
+						        Country: County,
+						        Town: Town,
+						        SellerId:SellerId,
+						        t: Math.random()
+						    }, function(data) {
+						    	console.log(data)
+						        var datas = JSON.parse(data);
+						        if (datas.Code == 1) {
+						            /*
+						             * 运费计算公式
+						             * NumWeight  超出首重的重量(总重 - 运费模版首重) / 运费模版超重重量基数 + 没填重量的商品的个数*5
+						             * CountShipFee 运费模版首重money + NumWeight * 运费模版超重价格基数
+						             */
+						            var freight=0
+						            var NumWeight = 0;
+						            if (Weight > datas.Data.Weight) {
+						            	NumWeight = _this.calc(Weight, '-' , datas.Data.Weight,2);
+						            	if(Number(datas.Data.AddWeight)!=0 || datas.Data.AddWeight!=""){
+						            		NumWeight = Math.ceil(NumWeight / datas.Data.AddWeight);
+						            	}else{
+						            		NumWeight = 0;
+						            	}
+						            }
+						            NumWeight = Number(NumWeight).toFixed(2);
+						            var CountShipFee = _this.calc (datas.Data.Price,'+', NumWeight * datas.Data.AddPrice,2);
+						            freight = CountShipFee;
+						            console.log('CountShipFee'+CountShipFee)
+						            if(Weight<=0){
+						            	freight = datas.Data.Price;
+						            }
+						            _this.freight=freight;
+//									var total = calc (GoodsMoney,'+', freight,2);
+//									$("#amount_formated").text(total);
+						        } else {
+//						            $.toast("当前地址无效、请重新选择");
+						        }
+						    }, 'JSON');
+						    
+						},
+					 calc:function(arg1, op, arg2,dot) {
+					    var ra = 1, rb = 1, m;
+					    try {
+					        ra = arg1.toString().split('.')[1].length;
+					    } catch (e) {
+					    }
+					    try {
+					        rb = arg2.toString().split('.')[1].length;
+					    } catch (e) {
+					    }
+					    m = Math.pow(10, Math.max(ra, rb));
+					
+					    switch (op) {
+					        case '+':
+					        case '-':
+					            arg1 = Math.round(arg1 * m);
+					            arg2 = Math.round(arg2 * m);
+					            break;
+					        case '*':
+					            ra = Math.pow(10, ra);
+					            rb = Math.pow(10, rb);
+					            m = ra * rb;
+					            arg1 = Math.round(arg1 * ra);
+					            arg2 = Math.round(arg2 * rb);
+					            break;
+					        case '/':
+					            arg1 = Math.round(arg1 * m);
+					            arg2 = Math.round(arg2 * m);
+					            m = 1;
+					            break;
+					    }
+					    try {
+					        var result = eval('(' + '(' + arg1 + ')' + op + '(' + arg2 + ')' + ')/' + m);
+					    } catch (e) {
+					    }
+					    if(result.toString().indexOf(".")!=-1){
+					    	var strarr = result.toString().split(".");
+					    	if(strarr[1].length>dot){
+					    		result = strarr[0]+"."+strarr[1].substring(0,dot);
+					    	}
+					    }
+					    return result;
+	                },
+		     	}
+     	     })
+            
+            $(function() {
+            	vm.getorderbargain();
+            	vm.guessLike();
+            	setTimeout(function(){
+            		$('.curtain').addClass("hide")
+            		$('#app').css('display','block');
+            		$('body').css('background','#DE3120');
+            	},200)
+            	setTimeout(function(){
+				 vm.rollMessage();
+			    },2000);
+                $("body").append("<div id='mask'></div>");
+                $("#mask").addClass("mask").hide();
+                $(document).on("click" , ".gospan" , function(){
+                    $("#mask").remove();
+                    $(".wxshare").hide();
+                    vm.getorderbargain();
+                });
+//              $('.kanyid').click(function() {
+//                  $("body").append("<div id='mask'></div>");
+//                  $("#mask").addClass("mask").show();
+//                  $('body,html').addClass('overhidden');
+//                  $('#zhezhao1').animate({
+//                      top: '50%'
+//                  }, 500);
+//              });
+
+                $('.close').click(function() {
+                    $("#mask").removeClass("mask").hide();
+                    $('body,html').removeClass('overhidden');
+                    $('#zhezhao1').animate({
+                        top: '-100%'
+                    }, 500);
+                    $('#zhezhao2').hide();
+                    $('#zhezhao3').hide();
+                });
+                $('#click1').click(function() {
+                    $('#zhezhao2').show();
+                    $('#zhezhao1').animate({
+                        top: '-100%'
+                    }, 500);
+                });
+                $('#click2').click(function() {
+                    $('#zhezhao3').show();
+                    $('#zhezhao1').animate({
+                        top: '-100%'
+                    }, 500);
+                });
+                //当小时，分钟和秒钟小于 10 的时候会显示为个位数，需要在前面加0
+                function zero1(num) {
+                    if(num < 10) {
+                        return '0' + num;
+                    } else {
+                        return '' + num;
+                    };
+                };
+
+                function GetRTimes() {
+                    var _this=this;
+		            var begintime_ms = Date.parse(new Date(vm.addtime.replace(/-/g, "/"))); //begintime 为开始时间
+		            var getInervalHour=(begintime_ms)/1000/60/60;
+		            var endtime=(48+getInervalHour)*60*60;
+                    var EndTime = new Date(timestampToTime(endtime).replace(/-/g, "/"));
+                    var NowTime = new Date();
+                    var t = (EndTime.getTime() - NowTime.getTime());
+                    if(t>0){
+                    	var h = Math.floor(t / 1000 / 60 / 60 );
+	                    var m = Math.floor(t / 1000 / 60 % 60);
+	                    var s = Math.floor(t / 1000 % 60);
+	                    document.getElementById("t_h1").innerHTML = zero1(h);
+	                    document.getElementById("t_m1").innerHTML = zero1(m);
+	                    document.getElementById("t_s1").innerHTML = zero1(s);
+                    }
+                };
+                setInterval(GetRTimes, 0);
+			    function timestampToTime(timestamp) {
+			        var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+			        var Y = date.getFullYear() + '-';
+			        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+			        var D = (date.getDate()+1 < 10 ? '0'+(date.getDate()) : date.getDate())+ ' ';
+			        var h = date.getHours() + ':';
+			        var m = date.getMinutes() + ':';
+			        var s = date.getSeconds();
+			        return Y+M+D+h+m+s;
+			     }
+                //当小时，分钟和秒钟小于 10 的时候会显示为个位数，需要在前面加0
+                function zero(num) {
+                    if(num < 10) {
+                        return '0' + num;
+                    } else {
+                        return '' + num;
+                    };
+                };
+                function GetRTime() {
+                    var EndTime = new Date('2018/12/5 00:00:00');
+                    var NowTime = new Date();
+                    var t = EndTime.getTime() - NowTime.getTime();
+                    var h = Math.floor(t / 1000 / 60 / 60 % 24);
+                    var m = Math.floor(t / 1000 / 60 % 60);
+                    var s = Math.floor(t / 1000 % 60);
+                    document.getElementById("t_h").innerHTML = zero(h);
+                    document.getElementById("t_m").innerHTML = zero(m);
+                    document.getElementById("t_s").innerHTML = zero(s);
+                };
+                setInterval(GetRTime, 0);
+            });
+            //上拉加载
+            $(function(){
+               
+            });
+        </script>
+
+    </body>
+
+</html>

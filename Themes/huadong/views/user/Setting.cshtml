@@ -1,0 +1,823 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!--<link rel="apple-touch-icon" href="favicon.png">-->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>完善用户资料-@{@WorkContext.SellerInfo.SellerName}</title>
+    <link rel="stylesheet" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/lrz.min.js"></script>
+    <script src="/Mobile/weui/picker.js"></script>
+    <script src="/Mobile/weui/picker-city.js"></script>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=nT6ySqHzG1p7QMRpZ1k9rMAT0weeSERr"></script>
+    <style type="text/css">
+        body{font-size:12px}
+        .warp-main{display: none;}
+.weui_cells{margin-top:0;font-size:12px}
+a img{display:block;width:50px;height:50px}
+.weui_cell_hd{width:75px;margin-right:5px}
+.weui_input{height:30px;line-height:30px}
+.weui_cell{padding:5px 15px}
+.m-cityselect.brouce-in{-webkit-transform:translate(0,0);transform:translate(0,0)}
+.m-cityselect{border-top:1px solid #e1e1e1}
+.m-cityselect{position:fixed;bottom:0;left:0;width:100%;height:75%;z-index:1000;background-color:#fff;-webkit-transform:translate(0,100%);transform:translate(0,100%);-webkit-transition:-webkit-transform .3s;transition:-webkit-transform .3s;transition:transform .3s;transition:transform .3s,-webkit-transform .3s}
+.cityselect-header{position:absolute;top:0;left:0;width:100%;z-index:1}
+.cityselect-title{width:100%;font-size:.94rem;text-align:center;height:45px;line-height:45px;position:relative}
+.cityselect-title:after{content:'';position:absolute;z-index:0;bottom:0;left:0;width:100%;height:1px;border-bottom:1px solid #B2B2B2;-webkit-transform:scaleY(.5);transform:scaleY(.5);-webkit-transform-origin:0 100%;transform-origin:0 100%}
+.cityselect-nav{width:100%;padding-left:.2rem;overflow:hidden;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}
+.cityselect-nav>a{font-size:.86rem;color:#222;display:block;height:40px;line-height:46px;padding:0 .6rem;position:relative;margin-right:.6rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40%}
+.cityselect-nav>a.crt{color:#F23030}
+.cityselect-nav>a.crt:after{content:'';width:100%;height:2px;background-color:#F23030;position:absolute;bottom:0;left:0;z-index:2}
+.cityselect-header:after{content:'';position:absolute;z-index:0;bottom:0;left:0;width:100%;height:1px;border-bottom:1px solid #D9D9D9;-webkit-transform:scaleY(.5);transform:scaleY(.5);-webkit-transform-origin:0 100%;transform-origin:0 100%}
+.cityselect-content{height:100%;padding-top:85px;width:100%;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}
+.cityselect-content.cityselect-move-animate{-webkit-transition:-webkit-transform .3s;transition:-webkit-transform .3s;transition:transform .3s;transition:transform .3s,-webkit-transform .3s}
+.cityselect-content.cityselect-prev{-webkit-transform:translate(0,0);transform:translate(0,0)}
+.cityselect-content>.cityselect-item{display:block;height:inherit;width:50%;-webkit-box-flex:0;-webkit-flex:0 0 50%;-ms-flex:0 0 50%;flex:0 0 50%;overflow-y:auto;-webkit-overflow-scrolling:touch;background-color:#FFF}
+.cityselect-item-box{width:100%;height:inherit;display:block;padding:0 .4rem}
+.cityselect-nav>a.crt{color:#F23030}
+.cityselect-item-box>a{color:#333;font-size:.86rem;height:40px;line-height:2.6rem;overflow:hidden;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center;width:100%;position:relative;z-index:1}
+.cityselect-item-box>a:before{content:'';position:absolute;z-index:0;bottom:0;left:0;width:100%;height:1px;border-bottom:1px solid #D9D9D9;-webkit-transform:scaleY(.5);transform:scaleY(.5);-webkit-transform-origin:0 100%;transform-origin:0 100%}
+.cityselect-item-box>a.crt:after{content:"";position:absolute;bottom:0;left:0;width:20%;height:2px;border-bottom:2px solid #f13030}
+.cityselect-item-box>a.crt{color:#f13030}
+.cityselect-item-box>a span{display:block;-webkit-box-flex:1;-webkit-flex:1;-ms-flex:1;flex:1}
+.cityselect-content>.cityselect-item:nth-child(2n){background-color:#F5F5F5}
+.cityselect-content.cityselect-next{-webkit-transform:translate(-50%,0);transform:translate(-50%,0)}
+.mask-black{background-color:rgba(0,0,0,.4);position:fixed;z-index:500;bottom:0;right:0;left:0;top:0;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center}
+.brouce-out{-webkit-transform:translate(0,100%);transform:translate(0,100%)}
+.cityselect-end{-webkit-transform:translate(-50%,0);transform:translate(-100%,0)}
+.weui_mask{z-index:99}
+.change-pswd{display:none;position:fixed;width:100%;height:100%;top:0;right:0;bottom:0;left:0;z-index:10;background:#fff}
+#l-map{width:1px;height:1px}
+#allmap{width:1px;height:1px}
+.searchResultPanel{z-index:9999;position:absolute}
+#tangram-suggestion--TANGRAM__1m-main{position:absolute;z-index:9999}
+.tangram-suggestion-main{position:absolute;z-index:9999}
+input:-webkit-autofill,select:-webkit-autofill,textarea:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px #fff inset}
+input[type=password]:focus,input[type=text]:focus,textarea:focus{-webkit-box-shadow:0 0 0 1000px #fff inset}
+.m-cityselect.brouce-out{height: 400px;}
+.m-cityselect.brouce-in{height: 400px;}
+.cityselect-content{height: 260px}
+.cityselect-content>.cityselect-item{overflow-x: hidden;}
+.cityselect-header{position: relative;padding: 0;}
+#S_City_Show{padding: 0;}
+.city-footer{}
+    </style>
+</head>
+<body>
+<div class="bg-orange weui-header "> 
+  	<div class="weui-header-left" onclick="goToBack()"> <a class="icon icon-109 f-white"></a>  </div>
+   	<h1 class="weui-header-title">修改资料</h1>
+	<!--<div class="weui-header-right"><a class="icon icon-22 f-white"></a></div> -->
+</div>
+<div class="warp-main">
+		<div class="weui_cells weui_cells_form">
+	        <div class="weui_cell">
+	            <div class="weui_cell_bd weui_cell_primary">
+	                <div class="weui_uploader">
+	                    <div class="weui_uploader_bd">
+	                        <ul class="weui_uploader_files" id='img'>
+	                        	@if (WorkContext.UserInfo.Avatar != "")
+	        					{
+	                        		<li id="delImg" onclick="delImg()" class="weui_uploader_file weui_uploader_status" style="background-image:url('@(WorkContext.ShopConfig.ImageCDN)@(WorkContext.UserInfo.Avatar)')"><div class="weui_uploader_status_content"><i class="weui_icon_cancel"></i></div></li>
+	                        	}
+	                        </ul>
+	                        <div class="weui_uploader_input_wrp">
+	                            <input class="weui_uploader_input" type="file" accept="image/jpg,image/jpeg,image/png,image/gif" id="headimgurl" />
+	                            <input type="hidden" name="headimgurl1" id="headimgurl1" value="@WorkContext.UserInfo.Avatar" />
+	                        </div>
+	                    </div>
+	                </div>
+	
+	            </div>
+	        </div>
+	        <div class="weui_cell">
+	            <div class="weui_cell_hd"><p>昵称：</p></div>
+	            <div class="weui_cell_bd weui_cell_primary">
+	                <p>
+	                <input class="weui_input" type="hidden" name="UserName1"  maxlength="8" value="@WorkContext.UserInfo.UserName" placeholder="请输入昵称" />
+	                <input class="weui_input" type="text" name="UserName" readonly="readonly" id="UserName" maxlength="8" autocomplete="off" value="@WorkContext.UserInfo.UserName" placeholder="请输入昵称" /></p>
+	            </div>
+	
+	        </div>
+	        @if (WorkContext.UserInfo.Password != "")
+	        {
+	            <div class="weui_cell" id="change_pswd">
+	                <div class="weui_cell_hd"><p>旧密码：</p></div>
+	                <div class="weui_cell_bd weui_cell_primary">
+	                	<input class="weui_input" type="hidden"/>
+	                    <input class="weui_input" type="password" readonly="readonly" name="Password" id="oldpassword" autocomplete="off" value="" oninput="if(value.length>18)value=value.slice(0,18)" placeholder="请输入旧密码" />
+	                </div>
+	
+	            </div>
+	        }
+	        <div class="weui_cell" id="change_pswd">
+	            <div class="weui_cell_hd"><p>新密码：</p></div>
+	            <div class="weui_cell_bd weui_cell_primary">
+	                <input class="weui_input" type="password" name="newpassword" readonly="readonly" id="newpassword" maxlength="18" value="" autocomplete="off" autocomplete="new-password" oninput="if(value.length>18)value=value.slice(0,18)" placeholder="请输入6到18位新密码" />
+	            </div>
+	
+	        </div>
+	        <div class="weui_cell" id="change_pswd">
+	            <div class="weui_cell_hd"><p>确认新密码：</p></div>
+	            <div class="weui_cell_bd weui_cell_primary">
+	                <input class="weui_input" type="password" name="assignpassword" readonly="readonly" id="assignpassword" maxlength="18" value="" autocomplete="off" placeholder="请再次输入新密码" oninput="if(value.length>18)value=value.slice(0,18)" />
+	            </div>
+	        </div>
+	        <div class="weui_cell">
+	            <div class="weui_cell_hd"><p>生日：</p></div>
+	            <div class="weui_cell_bd weui_cell_primary">
+	                <p><input class="weui_input" type="text" name="Birthday" readonly="readonly" value="@WorkContext.UserInfo.Birthday" autocomplete="off" id='date' placeholder="请选择生日" /></p>
+	            </div>
+	        </div>
+	
+	        @if (WorkContext.UserInfo.PayPwd != "")
+	        {
+	            <div class="weui_cell" id="change_pswd">
+	                <div class="weui_cell_hd"><p>旧支付密码：</p></div>
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <input class="weui_input" type="password" name="PayPwd" readonly="readonly" id="PayPwd" maxlength="6"  value=""  placeholder="旧支付密码"  />
+	                </div>
+	
+	            </div>
+	        }
+	        <div class="weui_cell" id="change_pswd">
+	            <div class="weui_cell_hd"><p>新支付密码：</p></div>
+	            <div class="weui_cell_bd weui_cell_primary">
+	                <input class="weui_input" type="password" name="NewPayPwd" readonly="readonly" id="NewPayPwd" maxlength="6" value="" autocomplete="off" placeholder="请输入6位纯数字支付密码"/>
+	            </div>
+	
+	        </div>
+	        <div class="weui_cell">
+	            <div class="weui_cell_hd"><p>地址：</p></div>
+	            <div class="weui_cell_bd weui_cell_primary">
+	                <input class="weui_input" name="address" type="text" value="" readonly="readonly" id="address" autocomplete="off" placeholder="请选择地址" data-province="@WorkContext.UserInfo.Province" data-city="@WorkContext.UserInfo.City" data-county="@WorkContext.UserInfo.Country" data-town="@WorkContext.UserInfo.Town">
+	            </div>
+	        </div>
+	        <div class="weui_cell">
+	            <div class="weui_cell_hd"><p>详细地址：</p></div>
+	            <div class="weui_cell_bd weui_cell_primary">
+	                <input type="text" id="Address2" name="street"  class="cell-input weui_input" maxlength="30" placeholder="详细地址" autocomplete="off" value="@WorkContext.UserInfo.Address">
+	                <div id="searchResultPanel2" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;" class="searchResultPanel"></div>
+	            </div>
+	
+	        </div>
+	        <div class="weui_cell">
+	            <div class="weui_cell_hd"><p>邮箱：</p></div>
+	            <div class="weui_cell_bd weui_cell_primary">
+	                <p><input class="weui_input" type="text" readonly="readonly" name="Email" id="Email" maxlength="25" autocomplete="off" value="@WorkContext.UserInfo.Email" placeholder="请输入邮箱地址" /></p>
+	            </div>
+	
+	        </div>
+	    </div>
+	    <div class="weui_btn_area">
+	        <a id="formSubmitBtn" href="javascript:" class="weui_btn weui_btn_primary">保存</a>
+	    </div>
+	    <!-- 城市四联动 -->
+	    <div class="m-cityselect brouce-out" id="Show_City_Four">
+	        <div class="cityselect-header">
+	            <p class="cityselect-title">所在地区</p>
+	            <div class="cityselect-nav">
+	                <a href="javascript:;" class="crt">北京市</a>
+	                <a href="javascript:;" class=""></a>
+	                <a href="javascript:;" class=""></a>
+	                <a href="javascript:;" class=""></a>
+	            </div>
+	        </div>
+	        <!--cityselect-move-animate cityselect-prev-->
+	        <ul class="cityselect-content cityselect-move-animate cityselect-prev" id="S_City_Show">
+	            <li class="cityselect-item">
+	                <div class="cityselect-item-box" id="Province_chioce">
+	                    <a class="crt" href="javascript:;" data-province="11"><span>北京市</span></a>
+	                    <a class="" href="javascript:;" data-province="12"><span>天津市</span></a>
+	                    <a class="" href="javascript:;" data-province="13"><span>河北省</span></a>
+	                    <a class="" href="javascript:;" data-province="14"><span>山西省</span></a>
+	                    <a class="" href="javascript:;" data-province="15"><span>内蒙古自治区</span></a>
+	                    <a class="" href="javascript:;" data-province="21"><span>辽宁省</span></a>
+	                    <a class="" href="javascript:;" data-province="22"><span>吉林省</span></a>
+	                    <a class="" href="javascript:;" data-province="23"><span>黑龙江省</span></a>
+	                    <a class="" href="javascript:;" data-province="31"><span>上海市</span></a>
+	                    <a class="" href="javascript:;" data-province="32"><span>江苏省</span></a>
+	                    <a class="" href="javascript:;" data-province="33"><span>浙江省</span></a>
+	                    <a class="" href="javascript:;" data-province="34"><span>安徽省</span></a>
+	                    <a class="" href="javascript:;" data-province="35"><span>福建省</span></a>
+	                    <a class="" href="javascript:;" data-province="36"><span>江西省</span></a>
+	                    <a class="" href="javascript:;" data-province="37"><span>山东省</span></a>
+	                    <a class="" href="javascript:;" data-province="41"><span>河南省</span></a>
+	                    <a class="" href="javascript:;" data-province="42"><span>湖北省</span></a>
+	                    <a class="" href="javascript:;" data-province="43"><span>湖南省</span></a>
+	                    <a class="" href="javascript:;" data-province="44"><span>广东省</span></a>
+	                    <a class="" href="javascript:;" data-province="45"><span>广西壮族自治区</span></a>
+	                    <a class="" href="javascript:;" data-province="46"><span>海南省</span></a>
+	                    <a class="" href="javascript:;" data-province="50"><span>重庆市</span></a>
+	                    <a class="" href="javascript:;" data-province="51"><span>四川省</span></a>
+	                    <a class="" href="javascript:;" data-province="52"><span>贵州省</span></a>
+	                    <a class="" href="javascript:;" data-province="53"><span>云南省</span></a>
+	                    <a class="" href="javascript:;" data-province="54"><span>西藏自治区</span></a>
+	                    <a class="" href="javascript:;" data-province="61"><span>陕西省</span></a>
+	                    <a class="" href="javascript:;" data-province="62"><span>甘肃省</span></a>
+	                    <a class="" href="javascript:;" data-province="63"><span>青海省</span></a>
+	                    <a class="" href="javascript:;" data-province="64"><span>宁夏回族自治区</span></a>
+	                    <a class="" href="javascript:;" data-province="65"><span>新疆维吾尔自治区</span></a>
+	                    <a class="" href="javascript:;" data-province="71"><span>台湾省</span></a>
+	                    <a class="" href="javascript:;" data-province="81"><span>香港特别行政区</span></a>
+	                    <a class="" href="javascript:;" data-province="82"><span>澳门特别行政区</span></a>
+	                </div>
+	            </li>
+	            <li class="cityselect-item">
+	                <div class="cityselect-item-box" id="City_chioce">
+	                </div>
+	            </li>
+	            <li class="cityselect-item">
+	                <div class="cityselect-item-box" id="County_chioce">
+	                </div>
+	            </li>
+	            <li class="cityselect-item">
+	                <div class="cityselect-item-box" id="Town_chioce">
+	                </div>
+	            </li>
+	        </ul>
+	    </div>
+	
+	    <div id="l-map"></div>
+	    <div id="allmap"></div>
+
+</div>
+	    
+
+
+    <script type="text/javascript">
+    	$.showLoading();
+    	function goToBack(){
+    		window.location.href="/m/usercenter/home";
+    	}
+    	function ajaxSubmit(picurl,username,oldpassword,newpassword,assignpassword,birthday,province,city,county,town,street,email,PayPwd,NewPayPwd){
+    		$.ajax({
+    			type:"post",
+    			url:"/m/user/setting",
+    			async:true,
+    			data:{picurl:picurl, username:username, oldpassword:oldpassword, newpassword:newpassword, assignpassword:assignpassword, birthday:birthday, province:province, city:city, county:county, town:town, street:street, email:email, PayPwd:PayPwd, NewPayPwd:NewPayPwd},
+    			dataType:"json",
+    			success:function(rst){
+    				if(rst.Code==1){
+    					$.alert(rst.Message,function(){
+    						window.location.href="/m/usercenter/home";
+    					});
+    				}else{
+    					$.alert(rst.Message);
+    				}
+    			}
+    		});
+    	}
+    	function getAddr(){
+    		var Town = "@WorkContext.UserInfo.Town";
+    		$.ajax({
+    			type:"post",
+    			url:"/m/product/GetAddressArea",
+    			async:true,
+    			data:{AreaId:Town},
+    			dataType:"json",
+    			success:function(rel){
+    				if(rel.Code==1){
+    					$("#address").val(rel.Data);
+    				}
+    			}
+    		});
+    	}
+    	function delImg() {
+			var delimg=$("#delImg");
+			$.confirm('您确定要删除吗?', '确认删除?', function() {delimg.remove();$("#headimgurl1").val("");$(".weui_uploader_input_wrp").show()},function(){$.toast('取消操作', 'cancel');});
+		}
+    	$(function(){
+    	
+    		
+    	
+    		getAddr();
+    		$("#PayPwd").on("keyup",function(e){
+				var str = String.fromCharCode(e.keyCode);
+				var val = $(this).val();
+				if(val=="-" || val=="e" || val.length>6 || isNaN(val)){
+					$(this).val(val.substring(0,val.length-1) || /^\s+|\s+$/g.test(val));
+					return false;
+				}
+	        })
+    		$("#NewPayPwd").on("keyup",function(e){
+				var str = String.fromCharCode(e.keyCode);
+				var val = $(this).val();
+				if(val=="-" || val=="e" || val.length>6 || isNaN(val) || /^\s+|\s+$/g.test(val)){
+					$(this).val(val.substring(0,val.length-1));
+					return false;
+				}
+	        })
+    		//修改密码
+    		$("#change_pswd").on("click",function(){
+    			$(".change-pswd").fadeIn(100);
+    		});
+    		//返回修改信息界面，清空密码框
+    		$("#back").on("click",function(){
+    			$(".change-pswd").fadeOut(100);
+    		});
+    		//返回修改信息界面
+    		$("#confirm-pswd").on("click",function(){
+    			$(".change-pswd").fadeOut(100);
+    		});
+    		//日历
+    		$("#date").datetimePicker({title:"选择日期",m:1});
+    		//单图压缩上传
+    		var f = document.querySelector('#headimgurl');
+			f.onchange = function() {
+			    lrz(this.files[0], {
+			        width: 640,
+			        fieldName: "file"
+			    }).then(function(rst) {
+			        var xhr = new XMLHttpRequest();
+			        xhr.open('POST', '../Tool/Upload?operation=uploaduseravatar');
+			        xhr.onload = function(datas) {
+			            if (xhr.status === 200) {
+                            var obj = eval('(' + xhr.responseText + ')');
+                            console.log(obj);
+			                $('#img').html('<li id="delImg" onclick="delImg()" class="weui_uploader_file weui_uploader_status" style="background-image:url(@(WorkContext.ShopConfig.ImageCDN)' + obj.url + ')"><div class="weui_uploader_status_content"><i class="weui_icon_cancel"></i></div></li>');
+			                $("#headimgurl1").val(obj.url);
+			                $(".weui_uploader_input_wrp").hide();
+			            } else {
+			            }
+			        };
+			        xhr.onerror = function() {
+			        };
+			        xhr.upload.onprogress = function(e) {
+			            var percentComplete = ((e.loaded / e.total) || 0) * 100;
+			        };
+
+			        //rst.formData.append('size', rst.fileLen);
+			        //rst.formData.append('base64', rst.base64);
+
+			        xhr.send(rst.formData);
+			        return rst;
+			    }).
+			    catch (function(err) {
+			        alert(err);
+			    }).always(function() {
+			    });
+			};
+			
+			/*$(document).on("click","#delImg",function(){
+				var delimg=$(this);$.confirm('您确定要删除吗?', '确认删除?', function() {delimg.remove();$("#headimgurl1").val("");$(".weui_uploader_input_wrp").show()},function(){$.toast('取消操作', 'cancel');});
+			});*/
+
+    		/*省市区街道四级联动*/
+    		$("#address").on('click', function (event) {
+				$("#address").blur();
+				dizhiguanli = true;
+				var html = '<div class="mask-black"></div>';
+				$('body').append(html);
+				$("#Show_City_Four").addClass("brouce-in");
+				$("#Show_City_Four").removeClass("brouce-out");
+
+			});
+			$('body').on('click', '.mask-black', function () {
+				$("#Show_City_Four").removeClass("brouce-in");
+				$("#Show_City_Four").addClass("brouce-out");
+				$(".mask-black").remove();
+			});
+
+
+			//  头部
+			$(".cityselect-nav").on('click', 'a', function () {
+				$(".cityselect-nav a").removeClass('crt');
+				$(this).addClass("crt");
+				if ($(this).index() == 0) {
+					$("#S_City_Show").removeClass('cityselect-next');
+					$("#S_City_Show").removeClass('cityselect-end');
+					$("#S_City_Show").addClass('cityselect-prev');
+
+				}
+				if ($(this).index() == 1) {
+					$("#S_City_Show").removeClass('cityselect-next');
+					$("#S_City_Show").removeClass('cityselect-end');
+					$("#S_City_Show").addClass('cityselect-prev');
+				}
+				if ($(this).index() == 2) {
+					$("#S_City_Show").removeClass('cityselect-end');
+					$("#S_City_Show").removeClass('cityselect-prev');
+					$("#S_City_Show").addClass('cityselect-next');
+				}
+				if ($(this).index() == 3) {
+					$("#S_City_Show").removeClass('cityselect-next');
+					$("#S_City_Show").removeClass('cityselect-prev');
+					$("#S_City_Show").addClass('cityselect-end');
+				}
+
+			});
+				//  选择省   加载市区
+				$("#Province_chioce").on("click", "a", function () {
+				var dom = $(this).parents("#Province_chioce");
+				$($(dom).find("a")).removeClass('crt');
+				$(this).addClass('crt');
+				var Province = $(this).attr("data-Province");
+				$($(".cityselect-nav").find("a")).removeClass('crt');
+				$($($(".cityselect-nav").find("a"))[0]).addClass('crt');
+				$($($(".cityselect-nav").find("a"))[0]).text($($(this).find('span')).text().trim());
+				$($(".cityselect-nav a")[0]).attr("data-Province", Province);
+				$.get('/m/Order/GetCityList', {
+					'Province': Province
+				}, function (data) {
+					var datas = JSON.parse(data);
+					var dete = datas.Data;
+					var html1 = "";
+					for (var i = 0; i < dete.length; i++) {
+						html1 += '<a class="" href="javascript:;" data-City="' + dete[i].RegionId + '"><span>';
+						html1 += dete[i].RegionName + '</span></a>'
+					};
+					$($("#City_chioce").find("a")).remove();
+					$("#City_chioce").append(html1);
+				}, 'JSON');
+			});
+			//  选择市  加载区
+			$("#City_chioce").on('click', 'a', function () {
+				var dom = $(this).parents("#City_chioce");
+				$($(dom).find("a")).removeClass('crt');
+				$(this).addClass('crt');
+				$($(".cityselect-nav").find("a")).removeClass('crt');
+				$($($(".cityselect-nav").find("a"))[1]).addClass('crt');
+				$($($(".cityselect-nav").find("a"))[1]).text($($(this).find('span')).text().trim());
+				var City = $(this).attr("data-City");
+				$($(".cityselect-nav a")[1]).attr("data-City", City);
+
+
+				$.get('/m/Order/GetCountyList', {
+					'City': City
+				}, function (data) {
+					var datas = JSON.parse(data);
+					var dete = datas.Data;
+					var html1 = "";
+					for (var i = 0; i < dete.length; i++) {
+						html1 += '<a class="" href="javascript:;" data-County="' + dete[i].RegionId + '"><span>';
+						html1 += dete[i].RegionName + '</span></a>';
+					}
+					$($("#County_chioce").find("a")).remove();
+					$("#County_chioce").append(html1);
+					$("#S_City_Show").removeClass('cityselect-prev');
+					$("#S_City_Show").addClass('cityselect-next');
+				}, 'JSON');
+			});
+			//  选择区  加载城镇
+			$("#County_chioce").on('click', 'a', function () {
+				var dom = $(this).parents("#County_chioce");
+				$($(dom).find("a")).removeClass('crt');
+				$(this).addClass('crt');
+				var County = $(this).attr("data-County");
+				$($(".cityselect-nav a")[2]).attr("data-County", County);
+
+				$($(".cityselect-nav").find("a")).removeClass('crt');
+				$($($(".cityselect-nav").find("a"))[2]).addClass('crt');
+				$($($(".cityselect-nav").find("a"))[2]).text($($(this).find('span')).text().trim());
+				$.get('/m/Order/GetTownList', {
+					'County': County
+				}, function (data) {
+					var datas = JSON.parse(data);
+					var dete = datas.Data;
+					var html1 = "";
+					for (var i = 0; i < dete.length; i++) {
+						html1 += '<a class="" href="javascript:;" data-Town="' + dete[i].RegionId + '"><span>';
+						html1 += dete[i].RegionName + '</span></a>';
+					}
+					$($("#Town_chioce").find("a")).remove();
+					$("#Town_chioce").append(html1);
+					$("#S_City_Show").removeClass('cityselect-next');
+					$("#S_City_Show").addClass('cityselect-end');
+				}, 'JSON');
+			});
+			//  选择镇
+			$("#Town_chioce").on('click', 'a', function () {
+				var dom = $(this).parents("#Town_chioce");
+				$($(dom).find("a")).removeClass('crt');
+				$(this).addClass('crt');
+				var Town = $(this).attr("data-Town");
+				$($(".cityselect-nav a")[3]).attr("data-Town", Town);
+				$($(".cityselect-nav").find("a")).removeClass('crt');
+				$($($(".cityselect-nav").find("a"))[3]).addClass('crt');
+				$($($(".cityselect-nav").find("a"))[3]).text($($(this).find('span')).text().trim());
+
+				$("#Show_City_Four").removeClass("brouce-in");
+				$("#Show_City_Four").addClass("brouce-out");
+				$(".mask-black").remove();
+
+
+					$("#address").attr("data-Province", $($(".cityselect-nav a")[0]).attr("data-Province"));
+					$("#address").attr("data-City", $($(".cityselect-nav a")[1]).attr("data-City"));
+					$("#address").attr("data-County", $($(".cityselect-nav a")[2]).attr("data-County"));
+					$("#address").attr("data-Town", $($(".cityselect-nav a")[3]).attr("data-Town"));
+					$("#address").val($($(".cityselect-nav a")[0]).text() + '-' + $($(".cityselect-nav a")[1]).text() + '-' + $($(".cityselect-nav a")[2]).text() + '-' + $($(".cityselect-nav a")[3]).text());
+
+
+			});
+
+
+    		$("#formSubmitBtn").on("click",function(){
+    			var picurl = $("#headimgurl1").val();
+    			var username = $("#UserName").val();
+    			var oldpassword = $("#oldpassword").val();
+    			var newpassword = $("#newpassword").val();
+    			var assignpassword = $("#assignpassword").val();
+    			var birthday = $("#date").val();
+    			var address = $("#address").val();
+    			var province = $("#address").attr("data-province");
+    			var city = $("#address").attr("data-city");
+    			var county = $("#address").attr("data-county");
+    			var town = $("#address").attr("data-town");
+    			var street = $("#Address2").val();
+    			var email = $("#Email").val();
+    			var PayPwd = $("#PayPwd").val();
+    			var NewPayPwd = $("#NewPayPwd").val();
+    			console.log(PayPwd);
+    			if(picurl!="" || username!="" || oldpassword!="" || newpassword!="" || assignpassword!="" || birthday!="" || address!="" || street!=""  || email!="" || PayPwd!="" || NewPayPwd!=""){
+					//保存
+					if(oldpassword!="" && typeof(oldpassword)!="undefined"){
+						if(oldpassword.length<=5){
+							$.alert('旧密码至少6位');
+							return false;
+						}else{
+							if(/\s/.test(oldpassword)){
+								$.alert('旧密码不能包含空格');
+								return false;
+							}
+							if(newpassword==""){
+								$.alert('请输入新密码');
+								return false;
+							}
+							if(assignpassword==""){
+								$.alert('请输入再次确认密码');
+								return false;
+							}
+						}
+					}
+					if(newpassword!=""){
+						if(typeof(oldpassword)=="undefined"){
+							
+								/*if(newpassword.length<=5){
+									$.alert('新密码至少6位');
+									return false;
+								}else{
+									if(/\s/.test(newpassword)){
+										$.alert('新密码不能包含空格');
+										return false;
+									}
+								}*/
+								
+								var reg=/^(?![0-9]+$)(?![a-zA-Z]+$)(?!([^(0-9a-zA-Z)]|[\(\)])+$)([^(0-9a-zA-Z)]|[\(\)]|[a-zA-Z]|[0-9])(\S*){6,18}$/;
+							    var result=reg.test(newpassword);
+							    if(result==false){
+							        $.alert("密码必须由不包含空格的字母、数字、符号任意两种组成6到18位密码！");
+							        return false;
+							    }
+								if(assignpassword!=""){
+									if(assignpassword!=newpassword){
+										$.alert('两次密码不一致');
+										return false;
+									}
+								}else{
+									$.alert('两次密码不一致');
+									return false;
+								}
+							
+						}else{
+							if(oldpassword==""){
+								$.alert('旧密码未输入');
+								return false;
+							}
+							if(oldpassword.length<=5){
+								$.alert('旧密码至少6位');
+								return false;
+							}else{
+								/*if(newpassword.length<=5){
+									$.alert('新密码至少6位');
+									return false;
+								}else{
+									if(/\s/.test(newpassword)){
+										$.alert('新密码不能包含空格');
+										return false;
+									}
+								}*/
+								var reg=/^(?![0-9]+$)(?![a-zA-Z]+$)(?!([^(0-9a-zA-Z)]|[\(\)])+$)([^(0-9a-zA-Z)]|[\(\)]|[a-zA-Z]|[0-9])(\S*){6,18}$/;
+							    var result=reg.test(newpassword);
+							    if(result==false){
+							        $.alert("密码必须由不包含空格的字母、数字、符号任意两种组成6到18位密码！");
+							        return false;
+							    }
+								if(newpassword==oldpassword){
+									$.alert("新旧密码不能一样");
+									return false;
+								}
+								if(assignpassword!=""){
+									if(assignpassword!=newpassword){
+										$.alert('两次密码不一致');
+										return false;
+									}
+								}else{
+									$.alert('两次密码不一致');
+									return false;
+								}
+							}
+						}
+							
+					}else{
+						if(assignpassword!=""){
+							if(oldpassword==""){
+								$.alert('未填写旧密码');
+								return false;
+							}else{
+								$.alert('未填写新密码');
+								return false;
+							}
+						}
+					}
+					if(typeof(PayPwd)!="undefined"){
+						if(PayPwd.length>0 && PayPwd!=""){
+							if(PayPwd.length<=5){
+								$.alert('旧支付密码必须是6位数字');
+								return false;
+							}else{
+								if(/\s/.test(PayPwd)){
+									$.alert('旧支付密码不能包含空格');
+									return false;
+								}
+								if(!(/^\d{6}$/.test(PayPwd))){
+									$.alert('旧支付密码必须是6位数字');
+									return false;
+								}
+							}
+						}
+						
+					}
+					
+					
+					
+					if(NewPayPwd!="" && NewPayPwd.length>0){
+						if(typeof(PayPwd)!="undefined"){
+							if(PayPwd.length<=0){
+								$.alert('旧支付密码未填写！');
+								return false;
+							}
+							if(NewPayPwd.length<=5){
+								$.alert('请输入6位纯数字支付密码');
+								return false;
+							}else{
+								if(/\s/.test(NewPayPwd)){
+									$.alert('新支付密码不能包含空格');
+									return false;
+								}
+								if(!(/^\d{6}$/.test(NewPayPwd))){
+									$.alert('请输入6位纯数字支付密码');
+									return false;
+								}
+							}
+							if(typeof(PayPwd)!="undefined"){
+								if(NewPayPwd==PayPwd){
+									$.alert("新旧支付密码不能一样");
+									return false;
+								}
+								
+							}
+							
+						}else{
+							if(NewPayPwd.length<=5){
+								$.alert('请输入6位纯数字支付密码');
+								return false;
+							}else{
+								if(/\s/.test(NewPayPwd)){
+									$.alert('新支付密码不能包含空格');
+									return false;
+								}
+								if(!(/^\d{6}$/.test(NewPayPwd))){
+									$.alert('请输入6位纯数字支付密码');
+									return false;
+								}
+							}
+							if(typeof(PayPwd)!="undefined"){
+								if(NewPayPwd==PayPwd){
+									$.alert("新旧支付密码不能一样");
+									return false;
+								}
+								
+							}
+						}
+					}
+					if(street!=""){
+						if(street.length<=1){
+							$.alert('详细地址至少2个字符');
+							return false;
+						}
+						
+					}
+					
+					var email_reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+					if(email!=""){
+						if(!email_reg.test(email)){
+							$.alert('邮箱地址错误');
+							return false;
+						}
+					}
+					
+					
+					ajaxSubmit(picurl,username,oldpassword,newpassword,assignpassword,birthday,province,city,county,town,street,email,PayPwd,NewPayPwd);
+    			}else{
+    				$.alert('您未填写任何数据');
+    			}
+    		});
+			setTimeout(function removeReadonly(){
+		        $("input").removeAttr("readonly");
+		        $.hideLoading();
+		        $(".warp-main").css("display","block");
+		    },1000);
+    	});
+
+    </script>
+    <script type="text/javascript">
+        var cityNames = "";
+        var map = new BMap.Map("allmap");
+        var point = new BMap.Point(116.331398, 39.897445);
+        map.centerAndZoom(point, 12);
+
+        function myFun(result) {
+            var cityName = result.name;
+            map.setCenter(cityName);
+            cityNames = cityName;
+            getCity(cityNames);
+        };
+        var myCity = new BMap.LocalCity();
+        myCity.get(myFun);
+
+        function getCity(cityNames) {
+
+            var map = new BMap.Map("l-map");
+
+            map.centerAndZoom(cityNames, 12);
+            console.log(cityNames);
+        };
+
+        function G(id) {
+            return document.getElementById(id);
+        };
+        var ac = new BMap.Autocomplete(
+            {
+                "input": "Address2",
+                "location": map
+            });
+		ac.setInputValue("@WorkContext.UserInfo.Address");
+        ac.addEventListener("onhighlight", function (e) {
+            var str = "";
+            var _value = e.fromitem.value;
+            var value = "";
+            if (e.fromitem.index > -1) {
+                value = _value.province + _value.city + _value.district + _value.street + _value.business;
+            };
+            str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+
+            value = "";
+            if (e.toitem.index > -1) {
+                _value = e.toitem.value;
+                value = _value.province + _value.city + _value.district + _value.street + _value.business;
+            };
+            str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+            G("searchResultPanel2").innerHTML = str;
+        });
+
+        var myValue;
+        ac.addEventListener("onconfirm", function (e) {
+            var _value = e.item.value;
+            myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+            G("searchResultPanel2").innerHTML = "onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+
+
+            setPlace();
+        });
+
+
+
+        function setPlace() {
+            map.clearOverlays();
+            function myFun() {
+                var pp = local.getResults().getPoi(0).point;
+                map.centerAndZoom(pp, 18);
+                map.addOverlay(new BMap.Marker(pp));
+            }
+            var local = new BMap.LocalSearch(map, {
+                onSearchComplete: myFun
+            });
+            local.search(myValue);
+        };
+        
+        
+    </script>
+</body>
+</html>

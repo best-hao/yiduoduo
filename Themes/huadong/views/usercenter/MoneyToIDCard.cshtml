@@ -1,0 +1,471 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>提现-@{@WorkContext.SellerInfo.SellerName}</title>
+    <link rel="stylesheet" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css">
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/usercenter/red-packet/red_packet_detail.css"/>
+    <!--<link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/usercenter/red-packet/red_packet.css?v=0.13"/>-->
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/zepto.min.js"></script>
+    <script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script> 
+    <style>
+body{height:auto!important;}
+.ysdetail{position:absolute;top:0;background: #fff;z-index: 11;width:7.5rem;margin:0 auto;}
+.top-data {position: fixed;top: 46px;width: 7.5rem;left: 50%;margin-left: -3.75rem;z-index: 3;background: #f2f2f2;}
+.header-ys {position: fixed;width: 7.5rem;height: 46px;top: 0;left: 50%; margin-left: -3.75rem;background: #fff;z-index: 3;}
+.header-ys .weui-header-title{color:#333;}
+.addcard-box{position:fixed;	top:0;width:7.5rem;margin:0 auto;height:100%;background: #eee;margin-top:0.92rem;}
+.add-btn{width:90%;margin:0 auto;/*padding:0.6rem 0;*/padding-bottom:0.4rem;border-radius: 0.2rem;background: linear-gradient(to top, #7b6fed, #b891fc);text-align: center;}
+.addcard-box ul{padding-top:0.1rem;}
+.addcard-box li{/*margin-top:0.4rem;*/}
+.add-btn icon{display:block;font-size: 1.2rem;color:#fff;}
+.add-btn p{	font-size: 0.28rem;	color:#fff;line-height: 0.6rem;}
+#packet{position: fixed;height:100%;}
+.mt46{/*position:fixed;*/top:0;height:100%;width:7.5rem;margin:0 auto;background: #fff;padding-top:0.92rem;padding-bottom:0.4rem;overflow-y: scroll;}
+.weui_cell{padding-top:0.2rem;padding-bottom:0.2rem;font-size: 0.28rem;	}
+.blank{	width:7.5rem;margin:0 auto;height:0.2rem;background: #eee;}
+.weui-picker-overlay, .weui-picker-container{position: fixed;bottom: 0;left: 0;right: 0; height: 0; width: 7.5rem;  z-index:111 ;}
+.weui_cell:before {content: " "; position: absolute;left: 0;top: 0; width: 100%; height: 1px; border-top: 1px solid #d9d9d9; color: #d9d9d9; -webkit-transform-origin: 0 0; transform-origin: 0 0; -webkit-transform: scaleY(.5); transform: scaleY(.5); left: 15px;}
+.weui-picker-modal .toolbar-inner{	height:1rem;}
+.weui-picker-modal{height: 5rem;}
+.weui-picker-modal .picker-modal-inner{height: 3.456rem;}
+.weui-picker-modal .picker-item{text-align:center;}
+.savebtn {display:block;font-size: 0.28rem;outline: none;border: 0; width: 85%; border-radius: 0.4rem;height: 0.8rem;background: #ff4800;color: #fff;margin: 0 auto;margin-top:0.6rem;}
+.weui_mask {background: rgba(0,0,0,.6);z-index: 100!important;}
+.txdetail{width:80%;margin:0 auto;line-height: 0.6rem;font-size: 0.28rem;}
+.weui_cells_radio .weui_check:checked+.weui_icon_checked:before { display: block; content: '\EA08'; font-size: 14px; color:#fff; background:#09bb07 ; border: 1px solid #09bb07; border-radius: 50%;    width: 0.4rem;height: 0.4rem; line-height: 0.4rem; text-align: center;}
+    .icon{margin-right: 0.2rem;}
+    .icr{color:#ff4800!important;}
+    .point{width:96%;margin:0.4rem auto;color:#ff4800!important;font-size: 0.24rem;margin-bottom:0;}
+    </style>
+</head>
+
+<body>
+	<div id="app" style='display: none;'>
+	<div class="warp" id='moneytocard'>
+		<div id="packet" >
+		    			<div class="header-ys">
+		    				<div class="weui-header bg-white">
+								<div class="weui-header-left">
+									<a href="javascript:;" onclick="history.back()" class="f-black"><span class="icon iconfont">&#xe60e;</span></a>
+								</div>
+								<h1 class="weui-header-title">提现</h1>
+								<div class="weui-header-right">
+									<a class="icon icr" v-on:click='tixian()'>提现说明</a>
+								</div>
+							</div>
+		    			</div>
+		    			<div class='weui_cells_form mt46' >
+		    				<div class="blank"></div>
+			    			<div class="weui_cell">
+			    				<div class="weui_cell_hd">
+			    					<label class="weui_label">当前金额：</label>
+			    				</div>
+			    				<div class="weui_cell_hd">
+			    					<input name="ShopName" value="@WorkContext.UserInfo.UserMoney" type="number" placeholder="当前金额" class="weui_input" readonly="readonly">
+			    				</div>
+			    			</div>
+			    			<div class="weui_cell">
+			    				<div class="weui_cell_hd">
+			    					<label class="weui_label">提现金额：</label>
+			    				</div>
+			    				<div class="weui_cell_hd">
+			    					<input name="CashMoney" v-model='CashMoney' type="number" placeholder="提现金额" class="weui_input" id='CashMoney'>
+			    				</div>
+			    			</div>
+			    			<div class="weui_cell" v-if='alipayshow'>
+			    				<div class="weui_cell_hd">
+			    					<label class="weui_label">支付宝账户：</label>
+			    				</div>
+			    				<div class="weui_cell_hd weui_cell_primary">
+			    					<input name="alipay" readonly="readonly"  id='alipay' v-model='alipayaccount' type="text" placeholder="支付宝账户" class="weui_input" readonly="readonly">
+			    				</div>
+			    			</div>
+			    			
+			    			<div class="weui_cell" v-if='bankshow'>
+			    				<div class="weui_cell_hd">
+			    					<label class="weui_label">开户人：</label>
+			    				</div>
+			    				<div class="weui_cell_hd weui_cell_primary">
+			    					<input name="openbank" readonly="readonly"  id='openbank' v-model='username' type="text" placeholder="开户人" class="weui_input" readonly="readonly">
+			    				</div>
+			    			</div>
+			    			@if (WorkContext.WeChatUserInfo != null)
+		                         {
+		                         	  if(WorkContext.WeChatUserInfo.UserId!=0){
+			    			<div class="weui_cell" v-if='iswechat'>
+			    				<div class="weui_cell_hd">
+			    					<label class="weui_label">微信名称：</label>
+			    				</div>
+			    				<div class="weui_cell_hd weui_cell_primary">
+			    					<input name="wechat" readonly="readonly"  id='wechat' value='@(WorkContext.WeChatUserInfo.NickName)' type="text" placeholder="微信名称" class="weui_input" readonly="readonly">
+			    				</div>
+			    			</div>
+			    			}
+			    			}
+			    			<div class="weui_cell" v-if='bankshow'>
+			    				<div class="weui_cell_hd">
+			    					<label class="weui_label">银行卡号：</label>
+			    				</div>
+			    				<div class="weui_cell_hd weui_cell_primary">
+			    					<input name="banksn"  readonly='readonly' v-model='bankcardsn' type="text" placeholder="卡号" class="weui_input" readonly="readonly">
+			    				</div>
+			    			</div>
+			    			<input type="password"  style='position: absolute;top:111111111111111rem;left:1111111111111111111111111rem' />
+			    			<div class="weui_cell">
+			    				<div class="weui_cell_hd">
+			    					<label class="weui_label">交易密码：</label>
+			    				</div>
+			    				<div class="weui_cell_hd weui_cell_primary">
+			    					<input name="bankAccount"  type="password" v-model='paypwd' oninput="if(value.length>6)value=value.slice(0,6)" maxlength="6" placeholder="请输入交易密码" class="weui_input">
+			    				</div>
+			    			</div>
+			    			 
+			    			 <div class="weui_cells weui_cells_radio">
+			    			 	<div class="" style='background: #f2f2f2;line-height: 0.8rem;font-size:0.28rem;color:#ff4800;padding-left: 0.2rem;'>
+			    			 	<icon class='icon icon-42'></icon>请选择提现方式   
+			    			    </div>
+					            <label class="weui_cell weui_check_label" for="x11">
+					                <div class="weui_cell_bd weui_cell_primary">
+					                    <p><icon class='icon iconfont' style='color:#1488F5;'>&#xe627;</icon>银行卡</p>
+					                </div>
+					                <div class="weui_cell_ft">
+					                    <!--<input type="radio" class="weui_check" name="radio1" id="x11" v-model='bankshow'> 
+					                    <span class="weui_icon_checked"></span>-->
+					                    <input id="redpackt" data-id="1" type="checkbox" class="weui_switch weui-bankcard" v-model='bankshow'  v-on:click='clickbank()' >
+					                </div>
+					            </label>
+
+		        				@if (WorkContext.WeChatUserInfo != null)
+		                         {
+		                         	  if(WorkContext.WeChatUserInfo.UserId!=0){
+							            <!--<label class="weui_cell weui_check_label" for="x12">					
+							                <div class="weui_cell_bd weui_cell_primary">
+							                    <p><icon class='icon icon-14' style='color:#04be02;'></icon>微信</p>
+							                </div>
+							                <div class="weui_cell_ft">
+							                     <input id="redpackt" data-id="1" type="checkbox" class="weui_switch weui-wexin1" v-on:click='clickweixin()'/ >
+							                </div>
+							            </label>-->
+						              }else{
+							            <!--<label class="weui_cell weui_check_label" for="x12">					
+							                <div class="weui_cell_bd weui_cell_primary">
+							                    <p><icon class='icon icon-14' style='color:#04be02;'></icon>微信(未绑定)</p>
+							                </div>
+							                <div class="weui_cell_ft">
+							                     <input id="redpackt" data-id="1" type="checkbox" class="weui_switch weui-wexin1"  disabled >
+							                </div>
+						               </label>-->
+						              }
+					               }else{
+					               	  <!--<label class="weui_cell weui_check_label" for="x12">					
+							                <div class="weui_cell_bd weui_cell_primary">
+							                    <p><icon class='icon icon-14' style='color:#04be02;'></icon>微信(未绑定)</p>
+							                </div>
+							                <div class="weui_cell_ft">
+							                     <input id="redpackt" data-id="1" type="checkbox" class="weui_switch weui-wexin1"  disabled >
+							                </div>
+						               </label>-->
+					               }
+		                          
+					             <label class="weui_cell weui_check_label" for="x13" >
+					
+					                <div class="weui_cell_bd weui_cell_primary">
+					                    <p><icon class='icon iconfont' style='color:#1488F5;' >&#xe638;</icon>支付宝</p>
+					                </div>
+					                <div class="weui_cell_ft">
+					                    <!--<input type="radio" name="radio1" class="weui_check" id="x13">
+					                    <span class="weui_icon_checked"></span>-->
+					                     <input id="redpackt" data-id="1" type="checkbox" class="weui_switch weui-zf" v-on:click='clickzf()'>
+					                </div>
+					            </label>
+					        </div>
+					         <!--<div class='point'>提现费用说明：商家提现扣除1%手续费，个人提现扣除3%手续费</div>-->
+                             <p class='point' style='margin-top: 0.2rem;'>友情提示：选择银行卡提现时,请尽量提现至中国银行，中国建设银行，中国农业银行，中国工商银行</p>
+			    			 <button v-on:click='givetocard()' class="savebtn">确定</button>
+		    		    </div>
+		    		    
+		    		</div>
+		    		
+		    	<div id="packet" v-if='isshow' >
+		    			<div class="header-ys">
+		    				<div class="weui-header bg-white">
+								<div class="weui-header-left">
+									<a href="javascript:;" v-on:click='tixian()' class="icon icon-109 f-black"></a>
+								</div>
+								<h1 class="weui-header-title">提现说明</h1>
+								<div class="weui-header-right">
+									<a class="icon"></a>
+								</div>
+							</div>
+		    			</div>
+		    			<div class='weui_cells_form mt46' >
+		    				<div class="blank"></div>
+		    				<div class='txdetail'>
+		    					<p>提现说明：</p>
+		    				<p>
+		    					
+							1、每次提现金额最低100元，必须为100的整倍数，最高10000元。<br />
+							
+							2、提现时平台扣取5%手续费。<br />
+							
+							3、请使用本人支付宝账号或银行卡进行提现（不支持信用卡）。<br />
+	
+		    				</p>
+		    				<p>到账时间</p>
+		    				<p>
+		    					
+							1、工作日提现，24小时内到账。<br />		
+							2、节假日提现，顺延到节假日后2日内到账。<br />
+							3、如有疑问请拨打秦商未来全国服务热线：029-87586712<br />
+	
+		    				</p>
+		    				</div>
+		    				
+		    		    </div>
+		    		    
+		    		</div>
+		
+	</div>
+</div>
+	<script>
+		
+$.showLoading();
+var vm = new Vue({
+    el: '#app',
+    data: {
+        isshow:false, 
+        bankshow:false,
+        userId:'@WorkContext.Uid',
+        disabled:false,
+        username:'',
+        bankcardsn:'',
+        CashType:-1,
+        CashMoney:'',
+        paypwd:'',
+        alipayaccount:'',
+        alipayshow:false,
+        wechat:'',
+        iswechat:false,
+        isnowcash:0,//1是秒到 0不能秒到
+        mostcash:0,//最大提现额
+        iscash:0,//0可以提现  1禁止提现
+        isUserRoleCash:false,//判断该用户有没有设置权限
+        MoneyType: 2  // MoneyType == 1是货款  2是普通
+    },
+    methods: {
+         tixian:function(){
+         	var _this=this;
+      	_this.isshow=!_this.isshow;
+         },
+         clickbank:function(){//银行卡按
+         	var _this=this;
+         	_this.judegebind(1);
+         },
+         clickzf:function(){//支付
+         	var _this=this;
+         	_this.judegebind(2);
+         },
+         clickweixin:function(){//微信
+         	var _this=this;
+         	$('.weui-bankcard').prop('checked',false);         	 
+         	$('.weui-zf').prop('checked',false);
+         	_this.bankshow=false;
+         	_this.alipayshow=false;
+         	_this.CashType=3;
+         	_this.iswechat=true;
+         },
+         givetocard:function(){
+         	var _this=this;
+         	
+         if(_this.iscash==0){
+         	if(_this.paypwd==''){
+         		$.alert('交易密码不能为空');
+         		return false;
+         	}else if(!(/^\d{6}$/.test(_this.paypwd))){
+         		$.alert('密码格式不正确');
+         		return false;
+         	}else if(/\s/.test(_this.paypwd)){
+         		$.alert('密码不能输入空格');
+				return false;
+         	}else if(_this.CashType==-1){
+         		$.alert('请选择提现方式');
+         		return false;
+         	}else if(_this.CashMoney==''){
+         		$.alert('请输入正确金额');
+         		return false;
+         	}else if(!/^[0-9]+.?[0-9]*$/.test(_this.CashMoney)){
+         		$.alert('请输入正确金额');
+         		return false;
+         	}else if(_this.CashMoney%100!=0){
+         		$.alert('提现金额不是100的倍数');
+         		return false;
+         	}else if(Number(_this.CashMoney)<100){
+         		$.alert('提现金额至少100');
+         		return false;
+         	}else if(_this.isUserRoleCash==false){
+         		if(Number(_this.CashMoney)>10000){
+	         		$.alert('提现金额不能超过1万');
+	         		return false;
+         	    }
+         	}else if(_this.isUserRoleCash){
+         		if(Number(_this.CashMoney)>Number(_this.mostcash)){
+	         		$.alert('您当前最大提现额为'+_this.mostcash);
+	         		return false;
+         	    }
+         	}else if(/\s/.test(_this.CashMoney)){
+         		$.alert('金额不能输入空格');
+				return false;
+         	}
+         }else{
+         	$.alert('抱歉！您目前禁止提现');
+			return false;
+         }
+         	var dataform={
+    			UserId:_this.userId,
+    			PayPwd:_this.paypwd,
+    			CashMoney:_this.CashMoney,
+    			CashType:_this.CashType,
+    			MoneyType:_this.MoneyType,
+    		}
+         	$('.savebtn').attr("disabled","disabled");
+         	$.ajax({
+    			type:"post",
+    			url:"/Api/User/CashToCardFlow",
+    			data:dataform,
+    			async:true,
+    			success: function(rel){
+    				var data=rel;
+    				if(data.code==1){
+    				   $.alert(data.message,function(){window.location.href='/m/usercenter/home'})	
+    				}else{
+    					$.alert(data.message,function(){$('.savebtn').removeAttr("disabled");});
+    				}
+    				
+    			}
+    		});
+         },
+         judegenowcash:function(num){
+         	var _this=this;
+         	$.ajax({
+    			type:"get",
+    			url:"/Api/User/GetUserRoleCashByUserId?userid="+_this.userId,
+    			success: function(rel){
+    				console.log(rel)
+    				if(rel.code==1){
+    					_this.isUserRoleCash=true
+    					if(num==2){
+    						_this.isnowcash=rel.data.isnowcash;
+    					
+    					}else if(num==1){
+    						_this.mostcash=rel.data.mostcash;
+    						_this.iscash=rel.data.iscash;
+    					}
+    				}else{
+    					_this.isUserRoleCash=false
+    				}
+    			}
+    		})
+         },
+         judegebind:function(CashType){//判断是否实名
+    		var _this=this;
+    		_this.isnowcash=0;
+    		$.ajax({
+    			type:"get",
+    			url:"/Api/Account/IsAuthentication?UserId="+_this.userId,
+    			success: function(rel){
+    				console.log(rel)
+    				var data=rel;
+    				if(data.code==1){    					
+	    				if(CashType==1){
+	    						_this.CashType=CashType
+	    					$('.weui-zf').prop('checked',false);
+	         	            $('.weui-wexin1').prop('checked',false)
+	         	            var str=data.data.username;	         	             
+	         	            _this.username=new Array(str.length).join('*') + str.substr(-1);
+	         	            _this.bankcardsn=data.data.bankcardsn.replace(/^(.{6})(?:\d+)(.{4})$/,"$1******$2");
+	         	            _this.alipayshow=false;
+	         	            _this.iswechat=false;
+	    					}else if(CashType==2){
+	    						if(data.data.alipayaccount==''){
+	    							 $.confirm("请先去绑定支付宝", "未绑定支付宝", function() {
+					                 window.location.href='/m/usercenter/authentication'
+							        }, function() {
+							        	$('.weui-zf').prop('checked',false);
+							        	_this.alipayshow=false;
+							        	_this.iswechat=false;
+							        });
+	    						}else{
+	    						_this.CashType=CashType
+	    						_this.alipayaccount=data.data.alipayaccount;
+	    						_this.alipayshow=true;
+	    						_this.iswechat=false;
+	    						$('.weui-bankcard').prop('checked',false);
+					         	$('.weui-wexin1').prop('checked',false);
+					         	_this.bankshow=false;
+					         	_this.judegenowcash(2);
+	    						}
+	    					}
+    				}else{
+    					 $.confirm("请先去实名认证", "未实名认证", function() {
+		                 window.location.href='/m/usercenter/authentication'
+				        }, function() {
+				        	_this.bankshow=false;
+				        	$('.weui-zf').prop('checked',false);
+				        	_this.alipayshow=false;
+				        	_this.iswechat=false;
+				        });
+				    
+    				}
+    			}
+    		});
+    	},
+    	
+    },
+    mounted:function(){
+    	
+    },
+    watch:{
+    	CashMoney:function(val,oldval){
+    		var _this=this;
+    	  if(val>@WorkContext.UserInfo.UserMoney){
+    			$.alert('提现金额不足')
+    			$('#CashMoney').blur();
+    			_this.CashMoney=oldval;
+    		}else if(_this.isUserRoleCash==false){
+	    		if(Number(val)>10000){
+	    			$.alert('提现金额不能超过1万');
+	    			$('#CashMoney').blur();
+	    			_this.CashMoney=oldval;
+	    		}
+    	    }
+    		
+    	},
+    	bankshow:function(val){
+    		
+    	}
+    }
+});
+$(function(){
+	vm.judegenowcash(1);
+	setTimeout(function(){
+		$.hideLoading();
+		$('#app').css('display','block')
+	},200)
+})
+	</script>
+</body>
+
+</html>

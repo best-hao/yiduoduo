@@ -1,0 +1,845 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>消息</title>
+	<script type='text/javascript' src='/Mobile/webim/demo/javascript/dist/webim.config.js'></script>
+	<script type='text/javascript' src='/Mobile/webim/sdk/dist/strophe-1.2.8.min.js'></script>
+	<script src='/Mobile/webim/sdk/dist/websdk-1.4.13.js'></script>
+	<script src="/Mobile/webim/webrtc/dist/webrtc-1.4.13.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css"/>
+	<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css"/>
+	
+	<script type='text/javascript' src='/Mobile/weui/zepto.min.js'></script>
+	<script type='text/javascript' src='/Mobile/weui/ydui.flexible.js'></script>
+	<script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script> 
+	<link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css?v=0.1"/>
+	<style type="text/css">
+		body{width: 7.5rem;height: 100%;overflow: hidden;margin: 0 auto;}
+		.ell-1{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+		.ell-2{overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+		.color{color: #ff4800;}
+		.bg{background: #ff4800;}
+		.gary{color: #999;}
+		li{list-style: none;}
+		.iconfont{vertical-align: middle;}
+		.header-menu .iconfont{font-size: 0.4rem;}
+		.common-header{position: fixed;top: 0;z-index: 100; background: #000;width: 7.5rem; height: 0.9rem;line-height: 0.9rem;margin-bottom: 0.06rem; -moz-box-shadow:0px 2px 10px #d9d9d9; -webkit-box-shadow:0px 2px 10px #d9d9d9; box-shadow:0px 2px 10px #d9d9d9;}
+		.common-header .title{text-align: center;padding: 0 1rem;color: #fff;font-size: 0.3rem;}
+		.common-header .header-back{position: absolute;top: 0;left: 0;width: .6rem;text-align: center;height: 0.8rem;line-height: 0.8rem;color: #fff;}
+		.common-header .header-menu{position: absolute;top: 0;right: 0;width: .6rem;text-align: center;height: 0.8rem;line-height: 0.8rem;color: #fff;}
+		.shade{display: none; position: fixed;width: 7.5rem;height: 100%; top: 0;left: 50%;margin-left: -3.75rem;background: rgba(0,0,0,0.7);z-index: 100;}
+		.shade-mask{position: absolute;width: 100%;height: 100%; top: 0;left: 0;z-index: 101;}
+		.shade-content{position: absolute;bottom: 0;left: 0;height: 8rem;background: #fff;z-index: 102;}
+		.weui_dialog_hd{padding: 0;}
+		.weui_toast{padding: 0 15px;font-size: 0.32rem;}
+		#webim-message{font-size: 0.24rem;color: #333;display: none;}
+		#msg-list li{background: #fff;padding: 0.2rem;margin-bottom: 1px;position: relative;height: 1.2rem;}
+		#msg-list li .head-box{width: 1.2rem;height: 1.2rem;}
+		#msg-list li .info-box{width: 5.4rem;height: 1.2rem;padding-left: 0.2rem;line-height: 0.6rem;}
+		#msg-list .head{width: 1.2rem;height: 1.2rem;border-radius: 50%;}
+		#msg-list li .badge{position: absolute;background: #e64340;width: 17px;height: 17px;line-height: 17px;text-align: center;color: #fff;right: 0.2rem;top: 50%;margin-top: -8.5px;border-radius: 50%;}
+		.nickname{font-size: 0.28rem;font-weight: 700;color: #333;}
+		#message-dialog{font-size: 0.24rem;color: #333;height: 100%;}
+		.message-list{padding: 0.2rem;height: 100%;overflow-y: auto;}
+		.message-list ul{margin-top: 1rem;margin-bottom: 2rem;}
+		.message-list li{margin-bottom: 0.4rem;}
+		.from-user{}
+		.from-user .user-head{margin-right: 0.4rem;}
+		.from-user .user-head .head-img{width: 0.8rem;height: 0.8;border-radius: 50%;}
+		.from-user .user-message{max-width: 4.8rem;padding: 0.2rem;background: #fff;position: relative;border-radius: 5px;word-wrap: break-word;}
+		.from-user .user-message img{width: 100%;}
+		.to-user{}
+		.to-user .user-head{margin-left: 0.4rem;}
+		.to-user .user-head .head-img{width: 0.8rem;height: 0.8rem;border-radius: 50%;}
+		.to-user .user-message{max-width: 4.8rem;padding: 0.2rem;background: #5FB878;position: relative;color: #fff;border-radius: 5px;word-wrap: break-word;}
+		.to-user .user-message img{width: 100%;}
+		.from-user .user-message:after{
+			content: '';
+		    position: absolute;
+		    left: -10px;
+		    top: 13px;
+		    width: 0;
+		    height: 0;
+		    border-style: solid dashed dashed;
+		    border-color: #fff transparent transparent;
+		    overflow: hidden;
+		    border-width: 10px;
+		    -webkit-box-sizing: border-box;
+		    box-sizing: border-box;
+		}
+		.to-user .user-message:after{
+		    content: '';
+		    position: absolute;
+		    top: 13px;
+		    width: 0;
+		    height: 0;
+		    border-style: solid dashed dashed;
+		    border-color: #fff transparent transparent;
+		    overflow: hidden;
+		    border-width: 10px;	
+		    -webkit-box-sizing: border-box;
+		    box-sizing: border-box;
+		    right: -10px;
+		    border-top-color: #5FB878;
+		}
+		.send-box{
+			width: 7.5rem;
+			height: 1rem;
+			padding: 0.2rem 0;
+			background: #fff;
+			position: fixed;
+			bottom: 0;
+			left: 50%;
+			margin-left: -3.75rem;
+			border-top: 1px solid #999;
+		}
+		.oper-box{vertical-align: middle;height: 1rem; overflow: hidden;width: 7.1rem;padding: 0 0.2rem;line-height: 1rem;}
+		.oper-box *{vertical-align: middle;}
+		.oper-box .icon{font-size: 0.6rem;}
+		.send-input{height: 0.76rem;line-height: 0.38rem;padding: 0.1rem 0.2rem;resize:none;width: 4.3rem;border: 0;border-bottom: 0.02rem solid #d9d9d9;outline: 0;}
+		.iconfont.more-type{font-size: 0.68rem;}
+		.no-send{background: #e6e6e6;color: #999;border: 0;outline: 0;padding: 0.1rem 0.14rem;}
+		.send{background: #129611;color: #fff;border: 0;outline: 0;padding: 0.1rem 0.14rem;}
+		.more-send-btn{margin-top: 0.2rem;width: 7.1rem;padding: 0.2rem;height: 0.7rem;}
+		.upimg{font-size: 0.6rem;}
+		.emoji-box {
+		    height: 0.6rem;
+		    position: relative;
+		    vertical-align: middle;
+		    line-height: 0.6rem;
+		}
+		.user-message{font-size: 0.28rem;}
+		.user-message img.emoji-icon{display: inline;width: 0.4rem;height: 0.4rem;vertical-align: middle;}
+		.message-list::-webkit-scrollbar{width: 0;}
+	</style>
+</head>
+<body>
+	<div id="message-dialog">
+		<div class="common-header"> 
+			<div class="header-back" onclick="goToBack()"><span class="icon iconfont">&#xe60e;</span></div>
+			<div class="title ell-1">@ViewData["shopname"]</div> 
+		    <!--<div class="header-menu"><span class="icon iconfont">&#xe630;</span></div>-->
+	    </div>
+	    <div class="message-list">
+	    	<ul>
+	    		<!--<li>
+	    			<div class="list-box from-user">
+	    				<div class="left user-head">
+	    					<img src="@(WorkContext.UserInfo.Avatar)?w=100&h=100" class="head-img"/>
+	    				</div>
+	    				<div class="left user-message">
+	    					接收消息测试
+	    				</div>
+	    			</div>
+	    			<div class="clearfix"></div>
+	    		</li>
+	    		<li>
+	    			<div class="list-box to-user">
+	    				<div class="right user-head">
+	    					<img src="@(WorkContext.UserInfo.Avatar)?w=100&h=100" class="head-img"/>
+	    				</div>
+	    				<div class="right user-message">
+	    					发送消息测试
+	    				</div>
+	    			</div>
+	    			<div class="clearfix"></div>
+	    		</li>-->
+	    	</ul>
+	    </div>
+	    <div class="send-box">
+	    	<div class="oper-box">
+	    		<input style="display: none;" type="file" name="" id="upload" value=""/>
+	    		<span class="icon iconfont upimg">&#xe665;</span>
+	    		<textarea type="text" class="send-input" ></textarea>
+	    		<span class="icon iconfont emijo" id="emijo">&#xe663;</span>
+	    		<!--<span class="icon iconfont more-type" id="more-type" onclick="openOther()">&#xe61f;</span>-->
+	    		<button class="no-send" id="nosend">发送</button>
+	    		<button class="send" id="privateText">发送</button>
+	    	</div>
+	    	<div class="more-send-btn">
+	    		<div class="emoji-box">
+	    			
+	    			<div class="weui-flex">
+	    				<div class="weui-flex-item emoji-img" data="[):]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_1.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[:D]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_2.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[;)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_3.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[:-o]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_4.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[:p]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_5.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[(H)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_6.png"/>
+	    				</div>
+			        	<div class="weui-flex-item emoji-img" data='bq7'>
+	    					<img src="/Mobile/webim/demo/images/faces/ee_7.png"/>
+	    				</div>
+			        	<div class="weui-flex-item emoji-img" data="[:s]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_8.png"/>
+	    				</div>
+			        	<div class="weui-flex-item emoji-img" data="[:$]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_9.png"/>
+	    				</div>
+	    			</div>
+	    			<div class="weui-flex">
+	    				<div class="weui-flex-item emoji-img" data="[:(]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_10.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[:'(]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_11.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[:|]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_12.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[(a)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_13.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[8o|]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_14.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[8-|]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_15.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[+o(]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_16.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[<o)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_17.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[|-)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_18.png"/>
+	    				</div>
+	    			</div>
+	    			<div class="weui-flex">
+	    				<div class="weui-flex-item emoji-img" data="[*-)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_19.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[:-#]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_20.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[:-*]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_21.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[^o)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_22.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[8-)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_23.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[(|)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_24.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[(u)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_25.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[(S)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_26.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[(*)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_27.png"/>
+	    				</div>
+	    				
+	    			</div>
+	    			<div class="weui-flex">
+	    				<div class="weui-flex-item emoji-img" data="[(#)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_28.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[(R)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_29.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[({)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_30.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[(})]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_31.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[(k)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_32.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[(F)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_33.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[(W)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_34.png"/>
+	    				</div>
+	    				<div class="weui-flex-item emoji-img" data="[(D)]">
+	    					<img src="/Mobile/webim/demo/images/faces/ee_35.png"/>
+	    				</div>
+	    			</div>
+	    			
+	    		</div>
+	    	</div>
+	    </div>
+	</div>
+	<div id="webim-message">
+		<div id="msg-list">
+			<ul>
+				<!--<li>
+					<div class="left head-box">
+						<img src="@(WorkContext.UserInfo.Avatar)?w=100&h=100" class="head"/>
+					</div>
+					<div class="left info-box">
+						<div class="nickname ell-1">逢山开路，遇水架桥</div>
+						<div class="message ell-1">你好，我是宇宙星空，无限时空，过去未来，最强之王</div>
+					</div>
+					<div class="badge">1</div>
+				</li>
+				<li>
+					<div class="left head-box">
+						<img src="@(WorkContext.UserInfo.Avatar)?w=100&h=100" class="head"/>
+					</div>
+					<div class="left info-box">
+						<div class="nickname ell-1">逢山开路，遇水架桥</div>
+						<div class="message ell-1">你好，我是宇宙星空，无限时空，过去未来，最强之王</div>
+					</div>
+					<div class="badge">1</div>
+				</li>
+				<li>
+					<div class="left head-box">
+						<img src="@(WorkContext.UserInfo.Avatar)?w=100&h=100" class="head"/>
+					</div>
+					<div class="left info-box">
+						<div class="nickname ell-1">逢山开路，遇水架桥</div>
+						<div class="message ell-1">你好，我是宇宙星空，无限时空，过去未来，最强之王</div>
+					</div>
+					<div class="badge">1</div>
+				</li>-->
+			</ul>
+		</div>
+	</div>
+	<script type="text/javascript">
+		/*var msg_vue = new Vue({
+			el: '#webim-message',
+			data: {
+				productid: '185198',
+				itemit: '',
+				toname: '',
+				shop_user: []
+			},
+			created: function() {
+				this.getShopInfo();
+			},
+			methods: {
+				getShopInfo: function(){
+					var _this = this;
+					
+					$.ajax({
+		    			type:"get",
+		    			url:"/Api/User/GetSaleUidByProductId?ProductId="+_this.productid,
+		    			async:true,
+		    			success: function(rel){
+		    				if(rel.code==1){
+		    					_this.toname = rel.data;
+		    					$.ajax({
+					    			type:"get",
+					    			url:"/Api/User/GetUserByUserId?UserId="+rel.data,
+					    			async:true,
+					    			success: function(rs){
+					    				if(rs.code==1){
+					    					_this.shop_user = rs.data;
+					    					
+					    				}
+					    			}
+					    		});
+		    				}
+		    			}
+		    		});
+				}
+			}
+		});*/
+	</script>
+	<script>
+		var IsApp = "@WorkContext.IsApp";
+		
+		function goToBack() {
+			if(IsApp==1){
+				if(navigator.userAgent.indexOf("iPhone")>0){
+					gobacklastpage();
+				}
+				if(navigator.userAgent.indexOf("Android")>0){
+					window.js.goBack();
+				}
+			}else{
+				window.history.back();
+			}
+				
+		}
+		function webim_func(){
+			var avatar = "@(WorkContext.UserInfo.Avatar)?w=100&h=100";
+			var uname = '@WorkContext.Uid';
+			var pwd = 'huadong518';
+			var toname = '@ViewData["saleuserid"]';
+			var weixinHeader = "@(WorkContext.ShopConfig.ImageCDN)@{@WorkContext.WeChatUserInfo.HeadImgUrl}?w=100&h=100";
+			var touser_head = '@(WorkContext.ShopConfig.ImageCDN)@{@ViewData["Avatar"]}?w=100&h=100';
+			if(touser_head==""){
+				touser_head = "/Images/photo.png";
+			}
+			if(avatar.indexOf("http")==-1){
+				avatar = "@(WorkContext.ShopConfig.ImageCDN)"+avatar;
+			}
+			var touser_name = '@ViewData["saleusername"]';
+			var shopname = '@ViewData["shopname"]';
+			if(shopname==""){
+				$(".title").text(touser_name);
+			}
+		    var conn = new WebIM.connection({
+			    isMultiLoginSessions: WebIM.config.isMultiLoginSessions,
+			    https: typeof WebIM.config.https === 'boolean' ? WebIM.config.https : location.protocol === 'https:',
+			    url: WebIM.config.xmppURL,
+			    heartBeatWait: WebIM.config.heartBeatWait,
+			    autoReconnectNumMax: WebIM.config.autoReconnectNumMax,
+			    autoReconnectInterval: WebIM.config.autoReconnectInterval,
+			    apiUrl: WebIM.config.apiURL,
+			    isAutoLogin: true
+			});
+			WebIM.Emoji = {
+			    path: '/Mobile/webim/demo/images/faces/'  /*表情包路径*/
+			    , map: {
+			        '[):]': 'ee_1.png',
+			        '[:D]': 'ee_2.png',
+			        '[;)]': 'ee_3.png',
+			        '[:-o]': 'ee_4.png',
+			        '[:p]': 'ee_5.png',
+			        '[(H)]': 'ee_6.png',
+			        '[:@@]': 'ee_7.png',
+			        '[:s]': 'ee_8.png',
+			        '[:$]': 'ee_9.png',
+			        '[:(]': 'ee_10.png',
+			        "[:'(]": 'ee_11.png',
+			        '[:|]': 'ee_12.png',
+			        '[(a)]': 'ee_13.png',
+			        '[8o|]': 'ee_14.png',
+			        '[8-|]': 'ee_15.png',
+			        '[+o(]': 'ee_16.png',
+			        '[<o)]': 'ee_17.png',
+			        '[|-)]': 'ee_18.png',
+			        '[*-)]': 'ee_19.png',
+			        '[:-#]': 'ee_20.png',
+			        '[:-*]': 'ee_21.png',
+			        '[^o)]': 'ee_22.png',
+			        '[8-)]': 'ee_23.png',
+			        '[(|)]': 'ee_24.png',
+			        '[(u)]': 'ee_25.png',
+			        '[(S)]': 'ee_26.png',
+			        '[(*)]': 'ee_27.png',
+			        '[(#)]': 'ee_28.png',
+			        '[(R)]': 'ee_29.png',
+			        '[({)]': 'ee_30.png',
+			        '[(})]': 'ee_31.png',
+			        '[(k)]': 'ee_32.png',
+			        '[(F)]': 'ee_33.png',
+			        '[(W)]': 'ee_34.png',
+			        '[(D)]': 'ee_35.png'
+			        
+			    }
+			};
+			var emojiStrArr = [
+			'[):]',
+			'[:D]',
+			'[;)]',
+	        '[:-o]',
+	        '[:p]',
+	        '[(H)]',
+	        '[:@@]',
+	        '[:s]',
+	        '[:$]',
+	        '[:(]',
+	        "[:'(]",
+	        '[:|]',
+	        '[(a)]',
+	        '[8o|]',
+	        '[8-|]',
+	        '[+o(]',
+	        '[<o)]',
+	        '[|-)]',
+	        '[*-)]',
+	        '[:-#]',
+	        '[:-*]',
+	        '[^o)]',
+	        '[8-)]',
+	        '[(|)]',
+	        '[(u)]',
+	        '[(S)]',
+	        '[(*)]',
+	        '[(#)]',
+	        '[(R)]',
+	        '[({)]',
+	        '[(})]',
+	        '[(k)]',
+	        '[(F)]',
+	        '[(W)]',
+	        '[(D)]'
+			];
+		    conn.listen({
+			    onOpened: function ( message ) {          //连接成功回调
+			        // 如果isAutoLogin设置为false，那么必须手动设置上线，否则无法收消息
+			        // 手动上线指的是调用conn.setPresence(); 如果conn初始化时已将isAutoLogin设置为true
+			        // 则无需调用conn.setPresence();             
+			    },  
+			    onClosed: function ( message ) {},         //连接关闭回调
+			    onTextMessage: function ( message ) {
+			    	console.log(message);
+			    	var html = '';
+			    	html += '<li>';
+			    	html += '<div class="list-box from-user">';
+			    	html += '<div class="left user-head">';
+			    	html += '<img src="'+touser_head+'?w=100&h=100" class="head-img"/>';
+			    	html += '</div>';
+			    	html += '<div class="left user-message">';
+			    	html += message.data;
+			    	html += '</div>';
+			    	html += '</div>';
+			    	html += '<div class="clearfix"></div>';
+		    		html += '</li>';	
+		    				
+		    		$(".message-list ul").append(html);	
+		    		var scrollTop = Number($(".message-list")[0].scrollHeight+1600);
+		    		console.log(scrollTop);
+		    		$(".message-list").scrollTop(scrollTop);
+		    				
+			    },    //收到文本消息
+			    onEmojiMessage: function ( message ) {
+			    	var html = '';
+			    	html += '<li>';
+			    	html += '<div class="list-box from-user">';
+			    	html += '<div class="left user-head">';
+			    	html += '<img src="'+touser_head+'?w=100&h=100" class="head-img"/>';
+			    	html += '</div>';
+			    	html += '<div class="left user-message">';
+			    	var thisMsg = '';
+		            var data = message.data;
+		            for (var i = 0, l = data.length; i < l; i++) {
+		                console.log(i+": "+data[i].data);
+		                if(data[i].type=="emoji"){
+		                	thisMsg += '<img class="emoji-icon" src="'+data[i].data+'" />';
+		                }else if(data[i].type=="txt"){
+		                	thisMsg += data[i].data;
+		                }
+		            }
+		            html += thisMsg;
+		            html += '</div>';
+			    	html += '</div>';
+			    	html += '<div class="clearfix"></div>';
+		    		html += '</li>';
+		    		console.log(html);
+		    		$(".message-list ul").append(html);
+		    		setTimeout(function(){
+		    			var scrollTop = Number($(".message-list")[0].scrollHeight+1600);
+		    			console.log(scrollTop);
+		    			$(".message-list").scrollTop(scrollTop);
+		    		},100);
+			    },   //收到表情消息
+			    onPictureMessage: function ( message ) {
+		            var options = {url: message.url};
+		            options.onFileDownloadComplete = function () {
+		                // 图片下载成功
+		                console.log('下载图片成功!');
+		                
+		                var html = '';
+				    	html += '<li>';
+				    	html += '<div class="list-box from-user">';
+				    	html += '<div class="left user-head">';
+				    	html += '<img src="'+touser_head+'?w=100&h=100" class="head-img"/>';
+				    	html += '</div>';
+				    	html += '<div class="left user-message">';
+				    	html += '<img src="'+message.url+'" />'
+				    	html += '</div>';
+				    	html += '</div>';
+				    	html += '<div class="clearfix"></div>';
+			    		html += '</li>';	
+			    				
+			    		$(".message-list ul").append(html);		
+			    		setTimeout(function(){
+		    			var scrollTop = Number($(".message-list")[0].scrollHeight+1600);
+		    			console.log(scrollTop);
+		    			$(".message-list").scrollTop(scrollTop);
+		    		},100);
+		                
+		                
+		            };
+		            options.onFileDownloadError = function () {
+		                // 图片下载失败
+		                console.log('Image download failed!');
+		            };
+		            WebIM.utils.download.call(conn, options);       // 意义待查
+			    	//$("#image_recive").attr("src",message.url);
+			    }, //收到图片消息
+			    onCmdMessage: function ( message ) {},     //收到命令消息
+			    onAudioMessage: function ( message ) {},   //收到音频消息
+			    onLocationMessage: function ( message ) {},//收到位置消息
+			    onFileMessage: function ( message ) {},    //收到文件消息
+			    onVideoMessage: function (message) {
+			        var node = document.getElementById('privateVideo');
+			        var option = {
+			            url: message.url,
+			            headers: {
+			              'Accept': 'audio/mp4'
+			            },
+			            onFileDownloadComplete: function (response) {
+			                var objectURL = WebIM.utils.parseDownloadResponse.call(conn, response);
+			                node.src = objectURL;
+			            },
+			            onFileDownloadError: function () {
+			                console.log('File down load error.')
+			            }
+			        };
+			        WebIM.utils.download.call(conn, option);
+			    },   //收到视频消息
+			    onPresence: function ( message ) {},       //处理“广播”或“发布-订阅”消息，如联系人订阅请求、处理群组、聊天室被踢解散等消息
+			    onRoster: function ( message ) {},         //处理好友申请
+			    onInviteMessage: function ( message ) {},  //处理群组邀请
+			    onOnline: function () {},                  //本机网络连接成功
+			    onOffline: function () {},                 //本机网络掉线
+			    onError: function ( message ) {},          //失败回调
+			    onBlacklistUpdate: function (list) {       //黑名单变动
+			        // 查询黑名单，将好友拉黑，将好友从黑名单移除都会回调这个函数，list则是黑名单现有的所有好友信息
+			        console.log(list);
+			    },
+			    onReceivedMessage: function(message){},    //收到消息送达服务器回执
+			    onDeliveredMessage: function(message){},   //收到消息送达客户端回执
+			    onReadMessage: function(message){},        //收到消息已读回执
+			    onCreateGroup: function(message){},        //创建群组成功回执（需调用createGroupNew）
+			    onMutedMessage: function(message){}        //如果用户在A群组被禁言，在A群发消息会走这个回调并且消息不会传递给群其它成员
+			});
+			/*var options = { 
+			  apiUrl: WebIM.config.apiURL,
+			  user: uname,
+			  pwd: pwd,
+			  appKey: WebIM.config.appkey,
+			  success: function(rel){
+			  	console.log("login success");
+			  }
+			};
+			conn.open(options);*/
+			var options = { 
+			  apiUrl: WebIM.config.apiURL,
+			  user: uname,
+			  pwd: pwd,
+			  appKey: WebIM.config.appkey,
+			  error: function(rel){
+			  	
+    		  }
+			};
+			conn.open(options);
+			
+			// 单聊发送文本消息
+			var sendPrivateText = function () {
+			    var id = conn.getUniqueId();                 // 生成本地消息id
+			    var send_msg = $(".send-input").val();
+			    if(send_msg==""){
+			    	$.toast("不能发送空消息","cancel");
+			    	return false;
+			    }else{
+			    	$(".send-box").css("height","1rem");
+				    var msg = new WebIM.message('txt', id);      // 创建文本消息
+				    msg.set({
+				        msg: send_msg,                  // 消息内容
+				        to: toname,                          // 接收消息对象（用户id）
+				        roomType: false,
+				        success: function (id, serverMsgId) {
+				        	var thisEmojiMsg = [];
+				        	var thisStr = send_msg;
+				        	var newstr = send_msg;
+					    	emojiStrArr.forEach(function(v,i){
+					    		
+				        		if(thisStr.indexOf(v)!=-1){
+				        			//thisEmojiMsg.push(WebIM.Emoji.path+WebIM.Emoji.map[v]);
+				        			thisEmojiMsg.push(v);
+				        			//thisStr = thisStr.replace(v,'<img class="emoji-icon" src="'+WebIM.Emoji.path+WebIM.Emoji.map[v]+'" />');
+				        			//thisStr = thisStr.replace(v,'<img class="emoji-icon" src="'+WebIM.Emoji.path+WebIM.Emoji.map[v]+'" />');
+				        		}
+				        	});
+				        	
+				        	thisEmojiMsg.forEach(function(v,i){
+				        		//if(thisStr.indexOf(v)!=-1){
+				        			//thisStr = thisStr.replace(v,'<img class="emoji-icon" src="'+WebIM.Emoji.path+WebIM.Emoji.map[v]+'" />');
+				        			for(var j=0;j<=send_msg.length/4;j++){
+				        				
+				        				thisStr = thisStr.replace(v,'<img class="emoji-icon" src="'+WebIM.Emoji.path+WebIM.Emoji.map[v]+'" />');
+				        			}
+				        			
+				        		//}
+				        	});
+				        	
+				        	console.log(thisStr);
+				        	console.log(thisEmojiMsg);
+				        	var html = '';
+					    	html += '<li>';
+					    	html += '<div class="list-box to-user">';
+					    	html += '<div class="right user-head">';
+					    	html += '<img src="'+avatar+'" class="head-img"/>';
+					    	html += '</div>';
+					    	html += '<div class="right user-message">';
+					    	html += thisStr;
+					    	
+					    	html += '</div>';
+					    	html += '</div>';
+					    	html += '<div class="clearfix"></div>';
+				    		html += '</li>';	
+				    		$(".message-list ul").append(html);	
+				        	$(".send-input").val("");
+				        	$(".send").css("display","none");
+							$(".no-send").css("display","inline");
+				            console.log('send private text Success');
+				            setTimeout(function(){
+		    			var scrollTop = Number($(".message-list")[0].scrollHeight+1600);
+		    			console.log(scrollTop);
+		    			$(".message-list").scrollTop(scrollTop);
+		    		},100);
+				        },
+				        fail: function(e){
+				        	$(".send-input").val("");
+				        	$(".send").css("display","none");
+							$(".no-send").css("display","inline");
+				            console.log("Send private text error");
+				        }
+				    });
+				    msg.body.chatType = 'singleChat';
+				    conn.send(msg.body);
+			    }
+			};
+		    // 单聊发送图片消息
+			var sendPrivateImg = function () {
+			    var id = conn.getUniqueId();                   // 生成本地消息id
+			    var msg = new WebIM.message('img', id);        // 创建图片消息
+			    var input = document.getElementById('upload');  // 选择图片的input
+			    var file = WebIM.utils.getFileUrl(input);      // 将图片转化为二进制文件
+			    var allowType = {
+			        'jpg': true,
+			        'gif': true,
+			        'png': true,
+			        'bmp': true
+			    };
+			    console.log("---------------------------------------");
+			    console.log(file);
+			    console.log("+++++++++++++++++++++++++++++++++++++");
+			    var html = '';
+			    	html += '<li>';
+			    	html += '<div class="list-box to-user">';
+			    	html += '<div class="right user-head">';
+			    	html += '<img src="'+avatar+'" class="head-img"/>';
+			    	html += '</div>';
+			    	html += '<div class="right user-message">';
+			    	html += '<img src="'+file.url+'" />'
+			    	html += '</div>';
+			    	html += '</div>';
+			    	html += '<div class="clearfix"></div>';
+		    		html += '</li>';			
+		    		$(".message-list ul").append(html);		
+	                setTimeout(function(){
+		    			var scrollTop = Number($(".message-list")[0].scrollHeight+1600);
+		    			console.log(scrollTop);
+		    			$(".message-list").scrollTop(scrollTop);
+		    		},100);
+			    if (file.filetype.toLowerCase() in allowType) {
+			        var option = {
+			            apiUrl: WebIM.config.apiURL,
+			            file: file,
+			            to: toname,                       // 接收消息对象
+			            roomType: false,
+			            chatType: 'singleChat',
+			            onFileUploadError: function () {      // 消息上传失败
+			                console.log('onFileUploadError');
+			            },
+			            onFileUploadComplete: function () {   // 消息上传成功
+			                console.log('onFileUploadComplete');
+			            },
+			            success: function () {                // 消息发送成功
+				    		/*var html = '';
+					    	html += '<li>';
+					    	html += '<div class="list-box to-user">';
+					    	html += '<div class="right user-head">';
+					    	html += '<img src="'+avatar+'" class="head-img"/>';
+					    	html += '</div>';
+					    	html += '<div class="right user-message">';
+					    	html += '<img src="'+file.url+'" />'
+					    	html += '</div>';
+					    	html += '</div>';
+					    	html += '<div class="clearfix"></div>';
+				    		html += '</li>';			
+				    		$(".message-list ul").append(html);		
+			                console.log('Success');
+			                console.log(file);
+			                setTimeout(function(){
+				    			var scrollTop = Number($(".message-list")[0].scrollHeight+1600);
+				    			console.log(scrollTop);
+				    			$(".message-list").scrollTop(scrollTop);
+				    		},100);*/
+			            },
+			            flashUpload: WebIM.flashUpload
+			        };
+			        msg.set(option);
+			        conn.send(msg.body);
+			    }
+			};
+			var showSendImg = 0;
+			var height = "1rem";
+			var openEmijo = function()  {
+				if(showSendImg==0){
+					height = "4.5rem";
+					showSendImg = 1;
+				}else{
+					height = "1rem";
+					showSendImg = 0;
+				}
+				$(".send-box").css("height",height);
+			}
+			
+			document.getElementById('privateText').onclick = sendPrivateText;
+			/*document.getElementById('privateImg').onclick = sendPrivateImg;*/
+			document.getElementById('emijo').onclick = openEmijo;
+			$(".upimg").on("click",function(){
+				$("#upload").click();
+			});
+			$(".send-input").on("input onpropertychange",function(){
+				if($(this).val().length>0){
+					$(".no-send").css("display","none");
+					$(".send").css("display","inline");
+				}else{
+					$(".send").css("display","none");
+					$(".no-send").css("display","inline");
+				}
+			});
+			$(".send-input").on("focus",function(){
+				height = "1rem";
+				showSendImg = 0;
+				$(".send-box").css("height",height);
+			});
+			$("#upload").on("change",function(){
+				var obj = document.getElementById("upload");
+		        sendPrivateImg();
+			});
+			$(".emoji-img").on("click",function(){
+				var emojiTxt = $(this).attr("data");
+				if(emojiTxt=="bq7"){
+					emojiTxt = "[:@@]";
+				}
+				var curSendMsg = $(".send-input").val();
+				curSendMsg = curSendMsg+emojiTxt;
+				$(".send-input").val(curSendMsg);
+				$(".no-send").css("display","none");
+				$(".send").css("display","inline");
+			});
+			
+			
+		}
+			
+		webim_func();
+</script>
+
+
+</body>
+</html>

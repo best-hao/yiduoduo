@@ -1,0 +1,256 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>收藏店铺列表-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" href="/Css/Mobile/collection.css" />
+    <style type="text/css">
+        body {
+            width: 100%;
+            min-width: 320px;
+            max-width: 640px;
+            margin: 0 auto;
+            font-family: '微软雅黑';
+        }
+
+        .tab-panel {
+            padding-top: 2.6rem;
+        }
+
+
+        .sheui_span:before {
+            content: "￥";
+        }
+
+        #more {
+            line-height: 2.6rem;
+            text-align: center;
+            color: #666666;
+            font-size: 0.94rem;
+        }
+
+        .sheui_span:before {
+            content: "";
+        }
+
+        .header span {
+            position: absolute;
+            right: 0;
+            top: 0;
+            line-height: 2.45rem;
+            padding: 0px 0.6rem;
+            color: #ff4800
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <span onclick='goshop()'>收藏商品列表</span>
+        <h3>收藏商铺</h3>
+        <a href="javascript:;" onclick="goToBack()">
+            <i class="iconfont">&#xe647;</i>
+        </a>
+    </div>
+    <div id="J_Tab" class="m-tab">
+        <ul class="tab-nav">
+            <!-- <li class="tab-nav-item tab-active">
+                    <a href="javascript:;">商品</a>
+                </li> -->
+            <!-- <li class="tab-nav-item">
+                    <a href="javascript:;">店铺</a>
+                </li>  156 8602 4605 -->
+        </ul>
+        <div class="tab-panel">
+            <div class="tab-panel-item tab-active">
+                <div class="weui_panel_bd" id="goods_1">
+                </div>
+                <div id="more"></div>
+            </div>
+            <div class="tab-panel-item">
+                <div class="shop_item">
+                    <div class="weui_cells weui_cells_access">
+                        <a class="weui_cell" href="javascript:;">
+                            <div class="weui_cell_hd">
+                                <img src="" alt="" style="width:50px;margin-right:5px;display:block">
+                            </div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>店铺名称</p>
+                                <p class="volume_p">
+                                    销量
+                                    <span class="volume">2320</span>
+                                </p>
+                            </div>
+                            <span class="weui_cell_ft">
+                                进入店铺
+                            </span>
+                        </a>
+                    </div>
+                    <div class="show_img">
+                    </div>
+                </div>
+                <!--end-->
+                <div class="shop_item">
+                    <div class="show_img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/Js/Mobile/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <!-- <script type="text/javascript">
+            //  tab 切换
+            $(".tab-nav-item").on('click', function() {
+                $(".tab-nav-item").removeClass('tab-active');
+                $(this).addClass('tab-active');
+                $(".tab-panel-item").removeClass('tab-active');
+                $($(".tab-panel-item")[$(this).index()]).addClass('tab-active');
+            });
+        </script> -->
+    <script type="text/javascript">
+
+		var IsApp = "@WorkContext.IsApp";
+		function goToBack() {
+			var _this = this;
+    		if(IsApp==1){
+				if(navigator.userAgent.indexOf("iPhone")>0){
+					gobacklastpage();
+				}
+				if(navigator.userAgent.indexOf("Android")>0){
+				window.js.goBack();
+			}
+			}else{
+				window.history.back();
+			}
+
+		}
+		function goshop(){
+            window.location.href = '/m/usercenter/Favorites?IsApp=' + IsApp
+		}
+        function goshopindex(_this) {
+            var id = $(_this).attr("data-shopid");
+            var url = '/m/shop/index?shopid='+id+'&IsApp='+IsApp
+            console.log(url);
+            //return false;
+            window.location.href =url
+        }
+		var maxpage = 5;
+		var sort = '@ViewData["sort"]',
+			search = '@ViewData["search"]',
+			page = '@ViewData["page"]',
+			size = '@ViewData["size"]';
+
+
+		$(function () {
+			$($(".tab-panel-item")[0]).addClass("tab-active");
+
+
+
+			function getPay(_this) {
+
+				var id = $($(_this).parents("li")).attr("data-ProductId");
+				window.location.href = '/m/product/detail?id=' + id;
+			};
+			$(function () {
+				getGoods();
+			});
+
+			function getGoods() {
+				$.get('/Api/Shop/GetFavoriteShopList', {
+						sort: "",
+						search: '',
+						page: page,
+						size: 20,
+                       UserId:'@WorkContext.Uid'
+					},
+
+					function (data) {
+						var datas = JSON.parse(data);
+                       console.log(datas);
+						var dete = datas.data;
+						console.log(dete);
+						if (datas.code != 0) {
+							var html = '';
+							var img_url = "@(WorkContext.ShopConfig.ImageCDN)";
+							var chicun = '?w=200&h=200';
+							for (var i = 0; i < dete.length; i++) {
+								if (dete[i].ImgUrl == "") {
+									dete[i].ImgUrl = '/Images/wutu.png';
+									chicun = '';
+									img_url = '';
+								} else {
+									img_url = "@(WorkContext.ShopConfig.ImageCDN)";
+									chicun = '?w=200&h=200';
+								};
+								html += '<a data-ProductId="' + dete[i].ProductId + '" data-shopid ="' + dete[i].shopid +
+									'" href="javascript:;" class="weui_media_box weui_media_appmsg">';
+                                html += '<div class="weui_media_hd"  data-shopid ="' + dete[i].shopid +
+									'"  onclick="goshopindex(this)"><img class="weui_media_appmsg_thumb" src="' +
+                                    img_url + dete[i].logo + chicun + '" alt="" >';
+                                html += '</div> <div class="weui_media_bd" ><p class="weui_media_desc"  onclick="goshopindex(this)" data-shopid ="' + dete[i].shopid +
+									'">' + dete[i].shopname + '</p>';
+								html += '<p class="weui_media_title"></p>&nbsp<p class="sheui_media_tag"> <span class="sheui_span">';
+								html += dete[i].phone +
+									'</span>	<button class="remove_coll" onclick="removeGoods(this)">取消收藏</button></p>';
+								html += ' </div></a>';
+							};
+							$("#goods_1").append(html);
+							page++;
+						} else {
+							$("#more").text("没有更多数据了");
+							page = maxpage;
+						};
+					}, 'JSON');
+			};
+			$(window).scroll(
+				function () {
+					var scrollTop = $(this).scrollTop();
+					var scrollHeight = $(document).height();
+					var windowHeight = $(this).height();
+					if (scrollTop + windowHeight == scrollHeight) {
+						if (page <= maxpage) {
+							getGoods();
+							page++;
+							if (page == maxpage) {
+								$("#more").html("没有更多数据了");
+								return false;
+							};
+
+						};
+					};
+				});
+		});
+		function removeGoods(_this) {
+			var id = $($(_this).parents(".weui_media_box")).attr("data-shopid");
+			$.ajax({
+				type: "get",
+				url: "/Api/Shop/SetFavoriteShop?UserId="+'@WorkContext.Uid'+'&ShopId='+id,
+				async: true,
+				dataType: "json",
+				success: function(rel) {
+					console.log(rel)
+					if(rel.code==1){
+						$($(_this).parents(".weui_media_box")).remove();
+						$.toast('取消成功')
+					}else{
+						$.toast('取消失败')
+					}
+				}
+			});
+		};
+    </script>
+</body>
+
+</html>

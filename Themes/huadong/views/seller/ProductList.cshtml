@@ -1,0 +1,331 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta content="telephone=no" name="format-detection">
+	    <meta name="apple-touch-fullscreen" content="yes">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>商品管理-@(WorkContext.SellerInfo.SellerName)</title>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+		<link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/font/common.css" />
+		<link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/seller/productManage/product.css" />
+		<script type="text/javascript" charset="utf-8" src="/Mobile/weui/zepto.min.js"></script>
+		<script type="text/javascript" charset="utf-8" src="/Js/vue/dist/vue.min.js"></script>
+		<script type="text/javascript" charset="utf-8" src="/Mobile/weui/ydui.flexible.js" ></script>
+		<script type="text/javascript" charset="utf-8" src="/Js/Mobile/updown.js"></script>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/loading.css"/>
+	</head>
+	<body>
+		<header class="prev-page-view">
+			商品管理
+			<div class="prev-page-btn icon icon-109" onclick="goToBack()"></div>
+		</header>
+		<section class="product-list-manage" id="app">
+            <div class="defalut-top"></div>
+			<!--div class="weui_search_bar">
+				<input type="search" class="search-input" id="search" placeholder="请输入您要查找的商品" style="box-sizing:content-box">
+				<button class="weui_btn weui_btn_mini weui_btn_primary" id="searchBtn"><i class="icon icon-4"></i></button>
+			</div-->
+			<div class="weui_panel weui_panel_access">
+				<div class="weui_panel_list"></div>
+	        </div>
+		</section>
+		<div class="curtain hide">
+			<div class="loader Rotation"></div>
+			<div class="loadTit">
+				<icon class='icon iconfont'>&#xe649;</icon>
+			</div>
+        </div>
+	</body>
+	<script>
+	$('.curtain').removeClass("hide")
+	var url = window.location.href;
+    var sellerid = url.split("sellerid=")[1].split("&IsApp")[0]; //商户id
+    var userid = "@WorkContext.Uid";
+	 var IsApp = "@WorkContext.IsApp";
+		function goToBack() {
+			var _this = this;
+    		if(IsApp==1){
+				if(navigator.userAgent.indexOf("iPhone")>0){
+					gobacklastpage();
+				}
+				if(navigator.userAgent.indexOf("Android")>0){
+					window.js.goBack();
+				}
+			}else{
+				window.history.back();
+			}
+				
+		}
+
+	//上拉加载
+    $(function(){
+        //页数初始化
+        var page = 0;
+        // 每页展示5个
+        var size = 5;
+        $('.weui_panel').dropload({
+            scrollArea : window,
+            autoLoad : true,//自动加载
+            domDown : {//上拉
+                domClass   : 'dropload-down',
+                domRefresh : '<div class="dropload-refresh f15 ">上拉加载更多</div>',
+                domLoad    : '<div class="dro pload-load f15"><span class="weui-loading"></span>正在加载中...</div>',
+                domNoData  : '<div class="dropload-noData">没有更多商品信息了</div>'
+            },
+            loadDownFn : function(me){//加载更多
+             page++;
+//           window.history.pushState(null, document.title, window.location.href);
+             var result = '';
+                $.ajax({
+                    type: 'get',
+                    url:'/Api/Product/ProductList?v='+Math.random()+'&SellerId='+sellerid+'&page='+page+'&size='+size,
+                    /*url:'/Api/Product/ProductList?v='+Math.random()+'&SellerId=14&page='+page+'&size='+size,*/
+                    dataType: 'json',
+                    success: function(res){
+                    	$('.curtain').addClass("hide")
+                    	//console.log(res);
+                        if(res.code == 1){
+                            var arrLen = res.data.length;
+                            var imgUrlHttps = '@(WorkContext.ShopConfig.ImageCDN)';
+                            for(var i=0; i<arrLen; i++){
+                            	var imgUrl = res.data[i].picurl;
+                                //var http = imgUrlExp.split(":")[0]; //获取当前picurl地址的http
+                                result  +='<div class="weui_panel_bd">';
+                                result  +='<a href="/m/seller/ProductDetail?ProductId='+res.data[i].productid+'&SellerId='+res.data[i].sellerid+'">';
+                                result  +='<div class="weui_media_box">';
+                                result  +='<div class="weui_media_hd">';
+                                    if (imgUrl.indexOf(imgUrlHttps)==-1) {//判断当前picurl地址的http是否存在
+                                        result  +='<img src="'+imgUrlHttps+res.data[i].picurl+'" alt="" />';
+                                    }
+                                result  +='</div>';
+                                result  +='<div class="weui_media_bd">';
+                                result  +='<h4 class="weui_media_title">'+res.data[i].productname+'</h4>';
+                                result  +='<p class="weui_media_desc">';
+                                    if(res.data[i].status == 1){
+                                        result  +='<span class="color-status">'+'上架中'+'</span>';
+                                    }else if(res.data[i].status == 0){
+                                        result  +='<span class="color-status">'+'待审核'+'</span>';
+                                    }else if(res.data[i].status == -1){
+                                        result  +='<span class="color-status">'+'下架中'+'</span>';
+                                    }else if(res.data[i].status == -2){
+                                        result  +='<span class="color-status">'+'淘汰'+'</span>';
+                                    }else if(res.data[i].status == -4){
+                                        result  +='<span class="color-status">'+'审核未通过'+'</span>';
+                                    }
+                                result  +='</p>'
+                                result  +='<p class="weui_media_desc weui_media_desc_last">';
+                                result  +='<span>销量 '+res.data[i].salecount+'</span>';
+                                result  +='<span>价格 ¥'+res.data[i].saleprice+'</span>';
+                                /*result  +='<span>库存 '+res.data[i].stock+'</span>';*/
+                                result  +='</p>'
+                                result  +='</div>';
+                                result  +='</div>';
+                                result  +='</a>';
+                                result  +='<div class="weui_media_box_down weui_panel_price_content">';
+                                    if(res.data[i].status == 1){
+                                        result  +='<div class="price-box">';
+                                        result  +='<p class="price" data-sellerid='+res.data[i].sellerid+' data-productid='+res.data[i].productid+' data-status="-1" data-userid='+userid+' >'+'下架'+'</p>';
+                                        result  +='</div>';
+                                    }else if(res.data[i].status == 0){
+                                        result  +='<div class="price-box">';
+                                        result  +='<p class="price" data-sellerid='+res.data[i].sellerid+' data-productid='+res.data[i].productid+' data-status="-1" data-userid='+userid+' >'+'下架'+'</p>';
+                                        result  +='</div>';
+                                    }else if(res.data[i].status == -1){
+                                        result  +='<div class="price-box">';
+                                        result  +='<p class="price" data-sellerid='+res.data[i].sellerid+' data-productid='+res.data[i].productid+' data-status="0" data-userid='+userid+' >'+'上架'+'</p>';
+                                        result  +='</div>';
+                                    }else if(res.data[i].status == -2){
+                                        /* res.data[i].status == -2 时 状态为淘汰 此时按钮不显示 */
+                                    }else{
+                                        /* res.data[i].status == -4 时 状态为审核未通过 此时按钮不显示 */
+                                    }
+                                result  +='</div>';
+                                result  +='</div>';
+                            }
+                        // 如果没有数据
+                        }else{
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+
+                        // 为了测试，延迟500毫秒加载
+                        setTimeout(function(){
+                            $('.weui_panel_list').append(result);
+                            // 每次数据加载完，必须重置
+                            me.resetload();
+                        },500);
+                    },
+                    error: function(xhr, type){
+                        $.toast("Ajax error!", "forbidden");
+                        // 即使加载出错，也得重置
+                        me.resetload();
+                    }
+                });
+            }
+        });
+
+        /**
+          *  更新上下架状态 *
+          *  status == 1 上架中 *
+          *  status == 0 待审核 *
+          *  status == -1 下架中 *
+          *  status == -2 淘汰 *
+          *  status == -4 审核未通过 *
+          *
+          **/
+        $(document).on("click",".price",function(){
+            var that = $(this);
+            var sellerid = that.data("sellerid"),
+                productid = that.data("productid"),
+                status = that.data("status"),
+                userid = that.data("userid");
+            $.ajax({
+                type:"get",
+                url: "/Api/Product/SetProductStatus?v="+Math.random(),
+                dataType:"json",
+                async: true,
+                data:{
+                    sellerid:sellerid,
+                    productid:productid,
+                    status:status,
+                    userid:userid,
+                },
+                success: function(res){
+                    //console.log(res);
+                    if(res.code == 1){
+                        $.toast("操作成功");
+                        if (status == 1) {
+                            that.data("status",-1);  // 当status == 1 时，按钮更改为下架
+                            that.text("下架").parents(".weui_panel_bd").find(".color-status").text("下架中");
+                        }else if(status == 0){
+                            that.data("status",-1); // 当status == 0 时，按钮更改为下架（审核中不是上架状态）
+                            that.text("下架").parents(".weui_panel_bd").find(".color-status").text("审核中");
+                        }else if(status == -1){
+                            that.data("status",0); // 当status == -1 时，按钮更改为上架（状态为审核中）
+                            that.text("上架").parents(".weui_panel_bd").find(".color-status").text("下架中");
+                        }else{
+                            return false;
+                            /* 当 status == -2 || status == -4 时 状态为淘汰或审核未通过 此时不执行任何逻辑 */
+                        }
+                    }else{
+                        $.toast("操作失败", "cancel");
+                    }
+                }
+            });
+        });
+    });
+
+	</script>
+
+    <!--script>
+        // 搜索
+        $(function(){
+            var cateid = 0,
+                sort = 0,
+                page = 0,
+                size = 10;
+            $("#searchBtn").on("click", function(){
+                var search = $("#search").val();
+                page = 1;
+                searchResult(cateid, sort, page, size, sellerid, search);
+            });
+        });
+        function searchResult(cateid, sort, page, size, sellerid, search){
+            var result = '';
+            if (search == '' || search == null) {
+               $.toptips("请输入关键字搜索");
+               return false;
+            }else{
+                $.showLoading();
+                $.ajax({
+                    type: 'get',
+                    url: '/Api/Product/ProductList?v='+Math.random(),
+                    dataType: 'json',
+                    data:{
+                        cateid: cateid,
+                        sort: sort,
+                        page: page,
+                        size: size,
+                        sellerid: sellerid,
+                        search: search
+                    },
+                    success: function(res){
+                        //console.log(res);
+                        if(res.code == 1){
+                            var arrLen = res.data.length;
+                            var imgUrlHttps = '@(WorkContext.ShopConfig.ImageCDN)';
+                            for(var i=0; i<arrLen; i++){
+                                var imgUrl = res.data[i].picurl;
+                                //var http = imgUrlExp.split(":")[0]; //获取当前picurl地址的http
+                                result  +='<div class="weui_panel_bd">';
+                                result  +='<a href="/m/seller/ProductDetail?ProductId='+res.data[i].productid+'">';
+                                result  +='<div class="weui_media_box weui_media_appmsg">';
+                                result  +='<div class="weui_media_hd">';
+                                    if (imgUrl.indexOf(imgUrlHttps)==-1) {//判断当前picurl地址的http是否存在
+                                        result  +='<img src="'+imgUrlHttps+res.data[i].picurl+'" alt="" />';
+                                    }
+                                result  +='</div>';
+                                result  +='<div class="weui_media_bd">';
+                                result  +='<h4 class="weui_media_title">'+res.data[i].productname+'</h4>';
+                                result  +='<p class="weui_media_desc">';
+                                result  +='<span>销量'+res.data[i].salecount+'</span>';
+                                result  +='<span>库存'+res.data[i].stock+'</span>';
+                                    if(res.data[i].status == 1){
+                                        result  +='<span>'+'审核通过'+'</span>';
+                                    }else if(res.data[i].status == 0){
+                                        result  +='<span>'+'停售'+'</span>';
+                                    }else if(res.data[i].status == -1){
+                                        result  +='<span>'+'待审核'+'</span>';
+                                    }else if(res.data[i].status == -2){
+                                        result  +='<span>'+'审核未通过'+'</span>';
+                                    }else if(res.data[i].status == -3){
+                                        result  +='<span>'+'停购'+'</span>';
+                                    }else if(res.data[i].status == -4){
+                                        result  +='<span>'+'淘汰'+'</span>';
+                                    }
+                                result  +='</p>'
+                                result  +='</div>';
+                                result  +='</div>';
+                                result  +='<div class="weui_media_box_down weui_panel_price_content">';
+                                result  +='<div class="price-box">市场价（元）<br />';
+                                result  +='<p class="price">'+res.data[i].marketprice+'</p>';
+                                result  +='</div>';
+                                result  +='<div class="price-box">售价（元）<br />';
+                                result  +='<p class="price">'+res.data[i].saleprice+'</p>';
+                                result  +='</div>';
+                                result  +='<div class="price-box">成本价（元）<br />';
+                                result  +='<p class="price">'+res.data[i].purcprice+'</p>';
+                                result  +='</div>';
+                                result  +='</div>';
+                                result  +='</a>';
+                                result  +='</div>';
+                            }
+                            $.hideLoading();
+                            $(".weui_panel_list").html("").append(result); //清空页面初始加载的列表同时append搜索的数据
+                            $(".dropload-down").hide(); //不展示dropload自带样式
+                        }else{
+                            $.hideLoading();
+                            $(".weui_panel_list").html(""); //当res.code == 0时无搜索内容同时清空weui_panel_list
+                            $(".dropload-down").hide(); //不展示dropload自带样式
+                            $.toast("暂无搜索商品", "forbidden");
+                            return false;
+                        }
+                    },
+                    error: function(res){
+                        $.toast("Ajax error!", "forbidden");
+                    }
+
+                });
+            }
+        }
+    </script-->
+</html>

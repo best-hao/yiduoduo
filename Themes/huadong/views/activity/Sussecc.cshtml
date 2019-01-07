@@ -1,0 +1,68 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>砍价-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta content="@WorkContext.ShopConfig.SEODescription" name="description">
+    <meta content="@WorkContext.ShopConfig.SEOKeyword" name="keywords">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css"/>
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css"/>
+   
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css">
+			header {
+				line-height: 2.6rem;
+				text-align: center;
+				background: #FFFFFF;
+				border-bottom: 1px solid #E1E1E1;
+			}
+			
+			#time {
+				color: #fff;
+				background: #09bb07;
+				font-size: 70px;
+				height: 100px;
+				width: 100px;
+				display: inline-block;
+				margin: 0 auto;
+				line-height: 100px;
+				border-radius: 50%;
+			}
+		</style>
+</head>
+<body>
+	<header>
+			支付成功
+		</header>
+
+		<div class="weui_msg hide" id="msg1" style="display: block; opacity: 1;">
+			
+			<div class="weui_icon_area"><span id="time">5</span></div>
+			<div class="weui_text_area">
+				<h2 class="weui_msg_title">支付成功</h2>
+				<p class="weui_msg_desc">内容详情，可根据实际需要安排，如果换行则不超过规定长度</p>
+			</div>
+			<div class="weui_opr_area">
+				<p class="weui_btn_area">
+					<a href="javascript:;" class="weui_btn weui_btn_primary">返回首页</a>
+					<a href="javascript:;" class="weui_btn weui_btn_default">个人中心</a>
+				</p>
+			</div>
+			<div class="weui_extra_area">
+
+			</div>
+		</div>
+
+
+
+</body>
+</html>

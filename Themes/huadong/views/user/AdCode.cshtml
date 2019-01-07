@@ -1,0 +1,243 @@
+﻿@{
+Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	    <meta name="format-detection" content="telephone=no">
+	    <meta name="apple-mobile-web-app-capable" content="yes" />
+	    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+	    <meta http-equiv="Pragma" content="no-cache" />
+	    <meta http-equiv="Cache-Control" content="no-cache" />
+	    <meta http-equiv="Expires" content="0" />
+	    <title>我的二维码-@{@WorkContext.SellerInfo.SellerName}</title>
+		<link rel="stylesheet" href="/Mobile/weui/style/weui.css" />
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css" />
+		<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/Mobile/qrcode.min.js"></script>
+		<style type="text/css">
+			#qrcode{display: none;}
+			body{background: #fff;}
+			.img-box{width: 7.5rem;margin: 0 auto;position: relative;}
+			.bg{display: block;width: 7.5rem;}
+			.title{position: absolute;}
+			.name{position: absolute;}
+			.head{position: absolute;display: block;}
+			.qrcode{display: block;position: absolute;}
+			.qrcode img{display: block;width: 100%;}
+			img.head{border-radius: 50%;}
+			.weui_toast{width: 2rem;height: 2rem;min-height: 2rem;margin-left: -1rem;top:50%;left: 50%;margin-top: -1rem;}
+			.goback{position: fixed;top: 0;left: 0;z-index: 100000;color: #fff;font-size: 0.5rem;}
+		</style>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script>
+    	var username = "@WorkContext.UserInfo.UserName";
+        wx.config({
+            debug: false, /* 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。*/
+            appId: '@ViewData["AppId"]', /* 必填，公众号的唯一标识*/
+            timestamp: '@ViewData["Timestamp"]', /* 必填，生成签名的时间戳*/
+            nonceStr: '@ViewData["NonceStr"]', /* 必填，生成签名的随机串*/
+            signature: '@ViewData["Signature"]',/* 必填，签名*/
+            jsApiList: [
+                    'checkJsApi',
+                    'onMenuShareTimeline',
+                    'onMenuShareAppMessage',
+                    'onMenuShareQQ',
+                    'onMenuShareWeibo',
+                    'hideMenuItems',
+                    'showMenuItems',
+                    'hideAllNonBaseMenuItem',
+                    'showAllNonBaseMenuItem',
+                    'translateVoice',
+                    'startRecord',
+                    'stopRecord',
+                    'onRecordEnd',
+                    'playVoice',
+                    'pauseVoice',
+                    'stopVoice',
+                    'uploadVoice',
+                    'downloadVoice',
+                    'chooseImage',
+                    'previewImage',
+                    'uploadImage',
+                    'downloadImage',
+                    'getNetworkType',
+                    'openLocation',
+                    'getLocation',
+                    'hideOptionMenu',
+                    'showOptionMenu',
+                    'closeWindow',
+                    'scanQRCode',
+                    'chooseWXPay',
+                    'openProductSpecificView',
+                    'addCard',
+                    'chooseCard',
+                    'openCard'
+            ]
+        });
+
+        wx.error(function (res) {
+            /*alert(res);*/
+            /*console.log(res);*/
+            /*alert('验证失败');*/
+        });
+
+        wx.ready(function () {
+            var link = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m/user/bind?m=m&LeaderUid='+'@WorkContext.Uid';
+            var Logo = '@WorkContext.SellerInfo.Logo';
+            var imgUrl = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/Images/Mobile/share-logo.png';
+               // imgUrl = "@(WorkContext.ShopConfig.ImageCDN)@{@WorkContext.SellerInfo.Logo}?w=100&h=100";
+            var  title = "让商家越让利越多,消费者越花越富有";
+            var desc = "让消费者越花越富有,商家越让利越多";
+                /*转发到朋友圈*/
+                wx.onMenuShareTimeline({
+                    title: title,
+                    link: link,
+                    imgUrl: imgUrl,
+                    success: function () {
+                        /*alert('转发成功！');*/
+                    },
+                    cancel: function () {
+                        /*alert('转发失败！');*/
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: title,
+                    desc: desc,
+                    link: link,
+                    imgUrl: imgUrl,
+                    type: 'link',
+                    dataUrl: '',
+                    success: function () {
+                        /*alert('转发成功！');*/
+                    },
+                    cancel: function () {
+                        /*alert('转发失败！');*/
+                    }
+                });
+            });
+    </script>
+	</head>
+	<body>
+		<div id="qrcode">
+			<span onclick="goToBack()" class="icon iconfont goback">&#xe65d;</span>
+			<div class="img-box">
+				<img class="bg"/>
+				<img v-show="obj.IsHeader==1" src='@ViewData["HeadImgUrl"]' class="head" :style="headStyle"/>
+				<div class="title" v-text="obj.AdText" :style="titleStyle"></div>
+				<div class="name" :style="nameStyle">@WorkContext.UserInfo.UserName</div>
+				<div class="qrcode" :style="qrcodeStyle"  id="qr-code">
+	    			<img src='@ViewData["Qrcode"]' alt="" />
+	    		</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var uid = "@WorkContext.Uid";
+			var IsApp = "@WorkContext.IsApp";
+			var iswexin = "@Yitao.Core.WebHelper.IsWeiXin()";
+			//返回交互
+			function goToBack() {
+				if(IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+		                window.js.goBack();
+					}
+				}else{
+					window.history.back();
+				}
+					
+			}
+			if(Number(uid)<=0){
+				window.location.href = '/m/user/Bind';
+				if(iswexin=="False"){
+					window.location.href = '/m/account/login';
+				}
+				//return false;
+			}else{
+				$.showLoading();
+				var vm = new Vue({
+					el: "#qrcode",
+					data: {
+						obj: [],
+						qrcodeStyle:{},
+						titleStyle:{},
+						nameStyle:{},
+						headStyle:{}
+					},
+					created: function() {
+						this.initData();
+					},
+					methods: {
+						initData: function() {
+							var _this = this;
+							$.ajax({
+								type:"post",
+								url:"/m/user/qrcodead",
+								async:true,
+								success:function(rel) {
+									var rst = JSON.parse(rel);
+									if(rst.Code==1){
+										_this.obj = rst.Data;
+										var bgurl = "@(WorkContext.ShopConfig.ImageCDN)"+rst.Data.ImgUrl;
+										$(".bg").attr("src",bgurl);
+										_this.qrcodeStyle = {
+											"width": _this.PxToRem2(_this.obj.QrcodeWidth)+"rem",
+											"height": _this.PxToRem2(_this.obj.QrcodeHeight)+"rem",
+											"left": _this.PxToRem2(_this.obj.QrcodeX)+"rem",
+											"top": _this.PxToRem3(_this.obj.QrcodeY)+"rem"
+										}
+										_this.titleStyle = {
+											"fontSize": _this.PxToRem2(_this.obj.AdTextSize)+"rem",
+											"color": "#"+_this.obj.AdTextColor,
+											"left": _this.PxToRem2(_this.obj.AdTextX)+"rem",
+											"top": _this.PxToRem3(_this.obj.AdTextY)+"rem"
+										}
+										_this.nameStyle = {
+											"color": "#"+_this.obj.NickNameColor,
+											"fontSize": _this.PxToRem2(_this.obj.NickNameSize)+"rem",
+											"left": _this.PxToRem2(_this.obj.NickNameX)+"rem",
+											"top": _this.PxToRem3(_this.obj.NickNameY)+"rem"
+										}
+										_this.headStyle = {
+											"width": _this.PxToRem2(_this.obj.HeaderWidth)+"rem",
+											"height": _this.PxToRem2(_this.obj.HeaderHeight)+"rem",
+											"left": _this.PxToRem2(_this.obj.HeaderX)+"rem",
+											"top": _this.PxToRem3(_this.obj.HeaderY)+"rem"
+										}
+										$.hideLoading();
+										$("#qrcode").show();
+									}else{
+										$.hideLoading();
+										$("#qrcode").show();
+									}
+								}
+							});
+						},
+						PxToRem: function(num) {
+							var rem = Number(num)*2/100;
+							return rem;
+						},
+						PxToRem2: function(num) {
+							var rem = Number(num)/100;
+							return rem;
+						},
+						PxToRem3: function(num) {
+							var rem = Number(num)/100;
+							return rem;
+						}
+					}
+				});
+				
+			}
+		</script>
+	</body>
+</html>

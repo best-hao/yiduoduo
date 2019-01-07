@@ -1,0 +1,125 @@
+﻿@{ Layout = null; }
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>联系我们</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css">
+        html {
+		    height: 100%;
+		}
+		
+		body {
+		    height: 100%;
+		    margin: 0px;
+		    padding: 0px;
+		}
+		
+		#container {
+		    height: 300px;
+		}
+		
+		body,html {
+		    background: #fff;
+		}
+		
+		#allmap {
+		    height: 300px;
+		}
+		
+		body {
+		    font-size: .24rem;
+		    margin: 0;
+		    padding: 0;
+		}
+		
+		li {
+		    list-style: none
+		}
+		
+		.fl {
+		    float: left;
+		}
+		
+		.fr {
+		    float: right;
+		}
+		
+		.clearfix:before,.clearfix:after {
+		    display: table;
+		    content: " "
+		}
+		
+		.clearfix:after {
+		    clear: both
+		}
+		
+		.clearfix * {
+		    zoom: 1
+		}
+		
+		.warpper {
+		    font-family: "微软雅黑","arial","sans-serif","courier new";
+		}
+		
+		div.banner {
+		}
+		
+		img.banner {
+		    display: block;
+		    width: 100%;
+		}
+		
+		.title {
+		    height: .8rem;
+		    line-height: .8rem;
+		    padding: 0 .2rem;
+		    background: #fff;
+		    font-size: .32rem;
+		    font-weight: bold;
+		}
+		.infos {
+		    padding: .2rem;
+		    margin: .2rem;
+		}
+    </style>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=GV1HPx33zmQSuzUE53cNAHX3DTvzztsT"></script>
+</head>
+
+<body>
+    <div class="warpper">
+        <div class="banner">
+            <img src="http://placehold.it/750x300" alt="" class="banner" />
+        </div>
+        <div class="title">联系我们 >></div>
+        <div id="allmap"></div>
+        <div class="infos">
+        	<p>地址：陕西省西安市莲湖区大庆路109号庆祥雅居</p>
+        	<p>联系电话：15029903053</p>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var map = new BMap.Map("allmap");
+        var point = new BMap.Point(116.331398, 39.897445);
+        map.centerAndZoom(point, 12);
+        var myGeo = new BMap.Geocoder();
+        myGeo.getPoint("陕西省西安市莲湖区大庆路109号庆祥雅居", function(point) {
+            if (point) {
+                map.centerAndZoom(point, 16);
+                map.addOverlay(new BMap.Marker(point));
+            } else {
+                alert("您选择地址没有解析到结果!");
+            }
+        }, "陕西省西安市莲湖区大庆路109号庆祥雅居");
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,658 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>会员分析</title>
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/weui.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/weui2.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/s_init.css" />
+		<script src="/Js/Mobile/boss/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+
+		</style>
+	</head>
+
+	<body>
+		<header>
+			<div id="s_back"></div>
+			<div class="weui-header">
+				<div class="weui-header-left">
+					<a class="icon icon-109 f-white" onclick="history.back()"></a>
+				</div>
+				<h1 class="weui-header-title">会员分析</h1>
+				<div class="weui-header-right">
+
+				</div>
+			</div>
+		</header>
+		<div class="content">
+			<div class="con_tab">
+				<ul>
+					
+				</ul>
+			</div>
+
+			<!--会员消费预览 -->
+			<div class="consumption">
+				<div class="consumption_1">
+					<div class="con_1 livelys">
+						<h3>会员分析</h3>
+						<!--时间-->
+						<div class="times">
+							2018-05-16
+							<i class="iconfont" id="time0">&#xe634;</i>
+						</div>
+						<!--end-->
+						<!--会员资料-->
+						<div class="con_huiyuan">
+							<ul>
+								<li>
+									<span class="num">480</span>
+									<span>新增注册</span>
+								</li>
+								<li>
+									<span class="num">152</span>
+									<span>新增会员</span>
+								</li>
+								<li>
+									<span class="num">55223</span>
+									<span>总会员</span>
+								</li>
+							</ul>
+						</div>
+						<!--end-->
+						<!--圆弧-->
+						<div class="yuan1">
+							<ul>
+								<li>
+									<canvas id="canvas1" width="100" height="100"></canvas>
+
+									<span>注册完成率</span>
+								</li>
+								<li>
+									<canvas id="canvas2" width="100" height="100"></canvas>
+
+									<span>会员完成率</span>
+								</li>
+								<li>
+									<canvas id="canvas3" width="100" height="100"></canvas>
+
+									<span>新客转化率</span>
+								</li>
+							</ul>
+						</div>
+						<!--end-->
+
+					</div>
+
+				</div>
+
+			</div>
+			<!--end-->
+			<!--店铺目标完成率 -->
+			<div class="consumption">
+				<div class="consumption_1">
+					<div class="con_1 livelys">
+						<h3>销售分析</h3>
+						<!--时间-->
+						<div class="times">
+							2018-05-16
+							<i class="iconfont" id="time1">&#xe634;</i>
+						</div>
+						<!--end-->
+						<!--会员资料-->
+						<div class="con_huiyuan">
+							<ul>
+								<li>
+									<span class="order_num">480</span>
+									<span>已售订单数</span>
+								</li>
+								<li>
+									<span class="order_money">156592</span>
+									<span>已售营业额</span>
+								</li>
+								<li>
+									<span class="order_sum">55223</span>
+									<span>月累积营业额</span>
+								</li>
+							</ul>
+						</div>
+						<!--end-->
+						<!--圆弧-->
+						<div class="yuan1">
+							<ul>
+								<li>
+									<canvas id="canvas7" width="100" height="100"></canvas>
+
+									<span>订单完成率</span>
+								</li>
+								<li>
+									<canvas id="canvas8" width="100" height="100"></canvas>
+
+									<span>营业额完成率</span>
+								</li>
+								<li>
+									<canvas id="canvas9" width="100" height="100"></canvas>
+
+									<span>月目标完成率</span>
+								</li>
+							</ul>
+						</div>
+						<!--end-->
+
+					</div>
+
+				</div>
+
+			</div>
+			<!--end-->
+			<!-- 客单价-->
+			<div class="guset_con">
+				<div class="guest">
+					<ul>
+						<li>
+							<div class="li_left">
+								<i class="iconfont">&#xe6b5;</i>
+							</div>
+							<div class="li_right">
+								<span>平均客单价(元)</span>
+								<span>852</span>
+							</div>
+						</li>
+						<li>
+							<div class="li_left">
+								<i class="iconfont">&#xe70d;</i>
+							</div>
+							<div class="li_right">
+								<span>平均客单件(件)</span>
+								<span>852</span>
+							</div>
+						</li>
+					</ul>
+
+				</div>
+
+			</div>
+			<!--end-->
+			<!-- 會員活躍度分析 -->
+			<div class="lively_con">
+				<div class="livelys">
+					<h3>用户活跃度分析</h3>
+					<ul class="lively_ul huoyue">
+						<li class="color-ea5831">
+							<span>登录活跃</span>
+							<span>8522</span>
+							<span>
+								<i class="iconfont">&#xe633;</i>
+							</span>
+						</li>
+						<li class="color-ff8d0c">
+							<span>消费活跃</span>
+							<span>862</span>
+							<span>
+								<i class="iconfont">&#xeeed;</i>
+							</span>
+						</li>
+						<li class="color-06afff">
+							<span>半活跃</span>
+							<span>852</span>
+							<span>
+								<i class="iconfont">&#xe615;</i>
+							</span>
+						</li>
+						<li class="color-21af99">
+							<span>活跃中</span>
+							<span>4322</span>
+							<span>
+								<i class="iconfont">&#xe6a0;</i>
+							</span>
+						</li>
+						<li class="color-f64241">
+							<span>沉睡中</span>
+							<span>3424</span>
+							<span>
+								<i class="iconfont">&#xe635;</i>
+							</span>
+						</li>
+						<li class="color-bdbdbd">
+							<span>已流失</span>
+							<span>32432</span>
+							<span>
+								<i class="iconfont">&#xe672;</i>
+							</span>
+						</li>
+					</ul>
+					<h3>会员占比</h3>
+					<ul class="lively_ul">
+
+						<li>
+							<canvas id="canvas4" width="100" height="100"></canvas>
+
+							<span>活跃会员</span>
+						</li>
+						<li>
+							<canvas id="canvas5" width="100" height="100"></canvas>
+
+							<span>沉睡会员</span>
+						</li>
+						<li><canvas id="canvas6" width="100" height="100"></canvas>
+
+							<span>流失会员</span>
+						</li>
+					</ul>
+
+				</div>
+
+			</div>
+			<!--end-->
+
+		
+			
+
+			<!--会员趋势变化 -->
+			<div class="trend_con">
+				<div class="trend">
+					<h3>会员趋势变化</h3>
+					<div class="times">
+						<p>
+							<span>2018-05-16</span> 至 <span>2018-08-16</span>
+						</p>
+						<i class="iconfont" id="time2">&#xe634;</i>
+					</div>
+					<div class="chioce">
+						<ul>
+							<li class="chioce_active">
+								<a href="Javascript:;">新增注册</a>
+							</li>
+							<li>
+								<a href="Javascript:;">新增会员</a>
+							</li>
+							<li>
+								<a href="Javascript:;">总会员</a>
+							</li>
+							<li>
+								<a href="Javascript:;">活跃会员</a>
+							</li>
+
+						</ul>
+
+					</div>
+
+					<div class="" id="main1" style="height: 300px;">
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<!--end-->
+			<!--会员客单价分析 -->
+			<div class="trend_con">
+				<div class="trend">
+					<h3>会员客单价分析</h3>
+					<div class="times">
+						<p>
+							<span>2018-05-16</span> 至 <span>2018-08-16</span>
+						</p>
+						<i class="iconfont" id="time3">&#xe634;</i>
+					</div>
+
+					<div class="" id="main2" style="height: 400px;">
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<!--end-->
+
+			<!-- 营业额 -->
+			<div class="trend_con">
+				<div class="trend">
+					<h3>销售额分析</h3>
+					<div class="times">
+						<p>
+							<span>2018-05-16</span> 至 <span>2018-08-16</span>
+						</p>
+						<i class="iconfont" id="time4">&#xe634;</i>
+					</div>
+
+					<div class="" id="main3" style="height: 400px;">
+
+					</div>
+
+				</div>
+
+			</div>
+			<!--end-->
+		</div>
+
+		<script>
+			toCanvas('canvas1', 40, "#fce6d9", "#f9884c", "#f9884c");
+			toCanvas('canvas2', 90, "#fdedcb", "#fbb925", "#fbb925");
+			toCanvas('canvas3', 90, "#cbeffd", "#1fbcff", "#1fbcff");
+			toCanvas('canvas4', 40, "#99ddd1", "#1bb89d", "#1bb89d");
+			toCanvas('canvas5', 50, "#ffb9b4", "#fd665b", "#fd665b");
+			toCanvas('canvas6', 60, "#ededed", "#bdbdbd", "#bdbdbd");
+			toCanvas('canvas7', 80, "#99ddd1", "#1bb89d", "#1bb89d");
+			toCanvas('canvas8', 70, "#ffb9b4", "#fd665b", "#fd665b");
+			toCanvas('canvas9', 20, "#ededed", "#bdbdbd", "#bdbdbd");
+
+//  空心圆环 init
+			function toCanvas(id, progress, color1, color2, color3) {
+				//	canvas进度条
+				var canvas = document.getElementById(id),
+					ctx = canvas.getContext("2d"),
+					percent = progress,
+					//最终百分比
+					circleX = canvas.width / 2,
+					//中心x坐标
+					circleY = canvas.height / 2,
+					//中心y坐标
+					radius = 40, //圆环半径
+					lineWidth = 7, //圆形线条的宽度
+					fontSize = 16;
+
+				//字体大小
+				//两端圆点
+
+				function smallcircle1(cx, cy, r) {
+					ctx.beginPath();
+					//ctx.moveTo(cx + r, cy);
+					ctx.lineWidth = 1;
+					ctx.fillStyle = '#000';
+					ctx.arc(cx, cy, r, 0, Math.PI * 2);
+					ctx.fill();
+				}
+
+				function smallcircle2(cx, cy, r) {
+					ctx.beginPath();
+					//ctx.moveTo(cx + r, cy);
+					ctx.lineWidth = 1;
+					ctx.fillStyle = '#00f8bb';
+					ctx.arc(cx, cy, r, 0, Math.PI * 2);
+					ctx.fill();
+				}
+
+				//画圆 
+
+				function circle(cx, cy, r) {
+					ctx.beginPath();
+					//ctx.moveTo(cx + r, cy);
+					ctx.lineWidth = lineWidth;
+					ctx.strokeStyle = color1;
+					// 圆弧底色  color1
+					ctx.arc(cx, cy, r, Math.PI * 2 / 3, Math.PI * 1 / 3);
+					ctx.stroke();
+				}
+
+				//画弧线
+
+				function sector(cx, cy, r, startAngle, endAngle, anti) {
+					ctx.beginPath();
+					//ctx.moveTo(cx, cy + r); // 从圆形底部开始画
+					ctx.lineWidth = lineWidth;
+
+					// 渐变色 - 可自定义
+					var linGrad = ctx.createLinearGradient(
+						circleX - radius - lineWidth, circleY, circleX + radius + lineWidth, circleY
+					);
+					// 圆弧  弧线渐变色  color2
+					linGrad.addColorStop(0.0, color2);
+					//linGrad.addColorStop(0.5, '#9bc4eb');
+					linGrad.addColorStop(1.0, color2);
+					ctx.strokeStyle = linGrad;
+
+					//	圆弧两端的样式
+					ctx.lineCap = 'round';
+
+					//	圆弧
+					ctx.arc(
+						cx, cy, r,
+						(Math.PI * 2 / 3),
+						(Math.PI * 2 / 3) + endAngle / 100 * (Math.PI * 5 / 3),
+						false
+					);
+					ctx.stroke();
+				}
+
+				//	刷新
+
+				function loading() {
+					if(process >= percent) {
+						clearInterval(circleLoading);
+					}
+
+					//清除canvas内容
+					ctx.clearRect(0, 0, circleX * 2, circleY * 2);
+
+					//中间的字
+					ctx.font = fontSize + 'px April';
+					ctx.textAlign = 'center';
+					ctx.textBaseline = 'middle';
+					ctx.fillStyle = color3;
+					// color3
+					ctx.fillText(parseFloat(process).toFixed(0) + '%', circleX, circleY);
+
+					//圆形
+					circle(circleX, circleY, radius);
+
+					//圆弧
+					sector(circleX, circleY, radius, Math.PI * 2 / 3, process);
+					//	两端圆点
+					//	smallcircle1(-10 + Math.cos(2 * Math.PI / 360 * 120) * 100, 150 + Math.sin(2 * Math.PI / 360 * 120) * 100, 5);
+					//	smallcircle2(-10 + Math.cos(2 * Math.PI / 360 * (120 + process * 3)) * 100, 150 + Math.sin(2 * Math.PI / 360 * (120 + process * 3)) * 100, 5);
+					//	控制结束时动画的速度
+					if(process / percent > 0.90) {
+						process += 0.30;
+					} else if(process / percent > 0.80) {
+						process += 0.55;
+					} else if(process / percent > 0.70) {
+						process += 0.75;
+					} else {
+						process += 1.0;
+					}
+				}
+
+				var process = 0.0;
+				//	进度
+				var circleLoading = window.setInterval(function() {
+					loading();
+				}, 20);
+
+			}
+		</script>
+	
+
+		
+		<script src="/Js/Mobile/boss/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(function() {
+				$("#main").css({
+					"width": screen.availWidth * .88
+				})
+				$("#main1").css({
+					"width": screen.availWidth * .88
+				})
+				$("#main2").css({
+					"width": screen.availWidth * .88
+				})
+				$("#main3").css({
+					"width": screen.availWidth * .88
+				})
+			});
+			// 基于准备好的dom，初始化echarts实例
+			var myChart = echarts.init(document.getElementById('main'));
+
+			// 指定图表的配置项和数据
+			var option = {
+
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						type: 'shadow'
+					}
+				},
+
+				grid: {
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					containLabel: true
+				},
+				xAxis: {
+					type: 'value',
+					boundaryGap: [0, 0.01]
+				},
+				yAxis: {
+					type: 'category',
+					data: ['商品一', '商品二', '商品三', '商品四', '商品五', '商品六']
+				},
+				series: [{
+						//						name: '2011年',
+						type: 'bar',
+						data: [203, 489, 34, 970, 744, 230]
+					}
+
+				]
+			};
+
+			// 使用刚指定的配置项和数据显示图表。
+			myChart.setOption(option);
+		</script>
+		<script type="text/javascript">
+			var myChart1 = echarts.init(document.getElementById('main1'));
+
+			// 指定图表的配置项和数据
+			var option = {
+				color: ['#3398DB'],
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: { // 坐标轴指示器，坐标轴触发有效
+						type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+					}
+				},
+				grid: {
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					containLabel: true
+				},
+				xAxis: [{
+					type: 'category',
+					data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+					axisTick: {
+						alignWithLabel: true
+					}
+				}],
+				yAxis: [{
+					type: 'value'
+				}],
+				series: [{
+					name: '新增会员',
+					type: 'bar',
+					barWidth: '60%',
+					data: [10, 52, 200, 334, 390, 330, 220]
+				}]
+			};
+
+			// 使用刚指定的配置项和数据显示图表。
+			myChart1.setOption(option);
+		</script>
+		<script type="text/javascript">
+			var myChart2 = echarts.init(document.getElementById('main2'));
+
+			// 指定图表的配置项和数据
+			var option = {
+				color: ['#3398DB'],
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: { // 坐标轴指示器，坐标轴触发有效
+						type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+					}
+				},
+				grid: {
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					containLabel: true
+				},
+				xAxis: [{
+					type: 'category',
+					data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+					axisTick: {
+						alignWithLabel: true
+					}
+				}],
+				yAxis: [{
+					type: 'value'
+				}],
+				series: [{
+					name: '直接访问',
+					type: 'bar',
+					barWidth: '60%',
+					data: [10, 52, 200, 334, 390, 330, 220]
+				}]
+			};
+
+			// 使用刚指定的配置项和数据显示图表。
+			myChart2.setOption(option);
+			var myChart3 = echarts.init(document.getElementById('main3'));
+
+			// 指定图表的配置项和数据
+			var option = {
+				xAxis: {
+					type: 'category',
+					data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+				},
+				yAxis: {
+					type: 'value'
+				},
+				series: [{
+					data: [820, 932, 901, 934, 1290, 1330, 1320],
+					type: 'line'
+				}]
+			};
+
+			// 使用刚指定的配置项和数据显示图表。
+			myChart3.setOption(option);
+		</script>
+		<script type="text/javascript">
+			window.onscroll = function() {
+				//变量t是滚动条滚动时，距离顶部的距离
+				var t = document.documentElement.scrollTop || document.body.scrollTop;
+
+				//当滚动到距离顶部200px时，返回顶部的锚点显示
+				if(t >= 400) {
+				
+					$("#s_back").css({
+						"background": "rgba(250,137,130,1)"
+					})
+				} else { //恢复正常
+					// #FA8982
+					// background: rgba(250,137,130,0);
+					var  option = (t / 400);
+					$("#s_back").css({
+						"background": "rgba(250,137,130,"+option+")"
+					})
+
+				}
+			}
+		</script>
+	
+	</body>
+
+</html>

@@ -1,0 +1,178 @@
+﻿@{ Layout = null; }
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css" />
+     <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <title>联系我们</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css">
+        html {
+		    height: 100%;
+		}
+		
+		body {
+		    height: 100%;
+		    margin: 0px;
+		    padding: 0px;
+		}
+		
+		#container {
+		    height: 300px;
+		}
+		
+		body,html {
+		    background: #fff;
+		}
+		
+		#allmap {
+		    height: 300px;
+		}
+		
+		body {
+		    font-size: .24rem;
+		    margin: 0;
+		    padding: 0;
+		}
+		
+		li {
+		    list-style: none
+		}
+		
+		.fl {
+		    float: left;
+		}
+		
+		.fr {
+		    float: right;
+		}
+		
+		.clearfix:before,.clearfix:after {
+		    display: table;
+		    content: " "
+		}
+		
+		.clearfix:after {
+		    clear: both
+		}
+		
+		.clearfix * {
+		    zoom: 1
+		}
+		
+		.warpper {
+		    font-family: "微软雅黑","arial","sans-serif","courier new";
+		}
+		
+		div.banner {
+		}
+		
+		img.banner {
+		    display: block;
+		    width: 100%;
+		}
+		.infos p{font-size: 0.28rem;line-height: 0.8rem;}
+		.title {
+		    height: .8rem;
+		    line-height: .8rem;
+		    padding: 0 .2rem;
+		    background: #fff;
+		    font-size: .32rem;
+		    font-weight: bold;
+		}
+		.infos {
+		    padding: .2rem;
+		    margin: .2rem;
+		}
+		 .return_btn {
+        background: #fff;
+        text-align: center;
+    }
+    .return_btn span {
+        display: inline-block;
+        /*padding-top: 0.24rem;*/
+        font-size: 0.32rem;
+        line-height:0.98rem;
+        font-weight: bold;
+    }
+    .return_btn i {
+        float: left;
+        margin: 0.2rem 0 0 0.2rem;
+    }
+    </style>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=rSyNW0D8ZGFaYkuIiKv5jxeal4SU3vLW"></script>
+</head>
+
+<body>
+    <div class="warpper">
+        <!--<div class="banner">
+            <img src="http://placehold.it/750x300" alt="" class="banner" />
+        </div>-->
+        <div class="return_btn clearfix">
+            <i class="icon iconfont" onclick="goToBack()">&#xe60e;</i><span>客服</span>
+        </div>
+        <!--<div class="title">联系我们 >></div>-->
+        <div id="allmap"></div>
+        <div class="infos">
+        	<p>秦商未来总部地址：西安市高新区唐延路旺座国际城B座33层3301室</p>
+        	<p>平台网址：@(WorkContext.ShopConfig.SiteUrl)</p>
+        	<p><a href="javascript:;" onclick='callphone(02987586712)'>平台客服：029-87586712</a></p>
+        	<p>客服邮箱：1303343737@qq.com</p>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var map = new BMap.Map("allmap");
+        var point = new BMap.Point(108.897478,34.242357);
+        map.centerAndZoom(point, 12);
+        var myGeo = new BMap.Geocoder();
+        myGeo.getPoint("西安市高新区唐延路旺座国际城B座33层3301室", function(point) {
+            if (point) {
+                map.centerAndZoom(point, 16);
+                map.addOverlay(new BMap.Marker(point));
+            } else {
+                alert("您选择地址没有解析到结果!");
+            }
+        }, "西安市高新区唐延路旺座国际城B座33层3301室");
+        var IsApp = "@WorkContext.IsApp";
+		function goToBack() {
+			var _this = this;
+    		if(IsApp==1){
+				if(navigator.userAgent.indexOf("iPhone")>0){
+					gobacklastpage();
+				}
+				if(navigator.userAgent.indexOf("Android")>0){
+					window.js.goBack();
+				}
+			}else{
+				window.history.back();
+			}
+				
+		}
+	  function callphone(phone){
+	  	     var _this = this;
+				if(_this.IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+		                callPhone(Number(phone));
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+						var mobile = "4001134500";
+						window.js.callPhone(mobile)
+					}
+				}else{
+					window.location.href='tel://'+phone;
+				}
+	  }
+    </script>
+</body>
+
+</html>

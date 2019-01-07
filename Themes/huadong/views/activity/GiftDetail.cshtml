@@ -1,0 +1,732 @@
+﻿@model Yitao.Core.GiftInfo
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <title>礼品兑换详情-@{@WorkContext.SellerInfo.SellerName}</title>
+    <link rel="stylesheet" href="/Css/Mobile/product/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/product/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/product/putong.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/share.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/youshang.css" />
+    <style>
+        .dehep_1 .dehespan_1:first-child:before {
+            content: "积分"
+        }
+
+        #friend {
+            width: 68%;
+        }
+    
+        .dehep_1 .dehespan_1:first-child label {
+            font-size: 1.2rem;
+            color: #f13030;
+        }
+
+        .dehep_1 .dehespan_1:first-child {
+            font-size: 1.2rem;
+            color: #f13030;
+        }
+
+        .dehespan_1 {
+            text-align: left;
+        }
+
+        .weui-header .weui-header-title, .weui-header h1 {
+            margin: auto;
+            margin-left: auto;
+        }
+
+        .para1 {
+            width: 90%;
+        }
+
+        .para2 {
+            width: 0;
+        }
+
+        #Goding {
+            position: fixed;
+            z-index: 666;
+            right: 0.6rem;
+            bottom: 4.6rem;
+            background: rgba(0,0,0,0.1);
+            border-radius: 50%;
+            width: 2rem;
+            height: 2rem;
+        }
+
+            #Goding img {
+                display: block;
+                width: 2rem;
+            height: 2rem;
+            }
+
+        .disableds {
+            background: #eee !important;
+        }
+
+            .disableds a {
+                color: #999 !important;
+            }
+
+        .dehespan_1 {
+            font-size: 1rem;
+            color: #666;
+        }
+
+            .dehespan_1 label {
+                font-weight: bold;
+                font-size: 1rem;
+                color: #323232;
+            }
+
+        .share {
+            display: none;
+        }
+
+        .de_titles .dehespan_1 {
+            display: inline-block !important;
+        }      .canshu{
+            line-height: 1.6rem;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .canshu ul{
+            line-height: 1.6rem;
+            display: inline-block;
+            position: relative;
+            width: 100%;
+            background: #fff;
+            color: #999;
+            font-size: 0.84rem;
+            padding-bottom:  0.4rem;
+        }
+        .canshu ul li{
+            display: inline-block;
+            width: 33.333%;
+            float: left;
+            text-align: center;
+        }
+        .canshu ul li:first-child{
+            text-align: left;
+            text-indent: 0.6rem;
+        }
+        .canshu ul li:last-child{
+            text-align: right;
+            padding-right: 0.6rem;
+        }
+    </style>
+    <script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+		<script>
+    	var wxobj = {
+    		appId: '@ViewData["AppId"]', /* 必填，公众号的唯一标识*/
+            timestamp: '@ViewData["Timestamp"]', /* 必填，生成签名的时间戳*/
+            nonceStr: '@ViewData["NonceStr"]', /* 必填，生成签名的随机串*/
+            signature: '@ViewData["Signature"]'/* 必填，签名*/
+    	}
+    	wxobj = JSON.stringify(wxobj);
+    	//alert(wxobj);
+        wx.config({
+            debug: false, /* 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。*/
+            appId: '@ViewData["AppId"]', /* 必填，公众号的唯一标识*/
+            timestamp: '@ViewData["Timestamp"]', /* 必填，生成签名的时间戳*/
+            nonceStr: '@ViewData["NonceStr"]', /* 必填，生成签名的随机串*/
+            signature: '@ViewData["Signature"]',/* 必填，签名*/
+            jsApiList: [
+                    'checkJsApi',
+                    'onMenuShareTimeline',
+                    'onMenuShareAppMessage',
+                    'onMenuShareQQ',
+                    'onMenuShareWeibo',
+                    'hideMenuItems',
+                    'showMenuItems',
+                    'hideAllNonBaseMenuItem',
+                    'showAllNonBaseMenuItem',
+                    'translateVoice',
+                    'startRecord',
+                    'stopRecord',
+                    'onRecordEnd',
+                    'playVoice',
+                    'pauseVoice',
+                    'stopVoice',
+                    'uploadVoice',
+                    'downloadVoice',
+                    'chooseImage',
+                    'previewImage',
+                    'uploadImage',
+                    'downloadImage',
+                    'getNetworkType',
+                    'openLocation',
+                    'getLocation',
+                    'hideOptionMenu',
+                    'showOptionMenu',
+                    'closeWindow',
+                    'scanQRCode',
+                    'chooseWXPay',
+                    'openProductSpecificView',
+                    'addCard',
+                    'chooseCard',
+                    'openCard'
+            ]
+        });
+
+        wx.error(function (res) {
+            /*alert(res);*/
+            /*console.log(res);*/
+            /*alert('验证失败');*/
+        });
+
+        wx.ready(function () {
+            var link = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m';
+            var Logo = '@WorkContext.SellerInfo.Logo';
+            var imgUrl = '';
+            if (Logo.length == 0) {
+                imgUrl = "@(WorkContext.ShopConfig.ImageCDN)/upload/public/1805/05/9410ab49b6a04fd2ba0bb5e9c28828c2.png?w=100";
+            }
+            else {
+                imgUrl = "@(WorkContext.ShopConfig.ImageCDN)@{@WorkContext.SellerInfo.Logo}?w=100&h=100";
+            }
+                /*转发到朋友圈*/
+                wx.onMenuShareTimeline({
+                    title: '@Model.Title',
+                    link: link,
+                    imgUrl: imgUrl,
+                    success: function () {
+                        /*alert('转发成功！');*/
+                    },
+                    cancel: function () {
+                        /*alert('转发失败！');*/
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: '@Model.Title',
+                    desc: '',
+                    link: link,
+                    imgUrl: imgUrl,
+                    type: 'link',
+                    dataUrl: '',
+                    success: function () {
+                        /*alert('转发成功！');*/
+                    },
+                    cancel: function () {
+                       /* alert('转发失败！');*/
+                    }
+                });
+            });
+            var sellerid = "@WorkContext.SellerInfo.SellerId";
+    </script>
+</head>
+<body>
+    <div class="header">
+           <input type="hidden" id="Province" value="@WorkContext.SellerInfo.Province">
+        <input type="hidden" id="City" value="@WorkContext.SellerInfo.City">
+        <input type="hidden" id="Country" value="@WorkContext.SellerInfo.County">
+        <input type="hidden" id="Town" value="@WorkContext.SellerInfo.Town">
+        <div class="weui_btn_default weui-header ">
+            <div class="weui-header-left">
+                <a class="icon" onclick="history.go(-1)">
+                    <i class="iconfont">&#xe631;</i>
+                </a>
+            </div>
+            <h1 class="weui-header-title f-green">
+                <ul class="offset_ul">
+                    <li class="offsetTop">
+                        商品
+                    </li>
+                    <li>
+
+                    </li>
+                    <li>
+                        详情
+                    </li>
+                </ul>
+            </h1>
+            <div class="weui-header-right">
+                <a class="icon" href="javascript:;" onclick="gerenShow()">
+                    <i class="iconfont">&#xe637;</i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <ul class="nav-more-list" id="sub-title"></ul>
+
+
+    <div class="content">
+        <!-- 这里面材质内容区 -->
+        <div class="swiper_conetnt">
+            <div class="slide" id="slide1">
+                @{
+                    List<Yitao.Core.PicsInfo>
+                        PicsInfoList = (List<Yitao.Core.PicsInfo>
+                            )ViewData["PicsList"];
+                }
+                <ul>
+                    <li style="">
+                        <a href="#">
+                            <img src="@(WorkContext.ShopConfig.ImageCDN)@{@Model.ImgUrl}?h=320&w=320" />
+                        </a>
+                    </li>
+                    @if (PicsInfoList.Count > 0)
+                    {
+                        foreach (Yitao.Core.PicsInfo info in PicsInfoList)
+                        {
+                            if (info.ImgUrl.Length > 0)
+                            {
+                                <li>
+                                    <a href="#">
+                                        <img src="@(WorkContext.ShopConfig.ImageCDN)@{@info.ImgUrl}?h=320&w=320" />
+                                    </a>
+                                </li>
+                            }
+                        }
+                    }
+                </ul>
+                <div class="corner">
+                    <p> <span class="corner1">1</span> <span class="corner2">5</span></p>
+                </div>
+            </div>
+        </div>
+        <!-- cone -->
+        <!-- 商品描述 -->
+        <div class="describe">
+
+
+
+            <div class="describe_head">
+
+                <!-- 价格  -->
+                <p class="dehep_1">
+                    <span class="dehespan_1"> <label> @Model.PayScore</label></span>
+                    <div class="describe_content">
+                        <div class="goods-title">
+                            @Model.Title  @if (string.IsNullOrEmpty(Model.SkuName))
+                        {
+                        }
+                        else
+                        {@: (@{@Model.SkuName})
+                    }
+                        </div>
+                        <div class="de_titles">
+                            <span class="dehespan_1">市场价 <label>@Model.Price</label>  元</span>
+
+                            <span class="dehespan_1" style="margin-left: 0.4rem">销量 <label>  @Model.SaleCount.ToString("#0")</label>  件</span>
+                        </div>
+					</div>
+                </p>
+                  <div class="jion_number" style="padding:0">
+                    <h3>选择数量</h3>
+                    <div style="font-size: 0px;" class="weui_cell_ft">
+                        <a class="weui-number weui-number-sub needsclick">-</a>
+                        <input pattern="[0-9]*" class="weui-number-input" style="width: 50px;" value="1" data-min="1" data-max="999" data-step="1">
+                        <a class="weui-number weui-number-plus needsclick">+</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- 商品说明 -->
+
+    </div>
+     <div class="canshu">
+        <ul>
+            <!--<li>
+                快递: <span class="yunfei">免运费</span>
+            </li>-->
+            <li>
+                月销: <span class="xiaoliang">@Model.SaleCount</span>笔
+            </li>
+            <li>
+                
+            </li>
+        </ul>
+    </div>
+        <!--<div class="s_para">
+        
+            <div class="s_para1">
+                服务
+            </div>
+            <div class="s_para2">
+              
+               线下门店 · 正品保障 · 7天退换      
+            </div>
+            <div class="s_para3">
+                <i class="iconfont">&#xe6ab;</i>
+            </div>
+    </div>  -->
+
+
+    <div class="goods_details">
+        <h3 class="goods_details_h3">商品详情</h3>
+
+
+        <div class="goods_details_con">
+            @Model.Description
+        </div>
+    </div>
+    </div>
+
+    <!-- footer -->
+    <div class="footer">
+        <ul>
+            <li class="tf_15">
+                <a href="/m" class="tf_a1">
+                    <i class="iconfont whiteri not">&#xe615;</i>
+                    <span>首页</span>
+                </a>
+            </li>
+            <li class="tf_15">
+                <a href="/m/home/service" class="tf_a2">
+                    <i class="iconfont whiteri">&#xe651;</i>
+                    <span>客服</span>
+                </a>
+            </li>
+
+            <li class="tf_30 disableds" id="friend">
+                <a href="javascript:;" class="tf_a4" id="jionPay">
+                    立即兑换
+                </a>
+            </li>
+        </ul>
+    </div>
+
+
+
+
+
+
+
+    <div id="jionOK">
+        <span>加载成功</span>
+    </div>
+    <div id="Goding">
+        <img src="/Images/ding.png" alt="">
+    </div>
+
+
+
+
+
+    <form id="goods_form" action="/m/Order/GiftOrder" method="post">
+        <input type="hidden" name="GiftId" id="GiftId" value='@ViewData["GiftId"]' />
+        <input type="hidden" name="Uid" id="Uid" value='@WorkContext.Uid' />
+        <input type="hidden" name="UserScore" id="UserScore" value='@WorkContext.UserInfo.UserScore' />
+    </form>
+
+
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Js/Mobile/youshang.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Js/Mobile/swiper.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var weixin = "@WebHelper.IsWeiXin()";
+
+        var UserScore ='@WorkContext.UserInfo.UserScore';
+
+ var scroce = Number($($(".dehep_1").find(".dehespan_1")[0]).text().trim());
+
+        // 监测用户是否是绑定的用户
+ 
+
+
+        $(function () {
+              $("#Goding").click(function () {
+                $(".offset_ul li").removeClass("offsetTop");
+                $($(".offset_ul li")[0]).addClass("offsetTop");
+             
+            });
+            
+
+              if(scroce >UserScore ){
+                  $("#friend").addClass("disableds");
+
+              }else{
+                   $("#friend").removeClass("disableds");
+
+              };
+
+
+
+            //  立即购买
+            $("#friend").click(function () {
+                                  
+
+                if(weixin){
+                    if($(this).hasClass("disableds")){
+                    $.toast("积分不足");
+                }else{
+                     if($("#Uid").val() < 1){
+                        var url = window.location.href;
+								window.location.href = '/m/user/Bind?returnUrl='+url;
+                    }else{
+                               var url = "/m/Order/GiftOrder?GiftId="+$("#GiftId").val()+"&Quantity=" + $(".weui-number-input").val();
+                             window.location.href=url;
+                    }
+                };
+                }else{
+                      if($(this).hasClass("disableds")){
+                    $.toast("积分不足");
+                }else{
+                     if($("#Uid").val() < 1){
+                        var url = window.location.href;
+								window.location.href = '/m/user/Bind?returnUrl='+url;
+                    }else{
+                             var url = "/m/Order/GiftOrder?GiftId="+$("#GiftId").val()+"&Quantity=" + $(".weui-number-input").val();
+                             window.location.href=url;
+                    }
+                };
+                }
+            });
+
+        $(function(){  
+  
+    $('.weui-number-input').bind('input propertychange', function() {  
+
+        var maxNums = UserScore / scroce ; 
+        if(maxNums % 1 > 0 && maxNums % 1 < 0.5){
+            maxNums = maxNums.toFixed(0);
+        }else{
+            maxNums = maxNums.toFixed(0) - 1;
+        }
+
+           
+            if($(".weui-number-input").val() > maxNums){
+                
+                $("#friend").addClass("disableds");
+                $.toast("积分不足");
+            }else{
+                $("#friend").removeClass("disableds");
+            }
+        });  
+    
+    }) ;
+        
+            //  轮播图
+            $('#slide1').swipeSlide({
+                autoSwipe: true, //自动切换默认是
+                speed: 3000, //速度默认4000
+                continuousScroll: true, //默认否
+                transitionType: 'cubic-bezier(0.22, 0.69, 0.72, 0.88)', //过渡动画linear/ease/ease-in/ease-out/ease-in-out/cubic-bezier
+                lazyLoad: true, //懒加载默认否
+                firstCallback: function (i, sum, me) {
+                    me.find('.dot').children().first().addClass('cur');
+                    $(".corner1").text(i + 1);
+                    $(".corner2").text(sum);
+                },
+                callback: function (i, sum, me) {
+                    me.find('.dot').children().eq(i).addClass('cur').siblings().removeClass('cur');
+                    $(".corner1").text(i + 1);
+                    $(".corner2").text(sum);
+                }
+            });
+        });
+
+
+
+
+
+
+
+            //  导航滑动
+            $(".offset_ul li").click(function () {
+                $(".offset_ul li").removeClass('offsetTop');
+
+                if ($(this).index() == 0) {
+
+                     $(window).scrollTop($("#slide1").offset().top);
+                }
+                if ($(this).index() == 1) {
+                     $(window).scrollTop($(".goods_details").offset().top +3 );
+
+                }
+                if ($(this).index() == 2) {
+                        $(window).scrollTop($(".goods_details").offset().top +3);
+
+                }
+                $(this).addClass('offsetTop');
+
+            });
+            //  监听滚动
+        $(window).scroll(function(){
+
+                if ($(window).scrollTop() > $("#slide1").offset().top && $(window).scrollTop() < $(".goods_details").offset().top){
+                    $(".offset_ul li").removeClass('offsetTop');
+                    $( $(".offset_ul li")[0]).addClass("offsetTop");
+                }
+                if ($(window).scrollTop() > $(".goods_details").offset().top && $(window).scrollTop() < $(".goods_details").offset().top){
+                    $(".offset_ul li").removeClass('offsetTop');
+                    $( $(".offset_ul li")[1]).addClass("offsetTop");
+                }
+                if ($(window).scrollTop() > $(".goods_details").offset().top){
+                    $(".offset_ul li").removeClass('offsetTop');
+                    $( $(".offset_ul li")[2]).addClass("offsetTop");
+                }
+            });
+            $("#Goding").on("click",function(){
+             $(window).scrollTop($("#slide1").offset().top);
+
+        });
+        function gerenShow(){
+			$("#sub-title").toggle();
+			setTimeout(function(){
+				$("#sub-title").hide();
+			},3000);
+		};
+        $(function() {
+				
+        function upDownOperation(element) {
+        var _input = element.parent().find('input'),
+            _value = _input.val(),
+            _step = _input.attr('data-step') || 1;
+        //检测当前操作的元素是否有disabled，有则去除
+        element.hasClass('disabled') && element.removeClass('disabled');
+        //检测当前操作的元素是否是操作的添加按钮（.input-num-up）‘是’ 则为加操作，‘否’ 则为减操作
+        if ( element.hasClass('weui-number-plus') )
+        {
+            var _new_value = parseInt( parseFloat(_value) + parseFloat(_step) ),
+                _max = _input.attr('data-max') || false,
+                _down = element.parent().find('.weui-number-sub');
+            
+            //若执行‘加’操作且‘减’按钮存在class='disabled'的话，则移除‘减’操作按钮的class 'disabled'
+            _down.hasClass('disabled') && _down.removeClass('disabled');
+            if (_max && _new_value >= _max) {
+                _new_value = _max;
+                element.addClass('disabled');
+            }
+        } else {
+            var _new_value = parseInt( parseFloat(_value) - parseFloat(_step) ),
+                _min = _input.attr('data-min') || false,
+                _up = element.parent().find('.weui-number-plus');
+            //若执行‘减’操作且‘加’按钮存在class='disabled'的话，则移除‘加’操作按钮的class 'disabled'
+            _up.hasClass('disabled') && _up.removeClass('disabled');
+            if (_min && _new_value <= _min) {
+                _new_value = _min;
+                element.addClass('disabled');
+            }
+        }
+        var maxNums = UserScore / scroce ; 
+        if(maxNums % 1 > 0 && maxNums % 1 < 0.5){
+            maxNums = maxNums.toFixed(0);
+        }else{
+            maxNums = maxNums.toFixed(0) - 1;
+        }
+      
+        if(_new_value > maxNums ){
+            $.toast("积分不足");
+            _input.val(_new_value - 1 );
+            $("#friend").addClass("disableds");
+        }else{
+             _input.val(_new_value);
+             $("#friend").removeClass("disableds");
+        }
+       
+       
+    };
+   
+	 
+            $('.weui-number-plus').click(function() {
+					upDownOperation($(this));
+				});
+				$('.weui-number-sub').click(function() {
+					upDownOperation($(this));
+				});
+            });
+           		  var Province=$("#Province").val();
+            var City = $("#City").val();
+            var Country = $("#Country").val();
+            var Town = $("#Town").val();
+            var ProvinceArr = [11, 12, 13, 14, 15, 21, 22, 23, 31, 32, 33, 34, 35, 36, 37, 41, 42, 43, 44, 45, 46, 50, 51, 52, 53, 54, 61, 62, 63, 64, 65, 71, 81, 82];
+            var CityArr =[];
+            function getYou(){
+			$.get('/m/Order/GetShipTemplate?t='+Math.random, {
+						Province: Province,
+						City :City,
+						 Country:Country,
+						 Town:Town
+					}, function (data) {
+				
+					var datas = JSON.parse(data);
+                        console.log(datas);
+						
+						if(datas.Code == 1){
+							console.log(111);
+                            var zongzhong = 0;
+                            for(var i = 0; i <$(".list-item").length; i++){
+                                zongzhong += $($(".list-item")[i]).attr("data-weight") * Number($($($(".list-item")[i]).find(".list_number")).text().trim());
+                            }
+				
+                            if((zongzhong - datas.Data.Weight) <= 0){
+                                $(".Weight").val(zongzhong);
+                                $(".yunfei").text((datas.Data.Price).toFixed(2));
+								console.log(datas.Data.Price); 
+
+                            }else{
+                                    var gaicheng = zongzhong - datas.Data.Weight;
+                                    if(gaicheng % datas.Data.AddWeight !=0 && gaicheng % datas.Data.AddWeight <0.5){
+                                      var cheng =   Number((gaicheng/datas.Data.AddWeight).toFixed(0)) + 1;                                        
+                                        $(".yunfei").text((datas.Data.Weight + cheng * datas.Data.AddPrice).toFixed(2));
+                                    }else{
+                                        var cheng =  Number((gaicheng/datas.Data.AddWeight).toFixed(0));
+                                        $(".yunfei").text((datas.Data.Weight + cheng * datas.Data.AddPrice).toFixed(2));
+                                    }
+                            }
+
+
+                            
+						}else{
+                            $(".yunfei").hide();
+						
+							 
+						}
+					}, 'JSON');
+                    BSheng(Province, City, Country, Town)
+		};  
+        $(function(){
+            getYou();
+        });
+        //  筛选省
+function BSheng(Province, City, Country, Town) {
+    //	dialog.loading.open('加载中');
+
+    for (var i = 0; i < ProvinceArr.length; i++) {
+        var dom = ProvinceArr[i];
+        if (Province == dom) {
+           
+           
+            // 筛选市
+            $.get('/m/order/GetCityList', {
+                'Province': Province
+            }, function (data) {
+                var datas = JSON.parse(data);
+                console.log(data);
+                var dete = datas.Data;
+                        console.log(dete);
+                        for(var i = 0; i < dete.length; i++){
+                            if(dete[i].RegionId == City){
+                                $($(".canshu ul li")[2]).text(dete[i].RegionName);
+                            }
+                        }
+            }, 'JSON');
+
+        } else {
+
+        };
+    };
+
+};
+
+    </script>
+
+
+
+</body>
+
+</html>

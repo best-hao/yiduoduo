@@ -1,0 +1,380 @@
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+	    <link rel="apple-touch-icon" href="favicon.png">
+	    <meta name="format-detection" content="telephone=no">
+	    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	    <meta name="apple-mobile-web-app-capable" content="yes" />
+	    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+	    <meta http-equiv="Pragma" content="no-cache" />
+	    <meta http-equiv="Cache-Control" content="no-cache" />
+	    <meta http-equiv="Expires" content="0" />
+	    <title>营收明细-@{@WorkContext.SellerInfo.SellerName}</title>
+	    <link rel="stylesheet" href="/Mobile/weui/style/weui.css" />
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+	    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/usercenter/red-packet/red_packet_detail.css"/>
+	    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+	    <script src="/Mobile/weui/zepto.min.js"></script>
+		<script src="/Mobile/weui/picker.js"></script>
+		<script src="/Mobile/weui/picker-city.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<style type="text/css">
+			.wapper{display: none;}
+			.lists-box .detail-left {
+			    position: absolute;
+			    top: 47%;
+			    left: 0.2rem;
+			    margin-top: -0.5rem;
+			    width: 1rem;
+			    height: 1rem;
+			    text-align: center;
+			    line-height: 1rem;
+			}
+			.lists-box.first {
+			    margin-top: 1.28rem;
+			}
+			.time-select .icon{
+				font-size:0.5rem;
+			}
+			.detail-left .icon{
+				color:#ff4800;
+				font-size: 0.5rem;
+			}
+			.title .icon,
+			.lists-box .detail-right{
+				color:#f00;
+			}
+			.boxies{
+				margin-top: 2rem;
+			}
+			.infos-tips{
+				height: 1rem;
+				line-height: 1rem;
+				text-align: center;
+				color: rgb(153, 153, 153);
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="wapper">
+			<div id="packet">
+				<div class="header">
+					<div class="weui-header bg-white">
+						<div class="weui-header-left">
+							<a href="javascript:;" onclick="goToBack()" class="f-black">
+								<span class="icon icon-109"></span>
+							</a>
+						</div>
+						<h1 class="weui-header-title">营收明细</h1>
+					</div>
+				</div>
+				<div class="content-box">
+					<div class="data-header top-data">
+						<div class="infos">
+							<div class="time">{{curData.day}}</div>
+							<!--div class="detail">
+								<span>营收:{{curData.getMoney}}</span>
+							</div-->
+							<div class="time-select">
+								<span class="icon icon-106"></span>
+								<input class="weui_input" type="text"  value="" id='date' readonly />
+							</div>
+						</div>
+						<div class="infos infos-tips" v-if="lists.length <= 0">
+							暂无营收数据
+						</div>
+					</div>
+					<div class="boxies">
+						<div class="lists-box">
+							<ul>
+								<li v-for="(item,index) in lists" :key="index" v-on:click="showDetail(item)">
+									<div class="detail-left">
+										<span class="icon icon-89"></span>
+									</div>
+									<div class="detail-center">
+										<div class="title" >{{typeFun(item.flowtype)}}</div>
+										<div class="time">{{item.addtime}}</div>
+									</div>
+									<div class="detail-right">
+										<span class="fuhao">+</span><span>{{item.savingmoney}}</span>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!--营收明细-->
+				<div class="data-detail-box">
+					<div class="weui-header">
+						<div class="weui-header-left" v-on:click="closeDetail()">
+							<a><span class="icon icon-109"></span></a>
+						</div>
+						<h1 class="weui-header-title">明细详情</h1>
+						<div class="weui-header-right"></div>
+					</div>
+					<div class="detail-infos-box">
+						<div class="title ell">
+							<span class="icon icon-89"></span>
+							<span>{{curDetail.shopname}}</span>
+						</div>
+						<h1>
+							<span>+</span>
+							{{curDetail.savingmoney}}
+						</h1>
+						<div class="infos-line ell">
+							<div class="left">订单编号</div>
+							<div class="right tright">{{curDetail.paymentsn}}</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="infos-line ell">
+							<div class="left">交易类型</div>
+							<div class="right tright">{{typeFun(curDetail.flowtype)}}</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="infos-line ell">
+							<div class="left">订单时间</div>
+							<div class="right tright">{{curDetail.addtime}}</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="infos-line ell">
+							<div class="left">备注</div>
+							<div class="right tright">{{curDetail.memo}}</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+				<div class="loading" :style="{'margin-top':loadingTop+'rem'}">
+					<div class="weui_cells_title tcenter hide" id="more">
+						<div class="weui-loadmore">
+				            <i class="weui-loading"></i>
+				            <span class="weui-loadmore-tips">正在加载</span>
+				        </div>
+					</div>
+					<div v-if="page==1" class="weui_cells_title tcenter hide" id="nomore">
+						暂无数据
+					</div>
+					<div v-else class="weui_cells_title tcenter hide" id="nomore">
+						没有更多数据了
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		$.showLoading();
+		
+		var IsApp = "@WorkContext.IsApp";
+		function goToBack() {
+			var _this = this;
+    		if(IsApp==1){
+				if(navigator.userAgent.indexOf("iPhone")>0){
+					gobacklastpage();
+				}
+				if(navigator.userAgent.indexOf("Android")>0){
+					window.js.goBack();
+				}
+			}else{
+				window.history.back();
+			}
+				
+		}
+		var curcurtime = new Date();
+		var curyear = curcurtime.getFullYear();
+		var curmon = curcurtime.getMonth()+1;
+		if(curmon<=9){
+			curmon = "0"+curmon;
+		}
+		curcurT = curyear+"-"+curmon;
+		var curstartTime = curcurT+"-"+"01";
+		$("#date").val(curstartTime);
+		var curtimearr = curstartTime.split("-");
+		if(curtimearr[1]>=12){
+			curtimearr[0] = Number(curtimearr[0])+1;
+			curtimearr[1] = "01";
+		}else{
+			curtimearr[1] = Number(curtimearr[1])+1;
+			if(curtimearr[1]<10){
+				curtimearr[1] = "0"+curtimearr[1];
+			}
+		}
+
+		var curendTime = curtimearr[0]+"-"+curtimearr[1]+"-"+curtimearr[2];
+		var vm = new Vue({
+			el:"#packet",
+			data:{
+				userid: @WorkContext.Uid,
+				flowtype: 5,
+				page: 1,
+				size: 10,
+				lists:[],
+				curDetail: {},
+				loadingTop: 0,
+				today: curcurT,
+				curData: {day:curcurT, getMoney:0, payMoney:0},
+				StartTime: curstartTime,
+				EndTime: curendTime
+			},
+			methods:{
+				getLists: function() {
+					var that = this;
+					that.loadingTop = 0;
+					var url = "/Api/User/GetUserCardFlow?v="+Math.random()+"&userid="+that.userid+"&FlowType="+that.flowtype+"&StartTime="+that.StartTime+"&EndTime="+that.EndTime+"&page="+that.page+"&size="+that.size;
+					if(that.FlowType==""){
+						if(that.StartTime==""){
+							url = "/Api/User/GetUserCardFlow?v="+Math.random()+"&userid="+that.userid+"&page="+that.page+"&size="+that.size;
+						}else{
+							url = "/Api/User/GetUserCardFlow?v="+Math.random()+"&userid="+that.userid+"&StartTime="+that.StartTime+"&EndTime="+that.EndTime+"&page="+that.page+"&size="+that.size;
+						}
+					}else{
+						if(that.StartTime==""){
+							url = "/Api/User/GetUserCardFlow?v="+Math.random()+"&userid="+that.userid+"&FlowType="+that.flowtype+"&page="+that.page+"&size="+that.size;
+						}else{
+							url = "/Api/User/GetUserCardFlow?v="+Math.random()+"&userid="+that.userid+"&FlowType="+that.flowtype+"&StartTime="+that.StartTime+"&EndTime="+that.EndTime+"&page="+that.page+"&size="+that.size;
+						}
+					}
+					$.ajax({
+						type: "get",
+						dataType: "json",
+						url: url,
+						async: true,
+						success: function(res) {
+							$("#more").addClass("hide");
+							if(res.code == 1){
+								res.data.forEach(function(element, index){
+									var timeArr = element.addtime.substring(0,7);
+									that.lists.push(element);
+								});
+								that.page++;
+								//console.log(that.lists);
+							}else{
+								if(that.page==1){
+									that.loadingTop = 1;
+								}
+								$("#nomore").removeClass("hide");
+							}
+						},
+						error: function(res){
+							alert(res.message);
+						}
+					});
+				},
+				//判断typeValue == 5时显示营收
+				typeFun: function(typeValue){
+					var that = this;
+					if(typeValue == 5){
+						return "营收";
+					}
+				},
+				showDetail: function(item){
+					var that = this;
+					that.curDetail = item;
+					$(".data-detail-box").animate({
+						left: "50%",
+						"margin-left": "-3.75rem"
+					}, 300);
+				},
+				closeDetail: function() {
+					$(".data-detail-box").animate({
+						left: "100%",
+						"margin-left": 0
+					}, 300);
+				}
+			},
+			created: function(){
+				var that = this;
+				that.getLists();
+			}
+		});
+
+		$(function() {
+			setTimeout(function(){
+				$.hideLoading();
+				$(".wapper").css("display","block");
+				$("#date").datetimePicker({
+					title: "选择日期",
+					m: 1
+				});
+				$("#date").on("click", function() {
+					$(".weui-picker-modal .picker-items-col").eq(2).remove();
+				});
+				$(document).on("click", ".close-picker", function() {
+					vm.StartTime = $("#date").val().substring(0,7)+"-01";
+					var timearr = vm.StartTime.split("-");
+					vm.curData.day = timearr[0]+"-"+timearr[1];
+					vm.curData.getMoney = 0;
+					vm.curData.payMoney = 0;
+					if(timearr[1]>=12){
+						timearr[0] = Number(timearr[0])+1;
+						timearr[1] = "01";
+					}else{
+						timearr[1] = Number(timearr[1])+1;
+						if(timearr[1]<10){
+							timearr[1] = "0"+timearr[1];
+						}
+					}
+					vm.EndTime = timearr[0]+"-"+timearr[1]+"-"+"01";
+					vm.page=1;
+					vm.day = [];
+					vm.lists = [];
+					vm.getLists();
+				});
+			},500);
+
+			var before = 0;
+			var after = 1;
+			var contentHeight = $(".content-box").height();
+			$(window).scroll(function(){
+                after = $(window).scrollTop();
+                if(after>before){
+                	//页面往上滚动
+                	before = after-1;
+                	var len = $(".boxies").length;
+                	var height = [];
+                	var allHeight = 0;
+                	var scrolltop = $(window).scrollTop();
+                	for(var i=0; i<len-1; i++){
+                		height[i] = allHeight+$(".boxies").eq(i).height();
+                		allHeight = height[i];
+                		if( scrolltop >= height[i]){
+                			vm.curData.day = $(".boxies").eq(i+1).data("day");
+                			vm.curData.getMoney = $(".boxies").eq(i+1).data("getmoney");
+                			vm.curData.payMoney = $(".boxies").eq(i+1).data("paymoney");
+                		}
+                	}
+
+                	var scrollTop = $(window).scrollTop();
+			        var scrollHeight = $(document).height();
+			        var windowHeight = $(this).height();
+
+			        if (scrollTop + windowHeight == scrollHeight) {
+			        	$("#nomore").addClass("hide");
+			        	$("#more").removeClass("hide");
+			            vm.getLists();
+			        }
+                }else{
+                	//页面往下滚动
+                	before = after+1;
+                	var len = $(".boxies").length;
+                	var height = [];
+                	var scrolltop = $(window).scrollTop();
+                	for(var i=len-1; i>0; i--){
+                		if(i<len-1){
+                			height[i] = height[i+1]-$(".boxies").eq(i).height();
+                		}else{
+                			height[i] = contentHeight-$(".boxies").eq(i).height();
+                		}
+                		if( scrolltop < height[i]){
+                			vm.curData.day = $(".boxies").eq(i-1).data("day");
+                			vm.curData.getMoney = $(".boxies").eq(i-1).data("getmoney");
+                			vm.curData.payMoney = $(".boxies").eq(i-1).data("paymoney");
+                		}
+                	}
+                }
+            });
+		})
+	</script>
+</html>

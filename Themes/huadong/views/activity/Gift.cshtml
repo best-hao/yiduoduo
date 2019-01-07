@@ -1,0 +1,344 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>礼品兑换-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta content="@WorkContext.ShopConfig.SEODescription" name="description">
+    <meta content="@WorkContext.ShopConfig.SEOKeyword" name="keywords">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/integral.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/youshang.css" />
+    <style>
+        a {
+            color: #323232;
+        }
+header h3{
+    font-size: 1rem;
+}
+        #more {
+            text-align: center;
+        }
+
+        a:active {
+            color: #323232;
+        }
+
+        .geren {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 0 0.6rem;
+            line-height: 2.6rem;
+        }
+
+        ul li {
+            list-style: none;
+        }
+        .jifenback{
+            width: 100%;
+        }
+        .items {
+    padding: 0.6rem;
+    background: #fff;
+    padding-top: 0;
+    margin-top: -5px;
+    padding-bottom: 0;
+}
+    </style>
+</head>
+<body>
+    <header>
+        <i class="iconfont back" onclick="history.back()">&#xe647;</i>
+        <h3>@(WorkContext.SellerInfo.ScoreName)商城</h3>
+        <i class="iconfont geren" onclick="gerenShow()">&#xe637;</i>
+    </header>
+    <ul class="nav-more-list" id="sub-title">
+       
+    </ul>
+    <!-- <div class="paixu">
+        <ul>
+         <li class="crt">
+                默认排序
+            </li>
+            <li>
+                积分价格
+            </li>
+            <li>
+                上架时间
+            </li>
+            <li>
+                兑换数量
+            </li>
+        </ul>
+    </div> -->
+    <div class="content" style="padding-top: 2.6rem;">
+        <img class="jifenback" src="/images/jifenback.jpg" alt="">
+        <ul class="items">
+
+            <!-- <li class="list_item">
+                <div class="list_left">
+                    <img src="#" />
+                </div>
+                <div class="list_right">
+                    <p class="list_p1">
+                        123积分兑换礼品
+                    </p>
+                    <p class="list_p2">
+                        无时间条件限制
+                    </p>
+                    <p class="list_p3">
+                        <span class="num">123</span>积分
+
+                        <span class="num_1">
+                        <label>0</label>人兑换
+                        </span>
+                    </p>
+                    <button class="jili">立即兑换</button>
+                </div>
+
+            </li> -->
+
+
+        </ul>
+
+    </div>
+    <div class="mask">
+        <div class="mask_content">
+            <div class="mask_head">
+               <i class="iconfont" onclick="HideMask(this)">&#xe647;</i>
+                <h3>@(WorkContext.SellerInfo.ScoreName)规则</h3>
+            </div>
+            <img src="/images/jifenback1.jpg" alt="">
+            <div class="mask_title">@(WorkContext.SellerInfo.ScoreName)规则</div>
+            <div class="mask_tolk">
+               
+                <p class="mask_p">
+                    <span class="mask_title_head">一.如何获得@(WorkContext.SellerInfo.ScoreName)？</span> <br>
+					1.新用户注册（绑定手机号）获得<span style="color: #f00;">@(WorkContext.SellerInfo.RegisterGiftScore)</span>@(WorkContext.SellerInfo.ScoreName) <br>
+					<!--2.每日签到获得<span style="color: #f00;">@(WorkContext.SellerInfo.RegisterGiftScore)</span>@(WorkContext.SellerInfo.ScoreName) <br>-->
+					2.用户A分享二维码，未关注的用户B扫此二维码，关注公众号，用户A获得<span style="color: #f00;">@(WorkContext.SellerInfo.ShareGiftScore)</span>@(WorkContext.SellerInfo.ScoreName) <br>
+					3.用户购买商品，每消费<span style="color: #f00;">@(WorkContext.SellerInfo.ScoreMoney)</span>元可获得1@(WorkContext.SellerInfo.ScoreName) <br>
+					注：（充值，@(WorkContext.SellerInfo.ScoreName)兑换，@(WorkContext.SellerInfo.ScoreName)抵扣）不赠送@(WorkContext.SellerInfo.ScoreName) <br> <br>
+					<span class="mask_title_head">二、如何使用@(WorkContext.SellerInfo.ScoreName)？</span> <br>
+					1.购买非@(WorkContext.SellerInfo.ScoreName)兑换商品，可用<span style="color: #f00;">@(WorkContext.SellerInfo.ScoreValue)</span>@(WorkContext.SellerInfo.ScoreName)抵扣<span style="color: #f00;">@(WorkContext.SellerInfo.ScoreMoneyValue)</span>元，(抵用基数为 1.00，前台抵付/退金额按抵用基数的整数倍数计算)<br>
+					2.购买@(WorkContext.SellerInfo.ScoreName)兑换商品，直接使用@(WorkContext.SellerInfo.ScoreName)兑换该商品，自提则无需再付其他费用，快递和配送，可能需要另外付运费
+                </p>
+            </div>
+         <div class="goqiandao_div"><a class="goqiandao" href="/m/usercenter/sign">去签到</a></div>   
+        </div>
+
+
+    </div>
+    <style>
+        .goqiandao_div{
+            text-align: center;
+    padding-bottom: 1rem;
+        }
+        .goqiandao{
+            margin: 0 auto;
+    background: #FD4C60;
+    color: #fff;
+    padding: 0.6rem 3rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+        }
+        .mask_title_head{
+            color: #323232;
+            font-size: 1rem;
+            line-height: 2.2rem;
+        }
+        .mask_p{
+            padding: 0.6rem;
+    font-size: 0.9rem;
+    line-height: 1.8rem;
+    color: #666;
+        }
+        .mask{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            margin: 0 auto;
+            z-index: 666;
+        }
+        .mask_content{
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            background: #FFF6F5;
+        }
+        .mask_head{
+            position: fixed;
+            height: 2.6rem;
+            line-height: 2.6rem;
+            text-align: center;
+            z-index: 55;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            background: #fff;
+            box-shadow: 1px 2px 3px #e1e1e1;
+        }
+        .mask_head i{
+            position: absolute;
+            left: 0;
+            top: 0;
+            padding: 0px 0.6rem;
+        }
+        .mask_head h3{
+            font-size: 1rem;
+            font-weight: inherit;
+        }
+        .mask_content img{
+            width: 100%;
+            margin-top: 2.6rem;
+        }
+        .mask_title{
+            line-height: 2.6rem;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid #e1e1e1;
+        }
+        .mask_title::before,.mask_title::after{
+            content: "";
+    position: absolute;
+    top: 0;
+    bottom: -3px;
+    width: 1rem;
+    height: 1px;
+    border-top: 1px solid #c7c7c7;
+    margin: auto;
+    margin-left: -1.6rem;
+        }
+        .mask_title::after{
+            margin-left: .6rem;
+          
+        }
+        .mask{
+            display: none;
+        }
+    </style>
+    <script src="/Js/Mobile/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Js/Mobile/youshang.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        function HideMask(_this){
+            $(".mask").hide();
+        };
+        $(".jifenback").on("click",function(){
+            $(".mask").show();
+        });
+			var sort = '@ViewData["sort"]',
+							search = '@ViewData["search"]',
+							page = '@ViewData["page"]',
+							size = '@ViewData["size"]';
+				var maxpage = 5;
+				function getPay(_this){
+
+				var id =	$($(_this).parents("li")).attr("data-ProductId");
+				window.location.href = '/m/product/detail?id='+id;
+				};
+				$(function(){
+					getGoods();
+				});
+				function getGoods(){
+				$.post('/m/activity/gift ',{
+									sort:sort,
+									search:search,
+									page:page,
+									size:size
+					},
+					function(data) {
+						var datas = JSON.parse(data);
+						var dete = datas.Data;
+						console.log(dete);
+					if(datas.Code != 0){
+						var html ='';
+						var img_url = "@(WorkContext.ShopConfig.ImageCDN)";
+						var chicun = '?w=200&h=200';
+						for(var i = 0; i< dete.length; i++){
+							if(dete[i].PicUrl == ""){
+								dete[i].PicUrl = '/Images/wutu.png';
+								chicun = '';
+								img_url='';
+							}else{
+								 img_url = "@(WorkContext.ShopConfig.ImageCDN)";
+								 chicun = '?w=200&h=200';
+							};
+							if(dete[i].Title == ""){
+								dete[i].Title = dete[i].ProductName;
+							};
+                            function timeJisuan1(times1) {
+                                var time1 = times1.split("T")[0] + " " + " " + times1.split("T")[1];
+                                var time2 = time1.replace(/\-/g, "/");
+                                var time3 = (new Date(time2)).getTime();
+                                var tody = (new Date()).getTime();
+                                var time4 = time3 - tody;
+                                return time4/1000; 
+                            };
+                            timeJisuan1(dete[i].EndTime);
+                            if(timeJisuan1(dete[i].EndTime) < 0){
+                                html += '';
+                            }else{
+                            var time = dete[i].EndTime.split("T")[0];
+							html += '<li class="list_item" data-ProductId ="'+dete[i].ProductId+'"><a href="/m/activity/giftDetail?id='+dete[i].GiftId+'" class="go_pay"><div class="list_left"><img src="'+img_url+dete[i].ImgUrl+chicun+'"></div>';
+							html += '<div class="list_right"><p class="list_p1">'+dete[i].Title+'</p><p class="list_p2">'+'结束时间:'+time;
+							html +='</p><p class="list_p3"><span class="num">'+dete[i].PayScore+'</span>@(WorkContext.SellerInfo.ScoreName)<span class="num_1">';
+							html +='<label>'+dete[i].SaleCount+'</label>人兑换</span></p><button class="jili" onclick="getPay(this)">立即兑换</button></div></a></li>';
+                            }
+						};
+
+						$(".items").append(html);
+						page++;
+
+					}else{
+						$(".chakan").addClass("disabled");
+						$(".chakan").text("已加载全部商品");
+
+						page = maxpage;
+					};
+				}, 'JSON');
+		};
+$(window).scroll(
+    function() {
+        var scrollTop = $(this).scrollTop();
+        var scrollHeight = $(document).height();
+        var windowHeight = $(this).height();
+        if (scrollTop + windowHeight == scrollHeight) {
+           if(page<=maxpage) {
+           	getGoods();
+           	page++;
+           	 if(page==maxpage){
+			$("#more").html("没有更多数据了");
+			return false;
+			};
+  			} ;
+        };
+    });
+	function gerenShow(){
+		$("#sub-title").toggle();
+		setTimeout(function(){
+			$("#sub-title").hide();
+		},3000);
+	};
+
+
+    </script>
+</body>
+</html>

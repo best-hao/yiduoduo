@@ -1,0 +1,112 @@
+﻿@model Yitao.Web.Framework.PromptModel
+@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>消息提示-@{@WorkContext.SellerInfo.SellerName}触屏版</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+     <link rel="stylesheet" type="text/css" href="/Css/mobile/footer.css" />    
+     
+    <link href="//s.geilicdn.com/user/css/online/user.ea2ddf09.css" type="text/css" rel="stylesheet">
+       <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    
+        <link rel="stylesheet" type="text/css" href="/Css/mobile/youshang.css" />  
+        <script src="/Js/Mobile/youshang.js" type="text/javascript" charset="utf-8"></script>  
+        <style> 
+        @@font-face {
+	font-family: 'iconfont';
+	src: url('/Css/Mobile/icon/iconfont.eot');
+	src: url('/Css/Mobile/icon/iconfont.eot?#iefix') format('embedded-opentype'), url('/Css/Mobile/icon/iconfont.woff') format('woff'), url('/Css/Mobile/icon/iconfont.ttf') format('truetype'), url('/Css/Mobile/icon/iconfont.svg#iconfont') format('svg');
+}
+
+
+.iconfont {
+	font-family: "iconfont" !important;
+	font-size: 16px;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	-webkit-text-stroke-width: 0.2px;
+	-moz-osx-font-smoothing: grayscale;
+}
+        #sub-title li a img {
+    display: inline-block;
+    width: 1.2rem;
+    position: relative;
+    top: -8px;
+}
+</style>
+      
+</head>
+
+<body style="background:#fff;">
+    <section class="main">
+        <header id="common_hd" class="c_txt rel">
+            <a id="hd_back" class="abs comm_p8" href="javascript:;" onclick="goToBack()">返回</a>
+            <h1 class="hd_tle">消息提示</h1>
+            <!--<a class="my_shop for_gaq"  href="javascript:;" ><i class="iconfont">&#xe637;</i> </a>-->
+        </header>
+        <ul id="sub-title" class="nav-more-list"></ul>
+
+        <div style="padding:40px; font-size:20px; text-align:center;">@Model.Message</div>
+    </section>
+    <script>
+var IsApp = "@WorkContext.IsApp";
+		function goToBack() {
+			var _this = this;
+    		if(IsApp==1){
+				if(navigator.userAgent.indexOf("iPhone")>0){
+					gobacklastpage();
+				}
+				if(navigator.userAgent.indexOf("Android")>0){
+				window.js.goBack();
+			}
+			}else{
+				window.history.back();
+			}
+				
+		}    
+		if(IsApp==1){
+			/*$.ajax({
+    			type:"get",
+    			url:"/m/tool/navbar",
+    			async:true,
+    			success: function(rel){
+				
+                    var dete = JSON.parse(rel);
+                    console.log(dete);
+                    if(dete.Code == 1){
+                          var html ='';
+                        html += '<div class="weui_tabbar " style="padding-top: 0.1rem;">';
+                            for(var i =0; i < dete.Data.NavBar.length;i++){
+                                var doms=dete.Data.NavBar[i];
+                                    html += '<a href="'+doms.MenuUrl+'" class="weui_tabbar_item"><div class="weui_tabbar_icon">';
+                                    html +='<img src="'+doms.MenuPic+'?w=50&amp;h=50" style="display: block; width: 0.5rem; height: 0.5rem; margin: 0px auto;"></div>';
+                                    html +='<p class="weui_tabbar_label" style="margin: 0px;">'+doms.MenuName+'</p></a>';
+                            };
+                            html += '</div>';
+                            $('body').append(html);
+                    }else{
+
+                    }
+    			}
+    		});*/
+		}
+
+function UlShow(){
+    $("#sub-title").toggle();
+   setTimeout(function(){
+    $("#sub-title").hide();
+   },3000);
+};
+
+
+    </script>
+</body>
+</html>

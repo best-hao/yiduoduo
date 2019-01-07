@@ -1,0 +1,156 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/swiper4.3.min.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/weui.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/weui2.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/renwu.css" />
+	
+
+	</head>
+
+	<body>
+		<header>
+			
+			<i class="iconfont back">&#xe733;</i>
+			<h3>任务发布</h3>
+
+		</header>
+		<div class="content">
+			<div class="weui_cell border_bottom">
+				<div class="weui_cell_hd"><label class="weui_label">接收方：</label></div>
+				<div class="weui_cell_bd weui_cell_primary">
+					<input class="weui_input" type="text" id="caozuo" placeholder="选择接收的店铺">
+				</div>
+			</div>
+			<div class="wenben">
+				<div class="weui_cells_title">内容：</div>
+				<div class="weui_cells weui_cells_form">
+					<div class="weui_cell">
+						<div class="weui_cell_bd weui_cell_primary">
+							<textarea id="textarea" class="weui_textarea" placeholder="请输入文本" rows="3"></textarea>
+							<div class="weui_textarea_counter"><span id="count">0</span>/<span id="count_max">80</span></div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class="weui_cell">
+				<div class="weui_cell_hd"><label class="weui_label">重要星级：</label></div>
+				<div class="weui_cell_bd weui_cell_primary">
+					<div class="page-hd">
+						<div class="weui-rater">
+							<a data-num="0" class="weui-rater-box checked"> <span class="weui-rater-inner">★</span> </a>
+							<a data-num="1" class="weui-rater-box"> <span class="weui-rater-inner">★</span> </a>
+							<a data-num="2" class="weui-rater-box"> <span class="weui-rater-inner">★</span> </a>
+							<a data-num="3" class="weui-rater-box"> <span class="weui-rater-inner">★</span> </a>
+							<a data-num="4" class="weui-rater-box"> <span class="weui-rater-inner">★</span> </a>
+						</div>
+
+						<div id='fen' class="weui_cells_title"></div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+		<a href="javascript:;" class="fabu weui_btn weui_btn_warn">发布</a>
+
+		<script src="/Js/Mobile/boss/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(function() {
+				var max = $('#count_max').text();
+				$('#textarea').on('input', function() {
+					var text = $(this).val();
+					var len = text.length;
+					$('#count').text(len);
+					if(len > max) {
+						$(this).closest('.weui_cell').addClass('weui_cell_warn');
+					} else {
+						$(this).closest('.weui_cell').removeClass('weui_cell_warn');
+					}
+				});
+			});
+			//评分js
+			var arr = [];
+			var num = -1;
+			$(".weui-rater a").mouseover(function() {
+				var thisL = $(this).index();
+				for(var i = 0; i < thisL; i++) {
+					$(".weui-rater a").eq(i).addClass('checked');
+				}
+				for(var i = thisL; i < 5; i++) {
+					$(".weui-rater a").eq(i).removeClass('checked');
+				}
+				$(this).addClass('checked');
+			});
+			$(".weui-rater a").mouseout(function() {
+				var thisL = $(this).index();
+				for(var i = thisL; i < 5; i++) {
+					$(".weui-rater a").eq(i).removeClass('checked');
+				}
+			});
+			$(".weui-rater").mouseout(function() {
+
+				for(var i = 0; i < num; i++) {
+					$(".weui-rater a").eq(i).addClass('checked');
+				}
+			});
+			$(".weui-rater a").click(function() {
+				var thisL = $(this).index();
+				$("#fen").html(arr[thisL]);
+				$(this).addClass('checked');
+				num = thisL + 1;
+				console.log(num);
+			});
+			// 上拉
+			$(document).on("click", "#caozuo", function() {
+				$(this).blur();
+				$.actions({
+					title: "选择操作",
+					onClose: function() {
+						console.log("close");
+					},
+					actions: [{
+							text: "发布",
+							className: "color-primary",
+							onClick: function() {
+							
+								 $("#caozuo").val(this.text);
+							}
+						},
+						{
+							text: "编辑",
+							className: "color-warning",
+							onClick: function() {
+								$.alert("你选择了“编辑”");
+							}
+						},
+						{
+							text: "删除",
+							className: 'color-danger',
+							onClick: function() {
+								$.alert("你选择了“删除”");
+							}
+						}
+					]
+				});
+			});
+		</script>
+
+	</body>
+
+</html>

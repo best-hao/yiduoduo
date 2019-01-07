@@ -1,0 +1,198 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>特惠专享-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta content="@WorkContext.ShopConfig.SEODescription" name="description">
+    <meta content="@WorkContext.ShopConfig.SEOKeyword" name="keywords">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css"/>
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css"/>
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/Newlyweds.css" />
+	<link rel="stylesheet" type="text/css" href="/Css/Mobile/youshang.css" />
+	<style>
+		.chakan{
+			text-align: center;
+			color: #666;
+			margin-top: 1.6rem;
+		}
+		.goods_items {   
+			padding-top: 7px;
+		}
+		body{
+				background: #f5f5f5;
+			}
+			.geren{
+				position: absolute;
+				top: 0;
+				right: 0;
+				padding: 0 0.6rem;
+				line-height: 2.6rem;
+			}
+	</style>
+</head>
+<body>
+
+    	<header>
+			<i class="iconfont back" onclick="goToBack()">&#xe647;</i>
+			<h3>特惠专享</h3>
+			<!--<i class="iconfont geren" onclick="gerenShow()">&#xe637;</i>-->
+		</header>
+		<ul class="nav-more-list" id="sub-title">
+			
+			</ul>
+		<div class="content">
+			<div class="goods_items">
+				<a href="@(Request.Url.Scheme)://@(WorkContext.ShopConfig.SiteUrl)/m/article/detail?id=91">
+					<img src="/images/mobile/activity/thsale.jpg"style="width:100%" alt="" />
+				</a>
+				<ul id="goods_content">
+				</ul>
+				<br>
+			</div>
+			<div class="chakan">查看全部商品</div>
+		</div>
+
+
+<script src="/Js/Mobile/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/Js/Mobile/youshang.js" type="text/javascript" charset="utf-8"></script>
+<script>
+			var IsApp = "@WorkContext.IsApp";
+			//返回交互
+			function goToBack() {
+
+				var _this = this;
+				if(IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+		                window.js.goBack();
+					}
+				}else{
+					window.history.back();
+				}
+					
+			}
+
+
+				//排序
+	           //     var  sort = DRequest.GetInt("sort", 0);
+                //搜索词
+                //var  search = DRequest.GetString("search");
+                //页码
+                //var page = DRequest.GetInt("page", 1);
+                //页数
+                //var size = DRequest.GetInt("size", 10);	
+					
+			var sort = '@ViewData["sort"]',
+				search = '@ViewData["search"]',
+				page = '@ViewData["page"]',
+				size = '@ViewData["size"]';
+				page = 1;  
+				size = 	20;
+			
+				$(document).ready(function(){
+					 getGoods(sort,search,page,size);
+				
+				});
+
+
+		function getGoods(sort,search,page,size){
+				$.post('/m/activity/FirstBuy',{
+						sort:sort,
+						search:search,
+						page:page,
+						size:size
+					},
+					
+					function(data) {
+						var datas = JSON.parse(data);
+						var dete = datas.Data;
+						console.log(dete);
+					if(datas.Code != 0){
+						var html ='';
+						var img_url = "@(WorkContext.ShopConfig.ImageCDN)";
+						var chicun = '?w=200&h=200';
+						for(var i = 0; i< dete.length; i++){
+							if(dete[i].PicUrl == "" || dete[i].PicUrl == null){
+								dete[i].PicUrl = '/Images/wutu.png';
+								chicun = '';
+								img_url='';
+							}else{
+								 img_url = "@(WorkContext.ShopConfig.ImageCDN)";
+								 chicun = '?w=200&h=200';
+							};
+							if(dete[i].Title == ""){
+								dete[i].Title = dete[i].ProductName;
+							};
+							html +='<li class="list_items" data-ItemId="'+dete[i].ItemId+'" data-SellerId="">';
+							html += '<div class="list_content"><a href="/m/activity/FirstBuyDetail?id='+dete[i].ItemId+'&IsApp=@{@WorkContext.IsApp}"><img class="setImg" src="'+img_url+dete[i].PicUrl+chicun+'"/><p class="p_list1">'+ dete[i].Title;
+							html +='</p><p class="p_list2"> <span class="sp_list1">'+dete[i].ActivityPrice+'</span><span class="list_right"><span class="mark">送</span><span class="sorce-num">'+dete[i].ActivityPrice+'积分</span></span></p></a></div></li>';
+						};
+					
+						$("#goods_content").append(html);
+						
+						setTimeout(function(){
+							setImg();
+						},200);
+					}else{
+						$(".chakan").addClass("disabled");
+						$(".chakan").text("已加载全部商品");
+						$.toast("加载完毕");
+					}
+				}, 'JSON');
+		};
+
+		function setImg(){
+			if($("body .setImg").length >2){
+				for(var i = 1; i <$("body .setImg").length ; i++){
+					var width = $($("body .setImg")[0]).offset().width + 'px';
+					var height = $($("body .setImg")[0]).offset().height +'px';
+					$($("body .setImg")[i]).css({
+					  'width':width,
+					  'height':height,
+				  });
+				  var width = $($("body .list_items")[0]).offset().width + 'px';
+					var height = $($("body .list_items")[0]).offset().height +'px';
+					$($("body .list_items")[i]).css({
+					  'height':height,
+				  });
+				};
+			}else{
+
+			};
+			$($("body .setImg")[0]).css({
+					  'width': $($("body .setImg")[1]).offset().width + 'px',
+					  'height': $($("body .setImg")[1]).offset().height +'px',
+				  });
+			$($("body .list_items")[0]).css({					
+					'height':$($("body .list_items")[0]).offset().height +'px',
+							});
+		};
+		$(".chakan").on("click",function(){
+			if($('.chakan').hasClass('disabled')){
+
+			}else{
+				page++;
+		        getGoods(sort,search,page,size);
+			}
+			
+		});
+		function gerenShow(){
+			$("#sub-title").toggle();
+			setTimeout(function(){
+				$("#sub-title").hide();
+			},3000)
+		};
+</script>  
+</body>
+</html>

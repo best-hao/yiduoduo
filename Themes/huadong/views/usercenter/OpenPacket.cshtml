@@ -1,0 +1,768 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>我的分润-@{@WorkContext.SellerInfo.SellerName}</title>
+    <link rel="stylesheet" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/sign2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css?v=0.113" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/usercenter/red-packet/red_packet.css?v=0.13"/>
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/zepto.min.js"></script>
+    <script src="/Mobile/weui/icon/iconfont.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="/Js/Mobile/calendar2.js"></script>
+	<script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	
+	<style type="text/css" media="screen">
+		.weui_grid{
+			width: 33.333333333%;
+		}
+		.weui_grid:nth-child(3n):before {
+		    border-right-width: 1px;
+		}
+		.mark{
+			width: 100%;
+			height: 100%;
+			max-width: 7.5rem;
+			margin: 0 auto;
+			background-color: rgba(0,0,0,.6);
+			position: fixed;
+			left: 0;
+			right: 0;
+			top: 0;
+			z-index: 9;
+		}
+		.mark .consumption-content{
+			width: 6rem;
+			min-height: 3rem;
+			background-color:#F04040;
+			border-radius: 0.1rem;
+			margin: 2rem auto 0;
+			position: relative;
+			z-index: 11;
+		}
+		.consumption-content h3{
+			background-color:#fff;
+			line-height: 0.8rem;
+			padding: 0.2rem;
+			color:#F04040;
+			font-size: 0.45rem;
+			font-weight: normal;
+			text-align: center;
+			border-top-left-radius: 0.1rem;
+			border-top-right-radius: 0.1rem;
+		}
+		.icon-title{
+			vertical-align: top;
+		}
+		.icon-title .icon{
+			font-size: 0.3rem;
+			color:#E5E5E5;
+		}
+		.consumption-content .list{
+			padding: 0.3rem 0.4rem;
+		}
+		.consumption-content .info {
+			-webkit-display:flex;
+			display:flex;
+			line-height: 0.8rem;
+		}
+		.consumption-content .info .date{
+			font-size: 0.3rem;
+			color:#FAD9A3;
+			-webkit-flex: 5;
+			flex: 5;
+		}
+		.consumption-content .info .value{
+			font-size: 0.3rem;
+			color:#FAD9A3;
+			text-align: right;
+			-webkit-flex: 2;
+			flex: 2;
+		}
+		.date .icon{
+			color:#FAD9A3;
+			font-size: 0.3rem;
+			margin-right: 0.15rem;
+		}
+		.no-list{
+			text-align: center;
+			line-height: 2rem;
+			font-size: 0.3rem;
+			color:#FAD9A3;
+		}
+		.close-btn{
+			width: 0.8rem;
+			margin: 0 auto;
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: -1.8rem;
+			z-index: 11;
+			font-size: 0.8rem;
+			color:#fff;
+		}
+		.weui_toptips {
+			width: 100%;
+			max-width: 7.5rem;
+			margin: 0 auto;
+			left: 0;
+			right: 0;
+		}
+		[v-cloak] {
+		    display: none ;
+		}
+		.weui_dialog_hd{padding: 0;}
+
+		.boxies{
+		    width: 100%;
+		   	max-height: 7.2rem;
+		    overflow-y: auto;
+		    overflow-x: hidden;
+		    padding: 0 0.2rem;
+		}
+	</style>
+	<script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script>
+			//alert('@WorkContext.Uid');
+			$(document).on("click", ".wx-share", function(){
+                $(this).hide();
+            });
+
+
+			function share(){
+				var IsApp = "@WorkContext.IsApp";
+				var Uid = '@WorkContext.Uid';
+				var weixin = "@WebHelper.IsWeiXin()";
+				var LeaderUid = '@WorkContext.Uid';
+				//alert(IsApp);
+				// if (Uid < 1) {
+				// 	if(IsApp==1){
+				// 		if(navigator.userAgent.indexOf("iPhone")>0){
+				// 			gotologinvc();
+				// 		}
+				// 		if(navigator.userAgent.indexOf("Android")>0){
+				// 			window.js.goLogin();
+				// 		}
+				// 	}else{
+				// 		if(weixin=="False"){
+				// 			window.location.href = '/m/account/Login';
+				// 		}else{
+				// 			window.location.href = '/m/user/Bind';
+				// 		}
+				// 	}
+				// }else{
+					if(IsApp==1){
+						var type = 2;
+						var title = '我今天领分润领取了188元';
+						/* var url = '@(Request.Url.Scheme)://'+'@(WorkContext.ShopConfig.SiteUrl)'+'/m/usercenter/OpenPacket'+'?LeaderUid='+'@WorkContext.Uid';*/
+
+						var url = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host'+'/m/activity/SharePacket'+'?LeaderUid='+'@WorkContext.Uid';
+			            var Logo = '@(WorkContext.ShopConfig.ImageCDN)@(WorkContext.SellerInfo.Logo)';
+			            var imageUrl = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/Images/Mobile/share-logo.png';
+			            var describe = "秦商未来邀请您一起参与\n实名认证即送60积分";
+			            var text="";
+			            var json = {
+			            	type: type,
+			            	title: title,
+			            	imageUrl: imageUrl,
+			            	describe: describe,
+			            	url: url,
+			            	LeaderUid: '@WorkContext.Uid',
+			            	text: ""
+			            }
+						if(navigator.userAgent.indexOf("iPhone")>0){
+							shareWithTypes(type,title,imageUrl,describe,url,text);
+						}
+						if(navigator.userAgent.indexOf("Android")>0){
+							/*alert("IsApp: "+IsApp);
+							alert("进入安卓");
+							alert(JSON.stringify(json));*/
+							window.js.shareWithTypes(JSON.stringify(json));
+						}
+					}else{
+						$(".wx-share").show();
+					}
+				//}
+			}
+	    	var wxobj = {
+	    		appId: '@ViewData["AppId"]', /* 必填，公众号的唯一标识*/
+	            timestamp: '@ViewData["Timestamp"]', /* 必填，生成签名的时间戳*/
+	            nonceStr: '@ViewData["NonceStr"]', /* 必填，生成签名的随机串*/
+	            signature: '@ViewData["Signature"]'/* 必填，签名*/
+	    	}
+	    	wxobj = JSON.stringify(wxobj);
+	    	//alert(wxobj);
+	        wx.config({
+	            debug: false, /* 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。*/
+	            appId: '@ViewData["AppId"]', /* 必填，公众号的唯一标识*/
+	            timestamp: '@ViewData["Timestamp"]', /* 必填，生成签名的时间戳*/
+	            nonceStr: '@ViewData["NonceStr"]', /* 必填，生成签名的随机串*/
+	            signature: '@ViewData["Signature"]',/* 必填，签名*/
+	            jsApiList: [
+	                    'checkJsApi',
+	                    'onMenuShareTimeline',
+	                    'onMenuShareAppMessage',
+	                    'onMenuShareQQ',
+	                    'onMenuShareWeibo',
+	                    'hideMenuItems',
+	                    'showMenuItems',
+	                    'hideAllNonBaseMenuItem',
+	                    'showAllNonBaseMenuItem',
+	                    'translateVoice',
+	                    'startRecord',
+	                    'stopRecord',
+	                    'onRecordEnd',
+	                    'playVoice',
+	                    'pauseVoice',
+	                    'stopVoice',
+	                    'uploadVoice',
+	                    'downloadVoice',
+	                    'chooseImage',
+	                    'previewImage',
+	                    'uploadImage',
+	                    'downloadImage',
+	                    'getNetworkType',
+	                    'openLocation',
+	                    'getLocation',
+	                    'hideOptionMenu',
+	                    'showOptionMenu',
+	                    'closeWindow',
+	                    'scanQRCode',
+	                    'chooseWXPay',
+	                    'openProductSpecificView',
+	                    'addCard',
+	                    'chooseCard',
+	                    'openCard'
+	            ]
+	        });
+
+	        wx.error(function (res) {
+	            /*alert(res);*/
+	            /*console.log(res);*/
+	            /*alert('验证失败');*/
+	        });
+
+	        wx.ready(function () {
+	        	//alert(wxobj);
+	        	$(function(){
+	        		var link = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host'+'/m/activity/SharePacket'+'?LeaderUid='+'@WorkContext.Uid';
+		            var Logo = '@(WorkContext.ShopConfig.ImageCDN)@(WorkContext.SellerInfo.Logo)';
+		            var imgUrl = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/Images/Mobile/share-logo.png';
+		            // imgUrl = $("#slide1 li:last-child").find("img").attr("src");
+		            var desc = "秦商未来邀请您一起参与\n实名认证即送60积分";
+		            //alert(link);
+	                /*转发到朋友圈*/
+	                wx.onMenuShareTimeline({
+	                    title: '我今天领分润领取了188元',
+	                    link: link,
+	                    imgUrl: imgUrl,
+	                    success: function () {
+	                        /*alert('转发成功！');*/
+	                    },
+	                    cancel: function () {
+	                        /*alert('转发失败！');*/
+	                    }
+	                });
+
+	                wx.onMenuShareAppMessage({
+	                    title: '我今天领分润领取了188元',
+	                    desc: desc,
+	                    link: link,
+	                    imgUrl: imgUrl,
+	                    type: 'link',
+	                    dataUrl: '',
+	                    success: function () {
+	                        /*alert('转发成功！');*/
+	                        //alert(link);
+	                    },
+	                    cancel: function () {
+	                       /* alert('转发失败！');*/
+	                    }
+	                });
+	        	});
+            });
+           var sellerid = "@WorkContext.SellerInfo.SellerId";
+    </script>
+</head>
+
+<body>
+<div id="app" v-cloak>
+	<div class="warp">
+		<div class="header">
+			<div class="weui-flex">
+	            <div class="weui-flex-item lt" v-on:click="goToBack()"><span class="icon iconfont">&#xe60e;</span></div>
+	            <a class="weui-flex-item rt" href="/m/usercenter/RedPacketDetail">分润明细</a>
+	        </div>
+	        <div class="infos">
+	        	<div class="title">累计获得分润</div>
+	        	<div class="money">¥@ViewData["SumUserCardFlowType8"]</div>
+	        </div>
+	        <div class="infos-item-box">
+	        	<!-- <div class="weui-flex">
+	        		<div class="weui-flex-item">
+	        			<div class="item-box">
+	        				<div class="title">累计获得分润金额</div>
+	        				<div class="money">@WorkContext.UserInfo.PayInAmount</div>
+	        			</div>
+	        		</div>
+	        		<div class="weui-flex-item">
+	        			<div class="item-box">
+	        				<div class="title">累计使用分润金额</div>
+	        				<div class="money">@WorkContext.UserInfo.PayOutAmount</div>
+	        			</div>
+	        		</div>
+	        	</div> -->
+	        </div>
+		</div>
+		 <div class="weui_grids link"  >
+	        <a href="javascript:;" class="weui_grid js_grid" v-on:click="showPacket()">
+	            <div class="weui_grid_icon">
+	                <span class="icon iconfont">&#xe66c;</span>
+	            </div>
+	            <p class="weui_grid_label">
+	               	领分润
+	            </p>
+	        </a>
+	        <!--<a href="/m/usercenter/MoneyToIDCard" class="weui_grid js_grid" >
+	            <div class="weui_grid_icon">
+	                <span class="icon icon-43"></span>
+	            </div>
+	            <p class="weui_grid_label">
+	                提现
+	            </p>
+	        </a>-->
+	        <a onclick="jumpApp()" href="javascript:;" class="weui_grid js_grid" >
+	            <div class="weui_grid_icon">
+	                <span class="icon iconfont">&#xe651;</span>
+	            </div>
+	            <p class="weui_grid_label">
+	                充值
+	            </p>
+	        </a>
+	        <a href="javascript:;" class="weui_grid js_grid" v-on:click="openListValue()">
+	            <div class="weui_grid_icon">
+	                <span class="icon iconfont">&#xe658;</span>
+	            </div>
+	            <p class="weui_grid_label">
+	                消费指数
+	            </p>
+	        </a>
+		</div>
+
+		<div id="calendar"></div>
+
+		<!--div class="footer">
+			<div class="item-box">
+				<a href="" class="readme">分润说明</a>
+				<span>|</span>
+				<a href="" class="quest">常见问题</a>
+			</div>
+		</div-->
+	</div>
+	<!--分享-->
+    <div class="wx-share">
+        <div class="share-img"></div>
+        <p class="share-tips">点击右上角分享</p>
+    </div>
+	<!--领分润-->
+	<div class="open-packet-bg" v-show="openPacket">
+		<div class="open-packet">
+			<div class="red-packet-title"><sapn class="text">分润</sapn>大派送</div>
+			<div class="red-packet-money" v-show="resInfo"></div>
+			<div class="red-packet-tips"  v-show="resInfo" v-on:click="openRedPacketDetail()"> 收到分润,<span class="click-text">点击查看</span>分润明细</div>
+			<div class="red-packet-btn" v-show="openPacketBtn" v-on:click="chai()">领</div>
+		</div>
+		<div class="icon iconfont close-packet" v-on:click="closePacket()">&#xe62d;</div>
+	</div>
+
+	<div class="mark" v-show="showContent">
+		<div class="consumption-content">
+			<h3>
+				<span class="icon-title">
+					<i class="icon icon-48"></i>
+				</span>
+				{{title}}
+				<span class="icon-title">
+					<i class="icon icon-48"></i>
+				</span>
+			</h3>
+			<div class="list" v-if="listValue.length > 0">
+				<div class="info" v-for="(item,index) of listValue" :key="index">
+					<div class="date">
+						<i class="icon icon-70"></i>{{timeArr(item.addtime)}}
+					</div>
+					<div class="value">{{item.groupindex}}</div>
+				</div>
+			</div>
+			<div class="no-list" v-if="listValue.length <= 0">暂无数据</div>
+			<div class="close-btn icon iconfont" v-on:click="closeListValue()">&#xe62d;</div>
+		</div>
+	</div>
+	<div class="open-detail" v-show="openDetail">
+		<div class="weui-flex">
+			<div class="weui-flex-item lt" v-on:click="goToBack()"><span class="icon iconfont">&#xe60e;</span></div>
+			<div class="weui-flex-item rt" v-on:click="share()"><span class="icon iconfont">&#xe620;</span></div>
+		</div>
+		<div class="openDetail-banner" v-on:click="openRanking()">
+			<img src="/Images/Mobile/rankingBg.png" />
+			<div class="ranking-title"><h3>TOP</h3> 10</div>
+			<div class="ranking-body">查看商家让利排行榜</div>
+		</div>
+		<!--分润明细-->
+		<div v-bind:class="[ranking ? 'content-box-active' : '','content-box-red']">
+			<div class="openDetail-info">
+				<div class="openDetail-tips">
+	                领分润记录
+                </div>
+			</div>
+			<ul class="boxies">
+				<li v-for="(itemLi, indexLi) of lists" :key="indexLi">
+					<div class="detail-left">
+						<span class="icon iconfont redpacket">&#xe610;</span>
+					</div>
+					<div class="detail-center">
+						<div class="title" >{{itemLi.username}}</div>
+						<div class="time">{{itemLi.addtime}}</div>
+					</div>
+					<div class="detail-right">
+						<span class="fuhao" >+</span><span>{{itemLi.savingmoney}}</span>
+					</div>
+				</li>
+			</ul>
+			<div class="loading" :style="{'margin-top':loadingTop+'rem'}">
+				<div class="weui_cells_title tcenter hide" id="more">
+					<div class="weui-loadmore">
+			            <i class="weui-loading"></i>
+			            <span class="weui-loadmore-tips">正在加载</span>
+			        </div>
+				</div>
+				<div v-if="page==1" class="weui_cells_title tcenter hide" id="nomore">
+					暂无数据
+				</div>
+				<div v-else class="weui_cells_title tcenter hide" id="nomore">
+					没有更多数据了
+				</div>
+			</div>
+		</div>
+		<!--商家让利排行-->
+		<div v-bind:class="[ranking ? '' : 'content-box-active','content-box-red']">
+			<ul class="ranking-list">
+				<li class="list" v-for="(item,index) of ShopGiftTopList" :key="index">
+					<i class="icon icon-red" v-if="index == 0"></i>
+					<i class="icon icon-yellow" v-else-if="index == 1"></i>
+					<i class="icon icon-blue" v-else-if="index == 2"></i>
+					<i class="icon" v-else></i>
+					<span class="seller-name">{{item.shopname}}</span>
+					<span class="giftprofits">¥{{item.giftprofitssum}}</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+</body>
+<script>
+	var myDate = new Date();
+	var curYear = myDate.getFullYear(); //获取完整的年份(4位,1970-????)
+	var curMonth = myDate.getMonth(); //获取当前月份(0-11,0代表1月)
+	curMonth = Number(curMonth+1);
+	var curDay = myDate.getDate(); //获取当前日(1-31)
+	var timestr = curYear+"-"+curMonth+"-"+curDay+" 5:00:00";
+	var limitstartstr = curYear+"-"+curMonth+"-"+curDay+" 0:00:00";
+	var regtimestr = "@WorkContext.UserInfo.AddTime";
+	var regTime = 0;
+	var limitTime = 0;
+	var curTime = 0;
+	var limitstartTime = 0;
+	regTime = new Date(regtimestr).getTime();//注册时间
+	limitTime = new Date(timestr).getTime();//限制5点
+	limitstartTime = new Date(limitstartstr).getTime();//当天0点
+	curTime = new Date().getTime();//当前时间
+
+	var signList= [];
+ 	var vm = new Vue({
+		el: "#app",
+		data: {
+			IsApp: '@WorkContext.IsApp',
+			userid: @WorkContext.Uid,
+			userscore: @WorkContext.UserInfo.UserScore,
+			showContent: false,
+			title: "消费指数",
+			listValue:[],
+			openPacket: false,
+			resInfo: false,
+			openPacketBtn: true,
+			regTime: regTime,
+			limitTime: limitTime,
+			curTime: curTime,
+			limitstartTime: limitstartTime,
+			openDetail: false,
+			lists: [],
+			loadingTop: 0,
+			page: 1,
+			ranking: true,
+			ShopGiftTopList:[],
+		},
+		methods:{
+			goToBack: function() {
+				var _this = this;
+	    		if(this.IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+				window.js.goBack();
+			}
+				}else{
+					window.history.back();
+				}
+			},
+			getListValue: function(){
+
+			},
+			openListValue: function(){
+				var that = this;
+				that.showContent = !that.showContent;
+			},
+			closeListValue: function(){
+				$.hideLoading();
+				var that = this;
+				that.showContent = !that.showContent;
+			},
+			timeArr: function(time){
+				if (time.length > 10){
+					return time.substring(0,10);
+				}
+			},
+			closePacket: function(){
+				var that = this;
+				that.openPacket = !that.openPacket;
+			},
+			showPacket: function(){
+				var that = this;
+				that.openPacket = !that.openPacket;
+			},
+			//领分润
+			chai: function(){
+				var that = this;
+				curTime = new Date().getTime();//当前时间
+					if(Number(regTime)>=Number(limitstartTime)){
+						//不可以领
+						$.alert("今日未到分红时间");
+						return false;
+					}else{
+						if(Number(curTime)<Number(limitTime)){
+							//不可以领
+							$.alert("今日未到分红时间");
+							return false;
+						}else{
+							//可以领
+							$.ajax({
+								type:"get",
+								url: "/Api/User/OpenRedPacket?v="+Math.random(),
+								dataType: "json",
+								async: true,
+								data:{
+									userid: that.userid,
+								},
+								success: function(res){
+									if(res.code == 0){
+										that.openPacketBtn = that.openPacketBtn;
+										that.resInfo = that.resInfo;
+										$.toast(res.message, "cancel");
+										return false;
+									}else{
+										var getday = new Date();
+										var currdata = getday.getDate(); //获取当前日期;
+										var arr = {};
+										arr.signDay = currdata; //给arr.signDay赋值为当前日期;
+										signList.push(arr);
+										calUtil.init(signList); //调用calUtil.init(signList)已展示当前领取分润的日期--点击领分润时选中当前日期;
+										that.openPacketBtn = !that.openPacketBtn;
+										that.resInfo = !that.resInfo;
+									}
+									$(".open-packet").addClass("open-packet-active");
+									$(".red-packet-title").html("今日已领分润").css({"color":"#fff","top":"2.2rem"});
+									$(".red-packet-money").text("¥"+ res.data.toFixed(2)+ "元");
+								}
+							});
+						}
+					}
+			    
+						
+			},
+			openRedPacketDetail: function(){
+				var that = this;
+					that.openDetail = !that.openDetail;
+					that.initGetData();
+			},
+			initGetData: function() {
+				var that = this;
+				that.loadingTop = 0;
+				var url = "/Api/User/GetUserCardFlow?v="+Math.random()+"&userid="+"@WorkContext.Uid&FlowType=8"+"&page="+that.page+"&size=15";
+				$.ajax({
+					type:"get",
+					url:url,
+					async:true,
+					success: function(rel) {
+						$("#more").addClass("hide");
+						if(rel.code==1){
+							rel.data.forEach(function(v, i){
+								that.lists.push(v);
+							});
+							that.page++;
+						}else{
+							if(that.page==1){
+								that.loadingTop = 1;
+							}
+							$("#nomore").removeClass("hide");
+						}
+						//_this.dayStr = _this.lists[_this.lists.length-1].addtime.substring(0,7);
+					}
+				});
+			},
+			openRanking:function(){
+				var that = this;
+					that.ranking = !that.ranking;
+			},
+			shopGiftTop: function(){
+				var that = this;
+					$.ajax({
+						type: "get",
+						url:"/Api/Statistic/ShopGiftTop10?v="+Math.random(),
+						async: true,
+						success: function(res){
+							if(res.code == 1){
+								res.data.forEach(function(element, index){
+									that.ShopGiftTopList.push(element);
+								});
+							}
+						}
+					});
+			}
+			//当前账户积分不满50执行chaiTips
+			// chaiTips: function(){
+			// 	$.toast("当前账户积分不满50,不能领分润", "cancel");
+			// 	return false;
+			// }
+		},
+		created: function(){
+			var that = this;
+			that.shopGiftTop();
+
+			$.ajax({
+				type: "get",
+				url: "/Api/Statistic/Get7DayGroupIndex?v="+Math.random(),  //初始化获取消费指数信息
+				async: true,
+				success: function(res){
+					if(res.code == 1){
+						res.data.forEach(function(element, index){
+							that.listValue.push(element);
+						});
+					}
+				}
+			});
+			$.ajax({
+				type:"get",
+				url: "/Api/User/OpenPacketFlow?v="+Math.random(),  //初始化展示分润领取记录
+				dataType: "json",
+				async: true,
+				data:{
+					userid: that.userid,
+				},
+				success: function(res){
+					//console.log(res.data);
+					if(res.message >= 0){
+						that.openPacket= that.openPacket;
+						that.resInfo = !that.resInfo;
+						that.openPacketBtn = !that.openPacketBtn;
+						signList = [];
+						$(".open-packet").addClass("open-packet-active");
+						$(".red-packet-title").html("今日已领分润").css({"color":"#fff","top":"2.2rem"});
+						$(".red-packet-money").text("¥"+ res.message+ "元");
+					}else{
+						if(that.userscore < 50){ //积分少于50时不显示领分润
+							that.openPacket= that.openPacket;
+						}else{
+							that.openPacket= !that.openPacket;
+							that.resInfo = that.resInfo;
+							that.openPacketBtn = that.openPacketBtn;
+						}
+					}
+					
+					var allData = res.data;
+					allData.forEach(function(element,index){
+						var arr = {};
+						//console.log(element.addtime);
+						var addTime = element.addtime;  //获取时间数组addtime
+						var addTimeData = addTime.split("-")[2].split(" ")[0]; //获取当前日期
+						if(addTimeData < 10){
+							var day = addTimeData.split("0")[1]; //获取当前日期的最后一位
+							arr.signDay = day; //给arr.signDay赋值为当前日期;
+							//console.log(arr);
+						}else{
+							arr.signDay = addTimeData; //给arr.signDay赋值为当前日期;
+						}
+						signList.push(arr);
+					});
+					calUtil.init(signList); //调用calUtil.init(signList)已展示当前领取分润的日期;
+				},
+				error: function(res){
+					alert(res.message)
+				}
+			});
+		}
+	});
+</script>
+
+<script>
+	var IsApp = "@WorkContext.IsApp";
+	function jumpApp() {
+		if(Number(IsApp)==1){
+			if(navigator.userAgent.indexOf("iPhone")>0){
+				RechargeWithAliPayOrWX();
+			}
+			if(navigator.userAgent.indexOf("Android")>0){
+				window.js.topMoney();
+			}
+		}else{
+			window.location.href="/m/settlement/recharge";
+		}
+	}
+
+	$(function(){
+		var before = 0;
+		var after = 1;
+		$(".boxies").scroll(function(){
+            after = $(".boxies").scrollTop();
+            if(after>before){
+            	//页面往上滚动
+            	before = after-1;
+            	var scrollTop = $(".boxies").scrollTop();
+		        var scrollHeight = $(".boxies")[0].scrollHeight;  //获取.boxies内容高度
+		        var windowHeight = $(this).height();
+
+		        console.log(scrollTop +"...."+scrollHeight+"...."+windowHeight);
+		        if (scrollTop + windowHeight == scrollHeight) {
+		        	$("#nomore").addClass("hide");
+		        	$("#more").removeClass("hide");
+		            vm.initGetData();
+		        }
+            }else{
+            	//页面往下滚动
+            	before = after+1;
+            }
+        });
+	})
+</script>
+
+</html>

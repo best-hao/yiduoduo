@@ -1,0 +1,626 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang='zh'>
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <title>团购详情页-@{@WorkContext.SellerInfo.SellerName}</title>
+    <link rel="stylesheet" href="/Css/Mobile/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/putong.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/youshang.css" />
+</head>
+<body>
+   <div class="header">
+        <div class="weui_btn_default weui-header ">
+            <div class="weui-header-left">
+                <a class="icon" onclick="history.back()">
+                    <i class="iconfont">&#xe631;</i>
+                </a>
+            </div>
+            <h1 class="weui-header-title f-green">
+                <ul class="offset_ul">
+                    <li class="offsetTop">
+                        商品
+                    </li>
+                    <li>
+
+                    </li>
+                    <li>
+                        详情
+                    </li>
+                </ul>
+            </h1>
+            <div class="weui-header-right">
+                <a class="icon" href="javascript:;" onclick="gerenShow()">
+                    <i class="iconfont">&#xe637;</i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <ul class="nav-more-list" id="sub-title"></ul>
+    <div class="swiper_conetnt">
+        <div class="slide" id="slide1">
+            @{
+                List<Yitao.Core.PicsInfo> PicsInfoList = (List<Yitao.Core.PicsInfo>)ViewData["PicsList"];
+                Yitao.Core.ActivitySkuInfo activitySkuInfo = (Yitao.Core.ActivitySkuInfo)ViewData["ActivitySkuInfo"];
+                Yitao.Core.GroupInfo groupInfo = (Yitao.Core.GroupInfo)ViewData["GroupInfo"];
+            }
+            <ul style="transition: all 0s cubic-bezier(0.22, 0.69, 0.72, 0.88); transform: translate3d(0px, 0px, 0px);">
+                <li style="">
+                    <a href="#">
+                        <img src="@(WorkContext.ShopConfig.ImageCDN)@{@groupInfo.ShareImg}?h=320" />
+                    </a>
+                </li>
+                @if (PicsInfoList.Count > 0)
+                {
+                    foreach (Yitao.Core.PicsInfo info in PicsInfoList)
+                    {
+                        if (info.ImgUrl.Length > 0)
+                        {
+                            <li style="transition: all 0s cubic-bezier(0.22, 0.69, 0.72, 0.88); transform: translate3d(-640px, 0px, 0px);">
+                                <a href="#">
+                                    <img src="@(WorkContext.ShopConfig.ImageCDN)@{@info.ImgUrl}?h=320&w=320" />
+                                </a>
+                            </li>
+                        }
+                    }
+                }
+            </ul>
+            <div class="corner">
+                <p> <span class="corner1">1</span> <span class="corner2">5</span></p>
+            </div>
+
+        </div>
+    </div>
+    <!-- cone -->
+    <!-- 商品描述 -->
+    <div class="describe">
+
+        <div class="describe_head">
+            <!-- 价格  -->
+            <p class="dehep_1">
+                <span class="dehespan_1">@activitySkuInfo.ActivityPrice</span>
+            </p>
+        </div>
+        <!-- 商品说明 -->
+        <div class="describe_content">
+            <div class="goods-title">@Model.ProductName</div>
+            <p class="desc_con_p">
+                @Model.SeoDescription
+            </p>
+        </div>
+    </div>
+    <!-- end  -->
+    <!-- 商品详情 -->
+    <div class="goods_details">
+        <h3 class="goods_details_h3">商品详情</h3>
+        <div class="goods_1">
+            <p class="goods_details_p">
+                @Model.Description
+            </p>
+        </div>
+        <div class="goods_details_con">
+            @Model.Description
+        </div>
+    </div>
+    <!-- footer -->
+    <div class="footer">
+        <ul>
+            <li class="tf_15">
+                <a href="/m" class="tf_a1">
+                    <i class="iconfont whiteri not">&#xe615;</i>
+                    <span>首页</span>
+                </a>
+            </li>
+            <li class="tf_15">
+                <a href="/m/home/service" class="tf_a2">
+                    <i class="iconfont whiteri">&#xe651;</i>
+                    <span>客服</span>
+                </a>
+            </li>
+
+            <li class="tf_30" id="alone">
+                <a href="javascript:;" class="tf_a3" id="jionShop">
+                    <span class="s_jia">@activitySkuInfo.SalePrice</span>
+                    <span>单独购买</span>
+                </a>
+            </li>
+            <li class="tf_30" id="friend">
+                <a href="javascript:;" class="tf_a4" id="jionPay">
+                    <span class="s_jia">@activitySkuInfo.ActivityPrice</span>
+                    <span>拼团购买</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+   <div id="jion" class="">
+        <div class="jion_hide">
+
+        </div>
+        <div class="jion_content">
+            <div class="jion_head">
+                <ul class="jion_head_ul">
+                    <li>
+                        @if (Model.PicUrl != "")
+                        {
+                            <img src="@(WorkContext.ShopConfig.ImageCDN)@{@Model.PicUrl}?w=100&h=100&mode=pad" />
+                        }
+                        else
+                        {
+
+                            <img src="/Images/wutu.png" />
+
+                        }
+                    </li>
+                    <li class="jion_title">
+                        <p class="jion_pay">@Model.VipPrice</p>
+                        <p class="jion_caishi">@Model.SkuName</p>
+                    </li>
+                    <li>
+                        <div class="jion_hidebtn">
+                            <i class="iconfont">&#xe617;</i>
+                        </div>
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <div class="jion_scroll">
+
+                @foreach (Yitao.Core.ProductSpecInfo info in ViewData["ListProductSpecInfo"] as List<Yitao.Core.ProductSpecInfo>)
+                {
+                    <div class="jion_color">
+                        <h3>@info.SpecName</h3>
+                        <ul class="jion_color_ul">
+                            @foreach (Yitao.Core.ProductSpecValueInfo v in ViewData["ListProductSpecValueInfo"] as List<Yitao.Core.ProductSpecValueInfo>)
+                            {
+                                if (info.SpecId == v.SpecId)
+                                {
+                                    <li href="javascript:;" @if (Model.SpecProps.Contains(v.SpecValueId.ToString())) { @: class="fl weui-block selected-spec"
+                                        } else { @: class="fl weui-block"
+                                        }
+                                        data-id="@v.SpecValueId">
+                                        @v.SpecValue
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                }
+
+
+                <div class="jion_number">
+                    <h3>数量</h3>
+                    <div style="font-size: 0px;" class="weui_cell_ft">
+                        <a class="weui-number weui-number-sub needsclick">-</a>
+                        <input pattern="[0-9]*" class="weui-number-input" style="width: 50px;" value="1" data-min="1" data-max="999" data-step="1">
+                        <a class="weui-number weui-number-plus needsclick">+</a>
+                    </div>
+                </div>
+            </div>
+            <!-- 确定 -->
+            <div class="jion_yes">
+                <button>确定</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="Goding">
+        <img src="/Images/ding.png" alt="">
+    </div>
+    <style>
+        #Goding {
+            position: fixed;
+            z-index: 666;
+            right: 0.6rem;
+            bottom: 4.6rem;
+            background: rgba(0,0,0,0.1);
+            border-radius: 50%;
+        }
+
+            #Goding img {
+                display: block;
+                width: 40px;
+                height: 40px;
+            }
+    </style>
+	 <input type="hidden" name="SpecProps" id="SpecProps" value="" />
+	 
+	  <form id="goods_form" action="/m/order/GroupOrder" method="post">
+		 <input type="hidden" name="ItemId" id="ItemId" value="@activitySkuInfo.ItemId" />
+		 <input type="hidden" name="SkuId" id="SkuId" value="@Model.SkuId" />
+		 <input type="hidden" name="ProductId" id="ProductId" value="@Model.ProductId" />
+		 <input type="hidden" name="Quantity" id="Quantity" value="1" />
+		
+    </form>
+	
+
+    <script src="/Js/Mobile/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Js/Mobile/youshang.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Js/Mobile/swiper.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+
+        var goods = 0;
+        var jions = false;
+        var alone = false;
+
+        var SkuId = "@Model.SkuId";
+        var ProductId = "@Model.ProductId";
+		var ItemId = "@activitySkuInfo.ItemId";
+		var SpecProps = '';
+        var Quantity = $("#Quantity").val();
+	   var weixin = "@WebHelper.IsWeiXin()";
+        console.log(weixin);
+           $(function (){
+                    if($(".jion_color_ul li").length != 0){
+                        $($(".jion_color_ul li")[0]).addClass("crt");
+                      SpecProps =   $($(".jion_color_ul li")[0]).attr("data-id");
+                    }
+            });
+            //  导航滑动
+            $(".offset_ul li").click(function () {
+                $(".offset_ul li").removeClass('offsetTop');
+
+                if ($(this).index() == 0) {
+
+                     $(window).scrollTop($("#slide1").offset().top);
+                }
+                if ($(this).index() == 1) {
+                     $(window).scrollTop($(".goods_details").offset().top +3 );
+
+                }
+                if ($(this).index() == 2) {
+                        $(window).scrollTop($(".goods_details").offset().top +3);
+
+                }
+                $(this).addClass('offsetTop');
+
+            });
+            $("#Goding").on("click",function(){
+                $(window).scrollTop(0);
+            });
+            //  监听滚动
+            $(window).scroll(function(){
+
+                if ($(window).scrollTop() > $("#slide1").offset().top && $(window).scrollTop() < $(".goods_details").offset().top){
+                    $(".offset_ul li").removeClass('offsetTop');
+                    $( $(".offset_ul li")[0]).addClass("offsetTop");
+                }
+                if ($(window).scrollTop() > $(".goods_details").offset().top && $(window).scrollTop() < $(".goods_details").offset().top){
+                    $(".offset_ul li").removeClass('offsetTop');
+                    $( $(".offset_ul li")[1]).addClass("offsetTop");
+                }
+                if ($(window).scrollTop() > $(".goods_details").offset().top){
+                    $(".offset_ul li").removeClass('offsetTop');
+                    $( $(".offset_ul li")[2]).addClass("offsetTop");
+                }
+            });
+            getColor();
+			function shouyeShow(){
+                $("#sub-title").toggle();
+                setTimeout(function(){
+                    $("#sub-title").hide();
+                },3000);
+            };
+
+			setTimeout(function(){
+                getColor();
+            },200); 
+			 function getColor() {
+				var text = "";
+				if($($("body").find(".jion_color_ul li")).length != 0) {
+			      
+                        var dom =  $(".jion_color_ul li");                     
+                        text += $($(dom.parents(".jion_color")).find("h3")).text().trim()+" " ;
+                        text +=  $($(dom.parents(".jion_color")).find(".crt")).text()+" "; 
+                        SpecProps = $($(dom.parents(".jion_color")).find(".crt")).attr("data-id");
+				} else {
+					alone = true;
+				}
+				text += "数量:" + $(".weui-number-input").val();
+				$(".para2").text(text);
+				$("#Quantity").val($(".weui-number-input").val());
+				getMoney();
+			};
+
+			function getMoney() {
+				
+				$.ajax({
+					type: "post",
+					url: "/m/product/getactivityskuinfo",
+					data: {
+                        SkuId:SkuId,
+                        ProductId:ProductId,
+                        ItemId:ItemId,
+                        SpecProps:SpecProps,
+                        ActivityType:1
+					},
+					dataType: 'json',
+					success: function(rel) {
+                        console.log(rel);
+						if(rel.Code == 1) {
+							$("#VipPrice").val(rel.Data.ActivityPrice);
+							$("#SkuId").val(rel.Data.SkuId);
+                             
+							$(".jion_pay").text(rel.Data.ActivityPrice);
+							$(".jion_caishi").text(rel.Data.SkuName);
+						}
+					}
+				});
+			};
+			$(function() {
+				function upDownOperation(element) {
+					var _input = element.parent().find('input'),
+						_value = _input.val(),
+						_step = _input.attr('data-step') || 1;
+					element.hasClass('disabled') && element.removeClass('disabled');
+					if(element.hasClass('weui-number-plus')) {
+						var _new_value = parseInt(parseFloat(_value) + parseFloat(_step)),
+							_max = _input.attr('data-max') || false,
+							_down = element.parent().find('.weui-number-sub');
+						_down.hasClass('disabled') && _down.removeClass('disabled');
+						if(_max && _new_value >= _max) {
+							_new_value = _max;
+							element.addClass('disabled');
+						}
+					} else {
+						var _new_value = parseInt(parseFloat(_value) - parseFloat(_step)),
+							_min = _input.attr('data-min') || false,
+							_up = element.parent().find('.weui-number-plus');
+						_up.hasClass('disabled') && _up.removeClass('disabled');
+						if(_min && _new_value <= _min) {
+							_new_value = _min;
+							element.addClass('disabled');
+						}
+					}
+					_input.val(_new_value);
+                    getColor();
+				};
+				$('.weui-number-plus').click(function() {
+					upDownOperation($(this));
+				});
+				$('.weui-number-sub').click(function() {
+					upDownOperation($(this));
+				});
+				$(".being_userCon .go_pin").click(function() {
+					$(".partin").css({
+						'display': 'flex'
+					});
+				});
+				$(".partin .chahao").click(function() {
+					$(".partin").css({
+						'display': 'none'
+					});
+				});
+				$(".being_head").click(function() {
+					$(".fight").css({
+						'display': 'flex'
+					});
+				});
+				$(".fight .chahao").click(function() {
+					$(".fight").css({
+						'display': 'none'
+					});
+				});
+				/* 单独购买 */
+				$("body").on("click", "#alone", function() {
+	
+                        if(weixin){
+                            if($("#Uid").val() < 1){
+                                window.location.href = '/m/user/Bind';
+                             }else{
+                                  if(alone) {
+									  $("#Quantity").val($(".weui-number-input").val());
+									var url = "/m/product/detail?id=";
+									window.location.href = url + ProductId;
+                                    } else {
+                                            $("#jion").show();
+                                            $(".jion_content").removeClass('spec-menu-hide');
+                                            $(".jion_content").addClass('spec-menu-show');
+                                    }
+                               }
+                               
+                            
+                        }else{
+                             if($("#Uid").val() < 1){
+                                window.location.href = '/m/user/Bind';
+                             }else{
+                                  if(alone) {
+									    $("#Quantity").val($(".weui-number-input").val());
+                                    $("#goods_form").submit();
+                                    } else {
+                                            $("#jion").show();
+                                            $(".jion_content").removeClass('spec-menu-hide');
+                                            $(".jion_content").addClass('spec-menu-show');
+                                    }
+                               }
+                               
+                            
+                        }
+                    
+			
+
+				});
+				$(".jion_hide").click(function() {
+					$(".jion_content").removeClass('spec-menu-show');
+					$(".jion_content").addClass('spec-menu-hide');
+					setTimeout(function() {
+						$("#jion").hide();
+					}, 500);
+				});
+				$(".jion_hidebtn").click(function() {
+					$(".jion_content").removeClass('spec-menu-show');
+					$(".jion_content").addClass('spec-menu-hide');
+					setTimeout(function() {
+						$("#jion").hide();
+					}, 500);
+				});
+				/*  拼团购买   */
+				$("#friend").click(function() {
+                        if(weixin){
+                            if($("#Uid").val() < 1){
+                                window.location.href = '/m/user/Bind';
+                             }else{
+                                  if(alone) {
+									    $("#Quantity").val($(".weui-number-input").val());
+                                    $("#goods_form").submit();
+                                    } else {
+                                            $("#jion").show();
+                                            $(".jion_content").removeClass('spec-menu-hide');
+                                            $(".jion_content").addClass('spec-menu-show');
+                                    }
+                               }
+                               
+                            
+                        }else{
+                             if($("#Uid").val() < 1){
+                                window.location.href = '/m/user/Bind';
+                             }else{
+                                  if(alone) {
+									    $("#Quantity").val($(".weui-number-input").val());
+                                    $("#goods_form").submit();
+                                    } else {
+                                            $("#jion").show();
+                                            $(".jion_content").removeClass('spec-menu-hide');
+                                            $(".jion_content").addClass('spec-menu-show');
+                                    }
+                               }
+                               
+                            
+                        }
+                    
+				});
+				$(".para").click(function() {
+					$("#jion").show();
+					$(".jion_content").removeClass('spec-menu-hide');
+					$(".jion_content").addClass('spec-menu-show');
+				});
+				$($(".tf_15")[0]).click(function() {
+
+						var Status = 0;
+						if($($(this).find('i')).hasClass('not')) {
+							$($(this).find('i')).removeClass('not');
+							$($(this).find('i')).addClass('yes');
+							Status = 0;
+						} else {
+							$($(this).find('i')).removeClass('yes');
+							$($(this).find('i')).addClass('not');
+							Status = 1;
+						}
+						$.ajax({
+							type: "post",
+							url: "Favorite",
+							async: true,
+							data: {
+								SkuId: SkuId,
+								Status: Status
+							},
+							dataType: "json",
+							success: function(rel) {}
+						});
+
+				});
+				$(".all_show_ul img").click(function() {
+					if($(this).hasClass('down_img')) {
+						$(".all_biao").css({
+							'height': 'auto'
+						});
+						$(this).removeClass('down_img');
+						$(this).addClass('upimg');
+					} else {
+						$(".all_biao").css({
+							'height': '4rem'
+						});
+						$(this).addClass('down_img');
+						$(this).removeClass('upimg');
+					}
+				});
+				$(".comh_a").click(function() {
+					$("#evaluate").show();
+				});
+				$(".hide_eva").click(function() {
+					$("#evaluate").hide();
+				});
+				$('#slide1').swipeSlide({
+					autoSwipe: true,
+					speed: 3000,
+					continuousScroll: true,
+					transitionType: 'cubic-bezier(0.22, 0.69, 0.72, 0.88)',
+					lazyLoad: true,
+					firstCallback: function(i, sum, me) {
+						me.find('.dot').children().first().addClass('cur');
+						$(".corner1").text(i + 1);
+						$(".corner2").text(sum);
+					},
+					callback: function(i, sum, me) {
+						me.find('.dot').children().eq(i).addClass('cur').siblings().removeClass('cur');
+						$(".corner1").text(i + 1);
+						$(".corner2").text(sum);
+					}
+				});
+				$(".jion_color_ul").on("click", "li", function() {
+					$($($(this).parents(".jion_color_ul")).find("li")).removeClass("crt");
+					$(this).addClass("crt");
+					getColor();
+				});
+				$(".jion_yes").on("click", function() {
+                       if(weixin){
+                            if($("#Uid").val() < 1){
+                                window.location.href = '/m/user/Bind';
+                             }else{
+                                  if(alone) {
+									    $("#Quantity").val($(".weui-number-input").val());
+                                    $("#goods_form").submit();
+                                    } else {
+                                            $("#jion").show();
+                                            $(".jion_content").removeClass('spec-menu-hide');
+                                            $(".jion_content").addClass('spec-menu-show');
+                                    }
+                               }
+                               
+                            
+                        }else{
+                             if($("#Uid").val() < 1){
+                                window.location.href = '/m/user/Bind';
+                             }else{
+                                  if(alone) {
+									    $("#Quantity").val($(".weui-number-input").val());
+                                    $("#goods_form").submit();
+                                    } else {
+                                            $("#jion").show();
+                                            $(".jion_content").removeClass('spec-menu-hide');
+                                            $(".jion_content").addClass('spec-menu-show');
+                                    }
+                               }
+                               
+                            
+                        }
+
+			
+			});
+			$('body').ready(function() {
+				$("#alone").removeClass("disableds");
+				$("#friend").removeClass("disableds");
+			});
+			function gerenShow(){
+				$("#sub-title").show();
+				setTimeout(function(){
+				$("#sub-title").hide();
+				},3000);
+			};
+
+    </script>
+
+</body>
+</html>
+

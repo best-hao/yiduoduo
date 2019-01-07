@@ -1,0 +1,625 @@
+﻿@{
+    Layout = null;
+    Yitao.Core.ShipAddressInfo shipAddressInfo = ViewData["MyAddress"] as Yitao.Core.ShipAddressInfo;
+    Yitao.Core.ProductInfo productInfo = ViewData["ProductInfo"] as Yitao.Core.ProductInfo; Yitao.Core.ProductSkuInfo productSkuInfo = ViewData["ProductSkuInfo"] as Yitao.Core.ProductSkuInfo; 
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>提交订单-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="/Css/mobile/weui.css" />
+    <link rel="stylesheet" href="/Css/mobile/weui2.css" />
+    <link rel="stylesheet" href="/Css/mobile/intejiesuan.css" />
+    <script type="text/javascript" src="/Js/mobile/zepto.min.js"></script>
+</head>
+
+<body>
+  <form action="" method="post">
+          <input type="hidden" id="IsCart" value="@ViewData["IsCart"]">
+          <header>
+		<i class="iconfont back" onclick="history.back()">&#xe647;</i>
+			<h3>拼团结算</h3>
+		</header>
+
+		<div class="content">
+			<div id="J_Tab" class="m-tab">
+				<ul class="tab-nav">
+					<li class="tab-nav-item tab-active">
+						<a href="javascript:;">快递</a>
+					</li>
+					<li class="tab-nav-item">
+						<a href="javascript:;">自提</a>
+					</li>
+
+				</ul>
+				<div class="tab-panel">
+					<div class="tab-panel-item tab-active">
+
+						<!-- 地址信息 -->
+						<div class="map_contnt" id="map1">
+                             @{ if (shipAddressInfo != null)
+                            {
+                                <div class="map_title cell-arrow">
+
+                                    <p class="map_user">
+                                        <span id="map_name">@shipAddressInfo.Consignee</span>
+                                        <span id="map_phon">@shipAddressInfo.Mobile @shipAddressInfo.Phone</span>
+                                    </p>
+                                    <p class="map_goods">
+                                        <span id="map_map" data-AddressId="" data-Province="" data-City="" data-County="" data-Town="">@shipAddressInfo.ZoneName @shipAddressInfo.Address</span>
+                                    </p>
+                                </div>
+                            }
+                            else
+                            {
+                                <!--  当没有地址的时候 -->
+                                <a id="no_more" style="display:block">去选择地址</a>
+                            } }
+							
+
+						</div>
+						<!--end-->
+						<!--店铺订单-->
+
+					</div>
+					<div class="tab-panel-item">
+						<!--表单-->
+					 <div class="m-cell">
+                        <div class="cell-item">
+                            <div class="cell-left">收货人：</div>
+                            <div class="cell-right"><input type="text" id="Consignee2" value="@WorkContext.UserInfo.UserName" class="cell-input" placeholder="收货人" autocomplete="off"></div>
+                        </div>
+
+                        <div class="cell-item">
+                            <div class="cell-left">联系电话：</div>
+                            <div class="cell-right"><input type="number" id="Mobile2" value="@WorkContext.UserInfo.Mobile" pattern="[0-9]*" class="cell-input" placeholder="请输入手机号" autocomplete="off"></div>
+                        </div>
+
+                        <div class="cell-item">
+                            <div class="cell-left">收货地址：</div>
+                            <div class="cell-right cell-arrow">
+                                <input type="text" class="cell-input J_Address2" readonly id="S_Address2" data-Province="" data-City="" data-County="" data-Town="" value="" placeholder="请选择收货地址">
+                            </div>
+                        </div>
+                        <div class="cell-item">
+                            <div class="cell-left">详细地址:</div>
+                            <div class="cell-right">
+                                <input type="text" id="Address2" class="cell-input " placeholder="详细地址" autocomplete="off">
+                                <div id="searchResultPanel2" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;" class="searchResultPanel"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+						<!--end-->
+
+					</div>
+
+				</div>
+
+			</div>
+			<!-- tab end -->
+
+			<!-- 商品 -->
+              @foreach (Yitao.Core.CartItem info in ViewData["CartItemList"] as List
+            <Yitao.Core.CartItem>)
+            {
+			<article class="m-list list-theme4" id="Article">
+				<input type="hidden" class="SkuId" value="23359">
+				<input type="hidden" class="ProductId" value="23252">
+
+				<div class="list_items_con">
+
+					<div class="list-item">
+						<div class="list-img">
+                         @if (info.ImgUrl.Length > 0)
+                                {
+                                    <img src="@(WorkContext.ShopConfig.ImageCDN)/@{@info.ImgUrl}?w=160&h=160&mode=pad"> }
+                                else
+                                {
+                                   <img src="/Images/wutu.png">}
+
+							 </div>
+						<div class="list-mes">
+							<h3 class="list-title">@info.ProductName</h3>
+							<div class="list-mes-item">
+								<span>@info.SkuName</span>
+							</div>
+
+							<div class="list-mes_right">
+								
+							 <div class="price">￥<span class="list_price"> @info.StockVipPrice.ToString("#0") </span></div>
+                             <div class="number">x<span class="list_number"> @info.Quantity </span></div>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+			</article>
+            }
+			<!--end-->
+			
+			<div class="cell-item Service_price textarea_con">
+					<div class="cell-left">商品留言：</div>
+					<div class="cell-right">
+						<input name="message[]" class="textarea" maxlength="50" placeholder="在这里给店家留言">
+					</div>
+			</div>
+			
+			<!--  -->
+			<ul class="ct-list order_total_ul">
+
+					<li class="order_total_li">
+					
+
+					
+						<div class="sub_con">
+							<span class="total-text">可用积分 <label class="total jifen">@WorkContext.UserInfo.UserScore</label></span>
+							
+
+						</div>
+					
+					</li>
+					<li>
+						<div class="subtotal">
+							<div class="sub_con">
+								<span class="total-text">商品价格</span>
+								<em class="total" id="goods_tags">0.00</em>
+							</div>
+							<div class="sub_con">
+								<span class="total-text">优惠金额</span>
+								<em class="total" id="goods_tags1">0.00</em>
+							</div>
+							<div class="sub_con">
+								
+								<em class="zongjia"><span class="total" id="zongjiage">0.00</span></em>
+							</div>
+
+						</div>
+					</li>
+				</ul>
+			
+			
+			<!--end-->
+			<div class="payment-bar">
+
+				<input type="button" class="settlement" id="settlement" disabled="disabled" value="提交订单">
+				<div class="paytot">
+					<span class="total-text">应付金额：</span>
+					<strong class="price_total"><span id="amount_formated">0.00</span></strong>
+				</div>
+
+			</div>
+
+		</div>
+    </form>
+		
+		<!-- 选择地址 -->
+		<div class="" id="address_chioce">
+				<div class="m-navbar">
+					<span class="navbar-item select_back" >
+						<i class="iconfont back">&#xe647;</i>
+					</span>
+					<div class="navbar-center">
+						<span class="navbar-title">收货地址</span>
+					</div>
+					<span id="address_remove">删除地址</span>
+				</div>
+				<div class="contents">
+					<div class="add_content">
+						<ul class="cont_ul" id="adddress_list">
+							<li class="con_li">
+
+								<div class="con_left">
+									<div class="con_top"><span class="con_name">佘坤</span><span class="con_phon">18629364654</span></div>
+									<div class="con_down">陕西省西安市未央区凤城十二路</div>
+								</div>
+								<div class="con_right"><img class="con_img" src="/Images/mobile/goods/right.png" alt=""></div>
+							</li>
+
+						</ul>
+
+					</div>
+					<div type="button" class="addMap" id="addMap">添加新地址</div>
+				</div>
+
+			</div>
+		<!--end-->
+		
+		
+		<!-- 添加地址-->
+		<div class="" id="select_add">
+				<div class="select_add_ab">
+					<div class="select_add_re">
+
+						<div class="m-navbar">
+							
+						
+						<i class="iconfont back" >&#xe647;</i>
+					</span>
+							
+							<div class="navbar-center">
+								<span class="navbar-title">地址管理</span>
+							</div>
+						</div>
+
+						<div class="m-cell">
+							<div class="cell-item">
+								<div class="cell-left">收货人姓名:</div>
+								<div class="cell-right">
+									<input type="text" placeholder="收货人姓名" name="" value="" class="cell_input" id="Consignee_Name">
+
+								</div>
+							</div>
+							<div class="cell-item">
+								<div class="cell-left">联系方式:</div>
+								<div class="cell-right">
+									<input type="text" placeholder="联系方式" name="" value="" class="cell_input" id="Consignee_Phone">
+								</div>
+							</div>
+
+							<!--  选择地址  dom 样式之后再做修改 -->
+
+							<div class="cell-item">
+								<div class="cell-left">选择省市:</div>
+								<div class="cell-right cell-arrow">
+									<input type="text" class="cell-input J_Address2" data-province="" data-city="" data-county="" data-town="" readonly="" id="S_Address3" value="" placeholder="请选择收货地址">
+								</div>
+
+							</div>
+
+							<div class="cell-item textarea_cell">
+							
+								<textarea name="" rows="" cols="" id="Consignee_Map" placeholder="详细地址"></textarea>
+								
+							</div>
+
+							<div class="cell-item">
+								<span class="total-text">设置默认地址</span>
+								<div class="weui_cell_ft moren">
+									<input class="weui_switch" type="checkbox" id="morenMap">
+								</div>
+							</div>
+
+							<div class="hideBtn">保存</div>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+		
+		
+		
+		<!--end-->
+		
+		
+		<!-- 城市四联动 -->
+		<div class="m-cityselect brouce-out" id="Show_City_Four">
+				<div class="cityselect-header">
+					<p class="cityselect-title">所在地区</p>
+					<div class="cityselect-nav">
+						<a href="javascript:;" class="crt">北京市</a>
+						<a href="javascript:;" class=""></a>
+						<a href="javascript:;" class=""></a>
+						<a href="javascript:;" class=""></a>
+					</div>
+				</div>
+				<!--cityselect-move-animate cityselect-prev-->
+				<ul class="cityselect-content cityselect-move-animate cityselect-prev" id="S_City_Show">
+					<li class="cityselect-item">
+						<div class="cityselect-item-box" id="Province_chioce">
+							<a class="crt" href="javascript:;" data-province="11"><span>北京市</span></a>
+							<a class="" href="javascript:;" data-province="12"><span>天津市</span></a>
+							<a class="" href="javascript:;" data-province="13"><span>河北省</span></a>
+							<a class="" href="javascript:;" data-province="14"><span>山西省</span></a>
+							<a class="" href="javascript:;" data-province="15"><span>内蒙古自治区</span></a>
+							<a class="" href="javascript:;" data-province="21"><span>辽宁省</span></a>
+							<a class="" href="javascript:;" data-province="22"><span>吉林省</span></a>
+							<a class="" href="javascript:;" data-province="23"><span>黑龙江省</span></a>
+							<a class="" href="javascript:;" data-province="31"><span>上海市</span></a>
+							<a class="" href="javascript:;" data-province="32"><span>江苏省</span></a>
+							<a class="" href="javascript:;" data-province="33"><span>浙江省</span></a>
+							<a class="" href="javascript:;" data-province="34"><span>安徽省</span></a>
+							<a class="" href="javascript:;" data-province="35"><span>福建省</span></a>
+							<a class="" href="javascript:;" data-province="36"><span>江西省</span></a>
+							<a class="" href="javascript:;" data-province="37"><span>山东省</span></a>
+							<a class="" href="javascript:;" data-province="41"><span>河南省</span></a>
+							<a class="" href="javascript:;" data-province="42"><span>湖北省</span></a>
+							<a class="" href="javascript:;" data-province="43"><span>湖南省</span></a>
+							<a class="" href="javascript:;" data-province="44"><span>广东省</span></a>
+							<a class="" href="javascript:;" data-province="45"><span>广西壮族自治区</span></a>
+							<a class="" href="javascript:;" data-province="46"><span>海南省</span></a>
+							<a class="" href="javascript:;" data-province="50"><span>重庆市</span></a>
+							<a class="" href="javascript:;" data-province="51"><span>四川省</span></a>
+							<a class="" href="javascript:;" data-province="52"><span>贵州省</span></a>
+							<a class="" href="javascript:;" data-province="53"><span>云南省</span></a>
+							<a class="" href="javascript:;" data-province="54"><span>西藏自治区</span></a>
+							<a class="" href="javascript:;" data-province="61"><span>陕西省</span></a>
+							<a class="" href="javascript:;" data-province="62"><span>甘肃省</span></a>
+							<a class="" href="javascript:;" data-province="63"><span>青海省</span></a>
+							<a class="" href="javascript:;" data-province="64"><span>宁夏回族自治区</span></a>
+							<a class="" href="javascript:;" data-province="65"><span>新疆维吾尔自治区</span></a>
+							<a class="" href="javascript:;" data-province="71"><span>台湾省</span></a>
+							<a class="" href="javascript:;" data-province="81"><span>香港特别行政区</span></a>
+							<a class="" href="javascript:;" data-province="82"><span>澳门特别行政区</span></a>
+						</div>
+					</li>
+					<li class="cityselect-item">
+						<div class="cityselect-item-box" id="City_chioce">
+						</div>
+					</li>
+					<li class="cityselect-item">
+						<div class="cityselect-item-box" id="County_chioce">
+						</div>
+					</li>
+					<li class="cityselect-item">
+						<div class="cityselect-item-box" id="Town_chioce">
+						</div>
+					</li>
+				</ul>
+			</div>
+		
+		  
+		<!--end-->
+	  
+        <script type="text/javascript">
+        var bianji = false;
+        var shanchu = false;
+			$(".tab-nav").on("click", ".tab-nav-item", function() {
+				$(".tab-nav-item").removeClass("tab-active");
+				$(this).addClass("tab-active");
+				$(".tab-panel-item").removeClass("tab-active");
+				$($(".tab-panel-item")[$(this).index()]).addClass("tab-active")
+
+			});
+
+            $("#select_add").on("click",".back",function(){
+                    $("#address_back").hide();
+            });
+            $("#address_chioce").on("click",".back",function(){
+                     $("#address_chioce").hide();
+            });
+            //  保存地址
+            $("body").on("click",".hideBtn",function(){
+                  //  保存
+        if (testing()) {
+            //  保存地址
+            var name = $("#Consignee_Name").val();
+            var phone = $("#Consignee_Phone").val();
+            //
+            var map1 = $("#S_Address3").val();
+            var map2 = $("#Consignee_Map").val();
+            var dom = $($("#adddress_list").find(".baocun"));
+            var addressId = $($(dom).find(".con_right")).attr('data-AddressId');
+
+            if (addressId == undefined || addressId == null) {
+                addressId = "";
+            } else {
+                YDUI.dialog.alert("地址错误");
+            };
+            var IsDefault = 0;
+            if ($("#morenMap").prop("checked")) {
+                IsDefault = 1;
+            } else {
+                IsDefault = 0;
+            };
+            var dete = {
+                City: $("#S_Address3").attr("data-City"),
+                County: $("#S_Address3").attr("data-County"),
+                Town: $("#S_Address3").attr("data-Town")
+            };
+
+            //  AddressId   Mobile  Address  Consignee  Province  City  County  Town
+            $.post('AddressSave', {
+                AddressId: addressId,
+                Mobile: phone,
+                Address: map1 + "__" + map2,
+                Consignee: name,
+                IsDefault: IsDefault,
+                Province: $("#S_Address3").attr("data-Province"),
+                City: $("#S_Address3").attr("data-City"),
+                County: $("#S_Address3").attr("data-County"),
+                Town: $("#S_Address3").attr("data-Town"),
+            }, function (datas) {
+                console.log(datas);
+                console.log("这里是保存地址的data");
+                //                  AddressSave
+                //   重新获取地址列表
+                $.get('Address', {}, function (data) {
+
+                    var data = data.Data;
+                    var html = "";
+                    for (var i = 0; i < data.length; i++) {
+                        var map3 = data[i].Address.split("__")[0];
+                        var map4 = data[i].Address.split("__")[1];
+
+                        if (data[i].IsDefault == 1) {
+                            html += '<li class="con_li" style="border:1px solid #f13030;"><div class="con_left" onclick ="addchiceShow(this)">';
+                            html += '<div class="con_top"><span class="con_name">' + data[i].Consignee + '</span><span class="con_phon">' + data[i].Mobile;
+                            html += '</span></div><div class="con_down" data-AddressId ="' + data[i].AddressId + '"> <span class="shengshi" data-zone="' + data[i].ZoneId + '">';
+                            html += map3 + '</span><span class="xiangxi">' + map4 + '</span></div></div><div class="con_right" onclick="conRight(this)"';
+                            html += 'data-AddressId ="' + data[i].AddressId + '"data-Province ="' + data[i].Province + '"' + 'data-City ="' + data[i].City + '"' + 'data-County ="' + data[i].County + '"' + 'data-Town ="' + data[i].Town + '"' + 'data-IsDefault="' + data[i].IsDefault + '"><img class="con_img" src="/Images/mobile/goods/right.png" alt=""></div></li>';
+                        } else {
+                            html += '<li class="con_li"><div class="con_left" onclick ="addchiceShow(this)">';
+                            html += '<div class="con_top"><span class="con_name">' + data[i].Consignee + '</span><span class="con_phon">' + data[i].Mobile;
+                            html += '</span></div><div class="con_down" data-AddressId ="' + data[i].AddressId + '"> <span class="shengshi" data-zone="' + data[i].ZoneId + '">';
+                            html += map3 + '</span><span class="xiangxi">' + map4 + '</span></div></div><div class="con_right" onclick="conRight(this)"';
+                            html += 'data-AddressId ="' + data[i].AddressId + '"data-Province ="' + data[i].Province + '"' + 'data-City ="' + data[i].City + '"' + 'data-County ="' + data[i].County + '"' + 'data-Town ="' + data[i].Town + '"' + 'data-IsDefault="' + data[i].IsDefault + '"><img class="con_img" src="/Images/mobile/goods/right.png" alt=""></div></li>';
+                        };
+                    };
+                            $($("#adddress_list").find(".con_li")).remove();
+                            $("#adddress_list").append(html);
+                            $("#select_add").hide();
+                            shanchu = false;
+                            bianji = false;
+                                $("#address_remove").text("删除地址");
+                            }, 'JSON');
+                        }, 'JSON');
+                    } else {
+                        YDUI.dialog.alert("手机号不正确");
+                    };
+            });
+
+
+			//   这里是佘坤改的城市4联动
+			var dizhiguanli = false;
+			$("#S_Address3").on('click', function(event) {
+
+				dizhiguanli = true;
+				var html = '<div class="mask-black"></div>';
+				$('body').append(html);
+				$("#Show_City_Four").removeClass("brouce-out");
+				$("#Show_City_Four").addClass("brouce-in");
+
+			});
+			$("body").on("click", ".mask-black", function() {
+
+				$(this).remove();
+				$("#Show_City_Four").removeClass("brouce-in");
+				$("#Show_City_Four").addClass("brouce-out");
+
+			});
+			//  选择省   加载市区
+			$("#Province_chioce").on("click", "a", function() {
+				var dom = $(this).parents("#Province_chioce");
+				$($(dom).find("a")).removeClass('crt');
+				$(this).addClass('crt');
+				var Province = $(this).attr("data-province");
+				$($(".cityselect-nav").find("a")).removeClass('crt');
+				$($($(".cityselect-nav").find("a"))[0]).addClass('crt');
+				$($($(".cityselect-nav").find("a"))[0]).text($($(this).find('span')).text().trim());
+				console.log(Province);
+				//				/m/Order/GetCityList?Province=61
+				$.get('/m/Order/GetCityList', {
+					'Province': Province
+				}, function(data) {
+					console.log(data);
+					var dete = data.Data;
+					var html1 = "";
+					for(var i = 0; i < dete.length; i++) {
+						html1 += '<a class="" href="javascript:;" data-City="' + dete[i].RegionId + '"><span>';
+						html1 += dete[i].RegionName + '</span></a>';
+					}
+					$($("#City_chioce").find("a")).remove();
+					$("#City_chioce").append(html1);
+				}, 'JSON');
+			});
+			//  选择市  加载区
+			$("#City_chioce").on('click', 'a', function() {
+				var dom = $(this).parents("#City_chioce");
+				$($(dom).find("a")).removeClass('crt');
+				$(this).addClass('crt');
+				$($(".cityselect-nav").find("a")).removeClass('crt');
+				$($($(".cityselect-nav").find("a"))[1]).addClass('crt');
+				$($($(".cityselect-nav").find("a"))[1]).text($($(this).find('span')).text().trim());
+				var City = $(this).attr("data-City");
+				console.log(City);
+				$.get('/m/Order/GetCountyList', {
+					'City': City
+				}, function(data) {
+					console.log(data);
+					var dete = data.Data;
+					var html1 = "";
+					for(var i = 0; i < dete.length; i++) {
+						html1 += '<a class="" href="javascript:;" data-County="' + dete[i].RegionId + '"><span>';
+						html1 += dete[i].RegionName + '</span></a>';
+					};
+					$($("#County_chioce").find("a")).remove();
+					$("#County_chioce").append(html1);
+					$("#S_City_Show").removeClass('cityselect-prev');
+					$("#S_City_Show").addClass('cityselect-next');
+				}, 'JSON');
+			});
+			//  选择区  加载城镇
+			$("#County_chioce").on('click', 'a', function() {
+				var dom = $(this).parents("#County_chioce");
+				$($(dom).find("a")).removeClass('crt');
+				$(this).addClass('crt');
+				var County = $(this).attr("data-County");
+				console.log(County);
+				$($(".cityselect-nav").find("a")).removeClass('crt');
+				$($($(".cityselect-nav").find("a"))[2]).addClass('crt');
+				$($($(".cityselect-nav").find("a"))[2]).text($($(this).find('span')).text().trim());
+				$.get('/m/Order/GetTownList', {
+					'County': County
+				}, function(data) {
+					console.log(data);
+					var dete = data.Data;
+					var html1 = "";
+					for(var i = 0; i < dete.length; i++) {
+						html1 += '<a class="" href="javascript:;" data-Town="' + dete[i].RegionId + '"><span>';
+						html1 += dete[i].RegionName + '</span></a>'
+					}
+					$($("#Town_chioce").find("a")).remove();
+					$("#Town_chioce").append(html1);
+					$("#S_City_Show").removeClass('cityselect-next');
+					$("#S_City_Show").addClass('cityselect-end');
+				}, 'JSON');
+			});
+			//  选择镇 
+			$("#Town_chioce").on('click', 'a', function() {
+				var dom = $(this).parents("#Town_chioce");
+				$($(dom).find("a")).removeClass('crt');
+				$(this).addClass('crt');
+				var County = $(this).attr("data-Town");
+				$($(".cityselect-nav").find("a")).removeClass('crt');
+				$($($(".cityselect-nav").find("a"))[3]).addClass('crt');
+				$($($(".cityselect-nav").find("a"))[3]).text($($(this).find('span')).text().trim());
+				console.log(County);
+				$("#Show_City_Four").slideUp();
+				$(".mask-black").remove();
+
+				if(dizhiguanli) {
+					$("#S_Address3").val($($(".cityselect-nav a")[0]).text() + '-' + $($(".cityselect-nav a")[1]).text() + '-' + $($(".cityselect-nav a")[2]).text() + '-' + $($(".cityselect-nav a")[3]).text());
+				} else {
+					$("#S_Address2").val($($(".cityselect-nav a")[0]).text() + '-' + $($(".cityselect-nav a")[1]).text() + '-' + $($(".cityselect-nav a")[2]).text() + '-' + $($(".cityselect-nav a")[3]).text());
+
+				};
+
+			});
+			// 头部
+			$(".cityselect-nav").on('click', 'a', function() {
+				$(".cityselect-nav a").removeClass('crt');
+				$(this).addClass("crt");
+				if($(this).index() == 0) {
+					$("#S_City_Show").removeClass('cityselect-next');
+					$("#S_City_Show").removeClass('cityselect-end');
+					$("#S_City_Show").addClass('cityselect-prev');
+
+				};
+				if($(this).index() == 1) {
+					$("#S_City_Show").removeClass('cityselect-next');
+					$("#S_City_Show").removeClass('cityselect-end');
+					$("#S_City_Show").addClass('cityselect-prev');
+				};
+				if($(this).index() == 2) {
+
+					$("#S_City_Show").removeClass('cityselect-end');
+					$("#S_City_Show").removeClass('cityselect-prev');
+					$("#S_City_Show").addClass('cityselect-next');
+				};
+				if($(this).index() == 3) {
+					$("#S_City_Show").removeClass('cityselect-next');
+
+					$("#S_City_Show").removeClass('cityselect-prev');
+					$("#S_City_Show").addClass('cityselect-end');
+				};
+
+			});
+		</script>
+
+
+
+</body>
+
+</html>

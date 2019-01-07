@@ -1,0 +1,434 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>订单量与客单价</title>
+	
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/weui.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/weui2.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/OA.css" />
+		<script src="/Js/Mobile/boss/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.head_right {
+				position: absolute;
+				right: 0;
+				top: 0;
+				padding: 0 .6rem;
+				font-size: .8rem;
+				color: #666666;
+			}
+			
+			.chioce {
+				background: #FFFFFF;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<header>
+
+			<i class="iconfont back">&#xe733;</i>
+			<h3>订单量与客单价</h3>
+
+		</header>
+		<div class="content">
+			<div class="chioce">
+				<div class="weui_cell">
+					<div class="weui_cell_hd"><label for="" class="weui_label">选择日期</label></div>
+					<div class="weui_cell_bd weui_cell_primary">
+						<input class="weui_input" type="date" value="">
+					</div>
+				</div>
+				<div class="weui_cell">
+					<div class="weui_cell_hd"><label class="weui_label">选择店铺</label></div>
+					<div class="weui_cell_bd weui_cell_primary">
+						<input class="weui_input" placeholder="选择店铺">
+					</div>
+				</div>
+			</div>
+
+			<div class="hot_goods">
+
+				<div class="boss_titles">
+					<h3 class="boss_title">订单量</h3>
+				</div>
+				<div class="" id="main3" style="height: 400px;">
+
+				</div>
+
+			</div>
+
+			<div class="hot_goods">
+
+				<div class="" id="main4" style="height: 400px;">
+
+				</div>
+
+			</div>
+				<div class="hot_goods">
+
+				<div class="" id="main5" style="height: 400px;">
+
+				</div>
+
+			</div>
+			<div class="hot_goods">
+				<div class="boss_titles">
+					<h3 class="boss_title">热销单品</h3>
+				</div>
+				<table class="je-table">
+					<thead>
+						<tr>
+							<th>商品</th>
+							<th>零售价</th>
+							<th>成本价</th>
+							<th>销售数量</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>小米手机</td>
+							<td>1522</td>
+							<td>1500</td>
+							<td>
+								56
+							</td>
+
+						</tr>
+						<tr>
+							<td>小米手机</td>
+							<td>1522</td>
+							<td>1500</td>
+							<td>
+							4
+							</td>
+
+						</tr>
+					</tbody>
+				</table>
+				<div class="boss_time">
+					<a href="javascript:;">加载更多</a>
+				</div>
+			</div>
+			
+		</div>
+
+		<script src="/Js/Mobile/boss/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/Mobile/boss/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var myChart3 = echarts.init(document.getElementById('main3'));
+
+			// 指定图表的配置项和数据
+			var option = {
+				//  title: {
+				//      text: '折线图堆叠'
+				//  },
+				tooltip: {
+					trigger: 'axis'
+				},
+				legend: {
+					data: ['订单量', '客单价']
+				},
+				grid: {
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					containLabel: true
+				},
+				toolbox: {
+					feature: {
+						saveAsImage: {}
+					}
+				},
+				xAxis: {
+					type: 'category',
+					boundaryGap: false,
+					data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+				},
+				yAxis: {
+					type: 'value'
+				},
+				series: [{
+						name: '订单量',
+						type: 'line',
+						stack: '总量',
+						data: [120, 132, 101, 134, 90, 230, 210]
+					},
+					{
+						name: '客单价',
+						type: 'line',
+						stack: '总量',
+						data: [220, 182, 191, 234, 290, 330, 310]
+					}
+				]
+			};
+
+			// 使用刚指定的配置项和数据显示图表。
+			myChart3.setOption(option);
+
+			var myChart4 = echarts.init(document.getElementById('main4'));
+			var option = {
+				title: {
+//					text: '天气情况统计',
+					subtext: '订单量',
+					left: 'center',
+				
+				},
+//				tooltip: {
+//					trigger: 'item',
+//					formatter: "{a} <br/>{b} : {c} ({d}%)"
+//				},
+				legend: {
+					// orient: 'vertical',
+					// top: 'middle',
+					bottom: 10,
+					left: 'center',
+					data: ['西凉', '益州', '兖州', '荆州', '幽州']
+				},
+				series: [{
+					type: 'pie',
+					radius: '65%',
+					center: ['50%', '50%'],
+					selectedMode: 'single',
+					data: [{
+							value: 1548,
+							name: '幽州',
+							label: {
+								normal: {
+
+									backgroundColor: '#eee',
+									borderColor: '#777',
+
+									borderRadius: 4,
+									rich: {
+										title: {
+											color: '#eee',
+											align: 'center'
+										},
+										abg: {
+											backgroundColor: '#333',
+											width: '100%',
+											align: 'right',
+											height: 25,
+											borderRadius: [4, 4, 0, 0]
+										},
+										Sunny: {
+											height: 30,
+											align: 'left',
+
+										},
+										Cloudy: {
+											height: 30,
+											align: 'left',
+								
+										},
+										Showers: {
+											height: 30,
+											align: 'left',
+						
+										},
+										weatherHead: {
+											color: '#333',
+											height: 24,
+											align: 'left'
+										},
+										hr: {
+											borderColor: '#777',
+											width: '100%',
+											borderWidth: 0.5,
+											height: 0
+										},
+										value: {
+											width: 20,
+											padding: [0, 20, 0, 30],
+											align: 'left'
+										},
+										valueHead: {
+											color: '#333',
+											width: 20,
+											padding: [0, 20, 0, 30],
+											align: 'center'
+										},
+										rate: {
+											width: 40,
+											align: 'right',
+											padding: [0, 10, 0, 0]
+										},
+										rateHead: {
+											color: '#333',
+											width: 40,
+											align: 'center',
+											padding: [0, 10, 0, 0]
+										}
+									}
+								}
+							}
+						},
+						{
+							value: 535,
+							name: '荆州'
+						},
+						{
+							value: 510,
+							name: '兖州'
+						},
+						{
+							value: 634,
+							name: '益州'
+						},
+						{
+							value: 735,
+							name: '西凉'
+						}
+					],
+					itemStyle: {
+						emphasis: {
+							shadowBlur: 10,
+							shadowOffsetX: 0,
+							shadowColor: 'rgba(0, 0, 0, 0.5)'
+						}
+					}
+				}]
+			};
+			myChart4.setOption(option);
+			var myChart5 = echarts.init(document.getElementById('main5'));
+			var option = {
+				title: {
+//					text: '天气情况统计',
+					subtext: '订单构成',
+					left: 'center',
+				
+				},
+//				tooltip: {
+//					trigger: 'item',
+//					formatter: "{a} <br/>{b} : {c} ({d}%)"
+//				},
+				legend: {
+					// orient: 'vertical',
+					// top: 'middle',
+					bottom: 10,
+					left: 'center',
+					data: ['西凉', '益州', '兖州', '荆州', '幽州']
+				},
+				series: [{
+					type: 'pie',
+					radius: '65%',
+					center: ['50%', '50%'],
+					selectedMode: 'single',
+					data: [{
+							value: 1548,
+							name: '幽州',
+							label: {
+								normal: {
+
+									backgroundColor: '#eee',
+									borderColor: '#777',
+
+									borderRadius: 4,
+									rich: {
+										title: {
+											color: '#eee',
+											align: 'center'
+										},
+										abg: {
+											backgroundColor: '#333',
+											width: '100%',
+											align: 'right',
+											height: 25,
+											borderRadius: [4, 4, 0, 0]
+										},
+										Sunny: {
+											height: 30,
+											align: 'left',
+
+										},
+										Cloudy: {
+											height: 30,
+											align: 'left',
+								
+										},
+										Showers: {
+											height: 30,
+											align: 'left',
+						
+										},
+										weatherHead: {
+											color: '#333',
+											height: 24,
+											align: 'left'
+										},
+										hr: {
+											borderColor: '#777',
+											width: '100%',
+											borderWidth: 0.5,
+											height: 0
+										},
+										value: {
+											width: 20,
+											padding: [0, 20, 0, 30],
+											align: 'left'
+										},
+										valueHead: {
+											color: '#333',
+											width: 20,
+											padding: [0, 20, 0, 30],
+											align: 'center'
+										},
+										rate: {
+											width: 40,
+											align: 'right',
+											padding: [0, 10, 0, 0]
+										},
+										rateHead: {
+											color: '#333',
+											width: 40,
+											align: 'center',
+											padding: [0, 10, 0, 0]
+										}
+									}
+								}
+							}
+						},
+						{
+							value: 535,
+							name: '荆州'
+						},
+						{
+							value: 510,
+							name: '兖州'
+						},
+						{
+							value: 634,
+							name: '益州'
+						},
+						{
+							value: 735,
+							name: '西凉'
+						}
+					],
+					itemStyle: {
+						emphasis: {
+							shadowBlur: 10,
+							shadowOffsetX: 0,
+							shadowColor: 'rgba(0, 0, 0, 0.5)'
+						}
+					}
+				}]
+			};
+			myChart5.setOption(option);
+		</script>
+	</body>
+
+</html>

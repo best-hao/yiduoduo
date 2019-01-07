@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>砍价订单详情</title>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css"/>
+		<script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/icon/iconfont.js"></script>
+		<script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script> 
+		<style type="text/css">
+			.ell-1{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+			.ell-2{overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+			.color{color: #ff4800;}
+			.bg{background: #ff4800;}
+			.gary{color: #999;}
+			.common-header{position: relative; background: #fff;height: 0.8rem;line-height: 0.8rem;margin-bottom: 0.06rem; -moz-box-shadow:0px 2px 10px #d9d9d9; -webkit-box-shadow:0px 2px 10px #d9d9d9; box-shadow:0px 2px 10px #d9d9d9;}
+			.common-header .title{text-align: center;padding: 0 1rem;color: #ff4800;font-size: 0.3rem;}
+			.common-header .header-back{position: absolute;top: 0;left: 0;width: .6rem;text-align: center;}
+			.common-header .header-menu{position: absolute;top: 0;right: 0;width: .6rem;text-align: center;}
+			.shade{display: none; position: fixed;width: 7.5rem;height: 100%; top: 0;left: 50%;margin-left: -3.75rem;background: rgba(0,0,0,0.7);z-index: 100;}
+			.shade-mask{position: absolute;width: 100%;height: 100%; top: 0;left: 0;z-index: 101;}
+			.shade-content{position: absolute;bottom: 0;left: 0;height: 8rem;background: #fff;z-index: 102;}
+			.weui_dialog_hd{padding: 0;}
+			.weui_toast{padding: 0 15px;font-size: 0.32rem;}
+			.xsg-detail{width: 7.5rem;font-size: 0.28rem;margin: 0 auto;color: #333;font-family: "微软雅黑";}
+			.main{margin-bottom: 55px;}
+			.icon {
+	          /* 通过设置 font-size 来改变图标大小 */
+	          width: 1em; height: 1em;
+	          /* 图标和文字相邻时，垂直对齐 */
+	          vertical-align: -0.15em;
+	          /* 通过设置 color 来改变 SVG 的颜色/fill */
+	          fill: currentColor;
+	          /* path 和 stroke 溢出 viewBox 部分在 IE 下会显示
+	             normalize.css 中也包含这行 */
+	          overflow: hidden;
+	        }
+	        .wuliu{background: #FF4800;padding: 0.2rem;color: #fff;}
+	        .order-infos{padding: 0.2rem;background: #fff;}
+	        .weui-flex-item img{width: 2.6rem;margin: 0 auto;display: block;}
+	        .left-box{height: 1rem;margin: 0.25rem 0;padding-left: 0.5rem;}
+	        .status{height: 0.6rem;line-height: 0.6rem;font-size: 0.36rem;}
+	        .time-tips{height: 0.4rem;line-height: 0.4rem;}
+	        .weui_cells{margin-top: 0.2rem;}
+	        .weui_cell_hd .icon{font-size: 0.48rem;}
+	        .fs14{font-size:0.28rem;}
+	        .order-infos p{line-height: 0.58rem;}
+	        .weui_media_box.weui_media_appmsg {display: -webkit-box;-webkit-box-align: start;position: relative;z-index: 9;}
+	        .weui_media_box.weui_media_appmsg .weui_media_hd {width: 1.6rem;height: 1.6rem;margin-right: 0.3rem;}
+	        .weui_media_box .weui_media_title, .weui_media_box .weui_media_desc {color: #666;font-size: 0.28rem;}
+	        .weui_media_bd .weui_media_desc:last-child {margin-top: 0.4rem;overflow: hidden;line-height: 0.5rem;}
+	        .bargain-buy {display: inline-block;/* with: 1.6rem; */line-height: 0.5rem;/* background-color: #FF4800; */text-align: center;border-radius: 3px;overflow: hidden;color: #333;font-size: 0.26rem;z-index: 99;display: inline-block;float: right;}
+	        .bargain-buy span {color: #FF4800;}
+	        .weui_media_desc-1{width:7rem;margin:0 auto;height:0.58rem;padding:0.1rem 0;display: flex;justify-content: flex-start;line-height: 0.58rem;border-bottom: 1px solid #ccc;}
+	        .weuift:after {content: " ";display: inline-block;-webkit-transform: rotate(45deg);transform: rotate(45deg);height: 6px;width: 6px;border-width: 2px 2px 0 0;border-color: #c8c8cd;border-style: solid;position: relative;top: -2px;top: -1px;margin-left: .3em;}
+			.weuift{margin-left: 0.2rem;}
+			.gobuy{font-size: 0.28rem;margin-left: 0.2rem;}
+			.weui_media_box .weui_media_title{font-size: 0.28rem;}
+			#app{display:none;}
+			.get-goods-box {
+    text-align: right;
+}
+span.get-goods {
+    padding: 5px 10px;
+    margin-right: 10px;
+    background: #ff4800;
+    color: #fff;
+    border-radius: 3px;
+}
+		</style>
+		
+	</head>
+	<body>
+		<div id="app">
+			
+		
+		<div class="xsg-detail">
+			<div class="common-header"> 
+				<div class="header-back" onclick="goToBack()"><span class="icon iconfont">&#xe60e;</span></div>
+			    <div class="title ell-1">订单详情</div> 
+		    </div>
+		    <div class="main">
+				<div class="weui-flex wuliu" v-if="isSend">
+					<div class="weui-flex-item">
+						<div class="left-box">
+							<div class="status">{{statusname}}</div>
+							<div v-show="showTime" class="time-tips">还剩{{day}}天{{hour}}小时自动确认</div>
+						</div>
+					</div>
+					<div class="weui-flex-item">
+						<img src="/Images/Mobile/car.png"/>
+					</div>
+				</div>
+				<div class="weui-flex wuliu" v-else>
+					订单状态：{{statusname}}
+				</div>
+				<div class="weui_cells weui_cells_access" v-if="isSend">
+		            <a class="weui_cell" :href="'/m/order/express?orderid='+realOrderId">
+		                <div class="weui_cell_hd"><span class="icon iconfont">&#xe65f;</span></div>
+		                <div class="weui_cell_bd weui_cell_primary" style='font-size: 0.28rem;padding-left: 0.2rem;'>
+		                    <p style='color:#21a14a'>{{expressInfoList.context}}</p>
+		                    <div class="time-box">{{expressInfoList.time}}</div>
+		                </div>
+		                <div class="weui_cell_ft"></div>
+		            </a>
+		        </div>  
+		        <div class="weui_cells">         
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd">
+		                	<span class="icon iconfont">&#xe632;</span>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary" style='font-size: 0.28rem;padding-left: 0.2rem;'>
+		                    <div class="weui-flex infos">
+		                    	<div class="weui-flex-item">收货人：{{orderInfo.consignee}}</div>
+		                    	<div class="weui-flex-item">{{orderInfo.mobile}}</div>
+		                    </div>
+		                    <div class="weui-flex address">
+		                    	<div class="weui-flex-item">收货地址：{{orderInfo.address}}</div>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="weui_cells">
+		        	<div class="bargain-list" >
+		        		<div class='status_bottom'>
+			        	    <div class="weui_media_bd">
+			                    <p class="weui_media_desc-1">
+			                    	<span class="icon iconfont" style='height:2em;font-size: 0.48rem;'>&#xe60a;</span>
+			                    	<span class="gobuy">{{shopInfo.ShopName}}</span>
+			                    	<span class="weuift"></span>
+			                    </p>
+			                    
+			                </div>
+			            </div>
+				        <div class="weui_panel_bd">
+			                <a href="#" class="weui_media_box weui_media_appmsg">
+			                    <div class="weui_media_hd">
+			                    	
+			                    	<img style='width:100%' :src="'@(WorkContext.ShopConfig.ImageCDN)'+orderInfo.productimgurl+'?w=100&h=100'" alt="" />
+			                    </div>
+			                    <div class="weui_media_bd">
+			                        <h4 class="weui_media_title">{{orderInfo.productname}}</h4>
+			                        <!--<p class="weui_media_desc">原价¥140 最低砍至<strong class="bargain-price">¥56</strong></p>-->
+			                        <p class="weui_media_desc">¥{{orderInfo.originalprice}}
+			                        </p>
+			                    </div>
+			                </a>
+			            </div>
+	         </div>
+		        </div>
+		        <div class="pay-infos">
+		        	<div class="weui_cells">
+                    	<div class="weui_cell fs14">
+			                <div class="weui_cell_bd weui_cell_primary ">
+			                    <p >运费</p>
+			                </div>
+			                <div class="weui_cell_ft">{{orderInfo.shipfee}}</div>
+			            </div>
+			            <div class="weui_cell fs14">
+			                <div class="weui_cell_bd weui_cell_primary">
+			                    <p>砍价优惠</p>
+			                </div>
+			                <div class="weui_cell_ft">{{hasBargainPrice}}</div>
+			            </div>
+			            <div class="weui_cell fs14">
+			                <div class="weui_cell_bd weui_cell_primary">
+			                    <p>实付款<span v-show="orderInfo.shipfee>0">（含运费）</span></p>
+			                </div>
+			                <div class="weui_cell_ft">{{orderInfo.orderamount}}</div>
+			            </div>
+					</div>   
+		        </div>
+		        <div class="order-infos">
+		        	<p>订单编号：{{orderInfo.ordersn}}</p>
+		        	<p>创建时间：{{orderInfo.addtime}}</p>
+		        	<p>付款时间：{{orderInfo.paytime}}</p>
+		        	<p v-show="isSend">发货时间：{{shiptime}}</p>
+		        </div>
+		        
+		        
+		    </div>
+			<div class="get-goods-box">
+				<span class="get-goods" v-if="(paystatus==1 && orderstatus==1 && shipstatus==1) || (paystatus==1 && shipstatus==1)" v-on:click="getGoods()">确认收货</span>
+			</div>
+		</div>
+		
+		</div>
+		<script>
+		var IsApp = "@WorkContext.IsApp";
+		//返回交互
+		function goToBack() {
+			var _this = this;
+			if(IsApp==1){
+				if(navigator.userAgent.indexOf("iPhone")>0){
+					gobacklastpage();
+				}
+				if(navigator.userAgent.indexOf("Android")>0){
+	                window.js.goBack();
+				}
+			}else{
+				window.history.back();
+			}
+		}
+		
+		
+		function calc (arg1, op, arg2,dot) {
+	        var ra = 1, rb = 1, m;
+	        try {
+	            ra = arg1.toString().split('.')[1].length;
+	        } catch (e) {
+	        }
+	        try {
+	            rb = arg2.toString().split('.')[1].length;
+	        } catch (e) {
+	        }
+	        m = Math.pow(10, Math.max(ra, rb));
+	
+	        switch (op) {
+	            case '+':
+	            case '-':
+	                arg1 = Math.round(arg1 * m);
+	                arg2 = Math.round(arg2 * m);
+	                break;
+	            case '*':
+	                ra = Math.pow(10, ra);
+	                rb = Math.pow(10, rb);
+	                m = ra * rb;
+	                arg1 = Math.round(arg1 * ra);
+	                arg2 = Math.round(arg2 * rb);
+	                break;
+	            case '/':
+	                arg1 = Math.round(arg1 * m);
+	                arg2 = Math.round(arg2 * m);
+	                m = 1;
+	                break;
+	        }
+	        try {
+	            var result = eval('(' + '(' + arg1 + ')' + op + '(' + arg2 + ')' + ')/' + m);
+	        } catch (e) {
+	        }
+	        if(result.toString().indexOf(".")!=-1){
+	        	var strarr = result.toString().split(".");
+	        	if(strarr[1].length>dot){
+	        		result = strarr[0]+"."+strarr[1].substring(0,dot);
+	        	}
+	        }
+	        return result;
+	    };
+		
+		var vm = new Vue({
+	     	el: '#app',
+	     	data:{
+	     		realOrderId: "@Model.OrderId",
+		     	userId:'@WorkContext.Uid',
+		     	IsApp: "@WorkContext.IsApp",
+		     	orderid: "@Model.SourceOrderId",
+		     	realorderid: "@Model.OrderId",
+		     	paystatus: Number("@Model.PayStatus"),
+		     	orderstatus: Number("@Model.OrderStatus"),
+		     	shipstatus: Number("@Model.ShipStatus"),
+		     	shipmode: Number("@Model.ShipMode"),
+		     	source: "@Model.Source",
+		     	shiptime: "@Model.ShipTime",
+		     	expressNum: "@Model.ShipSN",
+		     	shipid: "@Model.ShipId",
+		     	sellerid: "@Model.SellerId",
+		     	shopid: "@Model.ShopId",
+		     	expressAbbr: "",
+		     	orderInfo: [],
+		     	expressInfoList: [],
+		     	statusname: "",
+		     	hasBargainPrice: 0,
+		     	day: 0,
+		     	hour: 0,
+		     	isSend: false,
+		     	showTime: false,
+		     	shopInfo: []
+	     	},
+	     	created: function(){
+	     		this.getShopInfo();
+	     		this.getShipCode();
+	     		this.getOrderDetail();
+	     		this.statusToName();
+	     		this.calcTime();
+	     	},
+	     	methods:{
+	     		//获取商户信息
+	     		getSellerInfo: function(){
+	     			var _this = this;
+	     			$.ajax({
+	     				type:"get",
+	     				url:"/Api/Seller/MiniGetSellerInfo?SellerId="+_this.sellerid,
+	     				async:true,
+	     				success: function(rel){
+	     					
+	     				}
+	     			});
+	     		},
+	     		//获取店铺信息
+	     		getShopInfo: function(){
+	     			var _this = this;
+	     			$.ajax({
+	     				type:"post",
+	     				url:"/m/Shop/detail",
+	     				data:{shopid:_this.shopid},
+	     				async:true,
+	     				success: function(rel){
+	     					rel = JSON.parse(rel);
+	     					if(rel.Code==1){
+	     						_this.shopInfo = rel.Data;
+	     						console.log(_this.shopInfo);
+	     					}
+	     				}
+	     			});
+	     		},
+	     		
+	     		getGoods: function(id) {
+	     			$.confirm("为了您的财产安全，请收到货之后再确认收货", "@WorkContext.SellerInfo.SellerName", function() {
+	                    $.ajax({
+	        				type: "post",
+	        				url: "/m/order/Confirm",
+	        				data: {
+	                            OrderId:"@Model.OrderId"
+	        				},
+	        				dataType: 'json',
+	        				success: function(rel) {
+	                            var data=(rel);
+	                            if(data.Code == 1){
+	                            $.toast("操作成功");
+	                            location.reload();  
+	                        }else{
+	                            $.toast("操作失败", "forbidden");
+	                        }
+	        				}
+	        			});
+                    }, function() {
+	                	//取消操作
+	                });
+	     		},
+	     		//获取砍价订单详情
+	     		getOrderDetail: function(){
+	     			var _this = this;
+	     			$.ajax({
+	     				type:"get",
+	     				url:"/Api/Activity/GetOrderBargain?orderid="+_this.orderid+"&v="+Math.random(),
+	     				async:true,
+	     				success:function(rel){
+	     					if(rel.code==1){
+	     						console.log(rel.data);
+	     						_this.orderInfo = rel.data;
+	     						_this.getMoney();
+	     					}
+	     				}
+	     			});
+	     		},
+	     		//获取物流code
+	     		getShipCode: function() {
+	     			var _this = this;
+	     			$.ajax({
+	     				type:"get",
+	     				url:"/Api/Order/GetShipType?sellerid="+_this.sellerid+"&shipid="+_this.shipid+"&v="+Math.random(),
+	     				async:true,
+	     				success: function(rs){
+	     					if(rs.code==1){
+	     						_this.expressAbbr = rs.data.expresscode;
+	     						_this.initGetShip();
+	     					}
+	     				}
+	     			});
+	     		},
+	     		//获取物流信息
+	     		initGetShip: function(){
+	     			var that = this;
+	                var url = "";
+	                if(that.expressAbbr == null || that.expressAbbr == ""){
+	                    //that.expressAbbr 快递公司字母简称，没有简称时使用'auto'代替，自动识别快递单号所属公司（成功率99%）
+	                    url = "https://ali-deliver.showapi.com/showapi_expInfo?v="+Math.random()+"&com=auto"+"&nu="+that.expressNum;
+	                }else{
+	                    url = "https://ali-deliver.showapi.com/showapi_expInfo?v="+Math.random()+"&com="+that.expressAbbr+"&nu="+that.expressNum;
+	                }
+	                $.ajax({
+	                    headers: {
+	                        "Content-Type":"application/json; charset=utf-8",
+	                        "Authorization":"APPCODE aa347ac9584746c8b45ca79e37de04ff"
+	                    },
+	                    type: "get",
+	                    url: url,
+	                    dataType: "json",
+	                    async: true,
+	                    success:function(res){
+	                        //console.log(res);
+	                        var data = res.showapi_res_body.data;
+	                        if(res.showapi_res_code == 0){
+	                            that.expressInfoList = data[0];
+	                        }
+	                    }
+	                });
+	     		},
+	     		//订单状态转换为名字
+	     		statusToName: function() {
+	     			var _this = this;
+	     			if(_this.paystatus==0){
+	     				//未支付
+	     				_this.statusname="待支付";
+	     			}else{
+	     				//已支付
+	     				if(_this.shipmode==0){
+	     					//快递
+	     					switch(_this.orderstatus){
+	     						case 0:
+		     						_this.statusname="待支付";
+		     						break;
+	     						case 1:
+	     							if(_this.shipstatus==0){
+	     								_this.statusname="待发货";
+	     							}else if(_this.shipstatus==1){
+	     								_this.statusname="已发货";	
+	     								_this.isSend = true;
+	     							}else if(_this.shipstatus==2){
+	     								_this.statusname="待确认";
+	     							}
+	     							break;
+	     						case 2:
+		     						_this.statusname="部分退货";
+		     						break;
+	     						case 3:
+		     						_this.statusname="整单退货";
+		     						break;
+	     						case 4:
+		     						_this.statusname="挂单";
+		     						break;
+	     						case 5:
+		     						_this.statusname="退货单";
+		     						break;
+	     						case 6:
+		     						_this.statusname="无效单";
+		     						break;
+	     						case 7:
+		     						_this.statusname="已取消";
+		     						break;
+	     						case 8:
+		     						_this.statusname="已完成";
+		     						break;
+	     						default:
+	     						
+	     							if(_this.shipstatus==0){
+	     								_this.statusname="待发货";
+	     							}else if(_this.shipstatus==1){
+	     								_this.statusname="已发货";	
+	     								_this.isSend = true;
+	     							}else if(_this.shipstatus==2){
+	     								_this.statusname="待确认";
+	     							}
+	     						
+	     					}
+	     				}
+	     				else if(_this.shipmode==1){
+	     					//快递
+	     					switch(_this.orderstatus){
+	     						case 0:
+		     						_this.statusname="待支付";
+		     						break;
+	     						case 1:
+	     							if(_this.shipstatus==0){
+	     								_this.statusname="待发货";
+	     							}else if(_this.shipstatus==1){
+	     								_this.statusname="已发货";	
+	     								_this.isSend = true;
+	     							}else if(_this.shipstatus==2){
+	     								_this.statusname="待确认";
+	     							}
+	     							break;
+	     						case 2:
+		     						_this.statusname="部分退货";
+		     						break;
+	     						case 3:
+		     						_this.statusname="整单退货";
+		     						break;
+	     						case 4:
+		     						_this.statusname="挂单";
+		     						break;
+	     						case 5:
+		     						_this.statusname="退货单";
+		     						break;
+	     						case 6:
+		     						_this.statusname="无效单";
+		     						break;
+	     						case 7:
+		     						_this.statusname="已取消";
+		     						break;
+	     						case 8:
+		     						_this.statusname="已完成";
+		     						break;
+	     						default:
+	     						
+	     							if(_this.shipstatus==0){
+	     								_this.statusname="待发货";
+	     							}else if(_this.shipstatus==1){
+	     								_this.statusname="已发货";	
+	     								_this.isSend = true;
+	     							}else if(_this.shipstatus==2){
+	     								_this.statusname="待确认";
+	     							}
+	     						
+	     					}
+	     				}else if(_this.shipmode==2){
+	     					//自提
+	     				}
+	     			}
+	     		},
+	     		//计算自动确认收货时间
+	     		calcTime: function() {
+	     			var StartTime = new Date(this.shiptime).getTime();
+	            	var EndTime = Number(StartTime+1296000000);
+	            	var CurTime = new Date().getTime();
+	            	var msceond = calc(EndTime,"-",CurTime,0);
+	            	if(msceond>0){
+		            	var intDiff = calc(msceond,"/",1000,0);
+		            	var day = Math.floor(intDiff / (60 * 60 * 24));
+						var hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+						this.day = day;
+						this.hour = hour;
+						this.showTime = true;
+	            	}
+					
+	     		},
+	     		//计算砍价优惠金额
+	     		getMoney: function() {
+					//已砍价格 = 商品原价-最低底价-剩余可砍价格
+					var hasBargainPrice = this.orderInfo.originalprice - this.orderInfo.limitprice - this.orderInfo.saleprice;
+					this.hasBargainPrice = hasBargainPrice;
+					console.log(hasBargainPrice);
+	     		}
+	     	}
+	   });
+		$(function(){
+			setTimeout(function(){
+				$('#app').css('display','block')
+			},200)
+		});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,131 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>拼团状态-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/CollageStatus.css" />
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+
+<body>
+
+    <header>
+        <i class="iconfont back">&#xe647;</i>
+        <h3>拼团状态</h3>
+    </header>
+    <div class="content">
+        <div class="con_s">
+
+
+            <!-- 倒计时 -->
+            <div class="time_down">
+                <div class="countdown"></div>
+            </div>
+
+            <!-- 还差几人 -->
+            <div class="poor">
+                还差 <span class="poor_num">1</span>人，赶快邀请好友来拼单吧
+            </div>
+
+            <!--邀请-->
+            <ul class="Invitation">
+                <li>
+                    <a href="#" class="go_haoyou">邀请好友拼单</a>
+                </li>
+                <li>
+                    <a href="#" class="go_home">回到首页</a>
+                </li>
+            </ul>
+        </div>
+        <!-- 拼主 -->
+        <div class="master">
+            <ul>
+                <li class="master_1">
+                    <img src="#" />
+                    <img src="#" class="no_more_s" />
+                </li>
+                <li class="master_2">
+                    <div class="ma_left">
+                        商品名称
+                    </div>
+                    <div class="ma_right">
+                        商品视频视频视频拍视频视频PSP商商品 平
+                    </div>
+                </li>
+                <li class="master_2">
+                    <div class="ma_left">
+                        拼单须知
+                    </div>
+                    <div class="ma_right s_ma_right">
+                        ·好友拼单  ·人满发货   ·人不满退款
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        var sDate1 = "2002-1-10";
+        var sDate2 = "2002-10-1";
+        console.log(DateDiff(sDate1, sDate2))
+
+        function DateDiff(sDate1, sDate2) { //sDate1和sDate2是2002-12-18格式
+            var aDate, oDate1, oDate2, iDays
+            aDate = sDate1.split("-")
+            oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]) //转换为12-18-2002格式
+            aDate = sDate2.split("-")
+            oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])
+            iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000) //把相差的毫秒数转换为天数
+            return iDays
+        }
+
+        var t = DateDiff(sDate1, sDate2); //秒数
+
+        function showtime() {
+
+            var d = parseInt(t / 3600 / 24);
+            if (d < 10) {
+                d = "0" + d;
+            }
+            var h = parseInt((t % (3600 * 24)) / 3600);
+            if (h < 10) {
+                h = "0" + h;
+            }
+            var m = parseInt((t % (3600 * 24)) % 3600 / 60);
+            if (m < 10) {
+                m = "0" + m;
+            }
+            var s = parseInt((t % (3600 * 24)) % 60);
+            if (s < 10) {
+                s = "0" + s;
+            }
+
+            var b = (h == "00") ? "" : '<span>' + h + '</span>:';
+            var c = (m == "00") ? "" : '<span>' + m + '</span>:';
+            var d = (s == "00") ? "" : '<span>' + s + '</span>';
+            $('.countdown').html(b + c + d);
+            t = t - 1;
+        }
+        showtime();
+        setInterval("showtime()", 1000);
+    </script>
+
+
+
+
+</body>
+
+</html>

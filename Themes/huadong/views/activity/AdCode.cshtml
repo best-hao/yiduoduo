@@ -1,0 +1,304 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>邀请好友</title>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css"/>
+		<script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/swipe.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			body{background: #fff;}
+			.ell-1{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+			.ell-2{overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+			.color{color: #ff4800;}
+			.bg{background: #ff4800;}
+			.gary{color: #999;}
+			.common-header{position: relative; background: #ff4800;height: 0.8rem;line-height: 0.8rem;margin-bottom: 0.06rem; -moz-box-shadow:0px 2px 10px #d9d9d9; -webkit-box-shadow:0px 2px 10px #d9d9d9; box-shadow:0px 2px 10px #d9d9d9;}
+			.common-header .title{text-align: center;padding: 0 1rem;color: #fff;font-size: 0.3rem;}
+			.common-header .header-back{position: absolute;top: 0;left: 0;width: .6rem;text-align: center;color: #fff;}
+			.common-header .header-menu{position: absolute;top: 0;right: 0;width: .6rem;text-align: center;}
+			.shade{display: none; position: fixed;width: 7.5rem;height: 100%; top: 0;left: 50%;margin-left: -3.75rem;background: rgba(0,0,0,0.7);z-index: 100;}
+			.shade-mask{position: absolute;width: 100%;height: 100%; top: 0;left: 0;z-index: 101;}
+			.shade-content{position: absolute;bottom: 0;left: 0;height: 8rem;background: #fff;z-index: 102;}
+			.weui_dialog_hd{padding: 0;}
+			.weui_toast{padding: 0 15px;font-size: 0.32rem;}
+
+			.score-hongbao{width: 7.5rem;font-size: 12px;margin: 0 auto;color: #333;font-family: "微软雅黑";}
+			.main{margin-bottom: 55px;}
+			.icon {
+	          /* 通过设置 font-size 来改变图标大小 */
+	          width: 1em; height: 1em;
+	          /* 图标和文字相邻时，垂直对齐 */
+	          vertical-align: -0.15em;
+	          /* 通过设置 color 来改变 SVG 的颜色/fill */
+	          fill: currentColor;
+	          /* path 和 stroke 溢出 viewBox 部分在 IE 下会显示
+	             normalize.css 中也包含这行 */
+	          overflow: hidden;
+	        }
+	        
+			.mask-shade{display: none; position: fixed;width: 7.5rem;height: 100%; top: 0;left: 50%;margin-left: -3.75rem; z-index: 101;background: rgba(0,0,0,0.7);}
+			.alert-box{display: none; position: fixed;width: 6.5rem;height: 6rem; top: 50%;left: 50%;margin-left: -3.25rem;margin-top: -3rem; z-index: 102;background: rgba(0,0,0,0.7);border-radius: 5px;}
+			.alert-box .content{position: absolute;width: 100%;height: 100%;background: #fff;z-index: 103;border-radius: 5px;}
+			.alert-box .title{height: 1rem;line-height: 1rem;text-align: center;position: relative;border-bottom: 1px solid #e6e6e6;font-size: 0.4rem;}
+			.alert-box .title-txt{}
+			.alert-box .close{position: absolute;top: 0;left: 0;width: 1rem;height: 1rem;line-height: 1rem;text-align: center;font-size: 0.46rem;}
+			.alert-box .info-box{margin: 0 0.4rem;padding: 0.4rem 0;border-bottom: 1px solid #e6e6e6;}
+			.alert-box p{text-align: justify;font-size: 0.28rem;}
+			.alert-box .score-box{margin: 0;opacity: 1;}
+			.alert-box .my-score-box{margin: 0 0.4rem;padding: 0.2rem 0;border-bottom: 1px solid #e6e6e6;font-size: 0.32rem;}
+			.alert-box .my-score-icon{font-size: 0.48rem;color: #ffa702;}
+			.alert-box .txt{}
+			.alert-box .my-score{margin-left: 0.5rem;}
+			.alert-box .submit-send{margin: 0.2rem 0.4rem;height: 0.8rem;line-height: 0.8rem;background: #ff4800;color: #fff;text-align: center;font-size: 0.32rem;border-radius: 5px;}
+			
+			.banner{width: 7.5rem;}
+			.input{display: block;width: 5.55rem;padding:0 0.2rem; height: 0.6rem;line-height: 0.6rem;margin: 0.2rem auto;border: 1px solid #e6e6e6;outline: 0;}
+			.code-box{width: 6rem;margin: 0.2rem auto;height: 0.6rem;}
+			.input.code{display: block;width: 3.55rem;margin: 0;height: 0.56rem;}
+			.send-code{display: block;width: 2rem;height: 0.6rem;line-height: 0.6rem;background: #ff4800;color: #fff;text-align: center;border: 0;outline: 0;}
+			.bind{display: block;width: 6rem;height: 0.6rem;line-height: 0.6rem;margin: 0.4rem auto;background: #ff4800;color: #fff;text-align: center;border: 0;outline: 0;}
+			.read-box{text-align: center;line-height: 1rem;}
+			.guize{color: #00ad43}
+			input#agreen {
+			    width: 18px;
+			    height: 18px;
+			    vertical-align: middle;
+			}
+		</style>
+		
+	</head>
+	<body>
+		<div class="score-hongbao">
+			<!--<div class="common-header"> 
+				<div class="header-back" onclick="goToBack()"><span class="icon iconfont">&#xe60e;</span></div>
+			    <div class="title ell-1">新用户推广</div> 
+		    </div>-->
+		    <div class="main">
+		    	<img src="/Images/Mobile/user-banner.png" alt="" class="banner" />
+		    	<input type="tel" class="input mobile" id="mobile" placeholder="请输入手机号" />
+		    	<div class="code-box">
+		    		<input type="tel" class="input code left" id="code" placeholder="请输入验证码"/>
+		    		<div class="send-code left" data-flag="0" onclick="send()">发送验证码</div>
+		    		<div class="clearfix"></div>
+		    	</div>
+		    	<button class="bind" onclick="confirmBind()">立即绑定</button>
+		    	
+		    	<div class="read-box">
+		    		<input type="checkbox" checked="checked" name="" id="agreen" value="" />
+		    		<span>我已阅读并同意秦商未来会员</span>
+		    		<span class="guize" onclick="showRole()">【活动规则】</span>
+		    	</div>
+		    </div>
+		    <div class="mask-shade"></div>
+		    <div class="alert-box">
+		    	<div class="content">
+			    	<div class="title">
+			    		<span class="icon iconfont close" onclick="cancelBind()">&#xe654;</span>
+			    		<span class="title-txt">活动规则</span>
+			    	</div>
+		    		<div class="info-box">
+		    			<p>1、用户扫描推广二维码进入推广注册页注册账号并进行实名认证后即可获得注册积分</p>
+		    			<p>2、该手机号从未注册过平台用户可领取积分</p>
+		    			<p>3、好友在完成注册并进行实名认证后，邀请人获得积分奖励</p>
+		    			<p>4、任何通过不正当手段获得的奖励，秦商未来有权追回相应奖励或封停账号</p>
+		    		</div>
+		    	</div>
+		    </div>
+		</div>
+		<script type="text/javascript">
+			var IsApp = "@WorkContext.IsApp";
+			var uid = "@WorkContext.Uid";
+			var flag = 1;
+			var time = 60;
+			var timer;
+			var weixin = "@WebHelper.IsWeiXin()";
+			//返回交互
+			function goToBack() {
+	    		if(IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+						window.js.goBack();
+					}
+				}else{
+					window.location.href="/m/usercenter/home";
+				}
+	
+			}
+			//手机验证函数
+            function IsTel(Tel) {
+                var re = new RegExp(/^1(3|4|5|6|7|8|9)\d{9}$/);
+                var retu = Tel.match(re);
+                if (retu) {
+                    return true;
+                } else {
+                    return false;
+                };
+            };
+			//倒计时
+			function countDown(){
+				if(time>0){
+					time--;
+					$(".send-code").text(time+"秒");
+					$(".send-code").css({"background":"#e6e6e6","color":"#999"});
+				}else{
+					clearInterval(timer);
+					time = 60;
+					$(".send-code").text("发送验证码");
+					$(".send-code").css({"background":"#ff4800","color":"#fff"});
+				}
+			}
+			//显示规则
+			function showRole(){
+				$(".mask-shade").css("display","block");
+				$(".alert-box").css("display","block");
+			}
+			//提交绑定
+			function confirmBind(){
+				var Tel = $("#mobile").val();
+				var Code = $("#code").val();
+				if(flag==0){
+					$.alert("请先同意秦商未来绑定规则!");
+					return false;
+				}
+				if(!IsTel(Tel)){
+					$.alert("手机号错误!");
+					return false;
+				}
+				if(Code==""){
+					$.alert("请输入短信验证码!");
+					return false;
+				}else{
+					$.ajax({
+						type:"post",
+						url:"AdCode",
+						async:true,
+						data:{phone:Tel, code:Code},
+						dataType:"json",
+						success:function(rel) {
+							if(rel.Code==1){
+								$.alert("绑定成功!",function(){
+									/*if(rel.Data==""){
+										window.location.href = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m/usercenter/authentication';
+									}else{
+										window.location.href = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m/usercenter/home';
+									}*/
+									window.location.href = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m/usercenter/home';
+								});
+							}else{
+								$.alert(rel.Message);
+							}
+						}
+					});
+				}
+					
+					
+			}
+			//关闭规则框
+			function cancelBind() {
+				$(".mask-shade").css("display","none");
+				$(".alert-box").css("display","none");
+			}
+			//发送
+			function send() {
+				var isSend = $(".send-code").attr("data-flag");
+				if(Number(isSend)==0){
+					$(".send-code").attr("data-flag",1);
+					var Tel = $("#mobile").val();
+					if(IsTel(Tel)){
+						$.ajax({
+		                    type: "post",
+		                    url: "/m/tool/SendCode",
+		                    async: false,
+		                    data: { phone: Tel },
+		                    dataType: "json",
+		                    success: function (rel) {
+		                        if (rel.Code == 0) {
+		                            $.alert(rel.Message);
+		                            return false;
+		                        }else{
+		                        	//$.toast("发送成功，请注意查收短信");
+		                        	timer = setInterval(countDown, 1000);
+		                        }
+		                    }
+		                });
+					}else{
+						$.alert("手机号错误");
+					}
+				}else{
+					return false;
+				}
+					
+			}
+			
+			$(function(){
+				if(weixin=="False"){
+					$(".score-hongbao").remove();
+					$.alert("请在用微信扫一扫扫码!",function(){});
+				}else{
+					if(Number(uid)>0){
+						/*$.ajax({
+			    			type:"get",
+			    			url:"/Api/Account/IsAuthentication?v="+Math.random()+"&UserId="+_uid,
+			    			success: function(rel){
+			    				if(rel.code==1){
+			    					$.alert("您已经绑定过了",function(){
+										window.location.href = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m';
+									});
+			    					
+			    				}else{
+			    					$.alert("您已经绑定过了,去实名认证",function(){
+										window.location.href = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m/usercenter/authentication';
+									});
+			    				}
+			    				
+			    			}
+			    		});*/
+						$.alert("您已经绑定过了",function(){
+							window.location.href = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m/usercenter/home';
+						});
+						
+					}
+				}
+				$("#agreen").on("change",function(){
+	                if($("#agreen").prop("checked")){
+	                	flag = 1;
+	                }else{
+						flag = 0;
+	                }
+	        	});
+	        	$("#mobile").on("input propertychange",function(){
+	        		var val = $(this).val();
+	                val = val.toString();
+	                var newval = val.replace(/[^\d]/g, "");
+	        		if(newval.length>11){
+	    				newval = newval.substring(0,newval.length-1);
+	    			}
+	        		if (newval.length > 1 && newval.substring(0, 1) == 0 && newval.substring(1, 2) != ".") {
+	                    newval = newval.substring(1, newval.length);
+	                }
+	        		$(this).val(newval);
+	        	});
+	        	$("#code").on("input propertychange",function(){
+	        		var val = $(this).val();
+	                val = val.toString();
+	                var newval = val.replace(/[^\d]/g, "");
+	        		if(newval.length>6){
+	    				newval = newval.substring(0,newval.length-1);
+	    			}
+	        		$(this).val(newval);
+	        	});
+	        	
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,680 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>绩效管控-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/s_init.css" />
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+   <style type="text/css">
+			body {
+				background: #FFFFFF;
+			}
+			
+			.she_mask {
+				position: fixed;
+				top: 2.66rem;
+				z-index: 333;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: rgba(0, 0, 0, 0.5);
+				overflow: hidden;
+				display: none;
+			}
+			
+			.she_content {
+				background: #FFFFFF;
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				overflow: hidden;
+			}
+			
+			.queding {
+				position: fixed;
+				bottom: 2.6rem;
+				line-height: 2.6rem;
+				width: 80%;
+				border-radius: 3px;
+				border: 1px solid #f13030;
+				background: #f13030;
+				color: #FFFFFF;
+				font-size: 1rem;
+				left: 0;
+				right: 0;
+				z-index: 444;
+				text-align: center;
+				margin: 0 auto;
+			}
+			
+			.guanjianci,
+			.starttime,
+			.endtime,
+			.diyu {
+				color: #18b4ed;
+				font-size: 14px;
+				text-decoration: underline;
+				margin: 0px 0.6rem;
+			}
+			
+			.s_fixed {
+				position: fixed;
+				left: 0;
+				right: 0;
+				top: 2.66rem;
+				z-index: 33;
+				background: #fff;
+				box-shadow: 1px 2px 3px #e1e1e1;
+			}
+			
+			.weui_media_box {
+				padding: 15px;
+				position: relative;
+				padding-top: 8px;
+			}
+			
+			.content {
+				padding-top: 7.6rem;
+			}
+			
+			.weui_dialog,
+			.weui_toast {
+				z-index: 999;
+			}
+			
+			.weui_input {
+				width: 5rem;
+			}
+		</style>
+</head>
+<body>
+ <header>
+			<i class="iconfont back" onclick="history.back()">&#xe647;</i>
+			<h3>绩效管控</h3>
+
+		</header>
+		<div class="content">
+
+			<div class="weui_panel_bd s_fixed">
+				<div class="weui_media_box weui_media_text">
+					<h4 class="weui_media_title">分店管理</h4>
+					<p class="weui_media_desc">
+						<span class="guanjianci">分店一</span>
+						<span class="starttime">
+							<input class="weui_input" type="text" value="2016-12-10" id="StartTime" readonly=""></span> 至
+						<span class="endtime">
+							<input class="weui_input" type="text" value="2016-12-10" id="Endtime" readonly="">
+						</span>
+						<span class="diyu">销量</span>
+
+					</p>
+				</div>
+
+			</div>
+
+			<div id="canvasDiv">
+
+			</div>
+			<div class="weui_panel_bd">
+				<div class="weui_media_box weui_media_text">
+					<h4 class="weui_media_title">性别分布</h4>
+
+				</div>
+				<div id="canvasDiv1">
+
+				</div>
+			</div>
+			<div class="weui_panel_bd">
+				<div class="weui_media_box weui_media_text">
+					<h4 class="weui_media_title">分店单品</h4>
+
+				</div>
+				<div id="canvasDiv2">
+
+				</div>
+			</div>
+
+			<div class="weui_panel_bd">
+				<div class="weui_media_box weui_media_text">
+					<h4 class="weui_media_title">今日订单数</h4>
+
+				</div>
+				<div id="canvasDiv3">
+
+				</div>
+			</div>
+
+			<div class="weui_panel_bd">
+				<div class="weui_media_box weui_media_text">
+					<h4 class="weui_media_title">今日销售额与昨日销售额</h4>
+
+				</div>
+				<div id="canvasDiv4">
+
+				</div>
+			</div>
+		</div>
+		<div class="she_mask">
+			<div class="she_content">
+				<div class="page-bd">
+					<ul>
+
+						<li class="">
+							<div class="weui-flex js-category">
+								<p class="weui-flex-item">分店一</p>
+								<i class="icon icon-74"></i>
+							</div>
+							<div class="page-category js-categoryInner">
+
+								<div class="weui_cells weui_cells_access" style="margin-top: 0px;">
+									<a class="weui_cell" href="javascript:;">
+										<div class="weui_cell_bd weui_cell_primary">
+											<p>分店一</p>
+										</div>
+										<div class="weui_cell_ft"></div>
+									</a>
+									<a class="weui_cell" href="javascript:;">
+										<div class="weui_cell_bd weui_cell_primary">
+											<p>员工一</p>
+										</div>
+										<div class="weui_cell_ft"></div>
+									</a>
+									<a class="weui_cell" href="javascript:;">
+										<div class="weui_cell_bd weui_cell_primary">
+											<p>员工二</p>
+										</div>
+										<div class="weui_cell_ft"></div>
+									</a>
+									<a class="weui_cell" href="javascript:;">
+										<div class="weui_cell_bd weui_cell_primary">
+											<p>员工三</p>
+										</div>
+										<div class="weui_cell_ft"></div>
+									</a>
+									<a class="weui_cell" href="javascript:;">
+										<div class="weui_cell_bd weui_cell_primary">
+											<p>员工四</p>
+										</div>
+										<div class="weui_cell_ft"></div>
+									</a>
+								</div>
+
+							</div>
+						</li>
+						<li class="">
+							<div class="weui-flex js-category">
+								<p class="weui-flex-item">分店二</p>
+								<i class="icon icon-74"></i>
+							</div>
+							<div class="page-category js-categoryInner">
+
+								<div class="weui_cells weui_cells_access" style="margin-top: 0px;">
+									<a class="weui_cell" href="javascript:;">
+										<div class="weui_cell_bd weui_cell_primary">
+											<p>分店二</p>
+										</div>
+										<div class="weui_cell_ft"></div>
+									</a>
+									<a class="weui_cell" href="javascript:;">
+										<div class="weui_cell_bd weui_cell_primary">
+											<p>员工一</p>
+										</div>
+										<div class="weui_cell_ft"></div>
+									</a>
+									<a class="weui_cell" href="javascript:;">
+										<div class="weui_cell_bd weui_cell_primary">
+											<p>员工二</p>
+										</div>
+										<div class="weui_cell_ft"></div>
+									</a>
+								</div>
+
+							</div>
+						</li>
+						<li class="">
+							<div class="weui-flex js-category">
+								<p class="weui-flex-item">分店三</p>
+								<i class="icon icon-74"></i>
+							</div>
+							<div class="page-category js-categoryInner">
+
+								<div class="weui_cells weui_cells_access" style="margin-top: 0px;">
+									<a class="weui_cell" href="javascript:;">
+										<div class="weui_cell_bd weui_cell_primary">
+											<p>分店三</p>
+										</div>
+										<div class="weui_cell_ft"></div>
+									</a>
+									<a class="weui_cell" href="javascript:;">
+										<div class="weui_cell_bd weui_cell_primary">
+											<p>员工一</p>
+										</div>
+										<div class="weui_cell_ft"></div>
+									</a>
+									<a class="weui_cell" href="javascript:;">
+										<div class="weui_cell_bd weui_cell_primary">
+											<p>员工二</p>
+										</div>
+										<div class="weui_cell_ft"></div>
+									</a>
+								</div>
+
+							</div>
+						</li>
+					</ul>
+				</div>
+				
+			</div>
+		</div>
+
+		<script src="/Js/Mobile/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/Mobile/ichart.latest.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/Mobile/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/Mobile/picker.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+			// 分类
+
+			$(document).on("click", ".diyu", function() {
+				$.actions({
+					title: "选择分类",
+					onClose: function() {
+						console.log("close");
+					},
+					actions: [{
+							text: "查看销量",
+							className: "color-primary",
+							onClick: function() {
+								//								$.alert("发布成功");
+								$.showLoading();
+				$(".content").hide();
+				setTimeout(function() {
+					$(".content").show();
+					$.hideLoading();
+				}, 1500);
+							}
+						},
+						{
+							text: "查看订单数",
+							className: "color-warning",
+							onClick: function() {
+								//								$.alert("你选择了“编辑”");
+								$.showLoading();
+				$(".content").hide();
+				setTimeout(function() {
+					$(".content").show();
+					$.hideLoading();
+				}, 1500);
+							}
+						},
+						{
+							text: "查看收入来源",
+							className: 'color-danger',
+							onClick: function() {
+								//								$.alert("你选择了“删除”");
+								$.showLoading();
+				$(".content").hide();
+				setTimeout(function() {
+					$(".content").show();
+					$.hideLoading();
+				}, 1500);
+							}
+						}
+					]
+				});
+			});
+			// 选择时间
+			$("#StartTime").datetimePicker({
+				title: "选择日期",
+				m: 1
+			});
+			$("#Endtime").datetimePicker({
+				title: "选择日期",
+				m: 1
+			});
+			$(document).on("click", ".close-picker", function() {
+				$.showLoading();
+				$(".content").hide();
+				setTimeout(function() {
+					$(".content").show();
+					$.hideLoading();
+				}, 1500);
+			});
+
+			// 选择分店/员工
+			$(".guanjianci").on("click", function() {
+				$(".she_mask").show();
+			});
+			$(document).on("click", ".weui_cell", function() {
+				$.showLoading();
+				$(".guanjianci").text($($(this).find("p")).text());
+				setTimeout(function() {
+					$.hideLoading();
+
+					$(".she_mask").hide();
+				}, 1500);
+			});
+			$(".queding").on("click", function() {
+				$(".she_mask").hide();
+			});
+			$(function() {
+				var data = [{
+						name: '19岁及以下',
+						value: (Math.random()).toFixed(2) * 100,
+						color: '#a5c2d5'
+					},
+					{
+						name: '20~29岁',
+						value: (Math.random()).toFixed(2) * 100,
+						color: '#cbab4f'
+					},
+					{
+						name: '30~39岁',
+						value: (Math.random()).toFixed(2) * 100,
+						color: '#76a871'
+					},
+					{
+						name: '40~49岁',
+						value: (Math.random()).toFixed(2) * 100,
+						color: '#9f7961'
+					},
+					{
+						name: '50岁及以上',
+						value: (Math.random()).toFixed(2) * 100,
+						color: '#a56f8f'
+					}
+				];
+
+				new iChart.Column2D({
+					render: 'canvasDiv',
+					data: data,
+					title: '购买年龄分布',
+					showpercent: true,
+					decimalsnum: 2,
+					width: screen.availWidth,
+					height: 400,
+					coordinate: {
+						background_color: '#fefefe',
+						scale: [{
+							position: 'left',
+							start_scale: 0,
+							end_scale: 40,
+							scale_space: 8,
+							listeners: {
+								parseText: function(t, x, y) {
+									return {
+										text: t + "%"
+									}
+								}
+							}
+						}]
+					}
+				}).draw();
+			});
+
+			$(function() {
+				var data = [{
+						name: '男性',
+						value: (Math.random()).toFixed(2) * 100,
+						color: '#a5c2d5'
+					},
+					{
+						name: '女性',
+						value: (Math.random()).toFixed(2) * 100,
+						color: '#cbab4f'
+					}
+
+				];
+
+				new iChart.Column2D({
+					render: 'canvasDiv1',
+					data: data,
+					title: '分店性别分布情况',
+					showpercent: true,
+					decimalsnum: 2,
+					width: screen.availWidth,
+					height: 400,
+					coordinate: {
+						background_color: '#fefefe',
+						scale: [{
+							position: 'left',
+							start_scale: 0,
+							end_scale: 40,
+							scale_space: 8,
+							listeners: {
+								parseText: function(t, x, y) {
+									return {
+										text: t + "%"
+									}
+								}
+							}
+						}]
+					}
+				}).draw();
+			});
+			$(function() {
+				var data = [{
+						name: '鞋区',
+						value: 6078,
+						color: '#97b3bc'
+					},
+					{
+						name: '运动区',
+						value: 5845,
+						color: '#FF3333'
+					},
+					{
+						name: '女装区',
+						value: 5008,
+						color: '#cd5c5c'
+					},
+					{
+						name: '户外区',
+						value: 2662,
+						color: '#006666'
+					},
+					{
+						name: '休闲区',
+						value: 2445,
+						color: '#CC3333'
+					},
+					{
+						name: '皮具区',
+						value: 2389,
+						color: '#9d4a4a'
+					},
+					{
+						name: '男装区',
+						value: 2147,
+						color: '#eee8aa'
+					},
+					{
+						name: '内衣区',
+						value: 2135,
+						color: '#CCFF66'
+					},
+					{
+						name: '儿童区',
+						value: 820,
+						color: '#5d7f97'
+					},
+					{
+						name: '租赁',
+						value: 763,
+						color: '#33FF33'
+					},
+					{
+						name: '服饰区',
+						value: 421,
+						color: '#330099'
+					},
+					{
+						name: '家居区',
+						value: 272,
+						color: '#33FF99'
+					},
+					{
+						name: '毛纺区',
+						value: 261,
+						color: '#ffdead'
+					},
+					{
+						name: '羽绒服区',
+						value: 252,
+						color: '#CC3399'
+					}
+				];
+
+				new iChart.Bar2D({
+					render: 'canvasDiv2',
+					background_color: '#EEEEEE',
+					data: data,
+					title: '分店单品销售分析',
+					footnote: '数据来源：ERP基础数据仓库   单位：万元',
+					width: screen.availWidth,
+					height: 400,
+					coordinate: {
+						width: 640,
+						height: 260,
+						scale: [{
+							position: 'bottom',
+							start_scale: 0,
+							end_scale: 6500,
+							scale_space: 500
+						}]
+					},
+					sub_option: {
+						border: {
+							enable: false
+						},
+						label: {
+							color: '#333333'
+						}
+					},
+					shadow: true,
+					shadow_color: '#8d8d8d',
+					shadow_blur: 1,
+					shadow_offsety: 1,
+					shadow_offsetx: 1,
+					legend: {
+						enable: false
+					}
+				}).draw();
+			});
+
+			$(function() {
+				$('.js-category').click(function() {
+					$parent = $(this).parent('li');
+					if($parent.hasClass('js-show')) {
+						$parent.removeClass('js-show');
+						$(this).children('i').removeClass('icon-35').addClass('icon-74');
+					} else {
+						$parent.siblings().removeClass('js-show');
+						$parent.addClass('js-show');
+						$(this).children('i').removeClass('icon-74').addClass('icon-35');
+						$parent.siblings().find('i').removeClass('icon-35').addClass('icon-74');
+					}
+				});
+
+			});
+			$(function() {
+				var data = [{
+						name: '今日订单数',
+						value: 35.75,
+						color: '#a5c2d5'
+					},
+					{
+						name: '昨日订单数',
+						value: 29.84,
+						color: '#cbab4f'
+					},
+
+				];
+
+				new iChart.Column2D({
+					render: 'canvasDiv3',
+					data: data,
+					title: '今日订单数与昨日订单数的比较，数据截止当前时间，单位 ￥',
+					showpercent: true,
+					decimalsnum: 2,
+					width: screen.availWidth,
+					height: 300,
+					coordinate: {
+						background_color: '#fefefe',
+						scale: [{
+							position: 'left',
+							start_scale: 0,
+							end_scale: 40,
+							scale_space: 8,
+							listeners: {
+								parseText: function(t, x, y) {
+									return {
+										text: t
+									}
+								}
+							}
+						}]
+					}
+				}).draw();
+			});
+			$(function() {
+				var data = [{
+						name: '今日',
+						value: [45],
+						color: '#1385a5'
+					},
+					{
+						name: '昨日',
+						value: [60],
+						color: '#c56966'
+					}
+				];
+				var chart = new iChart.ColumnMulti2D({
+					render: 'canvasDiv4',
+					data: data,
+					labels: [],
+					title: '今日销售额与昨日销售额的比较',
+					subtitle: '今日销售额与昨日销售额的比较，数据截止当前时间，单位 k',
+					footnote: '数据来源：销售中心',
+					width: screen.availWidth,
+					height: 400,
+					background_color: '#ffffff',
+					legend: {
+						enable: true,
+						background_color: null,
+						border: {
+							enable: false
+						}
+					},
+					coordinate: {
+						background_color: '#f1f1f1',
+						scale: [{
+							position: 'left',
+							start_scale: 0,
+							end_scale: 140,
+							scale_space: 20
+						}],
+						width: 250,
+						height: 260
+					}
+				});
+				chart.draw();
+			});
+		</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,293 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>导购初始页面</title>
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/weui.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/weui2.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/guide.css" />
+		<style type="text/css">
+			.s_mask {
+				position: fixed;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				z-index: 33;
+				background: rgba(0, 0, 0, 0.6);
+				overflow: hidden;
+				display: none;
+			}
+			
+			.s_mask_conetnt {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				overflow: hidden;
+			}
+			
+			#qrCode {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				width: 300px;
+				height: 300px;
+				margin: auto;
+				padding: 5px;
+				background: #FFFFFF;
+				box-shadow: 5px 5px 13px #000;
+				border-radius: 4px;
+			}
+			
+			#qrCode img {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				margin: auto;
+			}
+			.f-white{
+				font-size: 1rem;
+			}
+			header h3{
+				font-weight: inherit;
+				font-size: .9rem;
+				text-align: center;
+			}
+			header{
+				box-shadow: 1px 2px 3px #e1e1e1;
+			}
+
+		</style>
+	
+
+	</head>
+
+	<body>
+		<header>
+			<i class="iconfont back" onclick="history.back()">&#xe733;</i>
+			<h3>导购数据分析</h3>
+			<div class="head_right">
+			
+				<i class="iconfont">&#xe88f;</i>
+			</div>
+
+		</header>
+		<div class="content">
+			<div class="weui_cell">
+                <div class="weui_cell_hd"> 
+                    <img src="/Images/user.jpg">
+                </div>
+                
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p class="name">Mr.佘</p>
+                    <p class="bianhao">4212646</p>
+                    <p class="dizhi">婴雄天下001号公司</p>
+                </div>
+                <div class="weui_cell_ft">
+                	<span>
+                		<i class="iconfont" id="getCode">&#xe503;</i>
+                	</span>
+                	<span>扫码分享</span>
+                </div>
+                
+            </div>
+            <p class="slogan">亲爱的，让我们共同开启新的一天！</p>
+            
+            <div class="she_back">
+            	<div class="back_con">
+            		<div class="shouyi">
+            			<span>485.39</span>
+            			<span>今日收益(元)</span>
+            		</div>
+            		<ul class="item">
+            			<li class="item_list">
+            				<p>
+            					同比昨日
+            					<i class="iconfont up">&#xe689;</i>
+            					<i class="iconfont down">&#xe603;</i>
+            					<span class="f-white">3</span>
+            				</p>
+            				<p class="bg_1">
+            					56
+            				</p>
+            				<p>
+            					今日新会员(位)
+            				</p>
+            			</li>
+            			<li class="item_list">
+            				<p>
+            					同比昨日
+            					<i class="iconfont up">&#xe689;</i>
+            					<i class="iconfont down">&#xe603;</i>
+            					<span class="f-white">34</span>
+            				</p>
+            				<p class="bg_1">
+            					56
+            				</p>
+            				<p>
+            					今日销售额(元)
+            				</p>
+            			</li>
+            			
+            			<li class="item_list">
+            				
+            				<p class="bg_1">
+            					56
+            				</p>
+            				<p>
+            					本月会员目标
+            				</p>
+            			</li>
+            				<li class="item_list">
+            				
+            				<p class="bg_1">
+            					56
+            				</p>
+            				<p>
+            					本月销售目标
+            				</p>
+            			</li>
+            			<li class="item_list">
+            				
+            				<p class="bg_1">
+            					56%
+            				</p>
+            				<p>
+            					本月会员完成率
+            				</p>
+            			</li>
+            				<li class="item_list">
+            				
+            				<p class="bg_1"> 
+            					56%
+            				</p>
+            				<p>
+            					本月销售完成率
+            				</p>
+            			</li>
+            		</ul>
+            		
+            	</div>
+            </div>
+            <!--end-->
+			<div class="shuju">
+				<h3>数据分析</h3>
+				<ul class="shuju_ul">
+					<li>
+						<i class="iconfont bg-ffca0e">&#xe88a;</i>
+						<span>会员分析</span>
+					</li>
+					<li>
+						<i class="iconfont bg-e93827">&#xe628;</i>
+						<span>销售分析</span>
+					</li>
+					<li>
+						<i class="iconfont bg-92e126">&#xe62f;</i>
+						<span>人效数据</span>
+					</li>
+					<li>
+						<i class="iconfont bg-50b3ff">&#xe621;</i>
+						<span>商品分析</span>
+					</li>
+					<li>
+						<i class="iconfont bg-f25b26">&#xe51a;</i>
+						<span>活动分析</span>
+					</li>
+					
+				</ul>
+				
+			</div>            
+            
+            <!--end-->
+			<div class="shuju">
+				<h3>工作台</h3>
+				<ul class="shuju_ul">
+					<li>
+						<i class="iconfont bg-fd892c">&#xe6b5;</i>
+						<span>个人绩效</span>
+					</li>
+					<!-- <li>
+						<i class="iconfont bg-02b6cb">&#xe6c8;</i>
+						<span>办公OA</span>
+					</li> -->
+					<!--<li>
+						<i class="iconfont bg-16d370">&#xe60e;</i>
+						<span>会员回访</span>
+					</li>-->
+					
+					
+				</ul>
+				
+			</div> 
+		</div>
+		<footer>
+			<ul>
+				<li class="active">
+					<a href="Javascript:;">
+						<i class="iconfont shou">&#xe61b;</i>
+						<span>首页</span>
+					</a>
+				</li>
+					<li class="">
+					<a href="Javascript:;">
+						<i class="iconfont">&#xe673;</i>
+						<span>商学院</span>
+					</a>
+				</li>
+					<li class="">
+					<a href="Javascript:;">
+						<i class="iconfont">&#xe602;</i>
+						<span>社区</span>
+					</a>
+				</li>
+					<li class="">
+					<a href="Javascript:;">
+						<i class="iconfont">&#xe6dd;</i>
+						<span>设置</span>
+					</a>
+				</li>
+			</ul>
+		</footer>
+		<div class="s_mask">
+			<div class="s_mask_conetnt">
+				<div id="qrCode"></div>
+			</div>
+		</div>
+
+		<script src="/Js/Mobile/boss/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/Mobile/qrcode.min.js"></script>
+		<script>
+		 $("#getCode").on("click",function(){
+			$(".s_mask").show();
+			new QRCode(document.getElementById("qrCode"),"11111");
+		});
+		$(".s_mask").on("click",function(){
+				$(this).hide();
+		});
+		
+
+		</script>
+		<script src="/Js/Mobile/boss/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+		
+		</script>
+	</body>
+
+</html>

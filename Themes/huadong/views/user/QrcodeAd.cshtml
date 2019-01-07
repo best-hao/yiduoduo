@@ -1,0 +1,327 @@
+﻿@{
+Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	    <meta name="format-detection" content="telephone=no">
+	    <meta name="apple-mobile-web-app-capable" content="yes" />
+	    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+	    <meta http-equiv="Pragma" content="no-cache" />
+	    <meta http-equiv="Cache-Control" content="no-cache" />
+	    <meta http-equiv="Expires" content="0" />
+	    <title>我的二维码-@{@WorkContext.SellerInfo.SellerName}</title>
+		<link rel="stylesheet" href="/Mobile/weui/style/weui.css" />
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css" />
+		<script src="/Mobile/weui/ydui.flexible.js?v=0.1" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/Mobile/qrcode.min.js"></script>
+		<style type="text/css">
+			#qrcode{display: none;}
+			body{background: #fff;max-width: 480px;width: 7.5rem;margin: 0 auto;}
+			body *{max-width: 480px;}
+			.img-box{width: 7.5rem;margin: 0 auto;position: relative;}
+			.bg{display: block;width: 7.5rem;}
+			.title{position: absolute;}
+			.name{position: absolute;}
+			.head{position: absolute;display: block;}
+			.qrcode{display: block;position: absolute;}
+			.qrcode img{display: block;width: 100%;}
+			img.head{border-radius: 50%;}
+			.weui_toast{width: 2rem;height: 2rem;min-height: 2rem;margin-left: -1rem;top:50%;left: 50%;margin-top: -1rem;}
+			.show-role{position: fixed;top: 0.2rem;right: 0.2rem;z-index: 100000;color: #fff;font-size: 0.24rem;}
+			.goback{position: fixed;top: 0;left: 0;z-index: 100000;color: #fff;font-size: 0.5rem;}
+			.weui_dialog{z-index: 99999999!important;}
+			
+			.ell-1{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+			.ell-2{overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+			.color{color: #ff4800;}
+			.bg{background: #ff4800;}
+			.gary{color: #999;}
+			.common-header{position: relative; background: #ff4800;height: 0.8rem;line-height: 0.8rem;margin-bottom: 0.06rem; -moz-box-shadow:0px 2px 10px #d9d9d9; -webkit-box-shadow:0px 2px 10px #d9d9d9; box-shadow:0px 2px 10px #d9d9d9;}
+			.common-header .title{position: relative; text-align: center;padding: 0 1rem;color: #fff;font-size: 0.3rem;}
+			.common-header .header-back{position: absolute;top: 0;left: 0;width: .6rem;text-align: center;color: #fff;}
+			.common-header .header-menu{position: absolute;top: 0;right: 0;width: .6rem;text-align: center;}
+			.header-menu .icon{color: #fff;}
+			.shade{display: none; position: fixed;width: 7.5rem;height: 100%; top: 0;left: 50%;margin-left: -3.75rem;background: rgba(0,0,0,0.7);z-index: 100;}
+			.shade-mask{position: absolute;width: 100%;height: 100%; top: 0;left: 0;z-index: 101;}
+			.shade-content{position: absolute;bottom: 0;left: 0;height: 8rem;background: #fff;z-index: 102;}
+			.weui_dialog_hd{padding: 0;}
+			.weui_toast{padding: 0 15px;font-size: 0.32rem;}
+			.role-box{position: fixed;font-size: 0.24rem;width: 7.5rem;height: 100%;background: #fff;top: 0;left: 50%;margin-left: -3.75rem;display: none;}
+			.role-line{padding: 0.2rem;}
+			.role-lt{width: 0.4rem;text-align: center;margin-right: 0.3rem;}
+			.role-lt span{padding: 1px 5px;background: #ff4800;color: #fff;border-radius: 50%;}
+			.role-rt{width: 6.3rem;text-align: justify;font-size: 0.3rem;color: #666;}
+		</style>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script>
+    	var username = "@WorkContext.UserInfo.UserName";
+		function onBridgeReady() {
+            WeixinJSBridge.call('hideOptionMenu');
+        }
+
+        if (typeof WeixinJSBridge == "undefined") {
+            if (document.addEventListener) {
+                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+            } else if (document.attachEvent) {
+                document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+            }
+        } else {
+            onBridgeReady();
+        }
+    	//WeixinJSBridge.call('hideOptionMenu');
+        /*wx.config({
+            debug: false,
+            appId: '@ViewData["AppId"]', 
+            timestamp: '@ViewData["Timestamp"]', 
+            nonceStr: '@ViewData["NonceStr"]', 
+            signature: '@ViewData["Signature"]',
+            jsApiList: [
+                    'checkJsApi',
+                    'onMenuShareTimeline',
+                    'onMenuShareAppMessage',
+                    'onMenuShareQQ',
+                    'onMenuShareWeibo',
+                    'hideMenuItems',
+                    'showMenuItems',
+                    'hideAllNonBaseMenuItem',
+                    'showAllNonBaseMenuItem',
+                    'translateVoice',
+                    'startRecord',
+                    'stopRecord',
+                    'onRecordEnd',
+                    'playVoice',
+                    'pauseVoice',
+                    'stopVoice',
+                    'uploadVoice',
+                    'downloadVoice',
+                    'chooseImage',
+                    'previewImage',
+                    'uploadImage',
+                    'downloadImage',
+                    'getNetworkType',
+                    'openLocation',
+                    'getLocation',
+                    'hideOptionMenu',
+                    'showOptionMenu',
+                    'closeWindow',
+                    'scanQRCode',
+                    'chooseWXPay',
+                    'openProductSpecificView',
+                    'addCard',
+                    'chooseCard',
+                    'openCard'
+            ]
+        });
+
+        wx.error(function (res) {
+            
+        });
+
+        wx.ready(function () {
+            var link = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m/user/bind?m=m&LeaderUid='+'@WorkContext.Uid';
+            var Logo = '@WorkContext.SellerInfo.Logo';
+            var imgUrl = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/Images/Mobile/share-logo.png';
+               // imgUrl = "@(WorkContext.ShopConfig.ImageCDN)@{@WorkContext.SellerInfo.Logo}?w=100&h=100";
+            var  title = "让商家越让利越多,消费者越花越富有";
+            var desc = "让消费者越花越富有,商家越让利越多";
+               
+                wx.onMenuShareTimeline({
+                    title: title,
+                    link: link,
+                    imgUrl: imgUrl,
+                    success: function () {
+                        
+                    },
+                    cancel: function () {
+                        
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: title,
+                    desc: desc,
+                    link: link,
+                    imgUrl: imgUrl,
+                    type: 'link',
+                    dataUrl: '',
+                    success: function () {
+                        
+                    },
+                    cancel: function () {
+                        
+                    }
+                });
+            });*/
+    </script>
+	</head>
+	<body>
+		<div id="qrcode">
+			<span onclick="goToBack()" class="icon iconfont goback">&#xe65d;</span>
+			<span onclick="showRole()" class="show-role">规则说明</span>
+			<div class="img-box">
+				<img class="bg"/>
+				<img v-show="obj.isheader==1" :src="headImg+'?w=100&h=100'" class="head" :style="headStyle"/>
+				<div class="title" v-text="obj.adtext" :style="titleStyle"></div>
+				<div class="name" :style="nameStyle">@WorkContext.UserInfo.UserName</div>
+				<div class="qrcode" :style="qrcodeStyle"  id="qr-code">
+	    			
+	    		</div>
+			</div>
+		</div>
+		<div class="role-box">
+			<div class="common-header" onclick="closeRole()"> 
+				<div class="header-back" ><span class="icon iconfont">&#xe60e;</span></div>
+			    <div class="title ell-1">分享好友规则说明</div> 
+		    </div>
+		    <div class="role-detail">
+		    	<div class="role-line">
+		    		<div class="left role-lt"><span>1</span></div>
+		    		<div class="left role-rt">分享二维码海报给你的好友，或者分享到朋友圈等各大社交平台，通过你分享的二维码，完成注册的好友即可成为你的推荐会员</div>
+		    		<div class="clearfix"></div>
+		    	</div>
+		    	<div class="role-line">
+		    		<div class="left role-lt"><span>2</span></div>
+		    		<div class="left role-rt">也可让好友直接使用微扫描你的二维码，在打开的页面中注册完成后，就会是你的推荐会员</div>
+		    		<div class="clearfix"></div>
+		    	</div>
+		    </div>
+		</div>
+		<script type="text/javascript">
+			var uid = "@WorkContext.Uid";
+			var IsApp = "@WorkContext.IsApp";
+			var iswexin = "@Yitao.Core.WebHelper.IsWeiXin()";
+			var headImg = '@WorkContext.UserInfo.Avatar';
+			
+			if(headImg==""){
+				headImg = "/images/photo.png";
+			}else{
+				if(headImg.indexOf("http")==-1){
+					headImg = "@(WorkContext.ShopConfig.ImageCDN)"+headImg;
+				}
+			}
+			console.log(headImg);
+			
+			//返回交互
+			function goToBack() {
+				if(IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+		                window.js.goBack();
+					}
+				}else{
+					window.history.back();
+				}
+					
+			}
+			function showRole(){
+				$("#qrcode").css("display","none");
+				$(".role-box").css("display","block");
+			}
+			//关闭规则框
+			function closeRole(){
+				$(".role-box").css("display","none");
+				$("#qrcode").css("display","block");
+			}
+				$.showLoading();
+				var vm = new Vue({
+					el: "#qrcode",
+					data: {
+						obj: [],
+						qrcodeStyle:{},
+						titleStyle:{},
+						nameStyle:{},
+						headStyle:{},
+						headImg: headImg
+					},
+					created: function() {
+						this.initData();
+					},
+					methods: {
+						initData: function() {
+							var _this = this;
+							$.ajax({
+								type:"get",
+								url:"/Api/Seller/QrcodeAd?t="+Math.random(),
+								data:{sellerid:14},
+								async:true,
+								success:function(rel) {
+									var rst = rel;
+									if(rst.code==1){
+										_this.obj = rst.data;
+										var bgurl = "@(WorkContext.ShopConfig.ImageCDN)"+rst.data.imgurl;
+										$(".bg").attr("src",bgurl);
+										_this.qrcodeStyle = {
+											"width": _this.PxToRem2(_this.obj.qrcodewidth)+"rem",
+											"height": _this.PxToRem2(_this.obj.qrcodeheight)+"rem",
+											"left": _this.PxToRem2(_this.obj.qrcodex)+"rem",
+											"top": _this.PxToRem3(_this.obj.qrcodey)+"rem"
+										}
+										_this.titleStyle = {
+											"fontSize": _this.PxToRem2(_this.obj.adtextsize)+"rem",
+											"color": "#"+_this.obj.adtextcolor,
+											"left": _this.PxToRem2(_this.obj.adtextx)+"rem",
+											"top": _this.PxToRem3(_this.obj.adtexty)+"rem"
+										}
+										_this.nameStyle = {
+											"color": "#"+_this.obj.nicknamecolor,
+											"fontSize": _this.PxToRem2(_this.obj.nicknamesize)+"rem",
+											"left": _this.PxToRem2(_this.obj.nicknamex)+"rem",
+											"top": _this.PxToRem3(_this.obj.nicknamey)+"rem"
+										}
+										_this.headStyle = {
+											"width": _this.PxToRem2(_this.obj.headerwidth)+"rem",
+											"height": _this.PxToRem2(_this.obj.headerheight)+"rem",
+											"left": _this.PxToRem2(_this.obj.headerx)+"rem",
+											"top": _this.PxToRem3(_this.obj.headery)+"rem"
+										}
+										$.hideLoading();
+										$("#qrcode").show();
+									}else{
+										$.hideLoading();
+										//alert(uid);
+										$.alert("网络不好，未获取到用户信息");
+									}
+								}
+							});
+						},
+						PxToRem: function(num) {
+							var rem = Number(num)*2/100;
+							return rem;
+						},
+						PxToRem2: function(num) {
+							var rem = Number(num)/100;
+							return rem;
+						},
+						PxToRem3: function(num) {
+							var rem = Number(num)/100;
+							return rem;
+						}
+					}
+				});
+				
+			
+			$(function(){
+				var obj = {id:"@WorkContext.Uid",type:1,name:"huadong"};
+				var json = JSON.stringify(obj);
+				
+				var iswexin = "@Yitao.Core.WebHelper.IsWeiXin()";
+				var share_url = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m/activity/adcode?type=3&LeaderUid='+'@WorkContext.Uid';
+				/*if(iswexin=="False"){
+					share_url = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m/account/Login?LeaderUid='+'@WorkContext.Uid';
+				}*/
+				
+				new QRCode(document.getElementById("qr-code"),share_url );
+			})
+		</script>
+	</body>
+</html>

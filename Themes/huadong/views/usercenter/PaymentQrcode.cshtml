@@ -1,0 +1,50 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		
+	    <meta name="format-detection" content="telephone=no">
+	    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	    <meta name="apple-mobile-web-app-capable" content="yes" />
+	    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+	    <meta http-equiv="Pragma" content="no-cache" />
+	    <meta http-equiv="Cache-Control" content="no-cache" />
+	    <meta http-equiv="Expires" content="0" />
+	    <title>付款码-@{@WorkContext.SellerInfo.SellerName}</title>
+		<link rel="stylesheet" href="/Mobile/weui/style/weui.css" />
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+		<!--<link rel="stylesheet" type="text/css" href="/Mobile/shop/css/vip.css" />-->
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/qrcode.css" />
+</head>
+<body>
+		<header>
+			<span class="back"><i class="iconfont">&#xe631;</i>返回</span>
+			<h3>收付款</h3>
+		</header>
+		<div class="tiao">
+
+		<div id="imgcode" />
+			</div>
+		</div>
+		
+		<div class="Code_con">
+			<div id="qrCode">
+			
+		</div>
+		</div>
+		<div class="footer">
+			<i class="iconfont">&#xe739;</i><span class="time">120</span><span class="timesss">秒后过期</span>
+		</div>
+		<script src="/Mobile/weui/jquery-2.1.4.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/barcode.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var Uid = "@WorkContext.UserInfo.UserId";
+		</script>
+		<script src="/Mobile/weui/qrcodeS.js" type="text/javascript" charset="utf-8"></script>
+		
+	
+
+</body>
+</html>

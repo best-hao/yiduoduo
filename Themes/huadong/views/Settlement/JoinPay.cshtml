@@ -1,0 +1,299 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>入驻缴费-@(WorkContext.SellerInfo.SellerName)</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/weui3.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css?v=0.12" />
+    <script src="/Mobile/Themes/huadong/static/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+	<style>
+		body{
+			background:#F7F7F7;
+		}
+		.bg-white{
+			background:#fff;
+		}
+		.color_gray{
+			color:#8C8C8C;
+		}
+		.joinpay_list{
+			background:#fff;
+		}
+		.Payment{
+			margin:10px 0;
+			background:#fff;
+			box-sizing: border-box;
+		}
+		.joinpay_list .weui_cell:before{
+			border-top:0;
+			padding:0 !important;
+			margin:0 !important;
+			left:0 !important;
+		}
+		.joinpay_thumb i{
+			font-size: 40px;
+			color:#E02E24;
+			margin-right:10px;
+			box-sizing: border-box;
+		}
+		.sw_right{
+			float: right;
+		}
+		.chose_list{
+			background:#fff;
+			padding:0px 12px;
+			box-sizing: border-box;
+		}
+		.chose_list .weui-flex{
+			align-items: center;
+			padding:6px 0;
+			border-bottom:1px solid #E8E8E8;
+		}
+		.chose_list .weui-flex:last-child{
+			border-bottom:none;
+		}
+		.chose_list .weui-flex .weui-flex-item span{
+			font-size: 14px;
+			color:#8C8C8C;
+		}
+		.now_payment{
+			background:#fff;
+			width:100%;
+			text-align: center;
+			margin-top:10px;
+			padding:15px 0;
+		}
+		.now_payment button{
+			border:0;
+			outline: 0;
+			width:80%;
+			height:35px;
+			line-height: 35px;
+			text-align: center;
+			border-radius: 35px;
+			background:#ff4800;
+			color:#fff;
+			font-size: 16px;
+			margin:0 auto;
+		}
+		.weui_cell{
+			padding: 4px 15px;
+		}
+		.red-money{
+			color:#ff4800;
+			font-weight:600;
+		}
+		.disabled{background: #f2f2f2;color: #999;}
+        .alipaycr{color:#56abe4!important}
+	.weixincr{color:#09bb07!important}
+	</style>
+</head>
+<body>
+ 	<header>
+        <div class="bg-white weui-header"> 
+            <div class="weui-header-left"> <a class="icon icon-109 fl333" onclick="history.back()"></a>  </div>
+            <h1 class="weui-header-title fl333" style='color:#333'>商家入驻缴费</h1>
+        </div>  
+    </header>
+	<div class="joinpay_list">
+		<div class="weui_cell">
+			<div class="weui_cell_bd weui_cell_primary">
+				<p>会员等级：</p>
+			</div>
+			<div class="weui_cell_ft">普通会员</div>
+        </div>
+		<div class="weui_cell">
+			<div class="weui_cell_bd weui_cell_primary">
+				<p>会员红包：</p>
+			</div>
+			<div class="weui_cell_ft">@WorkContext.UserInfo.UserMoney</div>
+        </div>
+		<!--div class="weui_cell">
+			<div class="weui_cell_bd weui_cell_primary">
+				<p>年费状态：</p>
+			</div>
+			<div class="weui_cell_ft"></div>
+        </div-->
+		<div class="weui_cell">
+			<div class="weui_cell_bd weui_cell_primary">
+				<p>服务期限：</p>
+			</div>
+			<div class="weui_cell_ft">一年</div>
+        </div>
+	</div>
+	<div class="Payment">
+		<div class="weui_cell">
+			<div class="weui_cell_bd weui_cell_primary">
+				<p>缴费金额：</p>
+			</div>
+			<div class="weui_cell_ft red-money"><span>1</span>元</div>
+        </div>
+	</div>
+	<div class="chose_payment">
+		<div class="chose_list">
+			<div class="weui-flex">
+				<div class="joinpay_thumb">
+					<i class="icon iconfont">&#xe66e;</i>
+				</div>
+				<div class="weui-flex-item">
+					<p>红包支付</p>
+					<span>红包抵现，方便快捷</span>
+				</div>
+				<div class="sw_toggle">
+					<div class="sw_right">
+                    	<input class="weui_switch" data-id="1" type="checkbox" checked />
+                	</div>
+				</div>
+			</div>
+			<div class="weui-flex">
+				<div class="joinpay_thumb">
+					<i class="icon iconfont alipaycr">&#xe638;</i>
+				</div>
+				<div class="weui-flex-item">
+					<p>支付宝</p>
+					<span>红包抵现，方便快捷</span>
+				</div>
+				<div class="sw_toggle">
+					<div class="sw_right">
+                    	<input class="weui_switch" data-id="2" type="checkbox" />
+                	</div>
+				</div>
+			</div>
+		
+			@if (Yitao.Core.WebHelper.IsWeiXin())
+        	{
+				<div class="weui-flex">
+					<div class="joinpay_thumb">
+						<i class="icon icon-14 weixincr"></i>
+					</div>
+					<div class="weui-flex-item">
+						<p>微信支付</p>
+						<span>红包抵现，方便快捷</span>
+					</div>
+					<div class="sw_toggle">
+						<div class="sw_right">
+	                    	<input class="weui_switch" data-id="3" type="checkbox"  />
+	                	</div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+	<div class="now_payment">
+		<button id="payNow">立即缴费</button>
+	</div>
+	<script>
+        var pay = {};
+		pay.payType = 1;
+        // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
+        document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+        	$("#payNow").on("click",function() {
+        		if(pay.payType==3){
+	        		$.ajax({
+		        		type:"post",
+		        		url:"joinpay",
+		        		async:true,
+		        		data:{payType:3},
+		        		dataType:"json",
+		        		success:function(rst) {
+		        			if(rst.Code==1){
+		        				//公众号支付
+					            WeixinJSBridge.invoke('getBrandWCPayRequest', {
+					                "appId": rst.appId,
+					                "timeStamp": rst.timeStamp,
+					                "nonceStr": rst.nonceStr,
+					                "package": rst.package,
+					                "signType": "MD5",
+					                "paySign": rst.paySign
+					            }, function (res) {
+					                if (res.err_msg == "get_brand_wcpay_request:ok") {
+					                    $.alert("缴费成功，去填写商户资料",function(){
+					                		window.location.href = "/m/seller/edit";
+					                	});
+					                } else {
+					                	if (res.err_msg == "get_brand_wcpay_request:cancel") {
+					                		$.alert("用户取消支付",  function () {
+						                        // 支付失败刷新当前页
+						                        window.location.reload();
+						                    });
+					                	}
+					                	if (res.err_msg == "get_brand_wcpay_request:fail") {
+					                		$.alert("支付失败",  function () {
+						                        // 支付失败刷新当前页
+						                        window.location.reload();
+						                    });
+					                	}
+					                    
+					                }
+					                // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+					                //因此微信团队建议，当收到ok返回时，向商户后台询问是否收到交易成功的通知，若收到通知，前端展示交易成功的界面；若此时未收到通知，商户后台主动调用查询订单接口，查询订单的当前状态，并反馈给前端展示相应的界面。
+					            });
+					            WeixinJSBridge.log('yo~ ready.');
+		        			}else{
+		        				$.toast(rst.Message);
+		        			}
+		        			
+		        		}
+		        	});
+        		}
+        		
+        	});
+        }, false);
+        $(function(){
+            $('.weui_switch').on("click",function(){
+        		$('.weui_switch').prop("checked", false);
+        		$(this).prop('checked',true)
+        	});
+    		pay.payNow = function(){
+    			$(".weui_switch").each(function(){
+    				if($(this).prop("checked")){
+    					pay.payType = $(this).data("id");
+    				}
+    			});
+    			if(pay.payType == 1){
+    				$.showLoading();
+    				$.ajax({
+    					type: 'post',
+    					url: 'joinPay',
+    					data: { payType: pay.payType },
+    					dataType: 'json',
+    					timeout: 300,
+    					success: function(data){
+    						
+    						if(data.Code==1){
+    							$.toast("支付成功");
+    							window.location.href = "/m/settlement/payresult";
+    						}else{
+    							$.toast("支付失败","cancel");
+    						}
+    					},
+    					error: function(xhr, type){
+    						console.log(xhr);
+    						
+    						$.toast("提交失败", "cancel");
+    					}
+    				});
+    				
+    			}else if(pay.payType==2){
+    				window.location.href = "/m/settlement/JoinAlipay?payType=2";
+    			}
+    		}
+        	$("#payNow").on("click", function(){
+        		pay.payNow();
+        	});
+            
+        });
+	</script>
+ </body>
+</html>

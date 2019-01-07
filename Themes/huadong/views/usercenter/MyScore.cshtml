@@ -1,0 +1,1233 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>我的积分-@{@WorkContext.SellerInfo.SellerName}</title>
+    <link rel="stylesheet" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css?v=0.113" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/usercenter/red-packet/red_packet_detail.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/usercenter/red-packet/red_packet.css?v=0.16" />
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/zepto.min.js"></script>
+    <script src="/Mobile/weui/picker.js"></script>
+    <script src="/Mobile/weui/picker-city.js"></script>
+    <script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/usercenter/myscore.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/loading.css" />
+    <style>
+    	body{width: 7.5rem;margin: 0 auto;}
+        .js_grid {
+            width: 33.3333%
+        }
+
+        .topwd {
+            position: relative;
+            top: 7%;
+            right: -5%;
+        }
+
+            .topwd a {
+                color: #ff4800 !important;
+                font-size: 0.3rem;
+            }
+
+            .topwd icon {
+                color: #E02E24;
+                margin-right: 0.2rem;
+            }
+
+        .wapper {
+            display: block;
+        }
+
+        .boxies {
+            margin-top: 0rem;
+        }
+
+        .cored {
+            color: red
+        }
+
+        .green {
+            color: green
+        }
+        .more-menu{margin-top: 0.7rem;background: #fff;padding-bottom: 10px;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="warp">
+            <div class="header">
+                <div class="weui-flex">
+                    <div class="weui-flex-item lt" v-on:click="goToBack()"><span class="icon iconfont">&#xe60e;</span></div>
+                    <a class="weui-flex-item rt" href="javascript:;" v-on:click='clickMx()'>积分明细</a>
+                </div>
+                <div class="infos">
+                    <div class="title">我的积分</div>
+                    <div class="money">@WorkContext.UserInfo.UserScore</div>
+                </div>
+                <div class="infos-item-box">
+                    <div class="weui-flex">
+                        <div class="weui-flex-item">
+                            <div class="item-box">
+                                <div class="title">累计获得积分</div>
+                                <div class="money">@WorkContext.UserInfo.PayInScoreAmount</div>
+                            </div>
+                        </div>
+                        <div class="weui-flex-item">
+                            <div class="item-box">
+                                <div class="title">累计使用积分</div>
+                                <div class="money">@WorkContext.UserInfo.PayOutScoreAmount</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="more-menu">
+            	<div class="weui-flex">
+            		<div class="weui-flex-item">
+            			<a href="javascript:;" class="" v-on:click="clickMx()">
+		                    <div class="weui_grid_icon">
+		                        <span class="icon iconfont">&#xe659;</span>
+		                    </div>
+		                    <p class="weui_grid_label">
+		                        积分明细
+		                    </p>
+		                </a>
+            		</div>
+            		<div class="weui-flex-item">
+            			@if (@WorkContext.IsApp == 1)
+		                {
+		                    <a href="javascript:;" class="" v-on:click='jumpApp'>
+		                        <div class="weui_grid_icon">
+		                            <span class="icon iconfont">&#xe655;</span>
+		                        </div>
+		                        <p class="weui_grid_label">
+		                            积分转赠
+		                        </p>
+		                    </a>
+		                }
+		                else
+		                {
+		                    <a href="javascript:;" class="" v-on:click='jfgive'>
+		                        <div class="weui_grid_icon">
+		                            <span class="icon iconfont">&#xe655;</span>
+		                        </div>
+		                        <p class="weui_grid_label">
+		                            积分转赠
+		                        </p>
+		                    </a>
+		                }
+            		</div>
+            	</div>
+            	<div class="weui-flex">
+            		<div class="weui-flex-item">
+            			<a href="javascript:;" class="" v-on:click="packetApp()">
+		                    <div class="weui_grid_icon">
+		                        <span class="icon iconfont">&#xe66c;</span>
+		                    </div>
+		                    <p class="weui_grid_label">
+		                        积分红包
+		                    </p>
+		                </a>
+            		</div>
+            		<div class="weui-flex-item">
+            			<a href="/m/activity/ScorePacketList?IsApp=@(WorkContext.IsApp)" class="" >
+		                    <div class="weui_grid_icon">
+		                        <span class="icon iconfont">&#xe659;</span>
+		                    </div>
+		                    <p class="weui_grid_label">
+		                      红包明细
+		                    </p>
+		                </a>
+            		</div>
+            	</div>
+            </div>
+            <!--积分转赠输入手机号-->
+            <div class="ysdetail" v-show='giveshow'>
+                <div class="wapper">
+                    <div id="packet">
+                        <div class="header-ys">
+                            <div class="weui-header bg-white">
+                                <div class="weui-header-left">
+                                    <a href="javascript:;" v-on:click='jfgive()' class="icon iconfont">&#xe60e;</a>
+                                </div>
+                                <h1 class="weui-header-title">积分转赠</h1>
+                                <div class="weui-header-right">
+                                    <!--<a class="icon icon-83 f-black"></a>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class='addcard-box' style='height:100%;background: #fff;'>
+                            <div class="blank"></div>
+                            <div class="weui_cell">
+                                <div class="weui_cell_hd">
+                                    <label class="weui_label">对方手机号：</label>
+                                </div>
+                                <div class="weui_cell_hd">
+                                    <input name="mobile" id='mobile' onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9-]+/,'');}).call(this)" onblur="this.v();" maxlength="11" type="number" oninput="if(value.length>11)value=value.slice(0,11)" placeholder="请输入对方手机号" class="weui_input" v-model='mobile'>
+                                </div>
+                                <div class="weui_cell_hd"><icon class='icon iconfont'>&#xe609;</icon></div>
+                            </div>
+                            <p class="tips2">注：积分将实时转入对方账户，无法退回，请仔细核对。</p>
+                            <button v-on:click='nextdetail(1)' class="savebtn">下一步</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!--转赠积分页面-->
+            <div class="ysdetail" v-show='isgiven'>
+                <div class="wapper">
+                    <div id="packet">
+                        <div class="header-ys">
+                            <div class="weui-header bg-white">
+                                <div class="weui-header-left">
+                                    <a href="javascript:;" v-on:click='nextdetail(2)' class="icon iconfont">&#xe60e;</a>
+                                </div>
+                                <h1 class="weui-header-title">积分转赠</h1>
+                                <div class="weui-header-right">
+                                    <a class="icon "></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='addcard-box' style='height:100%;background: #fff;'>
+                            <div class="blank"></div>
+                            <div class="main">
+                                <div class="card-box">
+                                    <div class="infos-box">
+                                        <img :src="'@(WorkContext.ShopConfig.ImageCDN)/'+formuserInfo.avatar+'?w=80&h=80'" class="logo">
+                                        <p class="shopname">{{formuserInfo.username}}</p>
+                                    </div>
+                                    <div class="card-bottom">
+                                        <div class="pay-infos">
+                                            <div class="title">积分转赠<span></span></div>
+                                            <div class="input-box">
+                                                <input type="number" name="giftScore" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9-]+/,'');}).call(this)" onblur="this.v();" id="money" v-model='giftScore'>
+                                            </div>
+                                            <div class="get-score-info">
+                                                <div class="weui-flex">
+                                                    <div class="weui-flex-item lt">可转赠积分@(WorkContext.UserInfo.UserScore)</div>
+                                                    <div class="weui-flex-item rt"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a href="javascript:showmark();" id='payNow' class='btn confirm'>确认转赠</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class='topwd'><a href="/m/account/resetpaypwd"><icon class='icon iconfont'>&#xe631;</icon>忘记支付密码</a></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--积分明细-->
+            <div class="ysdetail" v-show='yshow' :style='{height:windowHeight+"px"}'>
+                <div class="wapper">
+                    <div id="packet">
+                        <div class="header-ys">
+                            <div class="weui-header bg-white">
+                                <div class="weui-header-left">
+                                    <a href="javascript:;" v-on:click='clickMx()' class="icon iconfont">&#xe60e;</a>
+                                </div>
+                                <h1 class="weui-header-title">积分明细 </h1>
+                                <div class="weui-header-right" v-on:click="showShaixuan()">
+                                    <a class=" iconfont">筛选</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="shaixuan-box">
+                            <div class="weui-header">
+                                <div class="weui-header-left" v-on:click="closeShaixuan()">
+                                    <a class="icon iconfont">&#xe60e;</a>
+                                </div>
+                                <h1 class="weui-header-title">筛选</h1>
+                                <div class="weui-header-right"></div>
+                            </div>
+                            <div class="title">选择条件</div>
+                            <div class="lists" style='padding-top:0.4rem'>
+                                <div class="weui-flex">
+                                    <div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index<3">
+                                        <div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+
+                                    </div>
+                                </div>
+                                <div class="weui-flex">
+                                    <div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=3 && index<6">
+                                        <div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+                                    </div>
+                                </div>
+                                <div class="weui-flex">
+                                    <div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=6 && index<9">
+                                        <div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+                                    </div>
+                                </div>
+                                <div class="weui-flex">
+                                    <div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=9 && index<12">
+                                        <div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+                                    </div>
+                                </div>
+                                <div class="weui-flex">
+                                    <div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=12 && index<15">
+                                        <div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+                                    </div>
+                                </div>
+                                <div class="weui-flex">
+                                    <div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=15 && index<18">
+                                        <div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+                                    </div>
+                                </div>
+                                <div class="weui-flex">
+                                    <div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=18 && index<21">
+                                        <div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+                                    </div>
+                                </div>
+                                <div class="weui-flex">
+                                    <div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=21 && index<24">
+                                        <div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+                                    </div>
+                                </div>
+                                <div class="weui-flex">
+                                    <div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=24 && index<26">
+                                        <div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+                                    </div>
+                                </div>
+                                <div class="weui-flex">
+                                    <div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=26 && index<28">
+                                        <div class="item" :class="{'cur':(index==27 && FlowType=='') || (index!=27 && FlowType==item.id)}" v-on:click="getLists(item)">{{item.title}}</div>
+                                    </div>
+                                </div>
+                                
+                                <!--<div class="weui-flex">
+                                    <div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=28 && index<30">
+                                        <div class="item" :class="{'cur':FlowType==item.id}" v-on:click="getLists(item)">{{item.title}}</div>
+                                    </div>
+                                </div>
+                                <div class="weui-flex">
+                                    <div class="weui-flex-item" v-for="(item, index) of shaixuan" :key="item.id" v-if="index>=30">
+                                        <div class="item" v-if="index==30" :class="{'cur':FlowType==''}" v-on:click="getLists(item)">{{item.title}}</div>
+                                    </div>
+                                </div>-->
+                            </div>
+                        </div>
+                        <!--积分详情-->
+                        <div class="jifen-detail">
+                            <div class="weui-header">
+                                <div class="weui-header-left" v-on:click="closedetail()">
+                                    <a class="icon iconfont">&#xe60e;</a>
+                                </div>
+                                <h1 class="weui-header-title">积分详情</h1>
+                                <div class="weui-header-right"></div>
+                            </div>
+                            <div class='showdetail'>
+                                <p><span class='icon iconfont'>&#xe628;</span>{{jfdetail.shopname}}</p>
+                                <div class='userscore' :style="{'color':colorByType(jfdetail.flowtype)}">
+                                    <span>{{fuhaoByType(jfdetail.flowtype)}}</span>
+
+                                    {{jfdetail.usescore}}
+                                </div>
+                                <div class="weui_cell">
+                                    <div class="weui_cell_hd">
+                                        <label class="weui_label">交易类型：</label>
+                                    </div>
+                                    <div class="weui_cell_hd weui_cell_primary">
+                                        <div class="we-rt">{{nameByType(jfdetail.flowtype)}}</div>
+                                    </div>
+                                </div>
+                                <div class="weui_cell" v-if='jfdetail.flowtype!=11&&jfdetail.flowtype!=3'>
+                                    <div class="weui_cell_hd">
+                                        <label class="weui_label">订单编号：</label>
+                                    </div>
+                                    <div class="weui_cell_hd weui_cell_primary">
+                                        <!--<div  class='we-rt' v-if='jfdetail.flowtype==1||jfdetail.flowtype==3||jfdetail.flowtype==4||jfdetail.flowtype==5||jfdetail.flowtype==6||jfdetail.flowtype==8||jfdetail.flowtype==9||jfdetail.flowtype==10||jfdetail.flowtype==12||jfdetail.flowtype==13||jfdetail.flowtype==14||jfdetail.flowtype==15||jfdetail.flowtype==16||jfdetail.flowtype==17'
+                                            >收入</div>
+                                        <div  class='we-rt' v-if='jfdetail.flowtype==2||jfdetail.flowtype==7||jfdetail.flowtype==11'>支出</div>-->
+                                        <div class="we-rt">{{jfdetail.paymentsn}}</div>
+                                    </div>
+                                </div>
+                                <div class="weui_cell">
+                                    <div class="weui_cell_hd">
+                                        <label class="weui_label">创建时间：</label>
+                                    </div>
+                                    <div class="weui_cell_hd weui_cell_primary">
+                                        <div class='we-rt'>{{jfdetail.addtime}}</div>
+                                    </div>
+                                </div>
+                                <div class="weui_cell" v-if='jfdetail.flowtype!=3&&jfdetail.flowtype!=5'>
+                                    <div class="weui_cell_hd">
+                                        <label class="weui_label" style='width:1.76rem'>备注：</label>
+                                    </div>
+                                    <div class="weui_cell_hd weui_cell_primary">
+                                        <div class='we-rt'>{{jfdetail.memo}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="content-box" v-if='mxlistshow'>
+                            <div class="data-header top-data">
+                                <div class="infos">
+                                    <div class="time" v-if='initTimeShow'>{{curData.day}}</div>
+                                    <div class="time" v-else>全部明细</div>
+                                    <!--<div class="detail">
+                                        <span>获得积分：{{curData.getMoney}}</span>
+                                        <span>使用积分：{{curData.payMoney}}</span>
+                                    </div>-->
+                                    <div class="time-select">
+                                        <span class="icon iconfont rili">&#xe639;</span>
+                                        <input class="weui_input" type="text" value="" id='date' readonly />
+                                    </div>
+                                </div>
+                                <div class="infos" v-if="lists.length<=0" style="height: 1rem;line-height: 1rem;text-align: center;color: #999;">
+                                    暂无数据
+                                </div>
+                            </div>
+                            <div v-for="(item, index) of lists"
+                                 :data-index="index"
+                                 :data-getMoney="item.getMoney"
+                                 :data-payMoney="item.payMoney"
+                                 :data-day="item.day"
+                                 class="boxies" :class="{'cur-list':index==0}">
+                                <div class="data-header" v-show="index!=0 && page==1">
+                                    <div class="infos">
+                                        <div class="time">{{item.day}}</div>
+                                        <div class="detail">
+                                            <span>收入红包：{{item.getMoney}}</span>
+                                            <span>支出红包：{{item.payMoney}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="lists-box" :class="{'first':index==0}">
+                                    <ul>
+                                        <li v-for="(itemLi, indexLi) of item.data" :key="indexLi" v-on:click="showDetail(itemLi)">
+                                            <div class="detail-left">
+                                                <span class="icon iconfont" style=''>&#xe628;</span>
+                                            </div>
+                                            <div class="detail-center">
+                                                <div class="title">{{nameByType(itemLi.flowtype)}}</div>
+                                                <div class="time">{{itemLi.addtime}}</div>
+                                            </div>
+                                            <div class="detail-right" style='right:0.6rem' :style="{'color':colorByType(itemLi.flowtype)}">
+                                                <span class="fuhao">{{fuhaoByType(itemLi.flowtype)}}</span><span>{{itemLi.usescore}}</span>
+                                            </div>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="loading" :style="{'margin-top':loadingTop+'rem'}">
+                    <div class="weui_cells_title tcenter hide" id="more">
+                        <div class="weui-loadmore">
+                            <i class="weui-loading"></i>
+                            <span class="weui-loadmore-tips">正在加载</span>
+                        </div>
+                    </div>
+                    <div v-if="page==1" class="weui_cells_title tcenter hide" id="nomore">
+                        暂无数据
+                    </div>
+                    <div v-else class="weui_cells_title tcenter hide" id="nomore">
+                        没有更多数据了
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <div class="weui_mask"></div>
+        <div class="weui-custom-pop weui-dialog-visible" v-if='pwdboxshow'>
+            <div class="close" onclick="hidemark()"><i class="icon iconfont">&#xe672;</i></div>
+            <div class="weui-custom-hd">清输入支付密码</div>
+            <div class="weui-custom-bd">
+                <div class="pwd-box">
+                    <input type="tel" maxlength="6" class="pwd-input" id="pwd-input" autofocus="autofocus" v-model='PayPwd'>
+                    <div class="fake-box">
+                        <input type="password" readonly="">
+                        <input type="password" readonly="">
+                        <input type="password" readonly="">
+                        <input type="password" readonly="">
+                        <input type="password" readonly="">
+                        <input type="password" readonly="">
+                    </div>
+                </div>
+                <div class="weui-custom-ft">
+                    <a href="javascript:hidemark();">取消</a>
+                    <a href="javascript:hidemark(1);">确定</a>
+                </div>
+            </div>
+        </div>
+        <div class="curtain hide">
+            <div class="loader Rotation"></div>
+            <div class="loadTit">
+                <icon class='icon iconfont'>&#xe649;</icon>
+            </div>
+        </div>
+        <script type="text/javascript">
+			$.showLoading();
+//$('.curtain').removeClass("hide")
+		var vm = new Vue({
+			el: '#app',
+			data: {
+				IsApp: '@WorkContext.IsApp',
+				userid:0,
+				shopdetail:{},
+				jfdetail:{},
+				loadingTop: 0,
+				page:1,
+				initTimeShow:false,
+				isgiven:false,
+				giveshow:false,
+				isShow: false,
+				formShow:false,
+				curType: '',
+				FlowType:'',
+				mobile:'',
+				yshow:false,//营收明细显示隐藏
+				tqShow:false,//提取营收显示隐藏
+				curData: {day:"2018-07", getMoney:20.00, payMoney:30.00},
+				scrollHeight: 0,
+				windowHeight:0,
+				StartTime: "",
+				EndTime: "",
+				shaixuan: [
+					{id: 1,title: "购买获赠"},
+					{id: 2,title: "消费抵扣"},
+					{id: 3,title: "签到获赠"},
+					{id: 4,title: "注册赠送"},
+					{id: 5, title: "分享赠送"},
+					{id: 6, title: "退款增加"},
+					{id: 7, title: "拆红包扣除"},
+					/*{id: 8, title: "系统扣除"},
+					{id: 9, title: "推荐会员获赠"},*/
+					{id: 10, title: "商家积分营收"},
+					{id: 11, title: "积分转赠扣除"},
+					{id: 12, title: "积分转赠获赠"},
+					{id: 13, title: "消费获赠积分"},
+					{id: 14, title: "商家销售获赠"},
+					{id: 15, title: "粉丝购买分成"},
+					{id: 16, title: "粉丝销售分成"},
+					{id: 17, title: "超级码分红"},
+					{id: 18, title: "区域销售分红"},
+					{id: 19, title: "转转消费扣除"},
+					{id: 20, title: "转转销售增加"},
+					{id: 21, title: "积分购购买扣除"},
+					{id: 22, title: "积分购销售增加"},
+					{id: 23, title: "系统增加积分"},
+                    {id: 24, title: "系统扣除积分" },
+                    /*{id: 25, title: "注册赠送" },*/
+                    {id: 26, title: "粉丝实名认证赠送" },
+                    {id: 27, title: "幸运购扣除" },
+                    {id: 28, title: "发积分红包" },
+                    {id: 29, title: "领积分红包" },
+                    {id: 30, title: "红包过期退回" },
+					{id: 99, title: "全部"},
+				],
+				day: [],
+				lists: [
+				],
+				windowHeight:$(window).height(),
+				giftScore:'',
+				PayPwd:'',
+				formuserInfo:{},
+				userId:'@WorkContext.Uid',
+				usescore:'@WorkContext.UserInfo.UserScore',
+				pwdboxshow:false,
+				mxlistshow:true,//明细列表的现实隐藏
+				isbind:false,
+				userInfoMobile:'@WorkContext.UserInfo.Mobile',
+				isUserRoleCash:false,//是否设置权限
+				isgiftscore:0,//1 禁止转赠积分  0 可以转赠积分
+				mostgiftscore:0,//最大转赠积分
+			},
+			methods:{
+				goToBack: function() {
+					var _this = this;
+		    		if(this.IsApp==1){
+						if(navigator.userAgent.indexOf("iPhone")>0){
+							gobacklastpage();
+						}
+						if(navigator.userAgent.indexOf("Android")>0){
+				         window.js.goBack();
+			         }
+					}else{
+						window.location.href="/m/usercenter/home";
+					}
+				},
+				jumpApp: function() {
+					if(Number(this.IsApp)==1){
+						if(navigator.userAgent.indexOf("iPhone")>0){
+							UserGivingScoreAction();
+						}
+						if(navigator.userAgent.indexOf("Android")>0){
+							window.js.giftScore();
+						}
+					}
+				},
+				packetApp: function() {
+					if(Number(this.IsApp)==1){
+						if(navigator.userAgent.indexOf("iPhone")>0){
+							sendScoreRedPacket();
+						}
+						if(navigator.userAgent.indexOf("Android")>0){
+							window.js.sendScoreRedPacket();
+						}
+					}else{
+						window.location.href = "/m/activity/ScoreSendPacket?IsApp=@(WorkContext.IsApp)";
+					}
+				},
+				
+				
+				getUid:function(mobile) { //获取商品详情
+		                var _this = this;
+		                if(_this.mobile=='@WorkContext.UserInfo.Mobile'){
+					    	   $.alert('用户不能给自己转积分',function(){_this.mobile=''});
+					        }else{
+					        	 $.ajax({
+				                    type: "get",
+				                    url: '/Api/User/GetUserByMobile?v='+Math.random()+'&Mobile=' +mobile,
+				                    async: true,
+				                    success: function(rel) {
+				                    	console.log(rel)
+				                       if(rel.data.userid){
+				                       	_this.formuserInfo=rel.data;
+				                       	_this.userid=rel.data.userid;
+				                       	  _this.isgiven=!_this.isgiven;
+				                       }else{
+				                         $.alert('该用户未注册')
+				                       }
+
+				                    }
+		                         });
+					}
+		        },
+		        givenscore:function(){
+		        	var _this = this;
+		        	var url='/Api/User/CashToCard?v='+Math.random()+'&FromUserId='+'@WorkContext.Uid'+'&ToUserMobile='+_this.mobile+'&GiftScore='+_this.giftScore+'&PayPwd='+_this.PayPwd;
+		                $.ajax({
+		                    type: "get",
+		                    url: url,
+		                    async: true,
+		                    success: function(rel) {
+		                       console.log(rel)
+		                       _this.PayPwd=''
+		                       $(".fake-box input").each(function() {
+									$(this).val("");
+						       });
+		                       if(rel.code==1){
+		                       	$.alert('转赠成功',function(){
+		                       		window.location.href='/m/usercenter/home'
+		                       	})
+		                       }else{
+
+		                       	$.alert(rel.message,function(){
+		                       		_this.PayPwd=''
+		                       	})
+		                       }
+
+		                    }
+		                });
+		        },
+				nameByType: function(type) {
+					var _this = this;
+					switch(type)
+					{
+					    case 1:
+					       return "购买获赠";
+					        break;
+					    case 2:
+					       return "消费抵扣";
+					        break;
+					    case 3:
+					       return "签到获赠";
+					        break;
+						case 4:
+					       return "注册赠送";
+					        break;
+						case 5:
+					       return "分享赠送";
+					        break;
+						case 6:
+					       return "退款增加";
+					        break;
+						case 7:
+					       return "拆红包扣除";
+					        break;
+						case 8:
+					       return "系统扣除";
+					        break;
+						case 9:
+					       return "推荐会员获赠";
+					        break;
+					    case 10:
+					       return "商家积分营收";
+					        break;
+					    case 11:
+					       return "积分转赠扣除";
+					        break;
+					    case 12:
+					       return "积分转赠获赠";
+					        break;
+					    case 13:
+					       return "消费获赠积分";
+					        break;
+					    case 14:
+					       return "商家销售获赠";
+					        break;
+					    case 15:
+					       return "粉丝购买分成";
+					        break;
+					    case 16:
+					       return "粉丝销售分成";
+					        break;
+					    case 17:
+					       return "超级码分红";
+					        break;
+					    case 18:
+					       return "区域销售分红";
+					        break;
+					    case 19:
+					       return "转转消费扣除";
+					        break;
+					   case 20:
+					       return "转转销售增加";
+					        break;
+					   case 21:
+					       return "积分购购买扣除";
+					        break;
+					   case 22:
+					       return "积分购销售增加";
+					        break;
+					   case 23:
+					       return "系统增加积分";
+					        break;
+					   case 24:
+					       return "系统扣除积分";
+                            break;
+                        case 25:
+                            return "注册赠送";
+                            break;
+                        case 26:
+                            return "粉丝实名认证赠送";
+                            break;
+                        case 27:
+                            return "幸运购扣除";
+                            break; 
+                        case 28:
+                            return "发积分红包";
+                            break;
+                        case 29:
+                            return "领积分红包";
+                            break;
+                        case 30:
+                            return "红包过期退回";
+                            break;
+					    default:
+
+					}
+				},
+				fuhaoByType: function(type) {
+					if(type==2 || type==7 || type==11||type==19||type==21||type==24||type==27||type==28){
+						return "-";
+					}else{
+						return "+";
+					}
+				},
+				colorByType: function(type) {
+					if(type==2 || type==7 || type==11||type==19||type==21||type==24||type==27||type==28){
+						return "#f00";
+					}else{
+						return "#09bb07";
+					}
+				},
+				nextdetail:function(num){
+					var _this=this;
+					if(num==1){
+						console.log(_this.mobile);
+						if(_this.mobile.length==0){
+						 $.alert('手机号不能为空')
+					    }else{
+						 var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+				          if (!myreg.test(_this.mobile)) {
+				              $.alert('请输入正确手机号')
+				          } else {
+					        	_this.getUid(_this.mobile)
+				          }
+					    }
+					}else if(num==2){
+						_this.isgiven=!_this.isgiven
+					}
+				},
+				jfgive:function(){//
+					var _this=this;
+					if(_this.isgiftscore==1){
+						$.alert('抱歉！该用户禁止转赠积分');
+         		        return false;
+					}else{
+						$.ajax({
+		                    type: "get",
+		                    url: '/Api/User/GetUserByMobile?v='+Math.random()+'&Mobile=' +'@WorkContext.UserInfo.Mobile',
+		                    async: true,
+		                    success: function(rel) {
+		                    	console.log(111);
+		                    
+		                       if(rel.data.paypwd!=''){
+		                       	    if(_this.isbind){
+		                       	    	_this.giveshow=!_this.giveshow
+		                       	    }else{
+	                       	    	    $.confirm("请先去实名认证", "未实名认证", function() {
+						                 window.location.href='/m/usercenter/authentication'
+								        }, function() {
+								        });
+		                       	    }
+		                       }else{
+		                         $.alert('未设置支付密码,请到个人中心页设置密码')
+		                       }
+		                    }
+		                });
+					}
+					
+				},
+				getbank:function(){
+					console.log(1)
+				},
+				cardclick:function(){
+					var _this=this;
+					_this.formShow=!_this.formShow;
+				},
+				clickMx:function(){
+					var _this=this;
+					_this.yshow=!_this.yshow;
+					if(_this.yshow==false){
+						_this.initTimeShow=false;
+						_this.lists = [];
+                      _this.GetUserScoreFlow(1)
+					}
+				},
+				clickTq:function(){
+					var _this=this;
+					_this.tqShow=!_this.tqShow;
+				},
+				showShaixuan: function() {
+					$(".shaixuan-box").animate({
+						left: "50%",
+						"margin-left": "-3.75rem"
+					}, 300);
+
+				},
+				closeShaixuan: function() {
+					$(".shaixuan-box").animate({
+						left: "100%",
+						"margin-left": 0
+					}, 300);
+				},
+				getLists: function(item) {
+					var curT = this.StartTime.substring(0,7);
+					if(this.StartTime==""){
+						var curtime = new Date();
+						var year = curtime.getFullYear();
+						var mon = curtime.getMonth()+1;
+						if(mon<=9){
+							mon = "0"+mon;
+						}
+						curT = year+"-"+mon;
+					}
+					this.page=1;
+					this.day = [];
+					this.lists = [];
+					this.curData = {day:curT, getMoney:0, payMoney:0};
+					this.FlowType = item.id;
+					if(item.id==99){
+						this.FlowType = "";
+					}
+					this.GetUserScoreFlow();
+					this.closeShaixuan();
+				},
+				GetUserScoreFlow:function(num){
+					var _this = this;
+					_this.loadingTop = 0;
+					if(num==1){
+						_this.FlowType='';
+						_this.StartTime='';
+						_this.EndTime='';
+						_this.page=1;
+					}
+					var url = "/Api/User/GetUserScoreFlow?v="+Math.random()+"&userid="+"@WorkContext.Uid&page="+_this.page+"&size=15";
+					if(_this.FlowType!=""){
+						url = "/Api/User/GetUserScoreFlow?v="+Math.random()+"&userid="+"@WorkContext.Uid&FlowType="+_this.FlowType+"&page="+_this.page+"&size=15";
+						if(_this.StartTime!="" && _this.EndTime!=""){
+							url = "/Api/User/GetUserScoreFlow?v="+Math.random()+"&userid="+"@WorkContext.Uid&FlowType="+_this.FlowType+"&StartTime="+_this.StartTime+"&EndTime="+_this.EndTime+"&page="+_this.page+"&size=15";
+						}
+					}else{
+						if(_this.StartTime!="" && _this.EndTime!=""){
+							url = "/Api/User/GetUserScoreFlow?v="+Math.random()+"&userid="+"@WorkContext.Uid&StartTime="+_this.StartTime+"&EndTime="+_this.EndTime+"&page="+_this.page+"&size=15";
+						}
+					}
+					$.ajax({
+		        		type:"get",
+		        		url:url,
+		        		async:true,
+		        		success:function(rel) {
+		        			$("#more").addClass("hide");
+		        			if(rel.code==1){
+								var dararr = [];
+								var obj = {};
+								rel.data.forEach(function(v, i){
+									var daystr = v.addtime.substring(0,7);
+									var daynum = Number(daystr.replace("-",""));
+									if($.inArray(daynum,dararr)==-1){
+										dararr.push(daynum);
+										obj = {day:daystr, getMoney:0, payMoney:0,data:[]};
+										_this.lists.push(obj);
+									}
+								});
+								dararr.forEach(function(a,b){
+									var numstr = a.toString();
+									var str = numstr.substring(0,4)+"-"+numstr.substring(4,6);
+									if($.inArray(str, _this.day)==-1){
+										_this.day.push(str);
+									}
+								});
+								_this.curData.day = _this.day[0];
+								_this.lists.forEach(function(n, m){
+									rel.data.forEach(function(vo, k){
+										var daystr = vo.addtime.substring(0,7);
+										if(_this.lists[m].day==daystr){
+											_this.tofixed(vo.remainscore)
+											_this.lists[m].data.push(vo);
+										}
+									});
+								});
+								_this.page++;
+								console.log(_this.lists)
+							}else{
+								if(_this.page==1){
+									_this.loadingTop = 1;
+								}
+								$("#nomore").removeClass("hide");
+								return false;
+							}
+		        		}
+			    });
+				},
+				showDetail :function(item){
+					var _this=this;
+					_this.jfdetail=item;
+					$(".jifen-detail").animate({
+						left: "50%",
+						"margin-left": "-3.75rem"
+					}, 300);
+					setTimeout(function(){
+						_this.mxlistshow=false;
+					},300)
+
+				},
+				closedetail:function(){
+					var _this=this;
+					$(".jifen-detail").animate({
+						left: "100%",
+						"margin-left": 0
+					}, 300);
+					_this.mxlistshow=true;
+				},
+				jifendetail:function(){
+					var _this=this;
+					var url="/Api/User/GetUserScoreFlow?userid="+'@WorkContext.Uid'
+					_this.GetUserScoreFlow(url)
+				},
+				judegebind:function(){//判断是否实名
+		    		var _this=this;
+		    		$.ajax({
+		    			type:"get",
+		    			url:"/Api/Account/IsAuthentication?v="+Math.random()+"&UserId="+_this.userId,
+		    			success: function(rel){
+		    				var data=rel;
+		    				if(data.code==1){
+		    					_this.isbind=true;
+		    				}
+		    			}
+		    		});
+		    	},
+				tofixed:function(str){//保留小数点3位
+						var arr=str.toString().split('.');
+							if(arr[1]!=undefined){
+								if(arr[1].substring(0,3).substring(2,3)!=0){//第三位不为零
+							  var a=arr[0]+'.'+arr[1].substring(0,3);
+							}else{
+								if(arr[1].substring(0,3).substring(1,2)!=0){//第二位不为零
+									var a=arr[0]+'.'+arr[1].substring(0,2)
+								}else{
+									var a=arr[0]+'.'+arr[1].substring(0,1)
+								}
+							}
+						}else{
+							a=str
+						}
+					return a;
+				},
+				judegenowcash:function(num){//判断用户有无权限
+		         	var _this=this;
+		         	$.ajax({
+		    			type:"get",
+		    			url:"/Api/User/GetUserRoleCashByUserId?userid="+_this.userId,
+		    			success: function(rel){
+		    				console.log(rel)
+		    				if(rel.code==1){
+		    					_this.isUserRoleCash=true;
+		    					_this.isgiftscore=rel.data.isgiftscore;
+		    					_this.mostgiftscore=rel.data.mostgiftscore;
+		    				}
+		    			}
+		    		})
+	            },
+			},
+			mounted:function(){
+				this.jifendetail();
+				this.judegebind();
+			},
+			cerated:function(){
+				var _this=this;
+				_this.GetUserScoreFlow()
+			},
+			  watch:{
+			  	mobile:function(val){
+			  		if(/[a-z]/i.test(val)){
+			  			$.alert('手机号格式不正确');
+			  			$('#mobile').blur();
+			  			return false;
+			  		}
+			  	},
+	 		giftScore: function(val,oldval) {
+		 	    var _this=this;
+		 	    if(!/^[0-9]\d*$/.test(val)&&val!=''){
+			    	$.alert('积分不能输入小数',function(){
+			    		_this.giftScore=val.toString().split('.')[0];
+			    	});
+				   $('#money').blur();
+			        return false;
+			    }else if(val>_this.usescore){
+			    	$.alert('积分不足',function(){
+			          		_this.giftScore=oldval;
+			          	})
+			          	$('#money').blur();
+			          	return false;
+			    }else if(_this.isUserRoleCash==false){
+			    	if(Number(val)>100000){
+			    		$.alert('积分转赠不能超过10万',function(){
+			    		   _this.giftScore=oldval;
+			    	    });
+					   $('#money').blur();
+				        return false;
+			    	}
+			    }else if(_this.isUserRoleCash){
+			    	if(Number(val)>Number(_this.mostgiftscore)){
+			    		$.alert('积分转赠不能超过最大转赠积分',function(){
+			    		   _this.giftScore=oldval;
+			    	    });
+					   $('#money').blur();
+				        return false;
+			    	}
+			    }else{
+//			        if(val>_this.usescore){
+//			          	$.alert('积分不足',function(){
+//			          		_this.giftScore=oldval;
+//			          	})
+//			          	$('#money').blur();
+//			          	return false;
+//			        }else {
+//			        }
+			    }
+	 	    },
+	 	    PayPwd:function(val){
+	 	    	console.log(val)
+	 	    	var $input = $(".fake-box input");
+	 	    	var pwd = $("#pwd-input").val().trim()
+	 	    	for (var i = 0, len = val.length; i < len; i++) {
+			    $input.eq("" + i + "").val(pwd[i]);
+		       }
+	 	    	$input.each(function() {
+					var index = $(this).index();
+					if (index >= len) {
+						$(this).val("");
+					}
+		        });
+	 	    }
+	 	},
+	})
+
+	function showmark(){
+	 console.log(vm.giftScore!=0)
+	 if(!/^[0-9]\d*$/.test(vm.giftScore)&&vm.giftScore!=''){
+			    	$.alert('积分不能输入小数',function(){
+			    		vm.giftScore=vm.giftScore.toString().split('.')[0];
+			    	});
+				   $('#money').blur();
+			        return false;
+			    }else if(vm.giftScore!=''&&vm.giftScore!=0){
+			 $('.weui_mask').addClass('weui_mask_visible');
+			$('.weui-custom-pop').addClass('weui-dialog-visible');
+			vm.pwdboxshow=true;
+		}else{
+			$.alert('请输入转赠积分')
+		}
+    }
+	  function hidemark(num){
+	  	vm.pwdboxshow=false;
+	 	    $('.weui_mask').removeClass('weui_mask_visible');
+			$('.weui-custom-pop').removeClass('weui-dialog-visible');
+			if(num==1){
+				vm.givenscore();
+			}
+			$(".fake-box input").each(function() {
+				$(this).val("");
+			});
+	 }
+
+ $(window,document).bind('scroll',function(){
+    if($(this).scrollTop() > 120){
+            $('.top').fadeIn('slow');
+        }else{
+        $('.top').fadeOut('slow');
+        }
+    });
+
+    $(".top i").bind("tap",function(){
+        $("html,body").animate({"scrollTop":0});
+    });
+   var $input = $(".fake-box input");
+	$("#pwd-input").on("input", function() {
+		var pwd = $(this).val().trim();
+		for (var i = 0, len = pwd.length; i < len; i++) {
+			$input.eq("" + i + "").val(pwd[i]);
+		}
+		$input.each(function() {
+			var index = $(this).index();
+			if (index >= len) {
+				$(this).val("");
+			}
+		});
+		if (len == 6) {
+			//执行其他操作
+		}
+	});
+
+	$(function() {
+		vm.judegenowcash()
+			setTimeout(function(){
+				$.hideLoading();
+//$('.curtain').addClass("hide")
+				$("#app").css("display","block");
+				$("#date").datetimePicker({
+					title: "选择日期",
+					m: 1
+				});
+				$("#date").on("click", function() {
+					$(".weui-picker-modal .picker-items-col").eq(2).remove();
+				});
+				$(document).on("click", ".close-picker", function() {
+					vm.StartTime = $("#date").val();
+					console.log('start'+vm.StartTime)
+					vm.initTimeShow=true;
+					var timearr = vm.StartTime.split("-");
+					vm.StartTime=timearr[0]+"-"+timearr[1]+"-"+01
+					vm.curData.day = timearr[0]+"-"+timearr[1];
+					console.log(vm.curData.day)
+					vm.curData.getMoney = 0;
+					vm.curData.payMoney = 0;
+					if(timearr[1]>=12){
+						timearr[0] = Number(timearr[0])+1;
+						timearr[1] = "01";
+					}else{
+						console.log('start1-'+vm.StartTime)
+						timearr[1] = Number(timearr[1])+1;
+						if(timearr[1]<10){
+							timearr[1] = "0"+timearr[1];
+							console.log('start2-'+vm.StartTime)
+						}
+							console.log('start3-'+vm.StartTime)
+					}
+					vm.EndTime = timearr[0]+"-"+timearr[1]+"-"+01;
+					vm.page=1;
+					vm.day = [];
+					vm.lists = [];
+					vm.GetUserScoreFlow();
+				});
+			},500);
+
+			var before = 0;
+			var after = 1;
+			var contentHeight = $(".content-box").height();
+			$(window).scroll(function(){
+                after = $(window).scrollTop();
+                if(after>before){
+                	//页面往上滚动
+                	before = after-1;
+                	var len = $(".boxies").length;
+                	var height = [];
+                	var allHeight = 0;
+                	var scrolltop = $(window).scrollTop();
+                	for(var i=0; i<len-1; i++){
+                		height[i] = allHeight+$(".boxies").eq(i).height();
+                		allHeight = height[i];
+                		if( scrolltop >= height[i]){
+                			vm.curData.day = $(".boxies").eq(i-1).data("day");
+                			vm.curData.getMoney = $(".boxies").eq(i-1).data("getmoney");
+                			vm.curData.payMoney = $(".boxies").eq(i-1).data("paymoney");
+                		}
+                	}
+                	var scrollTop = $(window).scrollTop();
+			        var scrollHeight = $(document).height();
+			        var windowHeight = $(this).height();
+			        console.log("scrollTop: "+scrollTop);
+			        console.log("scrollHeight: "+scrollHeight);
+			        console.log("windowHeight: "+windowHeight);
+			        if (scrollTop + windowHeight == scrollHeight) {
+			        	$("#nomore").addClass("hide");
+			        	$("#more").removeClass("hide");
+			            vm.GetUserScoreFlow();
+			            return false;
+			        }
+                }else{
+                	//页面往下滚动
+                	before = after+1;
+                	var len = $(".boxies").length;
+                	var height = [];
+                	var scrolltop = $(window).scrollTop();
+                	for(var i=len-1; i>0; i--){
+                		if(i<len-1){
+                			height[i] = height[i+1]-$(".boxies").eq(i).height();
+                		}else{
+                			height[i] = contentHeight-$(".boxies").eq(i).height();
+                		}
+                		if( scrolltop < height[i]){
+                			vm.curData.day = $(".boxies").eq(i-1).data("day");
+                			vm.curData.getMoney = $(".boxies").eq(i-1).data("getmoney");
+                			vm.curData.payMoney = $(".boxies").eq(i-1).data("paymoney");
+                		}
+                	}
+                }
+            });
+		})
+
+
+        </script>
+</body>
+
+</html>

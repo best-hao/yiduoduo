@@ -1,0 +1,242 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>首页-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta content="@WorkContext.ShopConfig.SEODescription" name="description">
+    <meta content="@WorkContext.ShopConfig.SEOKeyword" name="keywords">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weuix.min.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/mobile/cart.css?v=0.4"/>
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/swipe.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/lazyimg.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="/Css/Mobile/NongHuChanPin/index.css"/>
+	</script><script src="/Mobile/weui/lazyimg.js"></script>
+    <script>
+	    $(function(){
+	    var lazyloadImg = new LazyloadImg({
+	            el: '.weui-updown [data-src]',
+	            top: 50,
+	            right: 50,
+	            bottom: 50,
+	            left: 50, 
+	            qriginal: false,
+	            load: function(el) {
+	                el.style.cssText += '-webkit-animation: fadeIn 01s ease 0.2s 1 both;animation: fadeIn 1s ease 0.2s 1 both;';
+	            },
+	            error: function(el) {
+	
+	            }
+	        });
+		});    
+	</script>
+
+	</head>
+	<body>
+		<!--轮播图-->
+		<div class="slide" id="slide"><ul></ul><div class="dot"></div></div>
+        <!--入口图标-->
+        <div class="weui-flex enter-into"></div>
+        <!--快报-->
+        <div class="notice">
+            <div class="left notice-right">
+                <div class="right-box">
+                    <div class="box">
+                        <div class="notice-box gd">
+                            <ul>
+                               
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="left notice-icon">快报 </div>
+            <div class="clearfix"></div>
+        </div>
+        <!--图片导航-->
+        <div class="addvr-nav">
+	        <ul>
+	        	<li>
+	        		<a href="NongFuChanPinNewsList?CateId=410&Name=新闻资讯">
+	            		<img src="/Images/Mobile/NongHuChanPin/i1.jpg?w=375&h=100" alt="" />
+	            		<!--<div class="addver-nav-txt-box">
+	            			<div class="fl addver-nav-txt">新闻咨询</div>
+	            			<div class="fr addver-nav-icon"></div>
+	            			<div class="clearfix"></div>
+	            		</div>-->
+            		</a>
+	        	</li>
+	        	<li>
+	        		<a href="NongFuChanPinNewsList?CateId=411&Name=种植培训">
+            			<img src="/Images/Mobile/NongHuChanPin/i3.jpg?w=375&h=100" alt="" />
+            		</a>
+	        	</li>
+	        	<li>
+	        		<a href="NongFuChanPinNewsList?CateId=412&Name=产品展示">
+            		<img src="/Images/Mobile/NongHuChanPin/i2.jpg?w=375&h=100" alt="" />
+            		</a>
+	        	</li>
+	        	<li>
+	        		<a href="http://vr.yxtx100.com/Pano/Show/1524503309">
+            		<img src="/Images/Mobile/NongHuChanPin/sjzs.jpg?w=375&h=100" alt="" />
+            		</a>
+            		
+	        	</li>
+	        	<li>
+	        		<a href="NongFuChanPinEC">
+            		<img src="/Images/Mobile/NongHuChanPin/i4.jpg?w=375&h=100" alt="" />
+            		</a>
+	        	</li>
+	        </ul>
+        </div>
+        <script type="text/javascript">
+        	
+        	
+			var w = window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth;
+			var h = window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight;
+        	
+        	function play_slider(){
+        		$.ajax({
+					type:"get",
+					url:"GetSliderList?T"+Math.random(),
+					data:{},
+					dataType:'json',
+					async:true,
+					success:function(rel){
+						var slide_list = rel.Code;
+						if(rel.Code==1){
+							var html = '';
+							$.each(rel.Data, function(i,v) {
+								html+= '<li>';
+								html+= '<a href="'+v.AdUrl+'">';
+								html+= '<img src="@(WorkContext.ShopConfig.ImageCDN)'+v.AdImage+'" data-src="@(WorkContext.ShopConfig.ImageCDN)'+v.AdImage+'?w=640&h=341&mode=crop" alt="">';
+								html+= '</a>';
+								html+= '</li>';
+								$("#slide .dot").append('<span></span>');
+							});
+							$("#slide ul").html(html);
+							
+							$('#slide').swipeSlide({
+								autoSwipe:true,
+								speed:3000,
+								continuousScroll:true,
+								transitionType:'cubic-bezier(0.22, 0.69, 0.72, 0.88)',
+								lazyLoad:true,
+								firstCallback : function(i,sum,me){
+						            me.find('.dot').children().first().addClass('cur');
+						        },
+						        callback : function(i,sum,me){
+						            me.find('.dot').children().eq(i).addClass('cur').siblings().removeClass('cur');
+						        }
+							});
+						}else{
+							$("#slide").remove();
+						}
+					}
+				});
+        	}
+        	//展示分类
+        	function show_cate(){
+        		$.ajax({
+					type:"get",
+					url:"GetCateList?T"+Math.random(),
+					data:{},
+					dataType:'json',
+					async:true,
+					success:function(rel){
+						var slide_list = rel.Code;
+						if(rel.Code==1){
+							var html = '';
+							$.each(rel.Data, function(i,v) {
+								if(v.CateId==406){
+									html+= '<a href="'+v.LinkUrl+'" class="weui-flex-item">';
+								}else if(v.CateId==407){
+									html+= '<a href="/m/website/NongFuChanPinNewsDetail?Id=65" class="weui-flex-item">';
+								}else{
+									html+= '<a href="NongFuChanPinNewsList?CateId='+v.CateId+'&Name='+v.Name+'" class="weui-flex-item">';
+								}
+								
+								html+= '<div><img src="@(WorkContext.ShopConfig.ImageCDN)'+v.ImgUrl+'"/></div>';
+								html+= '<p class="f14">'+v.Name+'</p>';
+								html+= '</a>';
+							});
+							$(".enter-into").html(html);
+						}else{
+							$(".enter-into").remove();
+						}
+					}
+				});
+        	}
+        	
+        	function show_notice(){
+        		$.ajax({
+					type:"post",
+					url:"GetArticleList?t="+Math.random(),
+					data:{cateid:404},
+					dataType:'json',
+					async:true,
+					success:function(rel){
+						var slide_list = rel.Code;
+						console.log(rel.Data);
+						if(rel.Code==1){
+							var html = '';
+							$.each(rel.Data, function(i,v) {
+								html += '<li>';
+								html += '<a class="action_btn hidetxt1" href="NongFuChanPinNewsDetail?Id='+v.ArticleId+'">'+v.Title+'</a>';
+								html += '</li>';
+							});
+							$(".notice ul").html(html);
+						}else{
+							$(".notice ul").remove();
+						}
+					}
+				});
+        	}
+        	
+        	function rollMessage() {
+	            var $this = $(".notice-box");
+	            var scrollTimer;
+	            function scrollNews(obj) {
+	                var $self = obj.find("ul");
+	                var lineHeight = $self.find("li:first").height();
+	                lineHeight = (lineHeight/100)*2;
+	                $self.animate({
+	                    "marginTop": -lineHeight + "rem"
+	                }, 500, function () {
+	                    $self.css({
+	                        marginTop: 0
+	                    }).find("li:first").appendTo($self);
+	                });
+	            }
+	            scrollTimer = setInterval(function () {
+	                scrollNews($this);
+	            }, 2000);
+	        }
+	        $(function(){
+	        	
+	            rollMessage();
+				var slide_h = 300*w/750;
+				slide_h = (slide_h/100)*2;
+				
+				
+				play_slider();
+				
+				show_cate();
+				
+				show_notice();
+	        });
+        </script>
+	</body>
+</html>

@@ -1,0 +1,51 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta content="telephone=no" name="format-detection">
+	    <meta name="apple-touch-fullscreen" content="yes">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>状态提示-@(WorkContext.SellerInfo.SellerName)</title>
+		<script src="/Mobile/Themes/huadong/static/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			body{font-size: 0.24rem;font-family: "微软雅黑";width: 7.5rem;margin: 0 auto;color: #666;}
+			img{display: block;width: 4.5rem;margin: 0.6rem auto;}
+			a{text-decoration: none;}
+			.tips{width: 4.5rem;margin: 0 1.5rem; line-height: 0.4rem;font-size: 0.28rem;}
+			.kefu{display: block;color: #d91d37;width: 4.5rem;margin: 0.3rem 1.5rem;}
+			.back{display: block; height: 0.9rem;width: 4.5rem;line-height: 0.9rem;text-align: center;color: #fff;margin: 0.3rem auto;background: #E02E24;border-radius: 5px;}
+		</style>
+	</head>
+	<body>
+		<img src="/Mobile/Themes/huadong/static/seller/apply/shenhe.png"/>
+		<div class="tips">
+			您的申请已成功提交，请您耐心等待管理员审核
+		</div>
+		<a class="kefu" href="tel:029-68563209">
+			客服电话：029-68563209
+		</a>
+		<a href="javascript:;" class="btn back" onclick="goToBack()">好的，返回</a>
+		<script type="text/javascript">
+			var IsApp = "@WorkContext.IsApp";
+			function goToBack() {
+				if(IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+						window.js.goBack();
+					}
+				}else{
+					window.location.href="/m/seller/service";
+				}
+					
+			}
+		</script>
+		
+	</body>
+</html>

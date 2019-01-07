@@ -1,0 +1,270 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>商品库存预警-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+       <link rel="stylesheet" type="text/css" href="/Css/Mobile/s_init.css" />
+    <style type="text/css">
+			.she_img {
+				width: 6rem;
+			}
+			
+			.sheng {
+				color: #F13030;
+			}
+			
+			.weui-form-preview {
+				margin-top: 2.6rem;
+			}
+			
+			.weui-form-preview:first-child {
+				margin-top: 0;
+			}
+			
+			.sousuo,
+			.paixu {
+				position: absolute;
+				top: 0;
+				right: 0;
+				padding: 0 0.6rem;
+				font-size: 1.4rem;
+				line-height: 2.6rem;
+			}
+			
+			.paixu {
+				right: 2.6rem;
+			}
+		</style>
+</head>
+<body>
+   <header>
+			<i class="iconfont back" onclick="history.back()">&#xe647;</i>
+			<h3>总商品库存预警</h3>
+
+			<i class="iconfont paixu">&#xe637;</i>
+			<i class="iconfont sousuo">&#xe61e;</i>
+		</header>
+		<div class="content">
+			<div class="weui-form-preview">
+				<div class="weui-form-preview-bd">
+					<p>
+						<label class="weui-form-preview-label">商品</label>
+						<span class="weui-form-preview-value">这里是商品名称</span>
+					</p>
+
+				</div>
+				<div class="weui-form-preview-hd">
+
+					<label class="weui-form-preview-label">商品主图</label>
+					<img src="../img/she_back.png" class="she_img" />
+
+				</div>
+				<div class="weui-form-preview-hd">
+					<label class="weui-form-preview-label">商品售价</label>
+					<em class="weui-form-preview-value">¥2400.00</em>
+				</div>
+				<div class="weui-form-preview-bd">
+					<p>
+						<label class="weui-form-preview-label">商品</label>
+						<span class="weui-form-preview-value">这里是商品名称</span>
+					</p>
+					<p>
+						<label class="weui-form-preview-label">月销量</label>
+						<span class="weui-form-preview-value">85525</span>
+					</p>
+					<p>
+						<label class="weui-form-preview-label">总剩余</label>
+						<span class="weui-form-preview-value sheng">85555</span>
+					</p>
+				</div>
+				<div class="weui-form-preview-bd">
+					<p>
+						<label class="weui-form-preview-label">规格一</label>
+						<span class="weui-form-preview-value sheng">55</span>
+					</p>
+
+				</div>
+				<div class="weui-form-preview-bd">
+					<p>
+						<label class="weui-form-preview-label">规格二</label>
+						<span class="weui-form-preview-value sheng">55</span>
+					</p>
+
+				</div>
+				<div class="weui-form-preview-ft">
+					<a class="weui-form-preview-btn weui-form-preview-btn-primary" href="javascript:">订货</a>
+				</div>
+			</div>
+
+			<div class="weui-form-preview">
+				<div class="weui-form-preview-bd">
+					<p>
+						<label class="weui-form-preview-label">商品</label>
+						<span class="weui-form-preview-value">这里是商品名称</span>
+					</p>
+
+				</div>
+				<div class="weui-form-preview-hd">
+
+					<label class="weui-form-preview-label">商品主图</label>
+					<img src="../img/she_back.png" class="she_img" />
+
+				</div>
+				<div class="weui-form-preview-hd">
+					<label class="weui-form-preview-label">商品售价</label>
+					<em class="weui-form-preview-value">¥2400.00</em>
+				</div>
+				<div class="weui-form-preview-bd">
+					<p>
+						<label class="weui-form-preview-label">商品</label>
+						<span class="weui-form-preview-value">这里是商品名称</span>
+					</p>
+					<p>
+						<label class="weui-form-preview-label">月销量</label>
+						<span class="weui-form-preview-value">85525</span>
+					</p>
+					<p>
+						<label class="weui-form-preview-label">总剩余</label>
+						<span class="weui-form-preview-value sheng">85555</span>
+					</p>
+				</div>
+				<div class="weui-form-preview-bd">
+					<p>
+						<label class="weui-form-preview-label">规格一</label>
+						<span class="weui-form-preview-value sheng">55</span>
+					</p>
+
+				</div>
+				<div class="weui-form-preview-bd">
+					<p>
+						<label class="weui-form-preview-label">规格二</label>
+						<span class="weui-form-preview-value sheng">55</span>
+					</p>
+
+				</div>
+				<div class="weui-form-preview-ft">
+					<a class="weui-form-preview-btn weui-form-preview-btn-primary" href="javascript:">订货</a>
+				</div>
+			</div>
+			<div class="weui-form-preview">
+				<div class="weui-form-preview-bd">
+					<p>
+						<label class="weui-form-preview-label">商品</label>
+						<span class="weui-form-preview-value">这里是商品名称</span>
+					</p>
+
+				</div>
+				<div class="weui-form-preview-hd">
+
+					<label class="weui-form-preview-label">商品主图</label>
+					<img src="../img/she_back.png" class="she_img" />
+
+				</div>
+				<div class="weui-form-preview-hd">
+					<label class="weui-form-preview-label">商品售价</label>
+					<em class="weui-form-preview-value">¥2400.00</em>
+				</div>
+				<div class="weui-form-preview-bd">
+					<p>
+						<label class="weui-form-preview-label">商品</label>
+						<span class="weui-form-preview-value">这里是商品名称</span>
+					</p>
+					<p>
+						<label class="weui-form-preview-label">月销量</label>
+						<span class="weui-form-preview-value">85525</span>
+					</p>
+					<p>
+						<label class="weui-form-preview-label">总剩余</label>
+						<span class="weui-form-preview-value sheng">85555</span>
+					</p>
+				</div>
+				<div class="weui-form-preview-bd">
+					<p>
+						<label class="weui-form-preview-label">规格一</label>
+						<span class="weui-form-preview-value sheng">55</span>
+					</p>
+
+				</div>
+				<div class="weui-form-preview-bd">
+					<p>
+						<label class="weui-form-preview-label">规格二</label>
+						<span class="weui-form-preview-value sheng">55</span>
+					</p>
+
+				</div>
+				<div class="weui-form-preview-ft">
+					<a class="weui-form-preview-btn weui-form-preview-btn-primary" href="javascript:">订货</a>
+				</div>
+			</div>
+		</div>
+
+		<script src="../js/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(".sousuo").on("click", function() {
+				$.prompt("输入商品名称/货号等", "搜索商品", function(text) {
+					$.alert("您的昵称是:" + text, "哦");
+				}, function() {
+					//取消操作
+				});
+
+			});
+			$(".paixu").on("click", function() {
+				$.actions({
+					title: "选择排序",
+					onClose: function() {
+						console.log("close");
+					},
+					actions: [{
+							text: "默认排序",
+							className: "color-primary",
+							onClick: function() {
+									$.showLoading();
+								$(".content").hide();
+								setTimeout(function() {
+									$(".content").show();
+									$.hideLoading();
+								}, 1500);
+							}
+						},
+						{
+							text: "从低到高",
+							className: "color-warning",
+							onClick: function() {
+								$.showLoading();
+								$(".content").hide();
+								setTimeout(function() {
+									$(".content").show();
+									$.hideLoading();
+								}, 1500);
+							}
+						},
+						{
+							text: "从高到低",
+							className: 'color-danger',
+							onClick: function() {
+									$.showLoading();
+								$(".content").hide();
+								setTimeout(function() {
+									$(".content").show();
+									$.hideLoading();
+								}, 1500);
+							}
+						}
+					]
+				});
+
+			});
+		</script>
+</body>
+</html>

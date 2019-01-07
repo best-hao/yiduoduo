@@ -1,0 +1,116 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>会员中心-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+      <link rel="stylesheet" type="text/css" href="/Css/Mobile/s_init.css" />
+ 
+    <style type="text/css">
+			.content {
+				background: #FFFFFF;
+			}
+			body{
+				background: #FFFFFF;
+			}
+			.she_zhu{
+				margin-top: 1rem;
+				padding-left: 0.6rem;
+				font-size: 0.84rem;
+				color: #666666;
+			}
+			.she_a{
+				color: #10AEFF;
+				text-decoration: underline;
+			}	
+			#canvasDiv1{
+				margin-top: 2.6rem;
+			}
+		</style>
+</head>
+<body>
+   <header>
+			<i class="iconfont back" onclick="history.back()">&#xe647;</i>
+			<h3>今日收入来源比例</h3>
+
+		</header>
+		<div class="content">
+			<div id="canvasDiv">
+
+			</div>
+			
+			<div id="canvasDiv1">
+
+			</div>
+			<p class="she_zhu">注: 目前所显示数据是您旗下所有店铺统计到的、具体请在绩效管控查看。 请 <a href="" class="she_a">点击这里</a></p>
+		</div>
+        <script src="/Js/Mobile/jquery.min.js"></script>
+	<script src="/Js/Mobile/ichart.latest.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		
+		$(function(){
+				var data = [
+				        	{name : '线下收银机',value : 35.75,color:'#9d4a4a'},
+				        	{name : '手机下单',value : 29.84,color:'#5d7f97'},
+				        	{name : '微商城',value : 24.88,color:'#97b3bc'},
+				        	{name : 'WAP',value : 6.77,color:'#a5aaaa'},
+				        	{name : '电脑端',value : 2.02,color:'#778088'},
+				        	{name : '小程序',value : 0.73,color:'#6f83a5'}
+			        	];
+	        	
+				new iChart.Pie2D({
+					render : 'canvasDiv',
+					data: data,
+					title : '今日收入比例与昨日收入比例的比较，数据截止当前时间',
+					legend : {
+						enable : false
+					},
+					showpercent:true,
+					decimalsnum:1,
+					width : screen.availWidth,
+					intellectLayout:true,
+					height : 400,
+					radius:60,
+					
+				}).draw();
+			});
+				$(function(){
+				var data = [
+				        	{name : '线下收银机',value : 35.75,color:'#9d4a4a'},
+				        	{name : '手机下单',value : 29.84,color:'#5d7f97'},
+				        	{name : '微商城',value : 24.88,color:'#97b3bc'},
+				        	{name : 'WAP',value : 6.77,color:'#a5aaaa'},
+				        	{name : '电脑端',value : 2.02,color:'#778088'},
+				        	{name : '小程序',value : 0.73,color:'#6f83a5'}
+			        	];
+	        	
+				new iChart.Pie2D({
+					render : 'canvasDiv1',
+					data: data,
+					title : '昨日收入比例与昨日收入比例的比较，数据截止当前时间',
+					legend : {
+						enable : false
+					},
+					showpercent:true,
+					decimalsnum:2,
+					width : screen.availWidth,
+					height : 400,
+					radius:40
+				}).draw();
+			});
+			
+			
+		
+	</script>
+</body>
+</html>

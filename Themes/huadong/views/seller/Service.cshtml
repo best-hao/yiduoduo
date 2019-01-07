@@ -1,0 +1,173 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+	    <meta content="telephone=no" name="format-detection">
+	    <meta name="apple-touch-fullscreen" content="yes">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <title>服务中心-@(WorkContext.SellerInfo.SellerName)</title>
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	     <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/weui.css" />
+	    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/weui2.css" />
+	    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/weui3.css" />
+	    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/icon.css" />
+	    <script src="/Mobile/Themes/huadong/static/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/Themes/huadong/static/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			body{background: #f6f6f6;width: 7.5rem;margin: 0 auto;}
+			.weui-header{background: #fff;color: #666;font-size: 0.28rem;font-family: "微软雅黑";}
+			.weui-header a{color: #666;}
+			.weui-header .weui-header-left a{color: #666;}
+			.weui-header .weui-header-title, .weui-header h1{color: #666;}
+			.main{font-size: 0.24rem;font-family: "微软雅黑";}
+			.data{margin-bottom: 0.2rem;background: #fff;width: 7.1rem;padding: .2rem;}
+			.data-lists{padding: .2rem 0;color: #fff;}
+			.data-lists .cur-day-money{padding: .4rem 0;text-align: center;width: 3.15rem;margin: 0 auto;border-radius: 5px;}
+			.data-lists .cur-day-diss{padding: .4rem 0;text-align: center;width: 3.15rem;margin: 0 auto;border-radius: 5px;}
+			.data .title{height: 0.7rem;line-height: 0.7rem;color: #000;font-size: 0.32rem;}
+			.cur-day-money{
+				background: -webkit-linear-gradient(bottom right, #8572ff , #bb92fc);
+			    background: -o-linear-gradient(bottom right, #8572ff , #bb92fc);
+			    background: -moz-linear-gradient(bottom right, #8572ff , #bb92fc);
+			    background: linear-gradient(to bottom right, #8572ff , #bb92fc);
+				
+			}
+			.cur-day-diss{
+				background: -webkit-linear-gradient(bottom right, #07cd8f , #4dedbd);
+				background: -o-linear-gradient(bottom right, #07cd8f , #4dedbd);
+				background: -moz-linear-gradient(bottom right, #07cd8f , #4dedbd);
+				background: linear-gradient(to bottom right, #07cd8f , #4dedbd);
+			}
+			
+			.weui_cell_ft.no-arrow:after{width: 0;height: 0;}
+			.weui_cells{margin-top: 0;}
+			.weui_cells .weui_cell{font-size: 0.28rem;padding: 0.3rem;}
+			.proxy-box{margin-bottom: 0.2rem;}
+			.weui_cell_ft:last-child:after{
+				display: none;
+			}
+			[v-cloak] {
+			    display: none ;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="weui-header"> 
+    		<div class="weui-header-left"> <a href="javascript:history.back()" class="icon icon-109"></a>  </div>
+			<h1 class="weui-header-title">服务中心</h1>
+    		<div class="weui-header-right"></div> 
+        </div>
+        <div class="main" id="service" v-cloak>
+        	<div class="data data-day">
+        		<div class="title">地区当地日交易数据</div>
+        		<div class="data-lists">
+        			<div class="weui-flex">
+        				<div class="weui-flex-item">
+        					<div class="cur-day-money">
+        						<p>今日交易总额</p>
+        						<p><span>¥</span><span>{{serviceList.todaysumorderamount}}</span></p>
+        					</div>
+        				</div>
+        				<div class="weui-flex-item">
+        					<div class="cur-day-diss">
+        						<p>今日让利总额</p>
+        						<p><span>¥</span><span>{{serviceList.todaysumgiftprofitsamount}}</span></p>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        	<div class="data data-sum">
+        		<div class="title">地区累计交易数据</div>
+        		<div class="data-lists">
+        			<div class="weui-flex">
+        				<div class="weui-flex-item">
+        					<div class="cur-day-money">
+        						<p>累计交易总额</p>
+        						<p><span>¥</span><span>{{serviceList.areasumamount}}</span></p>
+        					</div>
+        				</div>
+        				<div class="weui-flex-item">
+        					<div class="cur-day-diss">
+        						<p>累计让利总额</p>
+        						<p><span>¥</span><span>{{serviceList.areasumgiftprofits}}</span></p>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        	<div class="proxy-box">
+        		<div class="weui_cells">
+                    <div class="weui_cell">
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <p>代理类型</p>
+		                </div>
+		                <div class="weui_cell_ft">{{serviceList.usertypename}}</div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <p>代理区域</p>
+		                </div>
+		                <div class="weui_cell_ft">{{serviceList.userareaname}}</div>
+		            </div>
+				</div>
+        	</div>
+        	<div class="infos">
+        		<div class="weui_cells weui_cells_access">
+        			<a class="weui_cell " href="javascript:;">
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <p>代理区域商家数量</p>
+		                </div>
+		                <div class="weui_cell_ft no-arrow">{{serviceList.saleusernum}}个</div>
+		            </a>
+		            <!--<a class="weui_cell " href="javascript:;">
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <p>累计区域奖券补助</p>
+		                </div>
+		                <div class="weui_cell_ft">12345678.00</div>
+		            </a>-->
+		            <a class="weui_cell " href="javascript:;">
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <p>代理区域累计奖励</p>
+		                </div>
+		                <div class="weui_cell_ft">{{serviceList.recommendgiftbonusamount}}</div>
+		            </a>
+		        </div>
+        	</div>
+        </div>
+	</body>
+	<script>
+		var vm = new Vue({
+			el: "#service",
+			data:{
+				userid: @WorkContext.Uid,
+				serviceList:{},
+			},
+			created: function() {
+				var that = this;
+				$.ajax({
+					type: "get",
+					url: "/Api/Statistic/Service?v="+Math.random(),
+					dataType: "json",
+					async: true,
+					data: {
+						UserId: that.userid,
+					},
+					success: function(res){
+						if(res.code == 1){
+							that.serviceList = res.data;
+						}else{
+							console.log(res.message);
+						}
+					}
+				});
+			}
+		});
+	</script>
+</html>

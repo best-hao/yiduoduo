@@ -1,0 +1,737 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>购物车-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weuix.min.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css?v=0.12" />
+    <link rel="stylesheet" type="text/css" href="/Css/mobile/cart.css?v=0.4"/>
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    <!--<script src="/Mobile/weui/lazyimg.js" type="text/javascript" charset="utf-8"></script>-->
+    <script src="/Mobile/weui/icon/iconfont.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+    	/*.operbox {
+    height: 30px;
+    width: 120px;
+    position: absolute;
+    right: 68px;
+    bottom: 5px;
+}
+.delicon{
+	
+    position: absolute;
+    right: 0.46rem;
+    bottom: 5px;
+}
+.delicon icon{
+	font-size:1.8rem ;
+	color:#f13030;
+}*/
+.shopname {
+     overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+.cart-box{width:3rem;height:auto;margin:0 auto;text-align: center;margin-top:3.4rem}
+.cart-box .icon {
+	display:block;
+	width:3rem;
+	margin:0 auto;
+   font-size: 3rem;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+}
+    </style>
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/loading.css"/>
+	</head>
+	<body>
+		<div id="app" style='display:none;'>
+		<form id="cart" action="/m/order/createorder" method="post">
+    	<input type="hidden" name="IsCart" id="IsCart" value="1" />
+			<header>
+			<div class="bg-orange weui-header "> 
+		  		<div class="weui-header-left"> <a class="icon iconfont f-white" onclick="goToBack()">&#xe60e;返回</a>  </div>
+	   			<h1 class="weui-header-title">购物车</h1>
+		    	<div class="weui-header-right"><a class="icon iconfont f-white" id="del" v-on:click='deleteAll()'  style='font-size: 28px;'>&#xe614;</a></div> 
+	    	</div>  
+			</header>
+			<article>
+				@if (Model.Count == 0)
+                {
+                	<div class='cart-box weui_grid_icon'>
+                		<img src="/Images/Mobile/nodata.png" alt="" />
+                	</div>
+                	
+                	<div class="nodata">无数据</div>
+               }
+                else
+                {
+				<div class="weui_cells goods-box">
+					
+					<!--<div class='cart_box' v-for='(item1,index1) in sellerId' :key='index1'>
+	                   	<a :href="'/m/shop/index?shopid='+item1">
+		                   	<div class='shop_title' v-on:click=''>
+		                   		
+		                   		<div class="weui_cell_ft check-box weui_cells_checkbox">
+									<label class="weui_cell weui_check_label">
+						                <div class="weui_cell_ft">
+						                    <input type="checkbox" class="weui_check"   v-model='isparentcheck(item1)' v-on:click='allcheck(item1)'>
+						                    <span class="weui_icon_checked"></span>
+						                </div>
+						            </label>
+								</div>
+						          <div class='shopicon'> <icon class='icon iconfont'>&#xe6d1;</icon></div>
+						          <div class='shopname'> <icon class='icon iconfont'>&#xe6a6;</icon></div>
+		                   	</div>
+	                   	 </a>
+						<div class="weui_cell goods-list" v-for='(item,index) in  dataList' :key='index' v-if="item.sellerid==item1">
+							<div class="weui_cell_ft check-box weui_cells_checkbox">
+								<label class="weui_cell weui_check_label">
+					                <div class="weui_cell_ft">
+					                    <input type="checkbox" class="weui_check" name="CartId[]" v-model='ischeck(item)' v-on:click='chosecheck(item)'>
+					                    <span class="weui_icon_checked"></span>
+					                </div>
+					            </label>
+							</div>
+			                <div class="weui_cell_bd weui_cell_primary">
+			                    <div class="weui_media_box weui_media_appmsg">
+				                    <div class="weui_media_hd">
+				                    	<a href="">
+	                                        <img class="weui_media_appmsg_thumb" :src="'@(WorkContext.ShopConfig.ImageCDN)/'+item.imgurl" alt="">
+				                    	</a>
+				                    </div>
+				                    <div class="weui_media_bd info">
+				                    	<a href="">
+				                        <p class="weui_media_desc goods-title">{{item.productname}}</p>
+		                                <p class="weui_media_desc price">¥&nbsp;{{Number(item.stocksaleprice).toFixed(2)}}</p>
+		                                <p class="weui_media_desc"></p>
+		                                </a>
+				                    </div>
+				                </div>
+			                </div>
+			                <div class="operbox">
+			                	<div style="font-size: 0px;" class="weui_cell_ft"> <a class="weui-number weui-number-sub needsclick" v-on:click='subtraction(item)'>-</a>
+								    <input type="tel" name="Quantity" pattern="[0-9]*" class="weui-number-input" style="width: 50px;" v-model='item.quantity' value='' >
+								    <input type="hidden" id='hiddenprice' v-bind:value="item.stocksaleprice"/>
+								    <a class="weui-number weui-number-plus needsclick" v-on:click='Addition(item)'>+</a> 
+								    
+								</div>
+								<div class="weui_cell_ft" style="display: none;">0</div>
+			                </div>
+			            </div>
+		            </div>-->
+					
+                   <div class='cart_box' v-for='(item1,index) in cartList' :key='index'>
+                   	<a :href="'/m/shop/index?shopid='+item1.shopid+'&IsApp='+IsApp">
+	                   	<div class='shop_title' v-on:click=''>
+	                   		
+	                   		<div class="weui_cell_ft check-box weui_cells_checkbox">
+								<!--<label class="weui_cell weui_check_label">
+					                <div class="weui_cell_ft">
+					                    <input type="checkbox" class="weui_check"   v-model='isparentcheck(item1)' v-on:click='allcheck(item1)'>
+					                    <span class="weui_icon_checked"></span>
+					                </div>
+					            </label>-->
+					            <label class="weui_cell weui_check_label">
+					                <div class="weui_cell_ft">
+					                    <input type="checkbox" class="weui_check allcheck"  v-on:click='allcheck(item1)' v-model='isparentcheck(item1)'/>
+					                    <span class="weui_icon_checked"></span>
+					                </div>
+					            </label>
+							</div>
+					          <div class='shopicon'> <icon class='icon iconfont'>&#xe613;</icon></div>
+					          <div class='shopname'>{{item1.shopname}} <icon class='icon iconfont'>&#xe60d;</icon></div>
+	                   	</div>
+                   	 </a>
+					<div class="weui_cell goods-list" v-for='(item,index) in  item1.productL' :key='index' style='
+     padding: 10px 0 10px'>
+						
+							<div class="weui_cell_ft check-box weui_cells_checkbox">
+								<label class="weui_cell weui_check_label">
+					                <div class="weui_cell_ft">
+					                    <input type="checkbox" class="weui_check" name="CartId[]" v-model='ischeck(item)' v-on:click='chosecheck(item)'>
+					                    <span class="weui_icon_checked"></span>
+					                </div>
+					            </label>
+							</div>
+				                <div class="weui_cell_bd weui_cell_primary">
+				                    <div class="weui_media_box weui_media_appmsg">
+					                    <div class="weui_media_hd">
+					                    	<a :href="'/m/product/detail?id='+item.productid+'&IsApp='+IsApp">
+		                                        <img class="weui_media_appmsg_thumb" :src="'@(WorkContext.ShopConfig.ImageCDN)'+item.imgurl" alt="">
+					                    	</a>
+					                    </div>
+					                    <div class="weui_media_bd info">
+					                    	<a :href="'/m/product/detail?id='+item.productid+'&IsApp='+IsApp">
+						                        <p class="weui_media_desc goods-title">{{item.productname}}</p>
+				                                <p class="weui_media_desc price">¥&nbsp;{{Number(item.stocksaleprice).toFixed(2)}}</p>
+				                                <p class="weui_media_desc">{{item.skuname}}</p>
+			                                </a>
+					                    </div>
+					                </div>
+				                </div>
+			                <div class="operbox">
+			                	<div style="font-size: 0px;" class="weui_cell_ft"> <a class="weui-number weui-number-sub needsclick" v-on:click='subtraction(item)'>-</a>
+								    <input type="tel" name="Quantity" pattern="[0-9]*" class="weui-number-input" style="width: 50px;" v-model='item.quantity' value='' >
+								    <input type="hidden" id='hiddenprice' v-bind:value="item.stocksaleprice"/>
+								    <a class="weui-number weui-number-plus needsclick" v-on:click='Addition(item)'>+</a> 
+								</div>
+								<div class="weui_cell_ft" style="display: none;">0</div>
+			                </div>
+			                <!--<div class='delicon' v-on:click='deleteItem(item)'>
+			                	<icon class='icon iconfont'>&#xec85;</icon>
+			                </div>-->
+		                
+		            </div>
+		            </div>
+				</div>
+				}
+			</article>
+			<footer id="cart_footer">
+			    <div class="cart-footer">
+			        <div class="weui_cells_checkbox">
+			            <label class="weui_cell weui_check_label" for="check_all">
+			                <div class="weui_cell settlement-info">
+			                    <div class="weui_cell_hd">
+			                        <div class="weui_cell_hd">
+			                            <input type="checkbox" class="weui_check check_all" name="" id="check_all" v-model='totalstate' v-on:click='totalcheck()' >
+			                            <i class="weui_icon_checked"></i>
+			                        </div>
+			                    </div>
+			                    <div class="weui_cell_bd weui_cell_primary">
+			                        <p>全部</p>
+			                    </div>
+			                    <div class="weui_cell_ft total-box" >
+			                        总额:¥&nbsp;<span id="total" style="font-size:16px;">{{total}}</span>
+			                    </div>
+			                </div>
+			            </label>
+			        </div>
+			        <div class="settlement" v-on:click='toOrder()'>去结算</div>
+			        
+			    </div>
+			</footer>
+		</form>
+		</div>
+	<div class="curtain hide">
+				<div class="loader Rotation"></div>
+				<div class="loadTit">
+					<icon class='icon iconfont'>&#xe649;</icon>
+				</div>
+	</div>
+		<script type="text/javascript">
+//			$.showLoading();
+$('.curtain').removeClass("hide")
+			var IsApp = "@WorkContext.IsApp";
+			function goToBack() {
+				var _this = this;
+	    		if(IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+						window.js.goBack();
+					}
+				}else{
+					window.history.back();
+				}
+					
+			}
+	 var vm = new Vue({
+     	el: '#app',
+     	data:{
+     		userId:'@WorkContext.Uid',
+     		cartList:[],
+     		quantity:'',
+     		num:1,
+     		isnum:true,
+     		total:0,
+     		state:true,
+     		totalstate:false,
+     		dataList:[],
+     		sellerId: [],
+     		IsApp:"@WorkContext.IsApp"
+     	},
+     	methods:{
+     		toOrder:function(){
+     			var _this=this;
+     			_this.getData();
+     			var data=_this.dataList;
+     			console.log(data)
+     			var arr=[];
+     			var list=[]
+     			for(var i=0;i<data.length;i++){
+	     				if(data[i].ischeck===1){
+	     					list.push(data[i].sellerid)
+	     				}
+     			}
+     			var len=list.length
+				  var result = [];
+				  var data=list;
+				  if(len>1){
+					for(var i = 0; i< data.length;i++){
+							  for(var j = i + 1; j < data.length; j++){
+								   if(data[i] === data[j]){
+								    j = ++i;
+								   }
+							  }
+							  result.push(data[i]);
+		                 }
+						  	 _this.sellerId=result;
+				  }else{
+				  	 _this.sellerId=data;
+				  }
+     			 if(_this.sellerId.length>1){
+     			 	$.alert('只能选择一家店铺')
+     			 }else if(_this.sellerId.length==0){
+     			 	$.alert('至少选择一件商品')
+     			 }else if(_this.sellerId.length==1){
+     			 	$("#cart").submit();
+     			 }
+     		},
+     		deleteItem:function(item){
+     			var _this=this;
+     			$.confirm("您确定要删除吗?", "确认删除?", function () {
+			            $.post("CartDelete", { ids: item.cartid }, function (rel) {
+			            	console.log(rel)
+			                if (rel.Code == 1) {
+			                    $.toast("删除成功!");
+			                   window.location.reload();
+			                } else {
+			                    //$.alert("删除失败！");
+			                    $.toast("删除失败!", "cancel");
+			                }
+			            },"json");
+				        }, function () {
+				            //取消操作
+			            });
+     		},
+     		deleteAll:function(){
+     			var _this=this;
+     			var idArr=[];
+     			var data=_this.dataList
+     			for(var i=0;i<data.length;i++){
+     				if(data[i].ischeck==1){
+     					idArr.push(data[i].cartid);
+     				}
+     			}
+     			 $.confirm("您确定要删除选中吗?", "确认删除?", function () {
+		            $.post("CartDelete", { ids: idArr.join(",") }, function (rel) {
+		                if (rel.Code == 1) {
+		                    $('input[name="CartId[]"]:checked').parents(".goods-list").remove();
+		                    window.location.reload();
+		                } else {
+		                    //$.alert("删除失败！");
+		                    $.toast("删除失败!", "cancel");
+		                }
+		            },"json");
+		        }, function () {
+		            //取消操作
+	            });
+     		},
+     		totalcheck:function(){//判断全选
+     			var _this=this;
+     			_this.totalstate=!_this.totalstate;
+					var data= _this.cartList
+						 var arr1=[]
+				     for(var i=0;i<data.length;i++){
+				     	for(j=0;j<data[i].productL.length;j++){
+							if(_this.totalstate){
+								_this.updatacart(data[i].productL[j].cartid,data[i].productL[j].quantity,1);
+	                          _this.getData();
+							}else{
+								_this.updatacart(data[i].productL[j].cartid,data[i].productL[j].quantity,0);
+	                            _this.getData();
+							}
+                          
+				     	}
+				     }
+     		},
+            Addition:function(item){//加
+     			var _this=this;
+      			item.quantity=item.quantity+1;
+      			_this.updatacart(item.cartid,item.quantity,item.ischeck);
+      			_this.getData();
+     		},
+     		subtraction:function(item){//减
+     			var _this=this;
+     			if(item.quantity==1){
+     				$.confirm("您确定要删除吗?", "确认删除?", function () {
+			            $.post("CartDelete", { ids: item.cartid }, function (rel) {
+			            	console.log(rel)
+			                if (rel.Code == 1) {
+			                    $.toast("删除成功!", "cancel");
+			                   window.location.reload();
+			                } else {
+			                    //$.alert("删除失败！");
+			                    $.toast("删除失败!", "cancel");
+			                }
+			            },"json");
+				        }, function () {
+				            //取消操作
+			            });
+     			}else{
+	     			item.quantity=item.quantity-1;
+	      			_this.updatacart(item.cartid,item.quantity,item.ischeck);
+	     			_this.getData();
+     			}
+      			
+      			
+     			
+     		},
+     		chosecheck:function(item){
+     			var _this=this;
+     			if(item.ischeck==0){
+     				item.ischeck=1
+     			}else{
+     				item.ischeck=0;
+     				_this.totalstate=false;
+     			}
+     		_this.updatacart(item.cartid,item.quantity,item.ischeck);
+   			 _this.getData();
+     		},
+     		
+     		ischeck:function(item){//商品ischecked
+     			var _this=this;
+     			if(item.ischeck==0){
+//   				_this.isnum=false;
+     				return false;
+     			}else if(item.ischeck==1){
+//   				_this.isnum=true;
+     				return true;
+     			}
+     		},
+     		
+     		allcheck:function(item){
+     			var _this=this;
+//   			_this.isnum=!_this.isnum;
+     			var data=item.productL;
+     			if(item.ischeck==0){
+	     			for(var i=0;i<data.length;i++){
+	     				_this.updatacart(data[i].cartid,data[i].quantity,1);
+	     				_this.getData();
+	     			}
+     			}else{
+     				for(var i=0;i<data.length;i++){
+	     				_this.updatacart(data[i].cartid,data[i].quantity,0);
+	     				_this.getData();
+	     				_this.totalstate=false;	
+//	     				window.location.reload();
+	     			}
+     			}
+     		},
+               isparentcheck:function(item){
+     			var _this=this;
+     			if(item.ischeck==0){
+//   				_this.isnum=false;
+     				return false;
+     			}else if(item.ischeck==1){
+//   				_this.isnum=true;
+     				return true;
+     			}
+     		},
+       
+     		isparentcheck:function(item){
+     			var _this=this;
+     			if(item.ischeck==0){
+     				return false;
+     			}else if(item.ischeck==1){
+     				return true;
+     			}
+     		},
+     		getData:function(){
+     			var _this=this;
+     			 $.ajax({
+		    			type:"get",
+		    			url:"/Api/Cart/CartList?UserId="+_this.userId,		    			
+		    			async:true,
+		    			success: function(rel){
+		    				if(rel.code==1){
+		    					_this.dataList=rel.data;
+		    				}else{
+		    					_this.totalstate=false
+		    				}
+		    				
+		    				
+//		    				rel.data.forEach(function(v, i){
+//		    					if($.inArray(v.sellerid,_this.sellerId)==-1){
+//		    						_this.sellerId.push(v.sellerid);
+//		    						
+//		    					}
+//		    				})
+//		    				_this.sellerId.forEach(function(vo,k){
+//		    					if(_this.sellerId[k].length<=0){
+//		    						_this.sellerId[k] = [];
+//		    					}
+//		    					rel.data.forEach(function(vv, m){
+//			    					if(vv.sellerid==vo){
+//			    						_this.sellerId[k].push(vv);
+//			    					}
+//			    				})
+//		    				});
+//		    				
+//		    				console.log(_this.sellerId);
+		    				_this.dataFn();
+                           
+		    			}
+		    		});
+     		},
+
+dataFn:function(){
+            var _this=this;
+            if(_this.dataList.length!=0){
+			           var list=_this.dataList;
+					    flag = 0,
+					    data = [];  
+					    var arr=[];
+					    var total=0;
+					    var arr1=[];
+						for(var i = 0; i< list.length; i++) {
+							if(list[i].ischeck==1){
+								total += Number(list[i].quantity)*Number(list[i].stocksaleprice)
+							}else{
+								arr1.push(list[i])
+							}
+						    var az = '';
+						    for (var j = 0; j < data.length; j++) {
+						        if(data[j][0].sellerid == list[i].sellerid) {
+						            flag = 1;
+						            az = j;
+						            break;
+						        }
+						    }
+						    if(flag == 1){
+						        data[az].push(list[i]);
+						        flag = 0;
+						    } else if (flag == 0) {
+						        wdy = new Array();
+						        wdy.push(list[i]);
+						         data.push(wdy);
+						    }
+						}
+					    if(arr1.length==0){
+			                _this.totalstate=true;	
+			             }
+						for(var i=0;i<data.length;i++){
+							var obj={sellerid:data[i][0].sellerid,shopname:data[i][0].shopname,shopid:data[i][0].shopid,ischeck:data[i][0].ischeck,productL:[] }
+							var ai=data[i]
+							 for(var j=0;j<ai.length;j++){
+							 	obj.productL.push(ai[j])
+							 }
+							arr.push(obj)
+						}
+						_this.total=total;
+						 _this.cartList=arr;
+			              _this.jugefu()
+            }else{
+            	 _this.totalstate=false;	
+            }
+		
+},
+
+     		jugefu:function(){
+     			var _this=this;
+     			var data=_this.cartList;
+     			for(var i=0;i<data.length;i++){
+     				for(var j=0;j<data[i].productL.length;j++){
+     					if(data[i].productL[j].ischeck==0){
+     						data[i].ischeck=0
+     					}
+     				}
+     			}
+     			_this.cartList=data;
+     		},
+     		updatacart:function(CartId,Quantity,IsCheck){//更新购物车
+     			var _this=this;
+			     	$.ajax({
+					type:"post",
+					url:"CartUpdate",
+					async:false,
+					data:{IsCheck:IsCheck,CartId:CartId,Quantity:Quantity},
+					dataType:'json',
+					success:function(rel){
+						if(rel.Code==0){
+							$.toast(rel.Message,"cancel");
+							return false;
+						}
+					}
+				  });
+     		},
+     		sum_total:function(){//计算总价
+     			var allTotal = 0;
+     			var _this=this;
+				$('input[name="CartId[]"]:checked').each(function(){
+			    var num = $(this).parents(".goods-list").find('input[name="Quantity"]').val();
+				var price = $('#hiddenprice').val();	
+					var total = num*price;
+					allTotal = Number(allTotal)+Number(total);
+					allTotal = Number(allTotal).toFixed(2);
+				});
+				 _this.total=allTotal;
+     		},
+     		ajax_plus_sub:function(CartId,Quantity){//加减
+					$.ajax({
+						type:"post",
+						url:"CartUpdate",
+						async:false,
+						data:{CartId:CartId,Quantity:Quantity},
+						dataType:'json',
+						success:function(rel){
+							console.log(rel.Code==0)
+							if(rel.Code==0){
+								$.toast(rel.Message,"cancel");
+								return false;
+							}
+						}
+					});
+     		}
+     	},
+     	mounted:function(){
+     		var _this=this;
+     		_this.getData();
+     	},
+  
+   });
+   $(function(){
+     setTimeout(function(){
+//   	$.hideLoading();
+$('.curtain').addClass("hide")
+     	$('#app').css('display','block')
+     },200)
+//	$(".settlement").on("click",function(){
+//		var len = $('input[name="CartId[]"]:checked').length;
+//		if(len<=0){
+//			//$.toptips("请至少选择一个商品!");return false;
+//			$.toast("请至少选择一个商品!", "cancel");
+//			return false;
+//		}else{
+//			$("#cart").submit();
+//		}
+//	});
+//	$(".allcheck").on("change", function () {
+//	    var is_checked = $(this).prop("checked");
+//	    console.log(is_checked);
+//	    setTimeout(function () {
+//	        if (is_checked == true) {
+//	        	$('article input[name="Quantity"]').removeAttr("disabled");
+//	            $('article input[type="checkbox"]').prop("checked", true);
+//	            $('article input[type="checkbox"]').attr("checked", "checked");
+//	        } else {
+//	            $('article input[type="checkbox"]').prop("checked", false);
+//	            $('article input[name="Quantity"]').attr('disabled','disabled');
+//	            $('article input[type="checkbox"]').removeAttr("checked");
+//	        }
+//	        vm.sum_total();
+//	        $('input[name="CartId[]"]:checked').each(function(){
+//	        	var _this = $(this);
+//              ajax_check(_this);
+//	        });
+//	    }, 10);
+//	});
+	$("#check_all").on("change", function () {
+	    var is_checked = $(this).prop("checked");
+	    setTimeout(function () {
+	        if (is_checked == true) {
+	        	$('article input[name="Quantity"]').removeAttr("disabled");
+	            $('article input[type="checkbox"]').prop("checked", true);
+	            $('article input[type="checkbox"]').attr("checked", "checked");
+	        } else {
+	            $('article input[type="checkbox"]').prop("checked", false);
+	            $('article input[name="Quantity"]').attr('disabled','disabled');
+	            $('article input[type="checkbox"]').removeAttr("checked");
+	        }
+	        vm.sum_total();
+	        $('input[name="CartId[]"]:checked').each(function(){
+	        	var _this = $(this);
+                ajax_check(_this);
+	        });
+	    }, 10);
+	});
+	
+	function ajax_check(_this){
+		var IsCheck = 0;
+		var CartId = _this.val();
+		if(_this.prop("checked")){
+			IsCheck = 1;
+		}
+		var Quantity = _this.parents(".goods-list").find('input[name="Quantity"]').val();
+		$.ajax({
+			type:"post",
+			url:"CartUpdate",
+			async:false,
+			data:{IsCheck:IsCheck,CartId:CartId,Quantity:Quantity},
+			dataType:'json',
+			success:function(rel){
+				if(rel.COde==0){
+					$.toast(rel.Message,"cancel");
+					return false;
+				}
+			}
+	});
+}
+	//复选框
+	$('input[name="CartId[]"]').on("change", function () {
+	    var checkbox_len = $('input[name="CartId[]"]').length;
+	    var checked_len = $('input[name="CartId[]"]:checked').length;
+	    var _this = $(this);
+	    setTimeout(function () {
+	        if (checked_len >= checkbox_len) {
+	            $('#check_all').click();
+	        } else {
+	            $('#check_all').prop("checked", false);
+	            $('#check_all').removeAttr("checked");
+	        }
+	        if(_this.prop('checked')==true){
+	        	$(_this).parents(".goods-list").find('input[name="Quantity"]').removeAttr('disabled');
+	        }else{
+	        	$(_this).parents(".goods-list").find('input[name="Quantity"]').attr('disabled','disabled');
+	        }
+	        vm.sum_total();
+	        ajax_check(_this);
+	    }, 10);
+	});
+   })
+   
+	
+	function ajax_check(_this){
+	var IsCheck = 0;
+	var CartId = _this.val();
+	if(_this.prop("checked")){
+		IsCheck = 1;
+	}
+	var Quantity = _this.parents(".goods-list").find('input[name="Quantity"]').val();
+	$.ajax({
+		type:"post",
+		url:"CartUpdate",
+		async:false,
+		data:{IsCheck:IsCheck,CartId:CartId,Quantity:Quantity},
+		dataType:'json',
+		success:function(rel){
+			if(rel.COde==0){
+				$.toast(rel.Message,"cancel");
+				return false;
+			}
+		}
+	});
+}
+		</script>
+		<!--<script src="/Js/mobile/cart.js" type="text/javascript" charset="utf-8"></script>-->
+		
+	</body>
+</html>

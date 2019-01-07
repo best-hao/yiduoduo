@@ -1,0 +1,1683 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>填写基本资料开通门店-@(WorkContext.SellerInfo.SellerName)</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weuix.min.css"/>
+	<script type="text/javascript" charset="utf-8" src="/Mobile/Themes/huadong/static/weui/zepto.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="/Mobile/Themes/huadong/static/weui/lrz.min.js"></script>
+	<script src="/Mobile/Themes/huadong/static/weui/picker.js"></script>
+	<script src="/Mobile/Themes/huadong/static/weui/picker-city.js"></script>
+	<script src="/Mobile/Themes/huadong/static/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=nT6ySqHzG1p7QMRpZ1k9rMAT0weeSERr"></script>
+   <style>
+   	body{overflow-x: hidden;width: 7.5rem;overflow-x: hidden;margin: 0 auto;}
+   	#edit{font-size: 0.28rem;width: 7.5rem;overflow-x: hidden;display: none;}
+    .bg-white {background: #fff;}
+    .gray_color {color: #333 !important;}
+    .mt0 { margin-top: 0 !important;}
+    .text_color {color: #7C7C7C !important;}
+    .md_list .weui_cell:before { }
+    #textarea{font-size:0.32rem;}
+    .md_list .weui_cell{padding: 0.3rem;}
+    .md_list .weui_label {width:2.36rem !important;}
+    .md_list .weui_cell_bd{width: 4.54rem;}
+    .pic_upload {margin-top: 0.2rem;margin-bottom: 10px;background: #fff;}
+    .kt_btn {text-align: center;margin-top: 0.54rem; margin-bottom: 0.54rem;}
+    .now_btn {font-size: 0.28rem;outline: none;border: 0; width: 85%; border-radius: 0.4rem; height: 0.8rem;background: #ff4800; color: #fff; margin: 0 auto;}
+    .pic_upload .weui-flex{text-align: center}
+    .pic_upload .weui_uploader_hd {text-align: center;}
+    .industry{min-width: 1.6rem;line-height: 0.2rem;height: 0.6rem;margin-bottom: 0.2rem;}
+    
+    .shade-box{position: fixed;z-index: 10;bottom: -100%;left: 50%;background: rgba(0,0,0,0.5);width: 7.5rem;height: 100%;overflow: hidden;margin-left: -3.75rem;}
+    .addr-shade{position: absolute;z-index: 10;bottom: 0;left: 0;background: #fff;width: 8rem;height: 7.44rem;}
+    .addr-box{width: 15rem;}
+    .addr-box .province{width: 3.75rem;height: 6rem;overflow-y: auto;position: relative;}
+    .addr-box .province:after{position: absolute;right: 0;width: 1px;top: 0;background: #f2f2f2;content: "";}
+    .addr-box .city{width: 3.75rem;height: 6rem;overflow-y: auto;}
+    .addr-box .county{width: 3.75rem;height: 6rem;overflow-y: auto;}
+    .addr-box .town{width: 3.75rem;height: 6rem;overflow-y: auto;}
+    .addr-box ul li{padding: 0 0.2rem;line-height: 0.6rem;height: 0.6rem;}
+    .curProvince{color: #f00;}
+    li{list-style: none;}
+    .curCity{color: #f00;}
+    .curCounty{color: #f00;}
+    .curTown{color: #f00;}
+    .show-addr{height: 0.7rem;line-height: 0.7rem;padding: 0 0.2rem;}
+    .show-addr{border-bottom: 1px solid #f2f2f2;}
+    .show-addr li{line-height: 0.7rem;float: left;text-align: left;padding: 0 0.2rem;}
+    .addr-shade .title{text-align: center;height: 0.7rem;line-height: 0.7rem;border-bottom: 1px solid #f2f2f2;}
+    
+    .cur-li{position: relative;color: #f00;}
+    .cur-li:after{position: absolute;bottom: 0;content: "";left: 0;height: 2px; background: #fd4c60;width: 100%;}
+    .weui-picker-modal{height: 4.16rem;}
+	.weui-picker-modal .toolbar-inner{height: 0.7038rem;}
+	.weui-picker-modal .picker-modal-inner{height: 3.456rem;}
+	.time-select{width: 16px;height: 16px;position: relative;}
+	#date{width: 16px;height: 16px;position: absolute;top: 2px;left: 0;z-index: 4;opacity: 0;}
+	.weui-picker-modal .picker-items-col:eq(2){display: none !important;}
+	.weui_dialog_hd{padding: 0;}
+	.now_btn{line-height: 0.8rem;}
+	.tips-box{height: 0.6rem;line-height: 0.6rem;background: #f76260;padding: 0 0.2rem;font-size: 0.24rem;}
+	.tips-box *{vertical-align: middle;color: #fff;}
+	.tips-box i.weui_icon_warn:before{color: #f60;}
+	.addr-box ul{padding-bottom: 1rem;}
+	.unpass-box{font-size: 0.24rem;font-family: "微软雅黑";width: 7.5rem;margin: 0 auto;color: #666;height: 100%;overflow: hidden;background: #fff;}
+	.unpass-box img{display: block;width: 4.5rem;margin: 0.6rem auto;}
+	.unpass-box a{text-decoration: none;}
+	.tips{width: 4.5rem;margin: 0 1.5rem; line-height: 0.4rem;font-size: 0.28rem;text-align: center;}
+	.kefu{display: block;color: #d91d37;width: 4.5rem;margin: 0.3rem 1.5rem;text-align: center;}
+	.back{display: block; height: 0.7rem;width: 4.5rem;line-height: 0.7rem;text-align: center;color: #fff;margin: 0.3rem auto;background: #E02E24;border-radius: 5px;}
+	.reason{padding: 0.4rem;background: #f6f6f6;color: #f00;}
+	.upload-img{background: #fff;padding: 0.2rem;}
+	.uptxt{height: 0.8rem;line-height: 0.8rem;}
+	.crop-img-box{position: fixed;width: 7.5rem;height: 100%;top: 0;left: 50%;margin-left: -3.75rem;background: #fff;z-index: 100;display: none;}
+	.prew-box .img-preview{width: 100px !important;height: 100px !important;display: block;margin: 0 auto;}
+	.prew-box p{height: 0.8rem;line-height: 0.8rem;padding: 0.2rem;}
+	.weui_btn.crop-pic{width: 3rem;display: block;margin: 0 auto;margin-top: 30px;}
+	.result{width: 100%;}
+	.prew-box .img-preview{overflow: hidden;}
+	.shop-top-info {
+    margin: 10px auto;
+    padding: 10px 0;
+    background: #fff;
+}
+	.weui_media_box.weui_media_appmsg .weui_media_hd{width: 79px;height: 79px;}
+	.weui_media_box.weui_media_appmsg{padding: 0 15px;}
+	.weui_uploader_input_wrp{width: 77px;height: 77px;margin: 0;}
+	.weui_media_box.weui_media_appmsg .weui_media_bd{height: 77px;}
+	.map-hide-shade{display: none;position: fixed;width: 7.5rem;height:100%;left: 50%;margin-left: -3.75rem;top: 0;background: #fff;z-index: 100000;}
+	#allmap{width: 7.5rem;height: 7rem;}
+	#allmap>div{transform-origin: -38px -45px 0px}
+	.confirm-addr{width: 3rem;text-align: center;height: 0.7rem;line-height: 0.7rem;color: #fff;background: #0a0;margin: 10px auto;border-radius: 5px;}
+	.ShowWay {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+    </style>
+</head>
+
+<body>
+	    
+    @{ 
+	        Yitao.Core.ShopInfo shopInfo = ViewData["shopInfo"] as Yitao.Core.ShopInfo;
+	        Yitao.Core.SellerInfo sellerInfo = ViewData["sellerInfo"] as Yitao.Core.SellerInfo;
+	    }
+	    @if(ViewData["Status"].ToString()=="-99"){
+		    		
+		}else if(ViewData["Status"].ToString()=="0"){
+	    	<div class="unpass-box">
+				<img src="/Mobile/Themes/huadong/static/logo.png"/>
+				<div class="tips">
+					您的商户申请正在审核中，请耐心等待
+				</div>
+				<a class="kefu" href="tel:029-68563209">
+					客服电话：029-68563209
+				</a>
+				<a href="javascript:window.history.back()" class="btn back">好的，返回</a>
+			</div>
+		}else if(ViewData["Status"].ToString()=="1"){
+			
+		}else if(ViewData["Status"].ToString()=="-1"){
+	    	<div class="unpass-box">
+				<img src="/Mobile/Themes/huadong/static/logo.png"/>
+				<div class="tips">
+					您的商户已被禁用
+				</div>
+				<a class="kefu" href="tel:029-68563209">
+					客服电话：029-68563209
+				</a>
+				<a href="javascript:window.history.back()" class="btn back">知道了，返回</a>
+			</div>
+		}else if(ViewData["Status"].ToString()=="-2"){
+	    	<div class="unpass-box">
+				<img src="/Mobile/Themes/huadong/static/logo.png"/>
+				<div class="tips">
+					您的商户已停业
+				</div>
+				<a class="kefu" href="tel:029-68563209">
+					客服电话：029-68563209
+				</a>
+				<a href="javascript:window.history.back()" class="btn back">知道了，返回</a>
+			</div>
+		}else if(ViewData["Status"].ToString()=="-3"){
+	    	<div class="unpass-box">
+				<img src="/Mobile/Themes/huadong/static/logo.png"/>
+				<div class="tips">
+					您的商户已过期
+				</div>
+				<a class="kefu" href="tel:029-68563209">
+					客服电话：029-68563209
+				</a>
+				<a href="javascript:window.history.back()" class="btn back">知道了，返回</a>
+			</div>
+		}else if(ViewData["Status"].ToString()=="-4"){
+			<div class="unpass-box">
+				<img src="/Mobile/Themes/huadong/static/logo.png"/>
+				<div class="tips">
+					您的申请未通过审核,请修改资料后，重新提交！
+				</div>
+				<a class="kefu" href="tel:029-68563209">
+					客服电话：029-68563209
+				</a>
+				<div class="reason">
+					拒审原因：<span>@sellerInfo.Memo</span>
+				</div>
+				<div  class="btn back" onclick="showEdit()">修改资料</div>
+			</div>
+		}
+    
+    
+    
+	<div id="edit">
+		<div class="map-hide-shade">
+	    	<div class="header">
+		        <div class="bg-white weui-header">
+		            <div class="weui-header-left">
+		                <a class="icon icon-109 gray_color"></a>
+		            </div>
+		            <h1 class="weui-header-title gray_color">选择地址</h1>
+		        </div>
+		    </div>
+			<div id="allmap"></div>
+			<div id="searchResultPanel" style="display: none;"></div>
+			<div class="curmap-addr">
+				<p>当前地址：<span class="select-addr-addr"></span></p>
+				<p>经度：<span class="select-lng"></span> 纬度：<span class="select-lat"></span></p>
+			</div>
+			<div class="confirm-addr">完成选择，返回</div>
+		</div>
+		
+		
+		
+		
+	    
+		<div class="edit-content">
+			@if(ViewData["Status"].ToString()!="1"){
+		    <div class="header">
+		        <div class="bg-white weui-header">
+		            <div class="weui-header-left">
+		                <a class="icon icon-109 gray_color" onclick="history.back()"></a>
+		            </div>
+		            <h1 class="weui-header-title gray_color">填写基本资料开通门店</h1>
+		        </div>
+		    </div>
+		   }
+		    @if(ViewData["Status"].ToString()=="1"){
+		    <div class="header">
+		        <div class="bg-white weui-header">
+		            <div class="weui-header-left">
+		                <a class="icon icon-109 gray_color" onclick="history.back()"></a>
+		            </div>
+		            <h1 class="weui-header-title gray_color">完善资料</h1>
+		        </div>
+		    </div>
+		    <div class="shop-top-info">
+				<div class="weui_panel weui_panel_access">
+		            <div class="weui_panel_bd">
+		                <div  class="weui_media_box weui_media_appmsg">
+		                    <div class="weui_media_hd">
+		                        <ul class="weui_uploader_files" id="img8">
+	                                <li id="delImg8" onclick="delImage(8)" data-index="8" class="del_inmg weui_uploader_file weui_uploader_status" style="">
+	                            		<div class="weui_uploader_status_content">
+	                            			<i class="weui_icon_cancel"></i>
+	                            		</div>
+	                            	</li>  	
+	                            </ul>
+	                            <div class="weui_uploader_input_wrp">
+	                                <input class="weui_uploader_input" data-index="8" type="file" accept="image/jpg,image/jpeg,image/png,image/gif" id="headimgurl8">
+	                                <input type="hidden" value="" id="images8">
+	                            </div>
+		                    </div>
+		                    <div class="weui_media_bd">
+		                        <h4 class="weui_media_title">@(shopInfo.ShopName)</h4>
+		                        <p class="weui_media_desc" style="line-height: 30px;color: #666;">让利<span>@(shopInfo.Profits)</span>%</p>
+		                        <p style="text-align: right;"><a style="padding: 3px 5px; border-radius: 10px;background: #ff4800;color: #fff;" href="/m/shop/setprofits?shopid=@(shopInfo.ShopId)">修改折扣</a></p>
+		                    </div>
+		                </div>
+		                <div style="padding-left: 15px;height: 30px;line-height: 30px;background: #fff;position: relative;z-index: 11;" onclick="changeLogo()">
+		                	<span style="padding: 3px 10px;border: 1px solid #ff4800;">更换门头</span>
+		                </div>
+		            </div>
+		        </div> 
+		        
+			</div>
+		    }
+		    @if(ViewData["Status"].ToString()!="1"){
+		    <div class="md_list bg-white">
+		        <div class="weui_cells_form mt0">
+		        	<div class="weui_cell">
+		                <div class="weui_cell_hd text_color">
+		                    <label class="weui_label">选择行业：</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <select name="IndustryType" class="industry" v-model="curIndustry"  v-on:change="changeIndustry()">
+		                    	<option value="">请选择</option>
+		                    	<option value="0">零售业</option>
+		                    	<option value="1">餐饮业</option>
+		                    	<option value="2">美食</option>
+		                    	<option value="3">休闲娱乐</option>
+		                    	<option value="4">酒店住宿</option>
+		                    	<option value="5">生活服务</option>
+		                    	<option value="6">美容美体</option>
+		                    	<option value="7">百货商超</option>
+		                    	<option value="8">家具、房产</option>
+		                    	<option value="9">教育培训</option>
+		                    	<option value="10">爱车</option>
+		                    	<option value="11">其他行业</option>
+		                    	
+		                    </select>
+		                    <select name="IndustryId" class="industry"  v-model="curIndustryItem" >
+		                    	<option value="">请选择</option>
+		                    	<option v-for="(item, index) of Industry[curIndustry]" :key="index" v-bind:value="item.industryid" v-text="item.industryvalue"></option>
+		                    </select>
+		                </div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd text_color">
+		                    <label class="weui_label">销售渠道：</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                	<label for="show-way-1">线下</label>
+		                    <input class="ShowWay" id="show-way-1" type="radio" name="ShowWay" value="1">
+		                    <label for="show-way-2">线上</label>
+		                    <input class="ShowWay" id="show-way-2" type="radio" name="ShowWay" value="2">
+	                   		<label for="show-way-3">全部</label>
+	                    	<input class="ShowWay" id="show-way-3" type="radio" checked name="ShowWay" value="4">
+		                </div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd text_color">
+		                    <label class="weui_label">门店名称：</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input name="ShopName" maxlength="20" class="weui_input" v-model="ShopName" type="text" oninput="if(value.length>20)value=value.slice(0,20)"  placeholder="请输入门店名称">
+		                </div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd text_color">
+		                    <label class="weui_label">经营者/法人：</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input name="ManageName" maxlength="20" v-model="Contacts" class="weui_input" type="text" oninput="if(value.length>20)value=value.slice(0,20)"  placeholder="请输入法人名称">
+		                </div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd text_color">
+		                    <label class="weui_label">商户名称：</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input id="CompanyName" name="CompanyName" maxlength="20" v-model="SellerName" oninput="if(value.length>20)value=value.slice(0,20)"  class="weui_input" type="text" placeholder="请输入企业名称">
+		                </div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd text_color">
+		                    <label class="weui_label">营业开始时间：</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input name="WorkTimeStart" value="@(shopInfo.WorkTimeStart)" class="weui_input" id="start" type="text" placeholder="请选择营业开始时间">
+		                </div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd text_color">
+		                    <label class="weui_label">营业结束时间：</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input name="WorkTimeEnd" value="@(shopInfo.WorkTimeEnd)" class="weui_input" id="end" type="text" placeholder="请选择营业结束时间">
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		    }
+		    @if(ViewData["Status"].ToString()!="1"){
+		    <div class="pic_upload">
+		        <div class="weui_cell">
+		            <div class="weui_cell_bd weui_cell_primary">
+		
+		                <div class="weui-flex">
+		                    <div class="weui-flex-item">
+		                        <div class="weui_uploader">
+		                            <div class="weui_uploader_hd ">
+		                                <div class="weui_cell_bd" style="color:#4D4D4D;">营业执照</div>
+		                                <div class="weui_cell_ft"></div>
+		                            </div>
+		                            <div class="weui_uploader_bd" style="display:inline-block">
+		                            	<ul class="weui_uploader_files" id="img0">
+		                                	<li id="delImg0" onclick="delImage(0)" data-index="0" class="del_inmg weui_uploader_file weui_uploader_status" style="">
+		                                		<div class="weui_uploader_status_content">
+		                                			<i class="weui_icon_cancel"></i>
+		                                		</div>
+		                                	</li>  
+		                                </ul>
+		                                <div class="weui_uploader_input_wrp">
+		                                    <input class="weui_uploader_input" data-index="0" type="file" accept="image/jpg,image/jpeg,image/png,image/gif" id="headimgurl0">
+		                                    <input type="hidden" value="" id="images0">
+		                                </div>
+		                            	
+		                            	
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <div class="weui-flex-item">
+		                        <div class="weui_uploader">
+		                            <div class="weui_uploader_hd ">
+		                                <div class="weui_cell_bd" style="color:#4D4D4D;">法人身份证正面</div>
+		                                <div class="weui_cell_ft"></div>
+		                            </div>
+		                            <div class="weui_uploader_bd" style="display:inline-block">
+		                            	<ul class="weui_uploader_files" id="img1">
+			                                <li id="delImg1" onclick="delImage(1)" data-index="1" class="del_inmg weui_uploader_file weui_uploader_status" style="">
+		                                		<div class="weui_uploader_status_content">
+		                                			<i class="weui_icon_cancel"></i>
+		                                		</div>
+		                                	</li>  	
+		                                </ul>
+		                                <div class="weui_uploader_input_wrp">
+		                                    <input class="weui_uploader_input" data-index="1" type="file" accept="image/jpg,image/jpeg,image/png,image/gif" id="headimgurl1">
+		                                    <input type="hidden" value="" id="images1">
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div> 
+		
+		                <div class="weui-flex">
+		                    <div class="weui-flex-item">
+		                         <div class="weui_uploader">
+		                            <div class="weui_uploader_hd ">
+		                                <div class="weui_cell_bd" style="color:#4D4D4D;">法人身份证背面</div>
+		                                <div class="weui_cell_ft"></div>
+		                            </div>
+		                            <div class="weui_uploader_bd" style="display:inline-block">
+		                            	<ul class="weui_uploader_files" id="img2">
+			                                <li id="delImg2" onclick="delImage(2)" data-index="2" class="del_inmg weui_uploader_file weui_uploader_status" style="">
+		                                		<div class="weui_uploader_status_content">
+		                                			<i class="weui_icon_cancel"></i>
+		                                		</div>
+		                                	</li>  	
+		                                </ul>
+		                                <div class="weui_uploader_input_wrp">
+		                                    <input class="weui_uploader_input" data-index="2" type="file" accept="image/jpg,image/jpeg,image/png,image/gif" id="headimgurl2">
+		                                    <input type="hidden" value="" id="images2">
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <div class="weui-flex-item">
+		                        <div class="weui_uploader">
+		                            <div class="weui_uploader_hd ">
+		                                <div class="weui_cell_bd" style="color:#4D4D4D;">上传门头</div>
+		                                <div class="weui_cell_ft"></div>
+		                            </div>
+		                            <div class="weui_uploader_bd" style="display:inline-block">
+		                            	<ul class="weui_uploader_files" id="img3">
+			                                <li id="delImg3" onclick="delImage(3)" data-index="3" class="del_inmg weui_uploader_file weui_uploader_status" style="">
+		                                		<div class="weui_uploader_status_content">
+		                                			<i class="weui_icon_cancel"></i>
+		                                		</div>
+		                                	</li>  	
+		                                </ul>
+		                                <div class="weui_uploader_input_wrp">
+		                                    <input class="weui_uploader_input" data-index="3" type="file" accept="image/jpg,image/jpeg,image/png,image/gif" id="headimgurl3">
+		                                    <input type="hidden" value="" id="images3">
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		   
+		            </div>
+		        </div>
+		    </div>
+		    }
+		    @if(ViewData["Status"].ToString()=="1"){
+		    <div class="upload-img">
+		    	<div class="uptxt">请上传1-4张店铺照片</div>
+		    	<div class="weui-flex">
+		    		<div class="weui-flex-item">
+		    			<ul class="weui_uploader_files" id="img4">
+	                    	<li id="delImg4" onclick="delImage(4)" data-index="4" class="del_inmg weui_uploader_file weui_uploader_status" style="">
+	                    		<div class="weui_uploader_status_content">
+	                    			<i class="weui_icon_cancel"></i>
+	                    		</div>
+	                    	</li>  
+	                    </ul>
+	                    <div class="weui_uploader_input_wrp">
+	                        <input class="weui_uploader_input" data-index="4" type="file" accept="image/jpg,image/jpeg,image/png,image/gif" id="headimgurl4">
+	                        <input type="hidden" value="" id="images4">
+	                    </div>
+		    		</div>
+		    		<div class="weui-flex-item">
+		    			<ul class="weui_uploader_files" id="img5">
+	                    	<li id="delImg5" onclick="delImage(5)" data-index="5" class="del_inmg weui_uploader_file weui_uploader_status" style="">
+	                    		<div class="weui_uploader_status_content">
+	                    			<i class="weui_icon_cancel"></i>
+	                    		</div>
+	                    	</li>  
+	                    </ul>
+	                    <div class="weui_uploader_input_wrp">
+	                        <input class="weui_uploader_input" data-index="5" type="file" accept="image/jpg,image/jpeg,image/png,image/gif" id="headimgurl5">
+	                        <input type="hidden" value="" id="images5">
+	                    </div>
+		    		</div>
+		    		<div class="weui-flex-item">
+		    			<ul class="weui_uploader_files" id="img6">
+	                    	<li id="delImg6" onclick="delImage(6)" data-index="6" class="del_inmg weui_uploader_file weui_uploader_status" style="">
+	                    		<div class="weui_uploader_status_content">
+	                    			<i class="weui_icon_cancel"></i>
+	                    		</div>
+	                    	</li>  
+	                    </ul>
+	                    <div class="weui_uploader_input_wrp">
+	                        <input class="weui_uploader_input" data-index="6" type="file" accept="image/jpg,image/jpeg,image/png,image/gif" id="headimgurl6">
+	                        <input type="hidden" value="" id="images6">
+	                    </div>
+		    		</div>
+		    		<div class="weui-flex-item">
+		    			<ul class="weui_uploader_files" id="img7">
+	                    	<li id="delImg7" onclick="delImage(7)" data-index="7" class="del_inmg weui_uploader_file weui_uploader_status" style="">
+	                    		<div class="weui_uploader_status_content">
+	                    			<i class="weui_icon_cancel"></i>
+	                    		</div>
+	                    	</li>  
+	                    </ul>
+	                    <div class="weui_uploader_input_wrp">
+	                        <input class="weui_uploader_input" data-index="7" type="file" accept="image/jpg,image/jpeg,image/png,image/gif" id="headimgurl7">
+	                        <input type="hidden" value="" id="images7">
+	                    </div>
+		    		</div>
+		    	</div>
+		    </div>
+		    }
+		    
+		    
+		    <div class="md_list bg-white">
+		        <div class="weui_cells_form mt0">
+		        	@if(ViewData["Status"].ToString()=="1"){
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd text_color">
+		                    <label class="weui_label">联系人：</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                	<input class="weui_input" type="text" name="Contacts" v-model="Contacts"/>
+		                </div>
+		            </div>
+		             <div class="weui_cell">
+		                <div class="weui_cell_hd text_color">
+		                    <label class="weui_label">联系电话：</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                	<input class="weui_input" type="text" name="Mobile" v-model="Mobile"/>
+		                </div>
+		            </div>
+		            <div class="weui_cell" style="display: none;">
+		                <div class="weui_cell_hd text_color">
+		                    <label class="weui_label">选择行业：</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <select name="IndustryType" class="industry" v-model="curIndustry" v-on:change="changeIndustry()">
+		                    	<option value="">请选择</option>
+		                    	<option value="0">零售业</option>
+		                    	<option value="1">餐饮业</option>
+		                    	<option value="2">美食</option>
+		                    	<option value="3">休闲娱乐</option>
+		                    	<option value="4">酒店住宿</option>
+		                    	<option value="5">生活服务</option>
+		                    	<option value="6">百货商超</option>
+		                    	
+		                    	<option value="7">美容美体</option>
+		                    	<option value="8">家具、房产</option>
+		                    	<option value="9">教育培训</option>
+		                    	<option value="10">爱车</option>
+		                    	<option value="11">其他行业</option>
+		                    	
+		                    </select>
+		                    <select name="IndustryId" class="industry" v-model="curIndustryItem">
+		                    	<option value="">请选择</option>
+		                    	<option v-for="(item, index) of Industry[curIndustry]" :key="index" v-bind:value="item.industryid" v-text="item.industryvalue"></option>
+		                    </select>
+		                </div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd text_color">
+		                    <label class="weui_label">销售渠道：</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                	<label for="show-way-1">线下</label>
+		                    <input class="ShowWay" id="show-way-1" type="radio" name="ShowWay" value="1">
+		                    <label for="show-way-2">线上</label>
+		                    <input class="ShowWay" id="show-way-2" type="radio" name="ShowWay" value="2">
+	                   		<label for="show-way-3">全部</label>
+	                    	<input class="ShowWay" id="show-way-3" type="radio" checked name="ShowWay" value="4">
+		                </div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd text_color">
+		                    <label class="weui_label">营业开始时间：</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input name="WorkTimeStart" value="@(shopInfo.WorkTimeStart)" class="weui_input" id="start" type="text" placeholder="请选择营业开始时间">
+		                </div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd text_color">
+		                    <label class="weui_label">营业结束时间：</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input name="WorkTimeEnd" value="@(shopInfo.WorkTimeEnd)" class="weui_input" id="end" type="text" placeholder="请选择营业结束时间">
+		                </div>
+		            </div>
+		           }
+		           @if(ViewData["Status"].ToString()!="1"){
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd text_color">
+		                    <label class="weui_label">手机号：</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input name="Phone" maxlength="11" onkeyup="return( /[^\u4e00-\u9fa5a-zA-Z0-9\w]/g.test(String.fromCharCode(event.keyCode)))"  oninput="if(value.length>11)value=value.slice(0,11)"  v-model="Phone" class="weui_input" type="number" placeholder="请输入联系电话">
+		                </div>
+		            </div>
+		            }
+		            <!--<div class="weui_cell">
+		                <div class="weui_cell_hd text_color">
+		                    <label class="weui_label">省市区镇：</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input name="" class="weui_input" type="text"  readonly="readonly" id="selectAddr" v-on:click="showAddr()" placeholder="请选择省市区镇" v-model="Addr">
+		                    <input type="hidden" name="Province" id="Province" v-model="curProvince" />
+		                    <input type="hidden" name="City" id="City" v-model="curCity" />
+		                    <input type="hidden" name="County" id="County" v-model="curCounty" />
+		                    <input type="hidden" name="Town" id="Town" v-model="curTown" />
+		                </div>
+		            </div>-->
+		            <input type="hidden" name="Province" id="Province" v-model="curProvince" />
+	                <input type="hidden" name="City" id="City" v-model="curCity" />
+	                <input type="hidden" name="County" id="County" v-model="curCounty" />
+	                <input type="hidden" name="Town" id="Town" v-model="curTown" />
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd text_color">
+		                    <label class="weui_label">详细地址：</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input name="Address" maxlength="30" v-model="Address" id="addr" class="weui_input" type="text" placeholder="请输入详细地址">
+		                </div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd text_color">
+		                    <label class="weui_label">经纬度：</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                	<span id="Longitude">@shopInfo.Longitude</span>
+		                	<span id="Latitude">@shopInfo.Latitude</span>
+		                </div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <textarea name="Intro"  id="textarea" class="weui_textarea" placeholder="门店简介：" rows="3" v-model="ShopDescription">@shopInfo.Description</textarea>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		    <div class="kt_btn">
+		    	
+		    	@if(ViewData["Status"].ToString()=="-99"){
+		    		<div class="now_btn" onclick="save(0)">申请开通</div>
+		    	}else if(ViewData["Status"].ToString()=="0"){
+		    		<!--<div class="now_btn" onclick="save(0)">保存资料</div>-->
+		    	}else if(ViewData["Status"].ToString()=="1"){
+		    		<div class="now_btn" onclick="save(100)">保存资料</div>
+		    		<!--<div class="now_btn" onclick="save(1)">提交修改</div>-->
+		    	}else if(ViewData["Status"].ToString()=="-1"){
+		    		<!--<div class="now_btn">用户已禁用</div>-->
+		    	}else if(ViewData["Status"].ToString()=="-2"){
+		    		<!--<div class="now_btn">已停业</div>-->
+		    	}else if(ViewData["Status"].ToString()=="-3"){
+		    		<!--<div class="now_btn">已过期</div>-->
+		    	}else if(ViewData["Status"].ToString()=="-4"){
+		    		<div class="now_btn" onclick="save(1)">再次审核</div>
+		    	}
+		        
+		    </div>
+		</div>
+	</div>
+	
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+    	var Status = '@ViewData["Status"]';
+    	var imgBase = "@(WorkContext.ShopConfig.ImageCDN)";
+    	var OrganizationPic = "@(sellerInfo.OrganizationPic)";
+		var PersonalPicFront = "@(sellerInfo.PersonalPicFront)";
+		var PersonalPicBack =  "@(sellerInfo.PersonalPicBack)";
+		var ShopLogo = "@(shopInfo.Logo)";
+		var ShowWay = "@(shopInfo.ShowWay)";
+        function changeLogo(){
+	    	$("#headimgurl3").click();
+	    }
+    	function showEdit() {
+    		$(".unpass-box").css("display","none");
+    		$("#edit").css("display","block");
+    	}
+    	
+    	function delImage(index) {
+    		var delimg = $("#delImg"+index);
+			$.confirm('您确定要删除吗?', '确认删除?', function() {
+				
+				delimg.remove();
+				$("#images"+index).val("");
+				$("#images"+index).parents(".weui_uploader_input_wrp").show();
+				switch(index)
+				{
+				    case 0:
+				        vm.OrganizationPic = "";
+				        break;
+				    case 1:
+				        vm.PersonalPicFront = "";
+				        break;
+				    case 2:
+				        vm.PersonalPicBack = "";
+				        break;
+				    case 3:
+				        vm.ShopLogo = "";
+				        break;
+				    case 4:
+				        vm.Pic[0] = "";
+				        break;
+				    case 5:
+				        vm.Pic[1] = "";
+				        break;
+				    case 6:
+				        vm.Pic[2] = "";
+				        break;
+				    case 7:
+				        vm.Pic[3] = "";
+				        break;
+				    case 8:
+				        vm.ShopLogo = "";
+				        break;
+				}
+			}, function() {
+				$.alert('取消操作');
+			});
+    	}
+    	var status = 'ViewData["Status"]';
+	    function uplodImg(input,img,images,index) {
+	      	//单图压缩上传
+    		var f = document.querySelector(input);
+			f.onchange = function() {
+			    lrz(this.files[0], {
+			        width: 640,
+			        fieldName: "file"
+			    }).then(function(rst) {
+			        var xhr = new XMLHttpRequest();
+			        xhr.open('POST', '../Tool/Upload?operation=uploaduseravatar');
+			        xhr.onload = function(datas) {
+			            if (xhr.status === 200) {
+                            var obj = eval('(' + xhr.responseText + ')');
+                            var delImg = "delImg"+index;
+			                $(img).html('<li id="'+delImg+'" onclick="delImage('+index+')" data-index="'+index+'" class="del_inmg weui_uploader_file weui_uploader_status" style="background-image:url(@(WorkContext.ShopConfig.ImageCDN)' + obj.url + ')"><div class="weui_uploader_status_content"><i class="weui_icon_cancel"></i></div></li>');
+			                $(images).val(obj.url);
+			                //$(".weui_uploader_input_wrp").eq(index).hide();
+			                $(images).parents(".weui_uploader_input_wrp").hide();
+			                switch(index)
+							{
+							    case 0:
+							        vm.OrganizationPic = obj.url;
+							        break;
+							    case 1:
+							        vm.PersonalPicFront = obj.url;
+							        break;
+							    case 2:
+							        vm.PersonalPicBack = obj.url;
+							        break;
+							    case 3:
+							        vm.ShopLogo = obj.url;
+							        break;
+							    case 4:
+							        vm.Pic[0] = obj.url;
+							        break;
+							    case 5:
+							        vm.Pic[1] = obj.url;
+							        break;
+							    case 6:
+							        vm.Pic[2] = obj.url;
+							        break;
+							    case 7:
+							        vm.Pic[3] = obj.url;
+							        break;
+							    case 8:
+							        vm.ShopLogo = obj.url;
+							        break;
+							}
+							
+			            } else {
+			            }
+			        };
+			        xhr.onerror = function() {
+			        };
+			        xhr.upload.onprogress = function(e) {
+			            var percentComplete = ((e.loaded / e.total) || 0) * 100;
+			        };
+
+			        //rst.formData.append('size', rst.fileLen);
+			        //rst.formData.append('base64', rst.base64);
+
+			        xhr.send(rst.formData);
+			        return rst;
+			    }).
+			    catch (function(err) {
+			        alert(err);
+			    }).always(function() {
+			    });
+			};
+	    }
+	    //手机验证函数
+        function IsTel(Tel) {
+            var reg = /^1(3|4|5|6|7|8|9)\d{9}$/;
+            var retu = reg.test(Tel);
+            if (retu) {
+                return true;
+            } else {
+                return false;
+            };
+        };
+        //关闭裁切框
+        function closeCrop() {
+        	$(".crop-img-box").hide();
+        }
+	    function save(num) {
+	    	$(".now_btn").attr("disabled","disabled");
+			var ShopName = vm.ShopName;
+	    	var Contacts = vm.Contacts;
+	    	var SellerName = vm.SellerName;
+	    	var OrganizationPic = $('#images0').val();
+	    	var PersonalPicFront = $('#images1').val();
+	    	var PersonalPicBack = $('#images2').val();
+	    	var ShopLogo = $('#images3').val();
+	    	if(typeof(OrganizationPic)=="undefined"){
+	    		OrganizationPic = "@(sellerInfo.OrganizationPic)";
+	    	}
+	    	if(typeof(PersonalPicFront)=="undefined"){
+				PersonalPicFront = "@(sellerInfo.PersonalPicFront)";
+	    	}
+	    	if(typeof(PersonalPicBack)=="undefined"){
+				PersonalPicBack =  "@(sellerInfo.PersonalPicBack)";
+	    	}
+	    	
+	    	if(Number(Status)==1){
+	    		ShopLogo = $("#images8").val();
+	    	}
+	    	if(typeof(ShopLogo)=="undefined" || ShopLogo==""){
+	    		ShopLogo = "@(shopInfo.Logo)";
+	    	}
+	    	var Phone = vm.Phone;
+	    	var ShopDescription = vm.ShopDescription;
+	    	var Longitude = $('#Longitude').text();
+	    	var Latitude = $('#Latitude').text();
+	    	var IndustryType = vm.curIndustry;
+	    	var IndustryId = vm.curIndustryItem;
+	    	var Address = vm.Address;
+	    	var WorkTimeStart = $("#start").val();
+	    	var WorkTimeEnd = $("#end").val();
+	    	var textarea_txt = $("#textarea").val();
+	    	var County = vm.curCounty;
+	    	var ShowWay = $(".ShowWay:checked").val();
+	    	var PicList = "";
+	    	var PicsArr = vm.Pic;
+	    	if(PicsArr[0]!=""){
+	    		PicList = PicList+PicsArr[0];
+	    	}
+	    	if(PicsArr[1]!=""){
+	    		PicList = PicList+","+PicsArr[1];
+	    	}
+	    	if(PicsArr[2]!=""){
+	    		PicList = PicList+","+PicsArr[2];
+	    	}
+	    	if(PicsArr[3]!=""){
+	    		PicList = PicList+","+PicsArr[3];
+	    	}
+	    	
+	    	if(IndustryId=="" || IndustryId==0){
+	    		$.alert("请选择行业");
+	    		return false;
+	    	}
+	    	if(ShopName==""){
+	    		$.alert("请输入门店名称");
+	    		return false;
+	    	}
+	    	if(Contacts==""){
+	    		$.alert("请输入法人名称");
+	    		return false;
+	    	}
+	    	if(SellerName==""){
+	    		$.alert("请输入商户名称");
+	    		return false;
+	    	}
+	    	
+	    	console.log("WorkTimeStart: "+WorkTimeStart);
+	    	console.log("WorkTimeEnd: "+WorkTimeEnd);
+	    	
+	    	if(WorkTimeStart==""){
+	    		$.alert("请填写营业开始时间");
+	    	}else{
+	    		WorkTimeStart = WorkTimeStart.replace(" ",":");
+	    		
+	    	}
+	    	if(WorkTimeEnd==""){
+	    		$.alert("请填写营业结束时间");
+	    	}else{
+	    		WorkTimeEnd = WorkTimeEnd.replace(" ",":");
+	    	}
+	    	
+	    	if(OrganizationPic==""){
+	    		$.alert("请上传营业执照");
+	    		return false;
+	    	}
+	    	if(PersonalPicFront==""){
+	    		$.alert("请上传身份证正面");
+	    		return false;
+	    	}
+	    	if(PersonalPicBack==""){
+	    		$.alert("请上传身份证背面");
+	    		return false;
+	    	}
+	    	if(ShopLogo==""){
+	    		$.alert("请上传门头");
+	    		return false;
+	    	}
+	    	if(!IsTel(Phone)){
+	    		$.alert("手机号错误");
+	    		return false;
+	    	}
+	    	if(Address==""){
+	    		$.alert("地址必填");
+	    		return false;
+	    	}
+	    	if(Longitude==0 || Latitude==0 ||Longitude=="" || Latitude=="" ){
+	    		$.alert("地址不正确，未获取到经纬度，请重新输入地址");
+	    		return false;
+	    	}
+	    	
+	    	if(textarea_txt==""){
+	    		$.alert("门店简介必填");
+	    		return false;
+	    	}
+	    	if(num==1){
+	    		$.confirm("您确定要修改资料吗?修改资料，将进入审核状态", "确定修改?", function() {
+		        	$.ajax({
+			    		type:"post",
+			    		url:"Edit",
+			    		async:true,
+			    		data:{
+			    			ShopName: vm.ShopName,
+			    			Contacts: vm.Contacts,
+			    			Mobile: vm.Mobile,
+			    			SellerName: vm.SellerName,
+			    			OrganizationPic: OrganizationPic,
+			    			PersonalPicFront: PersonalPicFront,
+			    			PersonalPicBack: PersonalPicBack,
+			    			ShopLogo: vm.ShopLogo,
+			    			Phone: vm.Phone,
+			    			Province: vm.curProvince,
+			    			City: vm.curCity, 
+			    			County: vm.curCounty,
+			    			Town: 1,
+			    			Address: vm.Address,
+			    			WorkTimeStart: WorkTimeStart,
+			    			WorkTimeEnd: WorkTimeEnd,
+			    			IndustryType: vm.curIndustry,
+			    			IndustryId: vm.curIndustryItem,
+			    			ShopDescription: vm.ShopDescription,
+			    			Longitude: Longitude,
+			    			Latitude: Latitude,
+			    			PicList: PicList,
+			    			ShowWay: ShowWay
+			    		},
+			    		dataType:"json",
+			    		success: function(rel) {
+			    			$(".now_btn").removeAttr("disabled");
+			    			if(rel.Code==1){
+			    				$.alert("您的资料已提交，请耐心等待审核！",function(){
+			    					window.location.href = '/m/usercenter/home';
+			    				});
+			    			}else{
+			    				$.alert(rel.Message);
+			    			}
+			    		}
+			    	}); 
+		        }, function() {
+		        	//$.toast("取消操作");
+		        });
+	    	}else if(num==0){
+	    		$.ajax({
+		    		type:"post",
+		    		url:"Edit",
+		    		async:true,
+		    		data:{
+		    			ShopName: vm.ShopName,
+		    			Contacts: vm.Contacts,
+		    			Mobile: vm.Mobile,
+		    			SellerName: vm.SellerName,
+		    			OrganizationPic: OrganizationPic,
+		    			PersonalPicFront: PersonalPicFront,
+		    			PersonalPicBack: PersonalPicBack,
+		    			ShopLogo: vm.ShopLogo,
+		    			Phone: vm.Phone,
+		    			Province: vm.curProvince,
+		    			City: vm.curCity, 
+		    			County: vm.curCounty,
+		    			Town: 1,
+		    			Address: vm.Address,
+		    			WorkTimeStart: WorkTimeStart,
+		    			WorkTimeEnd: WorkTimeEnd,
+		    			IndustryType: vm.curIndustry,
+		    			IndustryId: vm.curIndustryItem,
+		    			ShopDescription: vm.ShopDescription,
+		    			Longitude: Longitude,
+		    			Latitude: Latitude,
+		    			PicList: PicList,
+		    			ShowWay: ShowWay
+		    		},
+		    		dataType:"json",
+		    		success: function(rel) {
+		    			$(".now_btn").removeAttr("disabled");
+		    			if(rel.Code==1){
+		    				$.alert("您的资料已提交，请耐心等待审核！",function(){
+		    					window.location.href = '/m/usercenter/home';
+		    				});
+		    			}else{
+		    				$.alert(rel.Message);
+		    			}
+		    		}
+		    	}); 
+	    	}else if(num==100){
+	    		$.ajax({
+		    		type:"post",
+		    		url:"/Api/Shop/EditShopInfo",
+		    		async:true,
+		    		data:{
+		    			ShopId: "@shopInfo.ShopId",
+		    			ShopName: vm.ShopName,
+		    			Contacts: vm.Contacts,
+		    			Mobile: vm.Mobile,
+		    			SellerName: vm.SellerName,
+		    			OrganizationPic: OrganizationPic,
+		    			PersonalPicFront: PersonalPicFront,
+		    			PersonalPicBack: PersonalPicBack,
+		    			Logo: vm.ShopLogo,
+		    			Phone: vm.Phone,
+		    			Province: vm.curProvince,
+		    			City: vm.curCity, 
+		    			County: vm.curCounty,
+		    			Town: 1,
+		    			Address: vm.Address,
+		    			WorkTimeStart: WorkTimeStart,
+		    			WorkTimeEnd:  WorkTimeEnd,
+		    			IndustryType: vm.curIndustry,
+		    			IndustryId: vm.curIndustryItem,
+		    			Description: vm.ShopDescription,
+		    			Longitude: Longitude,
+		    			Latitude: Latitude,
+		    			PicList: PicList,
+		    			ShowWay: ShowWay
+		    		},
+		    		dataType:"json",
+		    		success: function(rel) {
+		    			$(".now_btn").removeAttr("disabled");
+		    			if(rel.code==1){
+		    				$.alert(rel.message,function(){
+		    					window.location.href = '/m/usercenter/home';
+		    				});
+		    			}else{
+		    				$.alert(rel.message);
+		    			}
+		    		}
+		    	}); 
+	    	}
+	    }
+	    
+	    var vm = new Vue({
+			el: '#edit',
+			data: {
+				ShopName: '@(shopInfo.ShopName)',
+				curIndex: 0,
+				SellerName: "@(sellerInfo.SellerName)",
+				WorkTimeStart: '@(shopInfo.WorkTimeStart)',
+				WorkTimeEnd: '@(shopInfo.WorkTimeEnd)',
+				curIndustry: '@(ViewData["IndustryType"])',
+				curIndustryItem: "@(shopInfo.IndustryId)",
+	    		Industry: {0:[],1:[],2:[],3:[],4:[],5:[],6:[],7:[],8:[],9:[],10:[],11:[]},
+	    		imgBase: "@(WorkContext.ShopConfig.ImageCDN)",
+	    		OrganizationPic: "@(sellerInfo.OrganizationPic)",
+	    		PersonalPicFront: "@(sellerInfo.PersonalPicFront)",
+	    		PersonalPicBack: "@(sellerInfo.PersonalPicBack)",
+	    		ShopLogo: "@(shopInfo.Logo)",
+	    		Province: [],
+	    		City: [],
+	    		County: [],
+	    		Town: [],
+	    		curProvince: "@(shopInfo.Province)",
+	    		curProvinceName: "",
+	    		curCity: "@(shopInfo.City)",
+	    		curCityName: '',
+	    		curCounty: "@(shopInfo.County)",
+	    		curCountyName: '',
+	    		curTown: "@(shopInfo.Town)",
+	    		initProvince: "@(shopInfo.Province)",
+	    		initCity: "@(shopInfo.City)",
+	    		initCounty: "@(shopInfo.County)",
+	    		initTown: "@(shopInfo.Town)",
+	    		curTownName: '',
+	    		isInit: true,
+	    		Addr: "",
+	    		Address: "@(shopInfo.Address)",
+	    		PicList: ["","","",""],
+	    		Pic: ["","","",""],
+	    		Contacts: "@(shopInfo.Contacts)",
+	    		Mobile: "@(shopInfo.Mobile)",
+	    		Phone: "@(shopInfo.Phone)",
+	    		Longitude: "@(shopInfo.Longitude)",
+	    		Latitude: "@(shopInfo.Latitude)",
+	    		ShopDescription: "@shopInfo.Description",
+	    		ShowWay: "@(shopInfo.ShowWay)",
+	    		
+	    	},
+	    	created: function () {
+	    		this.getIndustry();
+	    		this.getProvince();
+	    		this.initAddr();
+	    		this.getPicList();
+    			this.getAddrName(this.curProvince,0);
+    			this.getAddrName(this.curCity,1);
+    			this.getAddrName(this.curCounty,2);
+    			this.getAddrName(this.curTown,3);
+    			
+    			/*this.getCounty(this.curCounty, this.curCountyName);
+    			this.getTown(this.curTown, this.curTownName);*/
+	    	},
+	    	methods: {
+	    		changeIndustry: function() {
+	    			this.curIndustryItem = "";
+	    		},
+	    		getPicList: function() {
+	    			var _this = this;
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/Tool/GetPics?ItemType=10&ItemId="+"@(shopInfo.ShopId)",
+	    				async:false,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						_this.PicList = rel.data;
+	    						_this.PicList.forEach(function(v,i){
+	    							_this.Pic[i] = v.imgurl;
+	    						});
+	    						if(_this.Pic[0]==""){
+									$("#delImg4").hide();
+								}else{
+									$("#delImg4").css("background","url("+imgBase+_this.Pic[0]+"?w=80&h=80)");
+									$(".upload-img .weui_uploader_input_wrp").eq(0).hide();
+								}
+								if(_this.Pic[1]==""){
+									$("#delImg5").hide();
+								}else{
+									$("#delImg5").css("background","url("+imgBase+_this.Pic[1]+"?w=80&h=80)");
+									$(".upload-img .weui_uploader_input_wrp").eq(1).hide();
+								}
+								if(_this.Pic[2]==""){
+									$("#delImg6").hide();
+								}else{
+									$("#delImg6").css("background","url("+imgBase+_this.Pic[2]+"?w=80&h=80)");
+									$(".upload-img .weui_uploader_input_wrp").eq(2).hide();
+								}
+								if(_this.Pic[3]==""){
+									$("#delImg7").hide();
+								}else{
+									$("#delImg7").css("background","url("+imgBase+_this.Pic[3]+"?w=80&h=80)");
+									$(".upload-img .weui_uploader_input_wrp").eq(3).hide();
+								}
+	    					}
+	    				}
+	    			});
+	    		},
+	    		initAddr:function() {
+	    			var _this = this;
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/User/GetCityList?Province="+_this.initProvince,
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						_this.City = rel.data;
+	    					}
+	    				}
+	    			});
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/User/GetCountyList?City="+_this.initCity,
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						_this.County = rel.data;
+	    					}
+	    				}
+	    			});
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/User/GetTownList?County="+_this.initCounty,
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						_this.Town = rel.data;
+	    					}
+	    				}
+	    			});
+	    		},
+	    		getIndustry: function() {
+	    			var _this = this;
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/Home/IndustryInfo",
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						rel.data.forEach(function(v, i) {
+	    							switch(v.industrytype){
+	    								case 0:
+									    	_this.Industry[0].push(v);
+									    break;
+									    case 1:
+									    	_this.Industry[1].push(v);
+									    break;
+									    case 2:
+									    	_this.Industry[2].push(v);
+									    break;
+									    case 3:
+									    	_this.Industry[3].push(v);
+									    break;
+									    case 4:
+									    	_this.Industry[4].push(v);
+									    break;
+									    case 5:
+									    	_this.Industry[5].push(v);
+									    break;
+									    case 6:
+									    	_this.Industry[6].push(v);
+									    break;
+									    case 7:
+									    	_this.Industry[7].push(v);
+									    break;
+									    case 8:
+									    	_this.Industry[8].push(v);
+									    break;
+									    case 9:
+									    	_this.Industry[9].push(v);
+									    break;
+									    case 10:
+									    	_this.Industry[10].push(v);
+									    break;
+									    case 11:
+									    	_this.Industry[11].push(v);
+									    break;
+	    							}
+	    						});
+	    						
+	    					}
+	    				}
+	    			});
+	    		},
+	    		showAddr: function (){
+	    			$(".shade-box").animate({"bottom":0},100);
+	    		},
+	    		clearAddr: function() {
+	    			var _this = this;
+	    			_this.curCity = 0;
+	    			_this.curCityName = "";
+	    			_this.curCounty = 0;
+	    			_this.curCountyName = "";
+	    			_this.curTown = 0;
+	    			_this.curTownName = "";
+	    		},
+	    		getProvince: function() {
+	    			var _this = this;
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/User/GetProvinceList",
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						_this.Province = rel.data;
+	    						
+	    					}
+	    				}
+	    			});
+	    		},
+	    		getAddrName: function(id,type) {
+	    			var _this = this;
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/Tool/GetRegionInfo?Regionid="+id,
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						if(type==0){
+	    							_this.curProvinceName = rel.data.regionname
+	    						}else if(type==1){
+	    							_this.curCityName = rel.data.regionname
+	    						}else if(type==2){
+	    							_this.curCountyName = rel.data.regionname
+	    						}else if(type==3){
+	    							_this.curTownName = rel.data.regionname
+	    						}
+	    						_this.Addr = _this.curProvinceName+_this.curCityName+_this.curCountyName+_this.curTownName;
+	    					}
+	    				}
+	    			});
+	    		},
+	    		getProvinceTab: function(regionid,regionname) {
+	    			$(".addr-box").animate({"margin-left":0},100);
+	    			this.curIndex = 0;
+	    		},
+	    		getCityTab: function(regionid,regionname) {
+	    			$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+	    			this.curIndex = 1;
+	    			/*var _this = this;
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/User/GetCityList?Province="+regionid,
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						_this.City = rel.data;
+	    					}
+	    				}
+	    			});*/
+	    		},
+	    		getCountyTab: function(regionid,regionname) {
+	    			$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+	    			this.curIndex = 2;
+	    		},
+	    		getTownTab: function(regionid,regionname) {
+	    			$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+	    			this.curIndex = 3;
+	    		},
+	    		getCity: function(regionid,regionname) {
+	    			var _this = this;
+	    			_this.isInit = false;
+	    			_this.curProvince = regionid;
+	    			_this.curProvinceName = regionname;
+	    			_this.curCity = 0;
+	    			_this.curCityName = "";
+	    			_this.curCounty = 0;
+	    			_this.curCountyName = "";
+	    			_this.curTown = 0;
+	    			_this.curTownName = "";
+	    			_this.curIndex = 0;
+	    			//$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/User/GetCityList?Province="+regionid,
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						_this.City = rel.data;
+	    					}
+	    				}
+	    			});
+	    		},
+	    		getCounty: function(regionid,regionname) {
+	    			var _this = this;
+	    			_this.curCity = regionid;
+	    			_this.curCityName = regionname;
+	    			_this.curCounty = 0;
+	    			_this.curCountyName = "";
+	    			_this.curTown = 0;
+	    			_this.curTownName = "";
+	    			var index = $(".cur-li").index();
+	    			if(_this.curIndex<index){
+	    				$(".addr-box").animate({"margin-left":0},100);
+	    			}else{
+	    				$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+	    			}
+	    			_this.curIndex = 1;
+	    			
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/User/GetCountyList?City="+regionid,
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						_this.County = rel.data;
+	    					}
+	    				}
+	    			});
+	    		},
+	    		getTown: function(regionid,regionname) {
+	    			var _this = this;
+	    			_this.curCounty = regionid;
+	    			_this.curCountyName = regionname;
+	    			_this.curTown = 0;
+	    			_this.curTownName = "";
+	    			var index = $(".cur-li").index();
+	    			if(_this.curIndex<index){
+	    				$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+	    			}else{
+	    				$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+	    			}
+	    			_this.curIndex = 2;
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/User/GetTownList?County="+regionid,
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						_this.Town = rel.data;
+	    					}
+	    				}
+	    			});
+	    		},
+	    		selTown: function(regionid,regionname) {
+	    			var _this = this;
+	    			_this.curTown = regionid;
+	    			_this.curTownName = regionname;
+	    			_this.curIndex = 3;
+	    			_this.Addr = _this.curProvinceName+_this.curCityName+_this.curCountyName+_this.curTownName;
+	    			$(".shade-box").animate({"bottom":"-100%"},100);
+	    			$("#addr").val("");
+	    			_this.Address = "";
+	    			$('#Longitude').text("");
+	    			$('#Latitude').text("");
+	    		}
+	    	}
+	    });
+	    
+	    
+	    
+	    
+	    
+	    var map = new BMap.Map("allmap");
+	    var mk;
+		map.enableScrollWheelZoom(true);
+		var Longitude = $('#Longitude').text();
+    	var Latitude = $('#Latitude').text();
+    	var Address = vm.Address;
+		
+		
+		if(Longitude!="" && Latitude!=""){
+			map.centerAndZoom(new BMap.Point(Longitude, Latitude), 12); 
+			mk = new BMap.Marker(Longitude,Latitude);
+			map.addOverlay(mk);
+			map.panTo(Longitude,Latitude);
+		}else{
+			map.centerAndZoom("西安市",12); 
+		}
+		
+		var geolocation = new BMap.Geolocation();
+		//创建百度地图控件
+		geolocation.enableSDKLocation();
+		
+		if(Number(Status)==-99){
+			geolocation.getCurrentPosition(function(r){
+				$("#addr").attr('placeholder','正在获取地理位置。。。。。。');
+				var adds =r.point;
+				var latitude = adds.lat,
+				longitude  = adds.lng;	
+				
+				map.centerAndZoom(new BMap.Point(r.point.lng, r.point.lat), 12);
+				map.removeOverlay(mk);
+				mk = new BMap.Marker(r.point);
+				map.addOverlay(mk);
+				
+				map.enableScrollWheelZoom(true);
+				
+				if(this.getStatus() == BMAP_STATUS_SUCCESS){
+					vm.Longitude = longitude;
+		    		vm.Latitude = latitude;
+					getPosAddr(longitude,latitude);
+				}
+				else {
+					$("#addr").attr('placeholder','定位失败,请手动输入');
+				}        
+			},{enableHighAccuracy: true})//指示浏览器获取高精度的位置，默认false
+		}else{
+			
+		}
+		
+			
+		function G(id) {
+			return document.getElementById(id);
+		}
+		// 初始化地图,设置城市和地图级别。
+		var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+			{"input" : "addr"
+			,"location" : map
+		});
+		ac.setInputValue(vm.Address);
+		ac.addEventListener("onhighlight", function(e) {  //鼠标放在下拉列表上的事件
+			var str = "";
+			var _value = e.fromitem.value;
+			var value = "";
+			if (e.fromitem.index > -1) {
+				value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+			}    
+			str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+			
+			value = "";
+			if (e.toitem.index > -1) {
+				_value = e.toitem.value;
+				value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+			}    
+			str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+			G("searchResultPanel").innerHTML = str;
+		});
+	
+		var myValue;
+		ac.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
+		var _value = e.item.value;
+			myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+			G("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+			setPlace();
+		});
+		//点击地图获取经纬度和地址
+		var geoc = new BMap.Geocoder();   
+		map.addEventListener("click", function(e){        
+			var pt = e.point;
+			map.removeOverlay(mk);
+			mk = new BMap.Marker(pt);
+			map.addOverlay(mk);
+			map.panTo(pt);
+			getPosAddr(pt.lng,pt.lat); 
+		});
+		function setPlace(){
+			map.clearOverlays();    //清除地图上所有覆盖物
+			function myFun(){
+				var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+				vm.Longitude = pp.lng;
+	    		vm.Latitude = pp.lat;
+				map.centerAndZoom(pp, 12);
+				map.removeOverlay(mk);
+				mk = new BMap.Marker(pp);
+				map.addOverlay(mk);
+				map.panTo(pp);
+				map.enableScrollWheelZoom(true);
+			}
+			var local = new BMap.LocalSearch(map, { //智能搜索
+			  onSearchComplete: myFun
+			});
+			local.search(myValue);
+		}
+		
+		function getPosAddr(longitude,latitude){
+			$.ajax({
+				url:'https://api.map.baidu.com/geocoder/v2/?ak=nT6ySqHzG1p7QMRpZ1k9rMAT0weeSERr&location=' + latitude + ',' + longitude + '&output=json&pois=1',
+				dataType: 'jsonp',
+					callback: 'BMap._rd._cbk43398',
+					success: function(res) {
+						var result = res.result,
+						addressComponent = result.addressComponent,
+						adcode = addressComponent.adcode;
+						if(adcode=="" || adcode==0){
+							vm.curProvince = 0;
+							vm.curCity = 0;
+							vm.curCounty = 0;
+							vm.curTown = 0;
+						}else{
+							var province_code = adcode.substring(0,2);
+							var city_code = adcode.substring(0,4);
+							vm.curProvince = province_code;
+							vm.curCity = city_code;
+							vm.curCounty = adcode;
+							vm.curTown = 0;
+						}
+			    		vm.Addr = result.formatted_address;
+			    		vm.Address = result.formatted_address;
+			    		$(".select-addr-addr").text(result.formatted_address);
+			    		$(".select-lng").text(longitude);
+			    		$(".select-lat").text(latitude);
+			    		$("#Longitude").text(longitude);
+			    		$("#Latitude").text(latitude);
+			    		
+						$("#addr").val(result.formatted_address);
+				}
+	    	});
+		}
+	    $(function() {
+	    	
+		    $(".shop-top-info #images8").val(ShopLogo);
+		    $(".shop-top-info #delImg8").css("background","url("+imgBase+ShopLogo+"?w=80&h=80)");
+	    	$(".pic_upload #images0").val(OrganizationPic);
+			$(".pic_upload #images1").val(PersonalPicFront);
+			$(".pic_upload #images2").val(PersonalPicBack);
+			$(".pic_upload #images3").val(ShopLogo);
+			$(".pic_upload #delImg0").css("background","url("+imgBase+OrganizationPic+"?w=80&h=80)");
+			$(".pic_upload #delImg1").css("background","url("+imgBase+PersonalPicFront+"?w=80&h=80)");
+			$(".pic_upload #delImg2").css("background","url("+imgBase+PersonalPicBack+"?w=80&h=80)");
+			$(".pic_upload #delImg3").css("background","url("+imgBase+ShopLogo+"?w=80&h=80)");
+			
+			if(OrganizationPic==""){
+				$(".pic_upload #delImg0").hide();
+			}else{
+				$(".pic_upload .weui_uploader_input_wrp").eq(0).hide();
+			}
+			if(OrganizationPic==""){
+				$(".pic_upload #delImg1").hide();
+			}else{
+				$(".pic_upload .weui_uploader_input_wrp").eq(1).hide();
+			}
+			if(PersonalPicBack==""){
+				$(".pic_upload #delImg2").hide();
+			}else{
+				$(".pic_upload .weui_uploader_input_wrp").eq(2).hide();
+			}
+			if(ShopLogo==""){
+				$(".pic_upload #delImg3").hide();
+				$(".shop-top-info #delImg8").hide();
+			}else{
+				$(".pic_upload .weui_uploader_input_wrp").eq(3).hide();
+				$(".shop-top-info .weui_uploader_input_wrp").hide();
+			}
+	    	if($(".unpass-box").length>0){
+	    		
+	    	}else{
+	    		$("#edit").css("display","block");
+	    	}
+	    	
+	    	$(".weui_uploader_input").on("click",function() {
+	    		var index = $(this).data("index");
+	    		var input = "#headimgurl"+index;
+	    		var img = "#img"+index;
+	    		var images = "#images"+index;
+	    		uplodImg(input,img,images,index);
+	    	});
+	    	
+	    	$("#addr").on("input propertychange",function(){
+	    		if($(this).val().length<=0 || $(this).val()==""){
+	    			$('#Longitude').text("");
+	    			$('#Latitude').text("");
+	    		}
+	    	})
+	    		
+	    	$("#start").picker({
+				title: "选择时间",
+				cols: [{
+					textAlign: 'center',
+					values: (function() {
+						var arr = [];
+						for (var i = 0; i <= 23; i++) {
+							arr.push(i < 10 ? '0' + i : i);
+						}
+						return arr;
+					})()
+			
+				}, {
+					textAlign: 'center',
+					values: (function() {
+						var arr = [];
+						for (var i = 0; i <= 59; i++) {
+							arr.push(i < 10 ? '0' + i : i);
+						}
+						return arr;
+					})(),
+				}]
+			});        
+	    	$("#end").picker({
+				title: "选择时间",
+				cols: [{
+					textAlign: 'center',
+					values: (function() {
+						var arr = [];
+						for (var i = 0; i <= 23; i++) {
+							arr.push(i < 10 ? '0' + i : i);
+						}
+						return arr;
+					})()
+			
+				}, {
+					textAlign: 'center',
+					values: (function() {
+						var arr = [];
+						for (var i = 0; i <= 59; i++) {
+							arr.push(i < 10 ? '0' + i : i);
+						}
+						return arr;
+					})(),
+				}]
+			});        
+			
+			
+			$(".confirm-addr").on("click",function(){
+				$(".map-hide-shade").css("display","none");
+				$("#edit .edit-content").css("display","block");
+			});
+			$(".map-hide-shade").on("click",".header",function(){
+				$(".map-hide-shade").css("display","none");
+				$("#edit .edit-content").css("display","block");
+			});	
+			$("#addr").on("focus",function(){
+				$("#edit .edit-content").css("display","none");
+				$(".map-hide-shade").css("display","block");
+			});	
+    	});
+    </script>
+	</body>
+</html>

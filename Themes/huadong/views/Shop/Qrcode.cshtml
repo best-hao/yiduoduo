@@ -1,0 +1,259 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>收款码</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="/Mobile/weui/style/weui.css" />
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+  		<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script src="/Js/Mobile/qrcode.min.js"></script>  
+		<!--<script src="/Js/Mobile/shop/jquery-1.8.3.min.js"></script>  
+   <script src="/Js/Mobile/shop/qrcode.js"></script>  
+    <script src="/Js/Mobile/shop/utf.js"></script>  -->
+    
+       <script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script> 
+    <style>
+#app header{background: #fff;border-bottom: 1px solid #ddd;overflow:hidden}
+body{background:#fff;width:7.5rem;margin:0 auto;overflow-x: hidden;}
+.zk_top{width:6.6rem;margin:0 auto;background:#ff4800!important;/* margin-top:40px; */padding:0 0 0.6rem 0;/*padding-left:20px;*/box-sizing: border-box;position: relative;}
+.content-box{width:61%;margin:0rem auto;padding:3%;background: #fff;/*border-radius: 0.5rem;*/padding-bottom:0.4rem;}
+.qrcode-top{width:100%;}
+.seller-logo{width:30%;}
+.seller-logo img{width:100%;}
+.logo_box{height: 100%;line-height: 100%;}
+.logo{width:100%;margin:0 auto;background: #fff!important;overflow: hidden;padding:0 0.0rem;overflow-x: hidden;}
+.logo img{display:block;width:44%;margin:5% 0;}
+.seller-info{width:68%;font-size:0.28rem;margin-left:2%;/*line-height:0.66rem;*/position:relative;}
+.sellername{position: absolute;top:0;left: 1%;font-size: 0.32rem;}
+.profits{margin-top: 31%;font-size:0.28rem;width:90%;display: flex;justify-content: space-between;}
+.xgzk{display: block;/*width:1.4rem;height:0.5rem;*/padding:0 3%;line-height:0.5rem;background: #ff4800;border-radius:12px;color:#fff;text-align: center;}
+.qrcode{width:88%;margin:0 auto;margin-top:7%;text-align: center;}
+.qrcode img{width:100%;}
+.xgzk a{color:#fff;}
+.logo-img{text-align: center;border:1px solid #ddd;line-height:1.6rem;}
+.logo-img icon{font-size: 0.96rem;color:#e4393c;}
+ #app{width:7.5rem;margin:0 auto;height: 100%;}
+.weui_toast {width:3rem;min-height:3rem;left: 31%;top: 35%;margin-left: 0;}
+.zk_title{font-size: 0.4rem;color:#fff;width:100%;text-align: center;margin-bottom: 0.2rem;margin-top: 0.2rem;}
+.logo_fit{color:#fff;font-size: 0.28rem;position:absolute;top:0;right:0%;background: #ff4800;border-radius: 0 0 0.2rem 0.2rem;text-align: center;padding: 0.1rem 0.1rem;}
+.fl{float:left;}
+.fr{float:right}
+.clear{clear:both;}
+.qr-logo{border:1px solid #eee;}
+.qrcode-p{width:100%;text-align: center;color:#666;font-size: 0.32rem;margin-top:0.2rem;}
+.saveqr{width:80%;color:#fff;margin:0 auto;text-align: center;font-size:0.34rem;margin-top:0.2rem;}
+.ell-1 {overflow: hidden;text-overflow: ellipsis;white-space: nowrap}
+.ell-2 {overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+.color {color: #ff4800;}
+.bg {background: #ff4800;}
+.gary { color: #999;}
+.tabbox {font-size:0.24rem;background: #fff;text-align: center;height: 0.9rem;line-height: 0.9rem;border-bottom:1px solid #d9d9d9;}
+.cur {color: #ff4800;}
+.tabbox .weui-flex-item {font-size: 0.24rem;position: relative;}
+.tabbox .weui-flex-item:after {position: absolute;content: "";right: 0;height: 0.3rem;top: 0.3rem;background: #d9d9d9;width: 1px;}
+.zk_top{display:none;}
+.zk_top.cur{display:block}
+#wechat-qr-code{position:relative}
+#app-qr-code{position:relative}
+#Logoimg{width:0.6rem!important;height:0.6rem;position:absolute;top:50%;left:50%;margin-left:-0.35rem;margin-top:-0.35rem;padding:0.1rem;background: #fff;border-radius: 0.05rem;z-index: 111;}
+
+</style>
+</head>
+<body>
+    <div id="app" :style="{'display':pageIsShow}">
+        <header>
+            <div class="bg-white weui-header ">
+                <div class="weui-header-left"> <a class="icon icon-109 fl333" onclick="history.back()"></a>  </div>
+                <h1 class="weui-header-title fl333" style='color:#333'>收款码</h1>
+                <div class="weui-header-right"><a href='/m/seller/PayInFlow' class="fl333">营收明细</a></div>
+            </div>
+        </header>
+        <!--<div class="tabbox">
+            <div class="weui-flex">
+                <div class="weui-flex-item cur"  v-on:click="tabQrcode(0)">
+                    微信扫码
+                </div>
+                <div class="weui-flex-item"  v-on:click="tabQrcode(1)">
+                    App扫码
+                </div>
+            </div>
+        </div>-->
+        <div class="zk_top  wechat cur"  >
+            <div class="logo">
+                <div class="logo_box">
+                    <img src="/Images/Mobile/hdlogo.png" alt="" />
+                </div>
+
+
+            </div>
+            <div class='logo_fit'>
+                <div>当前让利</div>
+                <div style='font-weight: bold;font-size: 0.4rem;'>{{Profits}}%</div>
+            </div>
+            <p class='zk_title'>消费有惊喜  &nbsp;天天领红包</p>
+            <div class='content-box'>
+            	
+                <div class="qrcode" id='wechat-qr-code'>
+                <img :src="'@(WorkContext.ShopConfig.ImageCDN)'+seller.Logo" alt=""  id='Logoimg'/>	
+                </div>
+                <p class='qrcode-p'> {{seller.ShopName}}</p>
+            </div>
+            <div class='saveqr' style='font-size:0.32rem'>
+                请使用秦商未来APP或微信扫一扫付款
+            </div>
+            <div class='saveqr' style='font-size:0.28rem'>
+                秦商未来服务热线：400-113-4500
+            </div>
+        </div>
+        <!--<div class="zk_top appqrcode" v-bind:style="{height:windowHeight+'px'}">-->
+        <div class="zk_top appqrcode" >
+            <div class="logo">
+                <div class="logo_box">
+                    <img src="/Images/Mobile/hdlogo.png" alt="" />
+                </div>
+
+
+            </div>
+            <div class='logo_fit'>
+                <div>当前让利</div>
+                <div style='font-weight: bold;font-size: 0.4rem;'>{{Profits}}%</div>
+            </div>
+            <p class='zk_title'>消费有惊喜  &nbsp;天天领红包</p>
+            <div class='content-box'>
+            	
+                <div class="qrcode" id='app-qr-code'>
+                	<img :src="'@(WorkContext.ShopConfig.ImageCDN)'+seller.Logo" alt=""  id='Logoimg'/>
+                </div>
+                <p class='qrcode-p'> {{seller.ShopName}}</p>
+            </div>
+            <div class='saveqr'>
+                请使用秦商未来APP扫一扫付款
+            </div>
+            <div class='saveqr' style='font-size:0.28rem'>
+                秦商未来服务热线：400-113-4500
+            </div>
+        </div>
+    </div>
+    <script>
+        
+  	$.showLoading();
+      var vm = new Vue({
+     	el: '#app',
+          data: {
+        tabIndex:0,
+     	windowHeight:0,
+     	shopid:window.location.href.split('=')[1],
+     	seller:{},
+     	Profits:0,
+     	pageIsShow:'none',
+     	id:@ViewData["ShopId"]
+     	},
+     	methods:{
+     		
+     		getdata:function(){//获取商品详情
+     			var _this=this;
+     			 $.ajax({
+		    			type:"post",
+		    			url:"/m/Shop/detail",
+		    			data:{
+		    				shopid:_this.shopid
+		    			},
+		    			async:true,
+		    			success: function(rel){
+		    				console.log(JSON.parse(rel));
+		    				var data=JSON.parse(rel).Data;
+		    				console.log(data)
+		    				_this.seller=data;
+		    				_this.Profits=data.Profits
+//		    				var b=(data.Profits/10).toString().split('.')
+//		    				console.log(b[1])
+//		    				if((data.Profits/10).toString().split('.')[1]==undefined){
+//		    					var a=data.Profits/10+'.0'
+//		    				  _this.Profits=a
+//		    				}else{
+//		    					_this.Profits=data.Profits/10
+//		    				}
+		    				
+		    			}
+		    		});
+     		},
+              tabQrcode: function (index) {
+                  console.log(index);
+                  $(".tabbox .weui-flex-item").removeClass("cur");
+                  $(".tabbox .weui-flex-item").eq(index).addClass("cur");
+                if (index == 0) {
+                    
+                    $(".zk_top").removeClass("cur");
+                    $(".wechat").addClass("cur");
+                } else if (index == 1) {
+                    $(".zk_top").removeClass("cur");
+                    $(".appqrcode").addClass("cur");
+                }
+            }
+     	},
+     	mounted:function(){
+     		var _this=this;
+	   	   	var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+	　　             var  h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight; 
+            _this.windowHeight= window.innerHeight-46;
+            _this.getdata()
+     	},
+     	created:function(){
+	    	
+       },
+     })
+         	$(function(){
+       	
+				var obj = {id:@ViewData["ShopId"],type:2,name:"huadong",UserId:'@WorkContext.Uid'};
+				var json = JSON.stringify(obj);	
+				var url = '@(Request.Url.Scheme)://' 
+				+ '@HttpContext.Current.Request.Url.Host' 
+				+ '/m/settlement/shoppay?shopid='
+				+ '@ViewData["ShopId"]'
+				+ '&id='
+				+ '@ViewData["ShopId"]'
+				+ '&type=2'
+				+ '&name=huadong'
+				+ '&LeaderUid='
+                + '@WorkContext.Uid';
+				+ '&UserId='
+                + '@WorkContext.Uid';
+                
+                new QRCode(document.getElementById("wechat-qr-code"), url);
+				new QRCode(document.getElementById("app-qr-code"),json);
+				
+                setTimeout(function(){
+				$.hideLoading();
+				vm.pageIsShow='block'
+                }, 300);
+                  
+
+                 
+			});
+   
+//		     var qrcode=jQuery('#qr-code').qrcode({
+//		     	 render  : "canvas",
+//		         text    : JSON.stringify({id:@ViewData["ShopId"],type:2,name:"huadong"}),
+//		         width : "170",              
+//               height : "170",              
+//               background : "#ffffff",       
+//               foreground : "#000000",        
+//               src: '@(WorkContext.ShopConfig.ImageCDN)/upload/public/1807/27/acda90145f4049a28f2d6474231473d4.jpg?w=750'             //二维码中间的图片
+//		     }).hide(); 
+//		     var canvas=qrcode.find('canvas').get(0);     
+//          $('#imgOne').attr('src',canvas.toDataURL('image/jpg'))
+    </script>
+</body>
+</html>

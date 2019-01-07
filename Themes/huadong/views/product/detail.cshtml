@@ -1,0 +1,2117 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <title>商品详情-@{@WorkContext.SellerInfo.SellerName}</title>
+    <link rel="stylesheet" href="/Css/Mobile/product/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/product/putong.css?v=0.1" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/youshang.css" />
+
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/loading.css"/>
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css?v=0.114" />
+    <style>
+        .jion_yes button{width: 100%;line-height: 2.85rem;border-radius: 0px;border: 0;background: #ff4800;color: #FFFFFF;letter-spacing: 2px;}
+        .curtain{width: 80px;height: 80px;top: 50%;left: 0;right: 0;margin: -40px auto 0;}
+        .loadTit{width: 28px;height: 28px;top: 50%;left: 0;right: 0;margin: -14px auto 0;line-height: 28px;}
+        .loadTit icon{font-size: 1rem !important;}
+        .slide{min-height: auto;}
+        .swiper_conetnt{padding: 3rem 0 0 0}
+        .dehespan_1{text-align: left}
+        .dehespan_1::before{content: "￥";font-size: .8rem}
+        .coupon-box{display: none;}
+        .coupons_popup{display: none;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,.5);z-index: 10}
+        .att-popup-container{position: absolute;z-index: 11;bottom: 0;background: #fff;width: 100%}
+        .coupons_title{padding: 10px;background: #fff;color: #333}
+        a.pop_close{display: inline-block;float: right;color: #333;border: 1px solid #333;border-radius: 50%;width: 26px;text-align: center;height: 26px;line-height: 26px}
+        ul#cul{padding: 10px;max-height: 300px;overflow-y: auto}
+        #cul li{width: 100%;height: 117.52px;background: url(https://demo3.vshop.kuaidiantong.cn/templates/common/images/coupon_n.png) no-repeat;background-size: 100% 100%;margin-bottom: 10px}
+        span.coupons_price{display: block;height: 60px;line-height: 60px;font-size: 24px;color: #fff}
+        .coupons_tips{font-size: 12px;height: 40px;margin: 8px 0 0 8px;position: relative}
+        .coupons_tips_left{width: 80%;display: inline-block}
+        .btn_receive{border: 1px solid #999;border-radius: 3px;display: inline-block;font-size: 14px}
+        .coupons_tips .btn_receive{float: right;position: absolute;right: 12px;top: 10px;color: #666;padding: 0 5px}
+        .coupons_tips_left span{font-size: 12px;display: inline-block;line-height: 20px;height: 20px;float: left;width: 100%;color: #666}
+        #Goding{position: fixed;bottom: 4rem;right: .6rem;z-index: 99}
+        #Goding img{display: inline-block;width: 2rem;height: 2rem}
+        .goods-price-box{height: 40px;line-height: 40px;vertical-align: middle;padding-right: 0;position: relative;}
+        .goods-price-box .goods-price{color: #ff4800;}
+        .goods-price-box .goods-score{color: #999;font-size: 12px;}
+        .goods-price-box .mark{display: inline-block;width: 20px;height: 20px;line-height: 22px;border-radius: 7px;background-color: #ff4800;font-size: 0.8rem;font-weight: bold;color: #fff;text-align: center;}
+        .sales-count{font-size: 12px;color: #999;}
+        .right-box{position: absolute;top: 3px;right: -5px;height: 40px;width: 40px;}
+        .right-box .icon-share{line-height: 26px;text-align: center;}
+        .right-box .icon-share .icon{line-height: 26px;font-size: 20px;color:#666; border-left: 1px solid #cdcdcd;padding-left: 5px;}
+        .right-box .txt-share{line-height: 14px;font-size: 12px;text-align: center;color:#ff4800;}
+        .goods_details_con{width: 100%;overflow: hidden;}
+        .callus{width: 80px;color: #fff;background: deepskyblue;text-align: center;border-radius: 5px;}
+        .ell-1{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .ell-2{overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+        .comment-content{background-color:#fff;margin-bottom: 0.4rem;padding: 0.4rem 0;}
+        .weui_media_box{padding: 0;}
+        .weui_media_box .weui_media_title{color:#333;}
+        .weui_media_box.weui_media_appmsg .weui_media_hd{margin-right: 0.2rem;border-radius: 3px;overflow: hidden;}
+        .weui_media_footer{width: 100%;color: #333;font-size: 13px;line-height: 1.7;word-wrap:break-word; }
+        .comment-star{float: right;color:#ff4800;}
+        .comment-title,.comment-body{-webkit-display: flex;display: flex;height: 1.8rem;line-height: 1.8rem;padding: 0 0.6rem;}
+        .comment-value{-webkit-flex: 1;flex: 1;text-align: left;color:#666;}
+        .comment-see{-webkit-flex: 1;flex: 1;text-align: right;}
+        .comment-see a{display: block;color:#ff4800;}
+        .comment-body{height: auto;}
+        .comment-body .no-comment{color:#666;}
+        .weui_panel_bd{width: 100%;}
+        .weui_media_box .weui_media_title{color: #333;font-size: 15px;}
+        [v-cloak]{display: none;}
+        .goods-title{ width: 88%; display: inline-block; }
+        .describe_content{position: relative;}
+        .shop-enter .shop-collection a{height: auto; border-radius: 20px; padding: 0;}
+        .shop-enter .shop-collection{border-radius: 20px;}
+        .shop-enter .shop-collection a .icon{font-size:13px;}
+        .shop-enter .shop-name,.shop-conte{color:#333; line-height: 1.2rem;}
+        .shop-enter .go-shop{ border: 1px solid #ff4800; color:#ff4800; border-radius: 20px; overflow: hidden; width: 5.8rem; font-size: 0.3rem; margin: 0 auto;  -webkit-flex: none; flex: none; line-height: 1.5rem; height: 1.5rem;}
+        .shop-enter .all a,.shop-enter .all a i{color:#ff4800; text-align: center; margin-right: 5px; font-size: 14px; line-height: 1.3rem;}
+        .shop-enter .all a:after{display:none;}
+        .shop-enter .shop-name-content{width: 76%;}
+        .shop-enter .shop-name, .shop-enter .shop-other-info{ width: 75%; }
+        .shop-enter .shop-other-info .other:last-child{ margin-left: 8px; }
+        .shop-enter .shop-other-info{ padding-left: 0.5rem; font-size: 12px;}
+        .shop-enter .shop-other-info .other:last-child{float: left;}
+        .collection-num,.all-sales{color:#ff4800;}
+        .grade-icon{background-color: transparent; color:#333;}
+        .weui_media_box .weui_media_desc{ font-size: 12px; }
+        .shop-conte .grade{color:#ff4800;}
+        .shop-enter .shop-info-down .shop-conte{ text-align: center; }
+    </style>
+    <script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script>
+            var IsApp = "@WorkContext.IsApp";
+            var Profits = "@Model.Profits";
+            Profits = Number(Profits);
+            var SalePrice = "@Model.SalePrice";
+            SalePrice = Number(SalePrice);
+            
+            var GiftProfits = Number((Profits/100)*5*SalePrice).toFixed(2);
+            //alert('@WorkContext.Uid');
+
+
+            function share(){
+
+                var IsApp = "@WorkContext.IsApp";
+                var Uid = '@WorkContext.Uid';
+                //alert(IsApp);
+                if(IsApp==1){
+                    var type = 2;
+                    var title = '@Model.ProductName';
+                    var url = '@(Request.Url.Scheme)://'+'@(WorkContext.ShopConfig.SiteUrl)'+'/m/product/detail?id='+'@Model.ProductId'+'&LeaderUid='+'@WorkContext.Uid';
+                    
+                    var Logo = '@WorkContext.SellerInfo.Logo';
+                    var imageUrl = $("#slide1 li:last-child").find("img").attr("src");
+                    var describe = "消费不剁手，越花越富有!";
+                    var text="";
+                    var json = {
+                        type: type,
+                        title: title,
+                        imageUrl: imageUrl,
+                        describe: describe,
+                        url: url,
+                        LeaderUid: '@WorkContext.Uid',
+                        text: ""
+                    }
+                    if(navigator.userAgent.indexOf("iPhone")>0){
+                        shareWithTypes(type,title,imageUrl,describe,url,text);
+                    }
+                    if(navigator.userAgent.indexOf("Android")>0){
+                        /*alert("IsApp: "+IsApp);
+                        alert("进入安卓");
+                        alert(JSON.stringify(json));*/
+                        window.js.shareWithTypes(JSON.stringify(json));
+                    }
+                }else{
+                    $(".wx-share").show();
+                }
+
+            }
+            
+            var wxobj = {
+                appId: '@ViewData["AppId"]', /* 必填，公众号的唯一标识*/
+                timestamp: '@ViewData["Timestamp"]', /* 必填，生成签名的时间戳*/
+                nonceStr: '@ViewData["NonceStr"]', /* 必填，生成签名的随机串*/
+                signature: '@ViewData["Signature"]'/* 必填，签名*/
+            }
+            wxobj = JSON.stringify(wxobj);
+            //alert(wxobj);
+            wx.config({
+                debug: false, /* 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。*/
+                appId: '@ViewData["AppId"]', /* 必填，公众号的唯一标识*/
+                timestamp: '@ViewData["Timestamp"]', /* 必填，生成签名的时间戳*/
+                nonceStr: '@ViewData["NonceStr"]', /* 必填，生成签名的随机串*/
+                signature: '@ViewData["Signature"]',/* 必填，签名*/
+                jsApiList: [
+                        'checkJsApi',
+                        'onMenuShareTimeline',
+                        'onMenuShareAppMessage',
+                        'onMenuShareQQ',
+                        'onMenuShareWeibo',
+                        'hideMenuItems',
+                        'showMenuItems',
+                        'hideAllNonBaseMenuItem',
+                        'showAllNonBaseMenuItem',
+                        'translateVoice',
+                        'startRecord',
+                        'stopRecord',
+                        'onRecordEnd',
+                        'playVoice',
+                        'pauseVoice',
+                        'stopVoice',
+                        'uploadVoice',
+                        'downloadVoice',
+                        'chooseImage',
+                        'previewImage',
+                        'uploadImage',
+                        'downloadImage',
+                        'getNetworkType',
+                        'openLocation',
+                        'getLocation',
+                        'hideOptionMenu',
+                        'showOptionMenu',
+                        'closeWindow',
+                        'scanQRCode',
+                        'chooseWXPay',
+                        'openProductSpecificView',
+                        'addCard',
+                        'chooseCard',
+                        'openCard'
+                ]
+            });
+
+            wx.error(function (res) {
+                /*alert(res);*/
+                /*console.log(res);*/
+                /*alert('验证失败');*/
+            });
+
+            wx.ready(function () {
+                $(function(){
+                    var link = window.location.href+'&LeaderUid='+'@WorkContext.Uid';
+                    var Logo = '@WorkContext.SellerInfo.Logo';
+                    var imgUrl = '';
+                    imgUrl = $("#slide1 li:last-child").find("img").attr("src");
+                    var desc = "消费不剁手，越花越富有!";
+                    /*转发到朋友圈*/
+                    wx.onMenuShareTimeline({
+                        title: '@Model.ProductName',
+                        link: link,
+                        imgUrl: imgUrl,
+                        success: function () {
+                            /*alert('转发成功！');*/
+                        },
+                        cancel: function () {
+                            /*alert('转发失败！');*/
+                        }
+                    });
+
+                    wx.onMenuShareAppMessage({
+                        title: '@Model.ProductName',
+                        desc: desc,
+                        link: link,
+                        imgUrl: imgUrl,
+                        type: 'link',
+                        dataUrl: '',
+                        success: function () {
+                            /*alert('转发成功！');*/
+                        },
+                        cancel: function () {
+                           /* alert('转发失败！');*/
+                        }
+                    });
+                });
+            });
+            var sellerid = "@WorkContext.SellerInfo.SellerId";
+    </script>
+</head>
+<body>
+
+    <input type="hidden" id="Province" value="@WorkContext.SellerInfo.Province">
+    <input type="hidden" id="City" value="@WorkContext.SellerInfo.City">
+    <input type="hidden" id="Country" value="@WorkContext.SellerInfo.County">
+    <input type="hidden" id="Town" value="@WorkContext.SellerInfo.Town">
+
+    <div class="header">
+        <div class="weui_btn_default weui-header ">
+            <div class="weui-header-left">
+                <a class="icon" onclick="goToBack()">
+                    <span style="color: #333;" class="icon iconfont">&#xe60e;</span>
+                </a>
+            </div>
+            <h1 class="weui-header-title f-green">
+                <ul class="offset_ul">
+                    <li class="offsetTop">
+                        商品详情
+                    </li>
+                    <li>
+                        商品评价
+                    </li>
+                    <!--li>
+                        详情
+                    </li-->
+                </ul>
+            </h1>
+            <div class="weui-header-right">
+                <!--a class="icon" href="javascript:;" onclick="shouyeShow()">
+                    <i class="icon icon-83"></i>
+                </a-->
+                <a class="icon" href="javascript:;">
+                    <i class="icon iconfont">&#xe67d;</i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <ul class="nav-more-list" id="sub-title"></ul>
+    <!--<ul id="list">-->
+    <!-- 这里面材质内容区 -->
+    <div class="swiper_conetnt">
+        <div class="slide" id="slide1">
+            @{
+                List<Yitao.Core.PicsInfo> PicsInfoList = (List<Yitao.Core.PicsInfo>)ViewData["PicsList"];
+            }
+            <ul>
+                <li>
+                    <a href="#">
+                        <img src="@(WorkContext.ShopConfig.ImageCDN)@{@Model.PicUrl}?w=640&h=640&mode=crop" />
+                    </a>
+                </li>
+                @if (PicsInfoList.Count > 0)
+                {
+                    foreach (Yitao.Core.PicsInfo info in PicsInfoList)
+                    {
+                        if (info.ImgUrl.Length > 0)
+                        {
+                            <li>
+                                <a href="#">
+                                    <img src="@(WorkContext.ShopConfig.ImageCDN)@{@info.ImgUrl}?h=320&w=320" />
+                                </a>
+                            </li>
+                        }
+                    }
+                }
+            </ul>
+            <div class="corner">
+                <p> <span class="corner1">1</span> <span class="corner2">5</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 商品描述 -->
+    <div class="describe">
+
+        <div id="daogou-money" class="describe_head" style="display: none;">
+            <!-- 奖金  -->
+            <span>分享奖：<span class="shareMoney"></span></span>
+            <span>导购奖：<span class="dgMoney"></span></span>
+        </div>
+        <div id="share-money" class="describe_head" style="display: none;">
+            <!-- 奖金  -->
+            <span>分享奖：<span class="shareMoney"></span></span>
+        </div>
+        <!-- 商品说明 -->
+        <div class="describe_content">
+            <div class="goods-title">@Model.ProductName</div>
+            <div class="right-box share-btn" onclick="share()">
+                <p class="icon-share">
+                    <span class="icon iconfont">&#xe620;</span>
+                </p>
+                <p class="txt-share">
+                    <span></span>
+                </p>
+            </div>
+            @if (Model.SeoDescription != "" && Model.SeoDescription != Model.ProductName)
+            {
+                <p class="desc_con_p">
+                    @Model.SeoDescription
+                </p>
+            }
+
+        </div>
+
+        <div class="goods-price-box">
+            <span class="goods-price">¥@Model.SalePrice</span>
+            <span class="mark">送</span>
+            <span class="goods-score"><span></span></span>
+            <span class="right sales-count">销量: <span class="xiaoliang">@Model.SaleCount</span>笔</span>
+            
+        </div>
+        <div class="describe_head" style="display: none;">
+            <!-- 价格  -->
+            <p class="dehep_1" style="text-align: left;vertical-align: middle;">
+
+                <span class="dehespan_1" style="display: inline;vertical-align: middle;top: 0;">@Model.SalePrice</span>
+                @if (Model.MarketPrice > 0)
+                {
+                    <del style="color: #999;vertical-align: middle;margin-left: 4px;font-size: 12px;position:relative;top: 2px;">原价：@Model.MarketPrice</del>
+                }
+                <span class="mark">送</span>
+                <span style="display: inline;vertical-align: middle;"></span>积分
+            </p>
+        </div>
+    </div>
+    <!--<div class="canshu">
+        <ul>
+            <li>
+                销量: <span class="xiaoliang">@Model.SaleCount</span>笔
+            </li>
+        </ul>
+    </div>-->
+    <!--<div class="s_para">
+
+            <div class="s_para1">
+                服务
+            </div>
+            <div class="s_para2">
+
+               线下门店 · 正品保障 · 7天退换
+            </div>
+            <div class="s_para3">
+                <i class="iconfont">&#xe6ab;</i>
+            </div>
+        </div>-->
+    <!--领取优惠券-->
+    <!--div class="s_para" id="coupon-box">
+        <div class="s_para1">
+           <span style="background: #ff5252;color: #fff;    border-radius:3px;padding: 0 3px;margin-right: 5px;">券</span>领取优惠券
+        </div>
+        <div class="s_para3">
+            <i class="iconfont"></i>
+        </div>
+    </div-->
+
+
+    @if (Model.SkuName == "无规格")
+    {
+       
+    }
+    else
+    {
+        <!-- 规格参数 -->
+        <div class="para">
+
+            <div class="para1">
+                已选
+            </div>
+            <div class="para2" data-skuid="@Model.SkuId">
+                <input type="hidden" value="@Model.ProductName" id="Model_length" />
+                @Model.SkuName
+            </div>
+            <div class="para3">
+                <i class="iconfont">&#xe6ab;</i>
+            </div>
+        </div>
+    }
+    <!--end-->
+    <!--评价-->
+    <div class="comment-content" id="app" v-cloak>
+        <div class="comment-title">
+            <div class="comment-value">商品评价({{typeValue}})</div>
+            <div class="comment-see">
+                <a href="/m/product/Comment?ProductId=@Model.ProductId&IsApp=@WorkContext.IsApp">查看全部<i class="icon iconfont">&#xe7f9;</i></a>
+            </div>
+        </div>
+        <div class="comment-body" v-if="commentList.length != 0">
+            <div class="weui_panel_bd" v-for="(item,index) of commentList" v-bind:key="index">
+                <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg">
+                    <div class="weui_media_hd">
+                        <img class="weui_media_appmsg_thumb" v-bind:src="item.commentinfo.avatar" alt="" />
+                    </div>
+                    <div class="weui_media_bd">
+                    <h4 class="weui_media_title">
+                        <!--item.commentinfo.isanonymous == 1 显示匿名-->
+                        <span v-if="item.commentinfo.isanonymous == 1">{{transform(item.commentinfo.nickname)}}</span>
+                        <span v-else>{{item.commentinfo.nickname}}</span>
+                        <div class="comment-star" v-if="item.commentinfo.goodsscore == 0">
+                            <i class="icon iconfont">&#xe61e;</i>
+                            <i class="icon iconfont">&#xe61e;</i>
+                            <i class="icon iconfont">&#xe61e;</i>
+                            <i class="icon iconfont">&#xe61e;</i>
+                            <i class="icon iconfont">&#xe61e;</i>
+                        </div>
+                        <div class="comment-star" v-if="item.commentinfo.goodsscore == 1">
+                            <i class="icon iconfont active">&#xe60f;</i>
+                            <i class="icon iconfont">&#xe61e;</i>
+                            <i class="icon iconfont">&#xe61e;</i>
+                            <i class="icon iconfont">&#xe61e;</i>
+                            <i class="icon iconfont">&#xe61e;</i>
+                        </div>
+                        <div class="comment-star" v-if="item.commentinfo.goodsscore == 2">
+                            <i class="icon iconfont active">&#xe60f;</i>
+                            <i class="icon iconfont active">&#xe60f;</i>
+                            <i class="icon iconfont">&#xe61e;</i>
+                            <i class="icon iconfont">&#xe61e;</i>
+                            <i class="icon iconfont">&#xe61e;</i>
+                        </div>
+                        <div class="comment-star" v-if="item.commentinfo.goodsscore == 3">
+                            <i class="icon iconfont active">&#xe60f;</i>
+                            <i class="icon iconfont active">&#xe60f;</i>
+                            <i class="icon iconfont active">&#xe60f;</i>
+                            <i class="icon iconfont">&#xe61e;</i>
+                            <i class="icon iconfont">&#xe61e;</i>
+                        </div>
+                        <div class="comment-star" v-if="item.commentinfo.goodsscore == 4">
+                            <i class="icon iconfont active">&#xe60f;</i>
+                            <i class="icon iconfont active">&#xe60f;</i>
+                            <i class="icon iconfont active">&#xe60f;</i>
+                            <i class="icon iconfont active">&#xe60f;</i>
+                            <i class="icon iconfont">&#xe61e;</i>
+                        </div>
+                        <div class="comment-star" v-if="item.commentinfo.goodsscore == 5">
+                            <i class="icon iconfont active">&#xe60f;</i>
+                            <i class="icon iconfont active">&#xe60f;</i>
+                            <i class="icon iconfont active">&#xe60f;</i>
+                            <i class="icon iconfont active">&#xe60f;</i>
+                            <i class="icon iconfont active">&#xe60f;</i>
+                        </div>
+                    </h4>
+                        <p class="weui_media_desc">{{item.commentinfo.addtime}}</p>
+                    </div>
+                </a>
+                <!--商品评价-->
+                <div class="weui_media_footer">{{item.commentinfo.memo}}</div>
+            </div>
+        </div>
+        <!--暂无评价-->
+        <div class="comment-body" v-else>
+            <div class="no-comment">
+                暂无评价
+            </div>
+        </div>
+    </div>
+    <!--店铺入口 star-->
+    <div class="shop-enter">
+        <div class="shop-info-up">
+            
+            <div class="shop-logo">
+                <a href="/m/shop/index?shopid=@Model.ShopId&IsApp=@WorkContext.IsApp">
+                    <img class="shop-logo-icon" src="" />
+                </a>
+            </div>
+            <div class="shop-name-content">
+                <a href="/m/shop/index?shopid=@Model.ShopId&IsApp=@WorkContext.IsApp">
+                    <div class="shop-name"></div>
+                </a>
+                <div class="shop-collection" data-active="0">
+                    <a href="javascript:;">
+                        <span class="icon iconfont">&#xe61e;<span class="shop-coll-status"></span></span>
+                    </a>
+                </div>
+            </div>
+            <div class="shop-other-info">
+                <div class="other">全部宝贝:<span class="all-sales">@(ViewData["ProductCount"])</span></div>
+                <!--<div class="other">已成交:<span class="collection-num">@(ViewData["OrderCount"])</span>笔</div>-->
+            </div>
+            
+            
+        </div>
+        <a href="/m/shop/index?shopid=@Model.ShopId&IsApp=@WorkContext.IsApp">
+            <div class="shop-info-down">
+                <div class="shop-conte">商品描述 <span class="grade">0</span><i class="grade-icon">分</i></div>
+                <div class="shop-conte">物流服务 <span class="grade">0</span><i class="grade-icon">分</i></div>
+                <div class="shop-conte">卖家服务 <span class="grade">0</span><i class="grade-icon">分</i></div>
+                <!--div class="shop-conte">店铺评价<div style="width: 76px;display:inline-block;"><span class="star-line level"></span></div></div-->
+            </div>
+        </a>
+        <!--div class="shop-tel"></div-->
+        <div class="shop-info-link">
+            <!--div class="all">
+                <a href="">全部商品(35)</a>
+            </div-->
+            <div class="all go-shop">
+                <a href="javascript:;" class="shop-tel" mobile="" onclick="callPhone(this)"><i class="icon iconfont">&#xe67c;</i>联系我们</a>
+            </div>
+            <div class="all go-shop">
+                <a href="/m/shop/index?shopid=@Model.ShopId"><i class="icon iconfont">&#xe67b;</i>进店逛逛</a>
+            </div>
+        </div>
+    </div>
+    <!--店铺入口 end-->
+    <!-- 商品评论  -->
+    @*<div class="comment">
+
+            <div class="comment_head">
+                <p class="comh_p">商品评价 <span class="comh_p_num">125</span></p>
+                <div class="comh_a">查看全部 <i class="iconfont">&#xe6ab;</i></div>
+
+            </div>
+            <!-- 评价标签 -->
+            <div class="comment_label">
+                <a href="" class="com_label_a">很舒服 <span class="com_span">22</span></a>
+                <a href="" class="com_label_a">很舒服 <span class="com_span">22</span></a>
+            </div>
+            <!-- 评价用户 -->
+            <div class="com_user">
+                <ul>
+                    <li>
+                        <div class="com_user_head">
+                            <p class="cuh_p1">
+                                <img src="/Images/user.jpg" /><span class="cuh_span1">这个是用户名这个是用户名这个是用户名</span>
+                                <span class="cuh_time">2018.04.04</span>
+                            </p>
+
+                        </div>
+                        <div class="com_user_cont">
+                            <p class="cuh_p2">
+                                这里都是补充的文字，这里还是填充的文字，这里依旧是超过两行的文字，可能不够还得再补补文字
+                            </p>
+                            <p class="cuh_p3">
+                                <span class="p3_span1">颜色</span>
+                                <span class="p3_span2">棉麻灰</span>
+                                <span class="p3_span3">尺码</span>
+                                <span class="p3_span4">XXXXXL</span>
+
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="com_user_head">
+                            <p class="cuh_p1">
+                                <img src="/Images/user.jpg" /><span class="cuh_span1">这个是用户名这个是用户名这个是用户名</span>
+                                <span class="cuh_time">2018.04.04</span>
+                            </p>
+
+                        </div>
+                        <div class="com_user_cont">
+                            <p class="cuh_p2">
+                                这里都是补充的文字，这里还是填充的文字，这里依旧是超过两行的文字，可能不够还得再补补文字
+                            </p>
+                            <p class="cuh_p3">
+                                <span class="p3_span1">颜色</span>
+                                <span class="p3_span2">棉麻灰</span>
+                                <span class="p3_span3">尺码</span>
+                                <span class="p3_span4">XXXXXL</span>
+
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>*@
+
+    <!-- 商品详情 -->
+    <div class="goods_details">
+        <h3 class="goods_details_h3">商品详情</h3>
+        @if (Model.Description == "")
+        {
+            <div class="goods_1">
+                <p class="goods_details_p">
+                    <span class="goods_details_span">商品描述</span> @Model.SeoDescription
+                </p>
+            </div>
+        }
+        else
+        {
+            <div class="goods_details_con">
+                @Model.Description
+            </div>
+        }
+
+    </div>
+    <!--end-->
+    <!-- 为你推荐 -->
+    <!--end-->
+    <!-- footer -->
+    <div class="footer">
+        <ul>
+            <li class="tf_15">
+                <a href="javascript:;" class="tf_a1">
+                    @if (ViewData["FavoriteStatus"].ToString() == "1")
+                    {
+                        <i style="font-size: 20px;" class="icon iconfont yes">&#xe60f;</i>
+                    }
+                    else
+                    {
+                        <i  style="font-size: 20px;" class="icon iconfont not">&#xe61e;</i>
+                    }
+
+
+                    <span>收藏</span>
+                </a>
+            </li>
+            <li class="tf_15">
+                <a href="javascript:;" onclick="webIM()" class="tf_a2">
+                    <i  style="font-size: 20px;" class="icon iconfont">&#xe7b0;</i>
+                    <span>客服</span>
+                </a>
+            </li>
+            
+            <li class="tf_15">
+                <a href="javascript:;" onclick="goToCart()" class="tf_a2">
+                    <i  style="font-size: 20px;" class="icon iconfont">&#xe608;</i>
+                    <span>购物车</span>
+                    <span id="gd_num"></span>
+                </a>
+            </li>
+            <li class="tf_30 disableds" id="alone">
+                <a href="javascript:;" class="tf_a3" id="jionShop">
+                    加入购物车
+                </a>
+            </li>
+            <li class="tf_30 disableds" id="friend">
+                <a href="javascript:;" class="tf_a4" id="jionPay">
+                    立即购买
+                </a>
+            </li>
+        </ul>
+    </div>
+
+
+
+    <!-- 加入购物车 -->
+    <div id="jion" class="">
+        <div class="jion_hide">
+
+        </div>
+        <div class="jion_content">
+            <div class="jion_head">
+                <ul class="jion_head_ul">
+                    <li>
+                        @if (Model.PicUrl != "")
+                        {
+                            <img id="jin_img" src="@(WorkContext.ShopConfig.ImageCDN)@{@Model.PicUrl}?w=100&h=100&mode=pad" />
+                        }
+                        else
+                        {
+
+                            <img id="jin_img" src="/Images/wutu.png" />
+
+                        }
+                    </li>
+                    @if (Model.SkuName == "无规格")
+                      {
+                        <li class="jion_title">
+                            <p class="jion_pay">@Model.SalePrice</p>
+                            <p class="jion_caishi">@Model.SkuName</p>
+                            <!--<p class="jion_stock"></p>-->
+                        </li>
+                    }else{
+                        <li class="jion_title">
+                        <p class="jion_pay">@Model.SalePrice</p>
+                        <p class="jion_caishi">@Model.SkuName</p>
+                        <!--<p class="jion_stock"></p>-->
+                        </li>
+                    }
+                    <li>
+                        <div class="jion_hidebtn">
+                            <i class="icon iconfont">&#xe62d;</i>
+                        </div>
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <div class="jion_scroll">
+
+                @foreach (Yitao.Core.ProductSpecInfo info in ViewData["ListProductSpecInfo"] as List<Yitao.Core.ProductSpecInfo>)
+                {
+                    <div class="jion_color">
+                        <h3>@info.SpecName</h3>
+                        <ul class="jion_color_ul">
+                            @foreach (Yitao.Core.ProductSpecValueInfo v in ViewData["ListProductSpecValueInfo"] as List<Yitao.Core.ProductSpecValueInfo>)
+                            {
+                                if (info.SpecId == v.SpecId)
+                                {
+                                    <li @if (Model.SpecProps.Contains(v.SpecValueId.ToString())) { @: class="fl weui-block selected-spec"
+                                        } else { @: class="fl weui-block"
+                                        }
+                                        data-Specid="@v.SpecValueId" data-skuname="@v.SpecValue">
+                                        @v.SpecValue
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                }
+
+
+                <div class="jion_number">
+                    <h3>数量</h3>
+                    <div style="font-size: 0px;" class="weui_cell_ft">
+                        <a class="weui-number weui-number-sub needsclick">-</a>
+                        <input pattern="[0-9]*" class="weui-number-input" id='Quantity_plus' style="width: 50px;" value="1" data-min="1" data-max="999" data-step="1">
+                        <a class="weui-number weui-number-plus needsclick">+</a>
+                    </div>
+                </div>
+            </div>
+            <!-- 确定 -->
+            <div class="jion_yes">
+                <button>确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!--end-->
+    <!-- 评价 -->
+    <div id="evaluate" class="">
+        <div class="eva_luate_con fadeInRight">
+
+            <div class="evaluate_head">
+                <h3>全部评价</h3>
+                <i class="iconfont hide_eva">&#xe614;</i>
+            </div>
+            <div class="all_eva">
+                <div class="all_contaion">
+                    <ul class="all_biao">
+                        <li class="all_show">
+                            <p class="all_p">全部 <span class="all_num">12</span></p>
+                        </li>
+                        <li>
+                            <p class="all_p">全部 <span class="all_num">12</span></p>
+                        </li>
+                        <li>
+                            <p class="all_p">全部 <span class="all_num">12</span></p>
+                        </li>
+                        <li>
+                            <p class="all_p">全部 <span class="all_num">12</span></p>
+                        </li>
+                        <li>
+                            <p class="all_p">全部 <span class="all_num">12</span></p>
+                        </li>
+                        <li>
+                            <p class="all_p">全部 <span class="all_num">12</span></p>
+                        </li>
+                        <li>
+                            <p class="all_p">全部 <span class="all_num">12</span></p>
+                        </li>
+                        <li>
+                            <p class="all_p">全部 <span class="all_num">12</span></p>
+                        </li>
+                        <li>
+                            <p class="all_p">全部 <span class="all_num">12</span></p>
+                        </li>
+                        <li>
+                            <p class="all_p">全部 <span class="all_num">12</span></p>
+                        </li>
+                        <li>
+                            <p class="all_p">全部 <span class="all_num">12</span></p>
+                        </li>
+                        <li>
+                            <p class="all_p">全部 <span class="all_num">12</span></p>
+                        </li>
+
+                    </ul>
+                    <div class="all_show_ul">
+                        <img src="/Images/down.png" class="down_img" />
+                    </div>
+
+                    <!-- 这里是评价内容 -->
+                    <div class="eval_contaion">
+                        <ul class="ev_user_ul">
+                            <li class="ev_user_li">
+                                <div class="ev_head">
+                                    <img src="/Images/user.jpg" />
+                                    <p>用户名用户名用户名用户名用户名用户名</p>
+                                    <span class="time">2018.05.02</span>
+                                </div>
+                                <div class="ev_con">
+                                    <p>
+                                        商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的 商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的
+                                    </p>
+                                </div>
+                                <div class="ev_img">
+                                    <img src="/Images/goods_background.png" alt="" />
+                                    <img src="/Images/goods_background.png" alt="" />
+                                    <img src="/Images/goods_background.png" alt="" />
+                                </div>
+                                <div class="ev_down">
+                                    <p> <span class="">颜色</span> <span class="ev_color">炫酷黑</span> <span class="">款式</span> <span class="kuanshi">3+3+3GB</span></p>
+                                </div>
+                                <div class="ev_zhui">
+                                    <h3 class="">用户<span>3</span>天内追评</h3>
+                                    <p class="zhui_con">
+                                        用户追评用户追评用户追评用户追评用户追评用户追评 用户追评用户追评用户追评用户追评用户追评用户追评用户追评 用户追评用户追评用户追评用户追评用户追评用户追评用户追评 用户追评用户追评用户追评用户追评用户追评用户追评用户追评 用户追评用户追评用户追评用户追评用户追评用户追评用户追评
+                                    </p>
+                                    <div class="ev_zhui_img">
+                                        <img src="/Images/goods_background.png" class="zhui_img" />
+                                        <img src="/Images/goods_background.png" class="zhui_img" />
+                                        <img src="/Images/goods_background.png" class="zhui_img" />
+
+                                    </div>
+                                </div>
+
+                            </li>
+                            <li class="ev_user_li">
+                                <div class="ev_head">
+                                    <img src="/Images/user.jpg" />
+                                    <p>用户名用户名用户名用户名用户名用户名</p>
+                                    <span class="time">2018.05.02</span>
+                                </div>
+                                <div class="ev_con">
+                                    <p>
+                                        商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的 商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的
+                                    </p>
+                                </div>
+                                <div class="ev_img">
+                                    <img src="/Images/goods_background.png" alt="" />
+                                    <img src="/Images/goods_background.png" alt="" />
+                                    <img src="/Images/goods_background.png" alt="" />
+                                </div>
+                                <div class="ev_down">
+                                    <p> <span class="">颜色</span> <span class="ev_color">炫酷黑</span> <span class="">款式</span> <span class="kuanshi">3+3+3GB</span></p>
+                                </div>
+                                <div class="ev_zhui">
+                                    <h3 class="">用户<span>3</span>天内追评</h3>
+                                    <p class="zhui_con">
+                                        用户追评用户追评用户追评用户追评用户追评用户追评 用户追评用户追评用户追评用户追评用户追评用户追评用户追评 用户追评用户追评用户追评用户追评用户追评用户追评用户追评 用户追评用户追评用户追评用户追评用户追评用户追评用户追评 用户追评用户追评用户追评用户追评用户追评用户追评用户追评
+                                    </p>
+                                    <div class="ev_zhui_img">
+                                        <img src="/Images/goods_background.png" class="zhui_img" />
+                                        <img src="/Images/goods_background.png" class="zhui_img" />
+                                        <img src="/Images/goods_background.png" class="zhui_img" />
+
+                                    </div>
+                                </div>
+
+                            </li>
+                            <li class="ev_user_li">
+                                <div class="ev_head">
+                                    <img src="/Images/user.jpg" />
+                                    <p>用户名用户名用户名用户名用户名用户名</p>
+                                    <span class="time">2018.05.02</span>
+                                </div>
+                                <div class="ev_con">
+                                    <p>
+                                        商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的 商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的商品评级很好非常好特别好好的不要不要的
+                                    </p>
+                                </div>
+                                <div class="ev_img">
+                                    <img src="/Images/goods_background.png" alt="" />
+                                    <img src="/Images/goods_background.png" alt="" />
+                                    <img src="/Images/goods_background.png" alt="" />
+                                </div>
+                                <div class="ev_down">
+                                    <p> <span class="">颜色</span> <span class="ev_color">炫酷黑</span> <span class="">款式</span> <span class="kuanshi">3+3+3GB</span></p>
+                                </div>
+                                <div class="ev_zhui">
+                                    <h3 class="">用户<span>3</span>天内追评</h3>
+                                    <p class="zhui_con">
+                                        用户追评用户追评用户追评用户追评用户追评用户追评 用户追评用户追评用户追评用户追评用户追评用户追评用户追评 用户追评用户追评用户追评用户追评用户追评用户追评用户追评 用户追评用户追评用户追评用户追评用户追评用户追评用户追评 用户追评用户追评用户追评用户追评用户追评用户追评用户追评
+                                    </p>
+                                    <div class="ev_zhui_img">
+                                        <img src="/Images/goods_background.png" class="zhui_img" />
+                                        <img src="/Images/goods_background.png" class="zhui_img" />
+                                        <img src="/Images/goods_background.png" class="zhui_img" />
+
+                                    </div>
+                                </div>
+
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--end-->
+    <div id="jionOK">
+        <span>加载成功</span>
+    </div>
+    <div id="Goding">
+        <img src="/Images/ding.png" alt="">
+    </div>
+
+
+
+
+    <input type="hidden" name="Uid" id="Uid" value='@WorkContext.Uid' />
+    <form id="goods_form" action="/m/Order/CreateOrder" method="post">
+        <input type="hidden" name="ProductId" id="ProductId" value="@Model.ProductId" />
+        <input type="hidden" name="SkuId" id="SkuId" value="@Model.SkuId" />
+        <input type="hidden" name="Quantity" id="Quantity" value="1" />
+        <input type="hidden" name="IsApp" value="@WorkContext.IsApp">
+
+    </form>
+
+
+
+    <!--div class="coupons_popup">
+        <div class="att-popup-container">
+            <div class="coupons_title">
+                <span>领取优惠券</span>
+                <a href="javascript:;" class="pop_close">╳</a>
+            </div>
+            <ul id="cul">
+                <li style="background: none;text-align: center;padding: 30px 0;color: #999;font-size: 12px;">暂无数据</li>
+            </ul>
+        </div>
+    </div-->
+    <!--分享-->
+    <div class="wx-share">
+        <div class="share-img"></div>
+        <p class="share-tips">点击右上角分享</p>
+    </div>
+    <div class="curtain hide">
+        <div class="loader Rotation"></div>
+        <div class="loadTit"><icon class='icon iconfont'>&#xe649;</icon></div>
+    </div>
+    <script id="coupon-li" type="text/html">
+        <% for(var i in Data) {   %>
+        <li>
+            <span class="coupons_price">
+                <i>￥</i><%=Data[i].Money%>
+                <% if(Data[i].AmountMode==1){%>
+                <span style="margin-left: 15px;">
+                    满<%=Data[i].AmountLower%>可用
+                </span>
+                <% } %>
+            </span>
+            <div class="coupons_tips">
+                <div class="coupons_tips_left">
+                    <span><i class="icon_tips  icon-icon_warning"></i>&nbsp;<%=Data[i].Title%> <% if(Data[i].Description){ %>(<%=Data[i].Description%>) <% } %></span>
+                    <span><i class="icon_clock icon-icon_time"></i>&nbsp;<%=Data[i].StartTime.split("T")[0]%> - <%=Data[i].EndTime.split("T")[0]%></span>
+                </div>
+                <a class="btn_receive" href="javascript:getCoupon(<%=Data[i].CouponId%>,<%=Data[i].GetMode%>,<%=Data[i].PayScore%>);">领取</a>
+            </div>
+        </li>
+        <% } %>
+    </script>
+
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Js/Mobile/youshang.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Js/Mobile/swiper.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var IsApp = "@WorkContext.IsApp";
+
+            function goToBack() {
+                var _this = this;
+                if(IsApp==1){
+                    if(navigator.userAgent.indexOf("iPhone")>0){
+                        gobacklastpage();
+                    }
+                    if(navigator.userAgent.indexOf("Android")>0){
+                        window.js.goBack();
+                    }
+                }else{
+                    window.history.back();
+                }
+
+            }
+        function webIM() {
+            if (Number(IsApp) == 0) {
+                window.location.href = '/m/webim/index?productid='+'@Model.ProductId';
+            }else{
+                $.ajax({
+                    type:"get",
+                    url:"/Api/User/GetSaleUidByProductId",
+                    async:true,
+                    data:{ProductId:"@Model.ProductId"},
+                    dataType: "json",
+                    success: function (rel) {
+                        if (rel.code==1) {
+                            if (navigator.userAgent.indexOf("iPhone") > 0) {
+                                chatWithShopper(rel.data,1);
+                            }
+                            if (navigator.userAgent.indexOf("Android") > 0) {
+                                window.js.chatWithShopper(rel.data,1);
+                            }
+                        }
+                    }
+                });
+            }
+
+        }
+        function goToCart() {
+            if(IsApp==1){
+                if($("#Uid").val()<=0){
+                    if(navigator.userAgent.indexOf("iPhone")>0){
+                        gotologinvc();
+                    }
+                    if(navigator.userAgent.indexOf("Android")>0){
+                        window.js.goLogin();
+                    }
+                }else{
+
+                    if(navigator.userAgent.indexOf("iPhone")>0){
+                        gotoshopcart();
+                    }
+                    if(navigator.userAgent.indexOf("Android")>0){
+                        window.js.goShopingCar();
+                    }
+
+                }
+
+            }else{
+                window.location.href="/m/cart/index";
+            }
+        }
+        var colorArr = [];
+        var Specid = [];
+        var textArr = [];
+        var goods = 0;
+        var jions = false;
+        var alone = false;
+        var Uid = "@WorkContext.Uid";
+        var SkuId = "@Model.SkuId";
+        var ProductId = "@Model.ProductId";
+        var SpecProps = "";
+        var Quantity = $("#Quantity").val();
+        var isWeixin = "@WebHelper.IsWeiXin()";
+        //获取链接参数
+        function GetQueryString(name)
+        {
+             var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+             var r = window.location.search.substr(1).match(reg);
+             if(r!=null)return  unescape(r[2]); return null;
+        }
+        /*获取优惠券列表*/
+        function getCouponList() {
+            $.ajax({
+                type:"post",
+                url:"/m/Activity/ProductCouponList",
+                async:true,
+                data:{Id:"@Model.ProductId"},
+                dataType:"json",
+                success:function(rel) {
+                    if(rel.Code==1){
+                        $("#coupon-box").show();
+                        var tplx = document.getElementById("coupon-li").innerHTML;
+                        var desc1 = tpl(tplx, rel);
+                        $("#cul").html(desc1);
+                    }else{
+                        $("#coupon-box").hide();
+                    }
+                }
+            });
+        }
+        /*领取优惠券*/
+        function getCoupon(CouponId,GetMode,PayScore) {
+
+
+            if(item.GetMode==1){
+                $.confirm("您确定要用来@(@WorkContext.SellerInfo.ScoreName)领取优惠券吗?", "确认?", function() {
+                    $.ajax({
+                        type:"post",
+                        url:"/m/activity/GetCoupon",
+                        async:true,
+                        data:{Id:CouponId},
+                        dataType:"json",
+                        success:function(rel) {
+                            if(rel.Code==1){
+                                if(GetMode==1){
+                                    $.toast("领取成功,本次扣减"+PayScore+"@WorkContext.SellerInfo.ScoreName");
+                                }else{
+                                    $.toast("领取成功");
+                                }
+                            }else{
+                                $.toast(rel.Message,"cancel");
+                            }
+                        }
+                    });
+                }, function() {
+                    //取消操作
+                });
+            }else{
+                $.ajax({
+                    type:"post",
+                    url:"/m/activity/GetCoupon",
+                    async:true,
+                    data:{Id:CouponId},
+                    dataType:"json",
+                    success:function(rel) {
+                        if(rel.Code==1){
+                            if(GetMode==1){
+                                $.toast("领取成功,本次扣减"+PayScore+"@WorkContext.SellerInfo.ScoreName");
+                            }else{
+                                $.toast("领取成功");
+                            }
+                        }else{
+                            $.toast(rel.Message,"cancel");
+                        }
+                    }
+                });
+            }
+
+
+
+
+
+        }
+        /*获取奖金*/
+        function GetProductBonus() {
+            $.ajax({
+                type: "post",
+                url: "/m/product/GetProductBonus",
+                async: true,
+                data: {
+                    ProductId: "@Model.ProductId"
+                },
+                dataType: "json",
+                success: function(rel) {
+                    //console.log(rel);
+                    var Level1Money = 0;
+                    var Level2Money = 0;
+                    if (rel.Code == 1) {
+                        var data = rel.Data; /*DeductType=0表示没有任何奖金 DeductType=1表示按比例计算 DeductType=2表示按金额计算*/
+                        if (data.DeductType == 1) {
+                            Level1Money = data.Level1Deduct * data.SalePrice;
+                            Level2Money = data.Level2Deduct * data.SalePrice;
+                        } else if (data.DeductType == 2) {
+                            Level1Money = data.Level1Deduct;
+                            Level2Money = data.Level2Deduct;
+                        }
+                        $(".shareMoney").text(Level2Money);
+                        $(".dgMoney").text(Level1Money); /*判断是否导购*/
+                        $.ajax({
+                            type: "get",
+                            url: "/m/product/IsLeader",
+                            async: true,
+                            dataType: "json",
+                            success: function(rst) {
+                                if (rst.Code == 1 && (Level1Money > 0 || Level2Money > 0)) {
+                                    $("#daogou-money").show();
+                                } else if (rst.Code == 0 && Level1Money > 0) {
+                                    $("#share-money").show();
+                                }
+                            }
+                        });
+
+                    }
+                }
+            });
+        }
+
+
+
+        $(function() {
+            var width = $("#slide1").width();
+            $("#slide1").css("height",width+"px");
+            $(".goods-score").text(GiftProfits+"积分");
+            /*优惠券相关操作  开始*/
+            getCouponList();
+
+            $("#coupon-box").on("click", function() {
+                $(".coupons_popup").show();
+            });
+            $(".coupons_popup").on("click", function() {
+                $(".coupons_popup").hide();
+            });
+            $(".att-popup-container").on("click", function(e) {
+                e.stopPropagation();
+            });
+            $(".pop_close").on("click", function() {
+                $(".coupons_popup").hide();
+            });
+            /*优惠券相关操作  结束*/
+
+            //  IsLeader();
+            GetProductBonus();
+
+            if ($(".jion_color_ul li").length != 0) {
+                $($(".jion_color_ul li")[0]).addClass("crt");
+                for (var i = 0; i < $(".jion_color_ul").length; i++) {
+                    $($($(".jion_color_ul")[i]).find("li")[0]).addClass("crt");
+                }
+                alone = false;
+            } else {
+                alone = true;
+            }
+            getColor();
+
+
+            //页面初始获取购物车商品数量
+            GetCartNum(0,1);
+        });
+        //  导航滑动
+        $(".offset_ul li").click(function() {
+            $(".offset_ul li").removeClass('offsetTop');
+
+            if ($(this).index() == 0) {
+
+                $(window).scrollTop($("#slide1").offset().top);
+            }
+            if ($(this).index() == 1) {
+                //$(window).scrollTop($(".para").offset().top + 3);
+                $(window).scrollTop($(".comment-content").offset().top - 50);
+
+            }
+            if ($(this).index() == 2) {
+                $(window).scrollTop($(".goods_details").offset().top + 3);
+
+            }
+            $(this).addClass('offsetTop');
+
+        });
+        $("#Goding").on("click", function() {
+            $(window).scrollTop(0)
+        });
+        //  监听滚动
+        /*
+        $(window).scroll(function() {
+            if ($(window).scrollTop() > $("#slide1").offset().top && $(window).scrollTop() < $(".goods_details").offset().top) {
+                $(".offset_ul li").removeClass('offsetTop');
+                $($(".offset_ul li")[0]).addClass("offsetTop");
+            }
+            if ($(window).scrollTop() > $(".para").offset().top && $(window).scrollTop() < $(".goods_details").offset().top) {
+                $(".offset_ul li").removeClass('offsetTop');
+                $($(".offset_ul li")[1]).addClass("offsetTop");
+            }
+            if ($(window).scrollTop() > $(".goods_details").offset().top) {
+                $(".offset_ul li").removeClass('offsetTop');
+                $($(".offset_ul li")[2]).addClass("offsetTop");
+            }
+        });
+        */
+        getColor();
+
+        function shouyeShow() {
+            $("#sub-title").toggle();
+            setTimeout(function() {
+                $("#sub-title").hide();
+            }, 3000);
+        };
+
+
+
+        function getColor() {
+            var text = "";
+            if ($($("body").find(".jion_color_ul li")).length != 0) {
+                colorArr = [];
+                Specid = [];
+                textArr = [];
+                /*for (var i = 0; i < $(".jion_color_ul").length; i++) {
+
+                    colorArr.push($($($(".jion_color_ul")[i]).find(".crt")).attr("data-skuname"));
+                    Specid.push($(".jion_color_ul").eq(i).find(".crt").data("Specid"));
+
+                    textArr.push($($($($(".jion_color_ul")[i]).parents(".jion_color")).find("h3")).text().trim() + "_" + $($($($(".jion_color_ul")[i]).parents(".jion_color")).find(".crt")).text());
+
+                }*/
+                $(".crt").each(function(index, el) {
+                    colorArr.push($(el).attr("data-skuname"));
+                    Specid.push($(el).attr("data-Specid"));
+                    textArr.push($(el).attr("data-skuname"));
+                });
+                SpecProps = String(Specid);
+                $(".para2").text(String(textArr));
+                $(".jion_caishi").text(String(colorArr));
+                //SpecProps = "";
+                console.log(SpecProps);
+                
+                alone = false;
+
+            } else {
+                alone = true;
+            }
+
+
+
+
+            getMoney();
+        };
+
+        function getMoney() {
+
+            $.ajax({
+                type: "post",
+                url: "/m/product/getproductsku",
+                data: {
+
+                    ProductId: ProductId,
+
+                    SpecProps: SpecProps,
+
+                },
+                dataType: 'json',
+                success: function(rel) {
+                    if (rel.Code == 1) {
+                        if(@ViewData["IsSku"]==0){
+                        }else{
+                        $("#VipPrice").val(rel.Data.SalePrice);
+                        $("#SkuId").val(rel.Data.SkuId);
+                        $(".jion_pay,.goods-price").text(rel.Data.SalePrice + "元");
+                        $(".goods-price").text(rel.Data.SalePrice);
+                        $(".jion_caishi").text(rel.Data.SkuName);
+                       /* $(".jion_stock").text("库存: " + rel.Data.Stock);*/
+                        if (rel.Data.PicUrl != "") {
+                            $("#jin_img").attr("src", "@(WorkContext.ShopConfig.ImageCDN)" + rel.Data.PicUrl);
+                        }
+                        }
+
+
+                    }
+                }
+            });
+        };
+        $(function() {
+
+            function upDownOperation(element) {
+                var _input = element.parent().find('input'),
+                    _value = _input.val(),
+                    _step = _input.attr('data-step') || 1;
+                element.hasClass('disabled') && element.removeClass('disabled');
+                if (element.hasClass('weui-number-plus')) {
+                    var _new_value = parseInt(parseFloat(_value) + parseFloat(_step)),
+                        _max = _input.attr('data-max') || false,
+                        _down = element.parent().find('.weui-number-sub');
+                    _down.hasClass('disabled') && _down.removeClass('disabled');
+                    if (_max && _new_value >= _max) {
+                        _new_value = _max;
+                        element.addClass('disabled');
+                    }
+                } else {
+                    var _new_value = parseInt(parseFloat(_value) - parseFloat(_step)),
+                        _min = _input.attr('data-min') || false,
+                        _up = element.parent().find('.weui-number-plus');
+                    _up.hasClass('disabled') && _up.removeClass('disabled');
+                    if (_min && _new_value <= _min) {
+                        _new_value = _min;
+                        element.addClass('disabled');
+                    }
+                }
+                $("#Quantity").val(_new_value);
+                _input.val(_new_value);
+                getColor();
+            };
+            $('.weui-number-plus').click(function() {
+                upDownOperation($(this));
+            });
+            $('.weui-number-sub').click(function() {
+                upDownOperation($(this));
+            });
+            $(".being_userCon .go_pin").click(function() {
+                $(".partin").css({
+                    'display': 'flex'
+                });
+            });
+            $(".partin .chahao").click(function() {
+                $(".partin").css({
+                    'display': 'none'
+                });
+            });
+            $(".being_head").click(function() {
+                $(".fight").css({
+                    'display': 'flex'
+                });
+            });
+            $(".fight .chahao").click(function() {
+                $(".fight").css({
+                    'display': 'none'
+                });
+            });
+
+
+            $("body").on("click", "#jionShop", function() {
+                if ($("#Uid").val() < 1) {
+                    if(IsApp==1){
+                        if(navigator.userAgent.indexOf("iPhone")>0){
+                            gotologinvc();
+                        }
+                        if(navigator.userAgent.indexOf("Android")>0){
+                            window.js.goLogin();
+                        }
+                    }else{
+                        /*if(isWeixin=="False"){
+                            window.location.href = '/m/account/Login?LeaderUid='+GetQueryString("LeaderUid");
+                        }else{
+                            window.location.href = '/m/user/Bind?LeaderUid='+GetQueryString("LeaderUid");
+                        }*/
+                        var LeaderUid = GetQueryString("LeaderUid");
+                        var url;
+                        if(isWeixin=="False"){
+                            if(LeaderUid==null || typeof(LeaderUid)=="undefined"){
+                                url = '/m/account/login?returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }else{
+                                url = '/m/account/login?LeaderUid='+GetQueryString("LeaderUid")+'&returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }
+                        }else{
+                            if(LeaderUid==null || typeof(LeaderUid)=="undefined"){
+                                url = '/m/user/bind?returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }else{
+                                url = '/m/user/bind?LeaderUid='+GetQueryString("LeaderUid")+'&returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }
+                        }
+                        window.location.href = url;
+                    }
+                }else{
+
+                    var SkuId=$('#SkuId').val();
+                    var SkuName=$('.jion_caishi').text();
+                    var Quantity=$('#Quantity').val();
+
+                    
+
+                    $.ajax({
+                        type: "post",
+                        url: "/m/cart/addtocart",
+                        async: true,
+                        data: {
+                            pid: ProductId,
+                            skuid: SkuId,
+                            pcount: Quantity,
+                            skuname: SkuName
+                        },
+                        dataType: "json",
+                        success: function(rel) {
+                            $.hideLoading();
+                            if (rel.Code == 1) {
+                                $.toast("加入成功");
+                                $("#gd_num").show();
+                                //加购时获取购物车商品数量
+                                GetCartNum(1,1);
+                                /*
+                                $("#gd_num").text($(".weui-number-input").val());
+                                setTimeout(function() {
+                                    $("#gd_num").hide();
+                                }, 2000)
+                                */
+                            } else {
+                                $.toast(rel.Message, "cancel");
+                                //加购时获取购物车商品数量
+                                GetCartNum(1,0);
+                            }
+                        }
+                    });
+                }
+
+
+            });
+            $(".jion_hide").click(function() {
+                $(".jion_content").removeClass('spec-menu-show');
+                $(".jion_content").addClass('spec-menu-hide');
+                setTimeout(function() {
+                    $("#jion").hide()
+                }, 500);
+            });
+            $(".jion_hidebtn").click(function() {
+                $(".jion_content").removeClass('spec-menu-show');
+                $(".jion_content").addClass('spec-menu-hide');
+                setTimeout(function() {
+                    $("#jion").hide();
+                }, 500);
+            });
+            $("#friend").click(function() {
+                if(@ViewData["IsSku"]==0){
+                    $("#jion").show();
+                    $(".jion_content").removeClass('spec-menu-hide');
+                    $(".jion_content").addClass('spec-menu-show');
+                }else{
+                    
+//              if (isWeixin) {
+                    if ($("#Uid").val() < 1) {
+                        if(IsApp==1){
+                            if(navigator.userAgent.indexOf("iPhone")>0){
+                                gotologinvc();
+                            }
+                            if(navigator.userAgent.indexOf("Android")>0){
+                                window.js.goLogin();
+                            }
+                        }else{
+                            /*if(isWeixin=="False"){
+                                window.location.href = '/m/account/Login?LeaderUid='+GetQueryString("LeaderUid");
+                            }else{
+                                window.location.href = '/m/user/Bind?LeaderUid='+GetQueryString("LeaderUid");
+                            }*/
+                            var LeaderUid = GetQueryString("LeaderUid");
+                        var url;
+                        if(isWeixin=="False"){
+                            if(LeaderUid==null || typeof(LeaderUid)=="undefined"){
+                                url = '/m/account/login?returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }else{
+                                url = '/m/account/login?LeaderUid='+GetQueryString("LeaderUid")+'&returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }
+                        }else{
+                            if(LeaderUid==null || typeof(LeaderUid)=="undefined"){
+                                url = '/m/user/bind?returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }else{
+                                url = '/m/user/bind?LeaderUid='+GetQueryString("LeaderUid")+'&returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }
+                        }
+                        window.location.href = url;
+                        }
+                    } else {
+                        if (alone) {
+                            $("#goods_form").submit();
+                        } else {
+                            $("#jion").show();
+                            $(".jion_content").removeClass('spec-menu-hide');
+                            $(".jion_content").addClass('spec-menu-show');
+                        }
+                    }
+
+
+//              } else {
+//                  if ($("#Uid").val() < 1) {
+//                      if(IsApp==1){
+//                          if(navigator.userAgent.indexOf("iPhone")>0){
+//                              gotologinvc();
+//                          }
+//                          if(navigator.userAgent.indexOf("Android")>0){
+//                              window.js.goLogin();
+//                          }
+//                      }else{
+//                          var url = window.location.href;
+//                          window.location.href = '/m/user/Bind?returnUrl='+url;
+//                      }
+//                  } else {
+//                      if (alone) {
+//                          $("#goods_form").submit();
+//                      } else {
+//                          $("body #jion").show();
+//                          $("body .jion_content").removeClass('spec-menu-hide');
+//                          $("body .jion_content").addClass('spec-menu-show');
+//                      }
+//                  }
+//
+//
+//              }
+
+                    
+                    
+                }
+
+
+            });
+            $(".para").click(function() {
+                $("#jion").show();
+                $(".jion_content").removeClass('spec-menu-hide');
+                $(".jion_content").addClass('spec-menu-show');
+            });
+            $($(".tf_15")[0]).click(function() {
+
+                var Status = 0;
+                if ($($(this).find('i')).hasClass('not')) {
+                    $($(this).find('i')).removeClass('not');
+                    $($(this).find('i')).addClass('yes');
+                    Status = 0;
+                } else {
+                    $($(this).find('i')).removeClass('yes');
+                    $($(this).find('i')).addClass('not');
+                    Status = 1;
+                }
+
+                if ($("#Uid").val() < 1) {
+                    if(IsApp==1){
+                        if(navigator.userAgent.indexOf("iPhone")>0){
+                            gotologinvc();
+                        }
+                        if(navigator.userAgent.indexOf("Android")>0){
+                            window.js.goLogin();
+                        }
+                    }else{
+                        /*if(isWeixin=="False"){
+                            window.location.href = '/m/account/Login?LeaderUid='+GetQueryString("LeaderUid");
+                        }else{
+                            window.location.href = '/m/user/Bind?LeaderUid='+GetQueryString("LeaderUid");
+                        }*/
+                        var LeaderUid = GetQueryString("LeaderUid");
+                        var url;
+                        if(isWeixin=="False"){
+                            if(LeaderUid==null || typeof(LeaderUid)=="undefined"){
+                                url = '/m/account/login?returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }else{
+                                url = '/m/account/login?LeaderUid='+GetQueryString("LeaderUid")+'&returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }
+                        }else{
+                            if(LeaderUid==null || typeof(LeaderUid)=="undefined"){
+                                url = '/m/user/bind?returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }else{
+                                url = '/m/user/bind?LeaderUid='+GetQueryString("LeaderUid")+'&returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }
+                        }
+                        window.location.href = url;
+                    }
+                }else{
+                    $.ajax({
+                        type: "post",
+                        url: "Favorite",
+                        async: true,
+                        data: {
+                            SkuId: SkuId,
+                            Status: Status
+                        },
+                        dataType: "json",
+                        success: function(rel) {}
+                    });
+                }
+
+            });
+            $(".all_show_ul img").click(function() {
+                if ($(this).hasClass('down_img')) {
+                    $(".all_biao").css({
+                        'height': 'auto'
+                    });
+                    $(this).removeClass('down_img');
+                    $(this).addClass('upimg');
+                } else {
+                    $(".all_biao").css({
+                        'height': '4rem'
+                    });
+                    $(this).addClass('down_img');
+                    $(this).removeClass('upimg');
+                }
+            });
+            $(".comh_a").click(function() {
+                $("#evaluate").show();
+            });
+            $(".hide_eva").click(function() {
+                $("#evaluate").hide();
+            });
+            $('#slide1').swipeSlide({
+                autoSwipe: true,
+                speed: 3000,
+                continuousScroll: true,
+                transitionType: 'cubic-bezier(0.22, 0.69, 0.72, 0.88)',
+                lazyLoad: true,
+                firstCallback: function(i, sum, me) {
+                    me.find('.dot').children().first().addClass('cur');
+                    $(".corner1").text(i + 1);
+                    $(".corner2").text(sum);
+                },
+                callback: function(i, sum, me) {
+                    me.find('.dot').children().eq(i).addClass('cur').siblings().removeClass('cur');
+                    $(".corner1").text(i + 1);
+                    $(".corner2").text(sum);
+                }
+            });
+            $(".jion_color_ul").on("click", "li", function() {
+                $($($(this).parents(".jion_color_ul")).find("li")).removeClass("crt");
+                $(this).addClass("crt");
+                getColor();
+            });
+            $(".jion_yes").on("click", function() {
+
+                if (isWeixin) {
+                    if ($("#Uid").val() < 1) {
+                        if(IsApp==1){
+                            if(navigator.userAgent.indexOf("iPhone")>0){
+                                gotologinvc();
+                            }
+                            if(navigator.userAgent.indexOf("Android")>0){
+                                window.js.goLogin();
+                            }
+                        }else{
+                            /*if(isWeixin=="False"){
+                                window.location.href = '/m/account/Login?LeaderUid='+GetQueryString("LeaderUid");
+                            }else{
+                                window.location.href = '/m/user/Bind?LeaderUid='+GetQueryString("LeaderUid");
+                            }*/
+                            var LeaderUid = GetQueryString("LeaderUid");
+                        var url;
+                        if(isWeixin=="False"){
+                            if(LeaderUid==null || typeof(LeaderUid)=="undefined"){
+                                url = '/m/account/login?returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }else{
+                                url = '/m/account/login?LeaderUid='+GetQueryString("LeaderUid")+'&returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }
+                        }else{
+                            if(LeaderUid==null || typeof(LeaderUid)=="undefined"){
+                                url = '/m/user/bind?returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }else{
+                                url = '/m/user/bind?LeaderUid='+GetQueryString("LeaderUid")+'&returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }
+                        }
+                        window.location.href = url;
+                        }
+                    } else {
+                        $("")
+                        $("#goods_form").submit();
+
+                    }
+
+
+                } else {
+                    if ($("#Uid").val() < 1) {
+                        if(IsApp==1){
+                            if(navigator.userAgent.indexOf("iPhone")>0){
+                                gotologinvc();
+                            }
+                            if(navigator.userAgent.indexOf("Android")>0){
+                                window.js.goLogin();
+                            }
+                        }else{
+                            /*if(isWeixin=="False"){
+                                window.location.href = '/m/account/Login?LeaderUid='+GetQueryString("LeaderUid");
+                            }else{
+                                window.location.href = '/m/user/Bind?LeaderUid='+GetQueryString("LeaderUid");
+                            }*/
+                            var LeaderUid = GetQueryString("LeaderUid");
+                        var url;
+                        if(isWeixin=="False"){
+                            if(LeaderUid==null || typeof(LeaderUid)=="undefined"){
+                                url = '/m/account/login?returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }else{
+                                url = '/m/account/login?LeaderUid='+GetQueryString("LeaderUid")+'&returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }
+                        }else{
+                            if(LeaderUid==null || typeof(LeaderUid)=="undefined"){
+                                url = '/m/user/bind?returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }else{
+                                url = '/m/user/bind?LeaderUid='+GetQueryString("LeaderUid")+'&returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/product/detail?id=@{@Model.ProductId}&IsApp=@{@WorkContext.IsApp}';
+                            }
+                        }
+                        window.location.href = url;
+                        }
+                    } else {
+
+                        $("#goods_form").submit();
+
+                    }
+
+
+                }
+
+            });
+        });
+        $('body').ready(function() {
+            $("#alone").removeClass("disableds");
+            $("#friend").removeClass("disableds");
+        });
+        var Province = $("#Province").val();
+        var City = $("#City").val();
+        var Country = $("#Country").val();
+        var Town = $("#Town").val();
+        var ProvinceArr = [11, 12, 13, 14, 15, 21, 22, 23, 31, 32, 33, 34, 35, 36, 37, 41, 42, 43, 44, 45, 46, 50, 51, 52, 53, 54, 61, 62, 63, 64, 65, 71, 81, 82];
+        var CityArr = [];
+
+//      function getYou() {
+//          $.get('/m/Order/GetShipTemplate?t=' + Math.random, {
+//              Province: Province,
+//              City: City,
+//              Country: Country,
+//              Town: Town
+//          }, function(data) {
+//
+//              var datas = JSON.parse(data);
+//              console.log(datas);
+//
+//              if (datas.Code == 1) {
+//                  console.log(111);
+//                  var zongzhong = 0;
+//                  for (var i = 0; i < $(".list-item").length; i++) {
+//                      zongzhong += $($(".list-item")[i]).attr("data-weight") * Number($($($(".list-item")[i]).find(".list_number")).text().trim());
+//                  }
+//
+//                  if ((zongzhong - datas.Data.Weight) <= 0) {
+//                      $(".Weight").val(zongzhong);
+//                      $(".yunfei").text((datas.Data.Price).toFixed(2));
+//                      console.log(datas.Data.Price);
+//
+//                  } else {
+//                      var gaicheng = zongzhong - datas.Data.Weight;
+//                      if (gaicheng % datas.Data.AddWeight != 0 && gaicheng % datas.Data.AddWeight < 0.5) {
+//                          var cheng = Number((gaicheng / datas.Data.AddWeight).toFixed(0)) + 1;
+//                          $(".yunfei").text((datas.Data.Weight + cheng * datas.Data.AddPrice).toFixed(2));
+//                      } else {
+//                          var cheng = Number((gaicheng / datas.Data.AddWeight).toFixed(0));
+//                          $(".yunfei").text((datas.Data.Weight + cheng * datas.Data.AddPrice).toFixed(2));
+//                      }
+//                  }
+//
+//
+//
+//              } else {
+//                  $(".yunfei").hide();
+//
+//
+//              }
+//          }, 'JSON');
+//          BSheng(Province, City, Country, Town)
+//      };
+//      $(function() {
+//          getYou();
+//      });
+        //  筛选省
+
+        function BSheng(Province, City, Country, Town) {
+            //  dialog.loading.open('加载中');
+
+            for (var i = 0; i < ProvinceArr.length; i++) {
+                var dom = ProvinceArr[i];
+                if (Province == dom) {
+
+
+                    // 筛选市
+                    $.get('/m/order/GetCityList', {
+                        'Province': Province
+                    }, function(data) {
+                        var datas = JSON.parse(data);
+                        console.log(data);
+                        var dete = datas.Data;
+                        console.log(dete);
+                        for (var i = 0; i < dete.length; i++) {
+                            if (dete[i].RegionId == City) {
+                                $($(".canshu ul li")[2]).text(dete[i].RegionName);
+                            }
+                        }
+                    }, 'JSON');
+
+                } else {
+
+                };
+            };
+
+        };
+    </script>
+
+
+    <script>
+        $(function(){
+            var shopid = "@Model.ShopId";
+            $(".curtain").removeClass("hide");
+            /*$(document).on("click", ".share-btn", function(){
+                $(".wx-share").show();
+            });*/
+
+            $(document).on("click", ".wx-share", function(){
+                $(this).hide();
+            });
+
+            if(IsApp == 0){
+                $(document).on("click",".weui-header-right .icon", function(){
+                    $("#sub-title").toggle();
+                        setTimeout(function() {
+                            $("#sub-title").hide();
+                    }, 3000);
+                });
+            }
+
+            //获取店铺信息
+            $.ajax({
+                type:"get",
+                url: "/m/Shop/detail",
+                dataType: "json",
+                async: false,
+                data: {
+                    shopid: shopid,
+                },
+                success: function(res){
+                    //console.log(res.Data);
+                    if (res.Code == 1) {
+                        var data = res.Data;
+                        var starWidth = "";
+                        $(".shop-logo-icon").attr("src" , "@(WorkContext.ShopConfig.ImageCDN)" + data.Logo + "?w=100&h=100");
+                        $(".shop-name").text(data.ShopName);
+                        //$(".all-sales").text(data.StarNum);
+                        //$(".collection-num").text(data.StarNum);
+                        $(".shop-tel").attr("mobile",data.Mobile);
+                        /*if(data.StarNum != 0){
+                            var fenzi = data.StarCount;
+                            if(fenzi == 0){
+                                $(".star-line").css("width","100%");
+                            }else{
+                                $(".star-line").css("width",fenzi*20+"%");
+                            }
+                        }else{
+                            $(".star-line").css("width","100%");
+                        }*/
+                        if(data.Star1 != 0){
+                            var fenzi = data.Star1;
+                            $($(".grade")[0]).text((fenzi/vm.typeValue).toFixed(1));
+                        }else{
+                            $($(".grade")[0]).text("5.0");
+                        }
+                        if(data.Star2 != 0){
+                            var fenzi = data.Star2;
+                            $($(".grade")[1]).text((fenzi/vm.typeValue).toFixed(1));
+                        }else{
+                            $($(".grade")[1]).text("5.0");
+                        }
+                        if(data.Star3 != 0){
+                            var fenzi = data.Star3;
+                            $($(".grade")[2]).text((fenzi/vm.typeValue).toFixed(1));
+                        }else{
+                            $($(".grade")[2]).text("5.0");
+                        }
+                    }else{
+                        $.alert(res.Message);
+                    }
+                    $('.curtain').addClass("hide")
+                },
+                error: function(res){
+                    $.alert("ajax error");
+                }
+            });
+
+            //收藏店铺
+            checkShopStatus();
+            $(document).on("click", ".shop-collection", function(){
+                $.ajax({
+                    type: "get",
+                    url: "/Api/Shop/SetFavoriteShop?v="+Math.random(),
+                    dataType: "json",
+                    async: true,
+                    data: {
+                        UserId: Uid,
+                        ShopId: shopid,
+                    },
+                    success: function(res){
+                        if(res.code == 1){
+                            $.toast("操作成功");
+                        }else{
+                            $.toast("登录后收藏店铺", "cancel");
+                            return false;
+                        }
+                    checkShopStatus();
+                    }
+                });
+            });
+            function checkShopStatus(){
+                $.ajax({
+                    type: "get",
+                    url: "/Api/Shop/GetFavoriteShopStatus?v="+Math.random(),
+                    dataType: "json",
+                    async: true,
+                    data: {
+                        UserId: Uid,
+                        ShopId: shopid,
+                    },
+                    success: function(res){
+                        if(res.code == 1){
+                            $(".shop-collection").removeClass("active");
+                            $(".shop-coll-status").text("关注");
+                        }else{
+                            $(".shop-collection").addClass("active");
+                            $(".shop-coll-status").text("关注");
+                        }
+                    }
+                })
+            }
+
+        });
+
+            function callPhone(obj){
+                var phone = $(obj).attr("mobile");
+                //alert(phone);
+                if(IsApp==1){
+                    if(navigator.userAgent.indexOf("iPhone")>0){
+                        callPhone(Number(phone));
+                    }
+                    if(navigator.userAgent.indexOf("Android")>0){
+                        window.js.callPhone(phone)
+                    }
+                }else{
+                    window.location.href='tel:'+phone;
+                }
+            }
+
+        //加购接口
+        function GetCartNum(vaule, ismy){
+            if(vaule == 1){   //value == 1时加购来自点击事件 res.data自增
+                $.ajax({
+                    type: "get",
+                    url:"/Api/Cart/GetCartNum?v="+Math.random(),
+                    dataType: "json",
+                    async: true,
+                    data:{
+                        userid: Uid,
+                    },
+                    success: function(res){
+                        //console.log(res);
+                        if(res.code == 1){
+                            var num = "";
+                            
+                                num = Number(res.data);
+                           
+                            
+                            $("#gd_num").text(num);
+                            console.log(num);
+                        }
+                    }
+                });
+            }else{       //value == 0时加购来自页面初始购物车数量
+                $.ajax({
+                    type: "get",
+                    url:"/Api/Cart/GetCartNum?v="+Math.random(),
+                    dataType: "json",
+                    async: true,
+                    data:{
+                        userid: Uid,
+                    },
+                    success: function(res){
+                        //console.log(res);
+                        if(res.code == 1){
+                            $("#gd_num").text(res.data);
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+
+    <script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                page: 1,
+                size: 1,
+                starNum: 0,
+                commentList:[],
+                productid: "@Model.ProductId",
+                typeValue: 0,
+                //imgBox:[],
+            },
+            created: function() {
+                var that = this;
+                that.typeCheck(0, 99); //全部
+            },
+            methods: {
+                typeCheck: function(index,ispic){
+                    var that = this;
+                    $.ajax({
+                        type: "get",
+                        url: "/Api/Product/CommentList?v="+Math.random(),
+                        dataType: "json",
+                        async: true,
+                        data: {
+                            ProductId: that.productid,
+                            Page: that.page,
+                            Size: that.size,
+                            IsPic: ispic,
+                        },
+                        success: function(res){
+                            var data = res.data;
+                                that.commentList = [];
+                            if(res.code == 1){
+                                data.forEach(function(el, i){
+                                    that.commentList.push(el);
+                                    console.log(that.commentList);
+                                    that.starNum = el.starnum;
+                                    //全部评价（有图+无图）
+                                    that.typeValue = el.commentallnum;
+                                    //判断头像
+                                    if(el.commentinfo.avatar.indexOf("http") > -1){
+                                        el.commentinfo.avatar = el.commentinfo.avatar+'?w=120&h=120';
+                                    }else if (el.commentinfo.avatar.indexOf("upload") > -1) {
+                                        el.commentinfo.avatar = '@(WorkContext.ShopConfig.ImageCDN)/'+el.commentinfo.avatar+'?w=120&h=120';
+                                    }else{
+                                        el.commentinfo.avatar = "/Images/Mobile/usercenter/head.png?w=120&h=120";
+                                    }
+                                });
+                            }else{
+                                console.log(res.message, "cancel");
+                            }
+                        },
+                        error: function(res){
+                            console.log("ajax error");
+                        }
+                    });
+                },
+                //名字截取***
+                transform: function(text){
+                    var that = this;
+                    var reg = /^(.).+(.)$/g;
+                    return text.replace(reg, "$1***$2");
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

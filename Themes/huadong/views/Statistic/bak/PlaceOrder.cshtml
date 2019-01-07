@@ -1,0 +1,406 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>订货中心-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="stylesheet" type="text/css" href="/Css/Mobile/weui.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/weui2.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/s_init.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/global.css"/>
+        <style type="text/css">
+			.she_img {
+				width: 6rem;
+			}
+			
+			.sheng {
+				color: #F13030;
+			}
+			
+			.weui-form-preview {
+				margin-top: 2.6rem;
+			}
+			
+			.weui-form-preview:first-child {
+				margin-top: 0;
+			}
+			
+			.sousuo,
+			.daochu {
+				position: absolute;
+				top: 0;
+				right: 0;
+				padding: 0 0.6rem;
+				font-size: 0.84rem;
+				line-height: 2.6rem;
+				font-style: normal;
+			}
+			
+			.daochu {
+				right: 4.6rem;
+			}
+			.weui_toptips{
+				top: 2.6rem;
+			}
+			.s_img{
+				display: block;
+				margin-left: 5px;
+				width: 4rem;
+				margin-right: 5px;
+			}
+			.weui_cell_bd p{
+				font-size: 0.94rem;
+				color: #666666;
+			}
+			body{
+				min-width: 320px;
+				max-width: 640px;
+				overflow-x: hidden;
+				margin: 0 auto;
+			}
+			.she_mask{
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				overflow: hidden;
+				background: rgba(0,0,0,0.5);
+				display: none;
+			}
+			.she_content{
+				background: #FFFFFF;
+				position: absolute;
+				top: 2.3rem;
+				left: 0;
+				padding-top: 1rem;
+				right: 0;
+				bottom: 0;
+				overflow-y: scroll;
+				text-align: center;
+			}
+			#PanelExcel{
+				text-align: center;
+			}
+			#PanelExcel table{
+				margin: 0 auto;
+			}
+			#she_daoshu{
+				position: fixed;
+				left: 0;
+				right: 0;
+				bottom: 2.6rem;
+				z-index: 666;
+				line-height: 2.6rem;
+				display: inline-block;
+				padding: 0px 4rem;
+				border-radius: 3px;
+				background: #F13030;
+				color: #FFFFFF;
+				margin: 0 auto;
+				box-shadow: 1px 2px 3px #888;
+			}
+		</style>
+		 <script language="javascript" type="text/javascript">
+        function PrintDoc() {
+            $(".s_close").remove();
+            window.print();
+        }
+
+        function ReTabColumn(_this) {
+            $("#tdheji").attr("colspan", parseInt($("#tdheji").attr("colspan") - 1));
+            TabColRemove(_this, false);
+        }
+
+        //jQuery移除Table列,isDellast：false最后一行不受影响；true最后一行受影响
+        //<th>标题<span class="s_close" style='color: Red; cursor: pointer' onclick='ReTabColumn(this)' title='隐藏当前列'>×</span></th>
+        function TabColRemove(_this, isDellast) {
+            if (isDellast) {
+                $(_this).parent().parent().parent().find("tr td:nth-child(" + ($(_this).parent().index() + 1) + ")").remove();
+            } else {
+                $(_this).parent().parent().parent().find("tr:not(:last-child)").find("td:nth-child(" + ($(_this).parent().index() + 1) + ")").remove();
+            }
+        }
+
+        //jQuery HTML导出Excel文件(兼容IE及所有浏览器)
+        function HtmlExportToExcel(tableid) {
+            $(".s_close").remove();
+            var filename = $('#lbl_innum_link').text();
+            if (getExplorer() == 'ie' || getExplorer() == undefined) {
+                HtmlExportToExcelForIE(tableid, filename);
+            }
+            else {
+                HtmlExportToExcelForEntire(tableid, filename)
+            }
+        }
+        //IE浏览器导出Excel
+        function HtmlExportToExcelForIE(tableid, filename) {
+            try {
+                var winname = window.open('', '_blank', 'top=10000');
+                var strHTML = document.getElementById(tableid).innerHTML;
+
+                winname.document.open('application/vnd.ms-excel', 'export excel');
+                winname.document.writeln(strHTML);
+                winname.document.execCommand('saveas', '', filename + '.xls');
+                winname.close();
+
+            } catch (e) {
+                alert(e.description);
+            }
+        }
+        //非IE浏览器导出Excel
+        var HtmlExportToExcelForEntire = (function() {
+            var uri = 'data:application/vnd.ms-excel;base64,',
+        template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
+        base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) },
+        format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+            return function(table, name) {
+                if (!table.nodeType) { table = document.getElementById(table); }
+                var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+                document.getElementById("dlink").href = uri + base64(format(template, ctx));
+                document.getElementById("dlink").download = name + ".xls";
+                document.getElementById("dlink").click();
+            }
+        })()
+        function getExplorer() {
+            var explorer = window.navigator.userAgent;
+            //ie 
+            if (explorer.indexOf("MSIE") >= 0) {
+                return 'ie';
+            }
+            //firefox 
+            else if (explorer.indexOf("Firefox") >= 0) {
+                return 'Firefox';
+            }
+            //Chrome
+            else if (explorer.indexOf("Chrome") >= 0) {
+                return 'Chrome';
+            }
+            //Opera
+            else if (explorer.indexOf("Opera") >= 0) {
+                return 'Opera';
+            }
+            //Safari
+            else if (explorer.indexOf("Safari") >= 0) {
+                return 'Safari';
+            }
+        }
+    </script>
+</head>
+<body>
+ 
+  <header>
+			<i class="iconfont back" onclick="history.back()">&#xe647;</i>
+			<h3>订货中心</h3>
+
+			<i class="daochu">导出Excel</i>
+			<i class="sousuo">添加货品</i>
+		</header>
+		<div class="content">
+			<div class="weui_cell slidelefts">
+                <div class="weui_cell_hd" style="padding-left:15px">
+				<img src="../img/she_back.png" class="s_img"/>
+				</div>
+				<div class="weui_cell_bd weui_cell_primary" style="padding-left:0">
+                    <p>
+                    	商品名称名称
+                    </p>
+                     <p>
+                    	商品规格： 规格一
+                    </p>
+                    <p>
+                    	商品编号: 85252522
+                    </p>
+                     <p>
+                    	进货数量：
+                    	7544
+                    </p>
+                </div>
+               
+                <div class="slideleft">
+                <span class="bg-red f-white">删除</span>
+              </div>
+            </div>
+            <div class="weui_cell slidelefts">
+                <div class="weui_cell_hd" style="padding-left:15px">
+				<img src="../img/she_back.png" class="s_img"/>
+				</div>
+				<div class="weui_cell_bd weui_cell_primary" style="padding-left:0">
+                    <p>
+                    	商品名称名称
+                    </p>
+                     <p>
+                    	商品规格： 规格一
+                    </p>
+                    <p>
+                    	商品编号: 85252522
+                    </p>
+                     <p>
+                    	进货数量(箱)：
+                    	7544
+                    </p>
+                     <p>
+                    	进货数量(个)：
+                    	7544
+                    </p>
+                </div>
+               
+                <div class="slideleft">
+                <span class="bg-red f-white">删除</span>
+              </div>
+            </div>
+            <div class="weui_cell slidelefts">
+                <div class="weui_cell_hd" style="padding-left:15px">
+				<img src="../img/she_back.png" class="s_img"/>
+				</div>
+				<div class="weui_cell_bd weui_cell_primary" style="padding-left:0">
+                    <p>
+                    	商品名称名称
+                    </p>
+                     <p>
+                    	商品规格： 规格一
+                    </p>
+                    <p>
+                    	商品编号: 85252522
+                    </p>
+                     <p>
+                    	进货数量：
+                    	7544
+                    </p>
+                </div>
+               
+                <div class="slideleft">
+                <span class="bg-red f-white">删除</span>
+              </div>
+            </div>
+            <div class="weui_cell slidelefts">
+                <div class="weui_cell_hd" style="padding-left:15px">
+				<img src="../img/she_back.png" class="s_img"/>
+				</div>
+				<div class="weui_cell_bd weui_cell_primary" style="padding-left:0">
+                    <p>
+                    	商品名称名称
+                    </p>
+                     <p>
+                    	商品规格： 规格一
+                    </p>
+                    <p>
+                    	商品编号: 85252522
+                    </p>
+                     <p>
+                    	进货数量：
+                    	7544
+                    </p>
+                </div>
+               
+                <div class="slideleft">
+                <span class="bg-red f-white">删除</span>
+              </div>
+            </div>
+          
+		</div>
+		<div class="she_mask">
+			<div class="she_content">
+				 <div id="PanelExcel">
+                <table border="" cellspacing="" name="Mr.佘的店的进货单" cellpadding="">
+                    <tr >
+                        <td align="center" colspan="5" style="height: 34px">
+                            <h3>
+                                <span id="lblTitle">Mr.佘的店 2018-06-05 进货订单</span>
+                            </h3>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>商品名称</th>
+                        <th>商品规格</th>
+                        <th>商品编号</th>
+        
+                        <th>进货数量(箱)</th>
+                        <th>进货数量(个)</th>
+                    </tr>
+                    <tr>
+                        <td>商品一</td>
+                        <td>规格一</td>
+                        <td>45646</td>
+                        <td>
+                        	7544
+                        </td>
+                        <td>7544</td>
+        
+                    </tr>
+                    <tr>
+                        <td>商品一</td>
+                        <td>规格一</td>
+                        <td>45646</td>
+                        <td>7544</td>
+                        <td>7544</td>
+        
+                    </tr>
+                    <tr>
+                        <td>商品一</td>
+                        <td>规格一</td>
+                        <td>45646</td>
+                        <td>7544</td>
+                        <td>7544</td>
+        
+                    </tr>
+                    <tr>
+                        <td>商品一</td>
+                        <td>规格一</td>
+                        <td>45646</td>
+                        <td>7544</td>
+                        <td>7544</td>
+        
+                    </tr>
+        
+                    <tr>
+                        <td>商品一</td>
+                        <td>规格一</td>
+                        <td>45646</td>
+                        <td>7544</td>
+                        <td>7544</td>
+        
+                    </tr>
+                </table>
+                </div>
+				<div class="" id="she_daoshu" onclick="javascript:HtmlExportToExcel('PanelExcel')">
+					确定导出Excel
+				</div>
+				<a id="dlink" style="display: none;"></a>
+				
+			</div>
+		</div>
+
+		<script src="/Js/Mobile/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/Mobile/slideleft.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript">
+			$(document).on("click",".slideleft",function(){
+					$(this).parents(".weui_cell").remove();
+			});
+			
+			$(".sousuo").on("click", function() {
+				$.prompt("输入商品名称/货号等", "搜索商品", function(text) {
+					$.alert("您搜索的是:" + text);
+				}, function() {
+					//取消操作
+				});
+
+			});
+			$(".daochu").on("click",function(){
+                $.alert("安卓手机推荐使用谷歌浏览器打开下载表格， 苹果手机推荐使用Safari打开下载表格");
+				$(".she_mask").show();
+			});
+		</script>  
+	
+	</body>
+
+</html>

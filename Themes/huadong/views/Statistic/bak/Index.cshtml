@@ -1,0 +1,378 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>数据中心-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+        <link rel="stylesheet" type="text/css" href="/Css/Mobile/s_init.css" />
+  	<style type="text/css">
+			.content {
+				background: #FFFFFF;
+			}
+            body{
+                overflow-x: hidden;
+            }
+			
+			.weui_grid {
+				padding: 40px 20px;
+			}
+			
+			.weui_grids:before {
+				height: 0;
+			}
+			.weui_grid_label{
+				color: #666666;
+			}
+			.sheng{
+				color: #F13030;
+				text-align: center;
+			}
+			.mask_she{
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				z-index: 33;
+				background: rgba(0,0,0,0.3);
+				display: none;
+			}
+			.weui_cells{
+				margin-top: 0;
+			}
+			.mask_content{
+				position: absolute;
+				top: 2.6rem;
+				left: 0;
+				right: 0;
+				bottom: 2.6rem;
+				overflow-y: scroll;
+			}
+			.weui_cell{
+				padding: 20px 15px;
+			}
+			.queding{
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				z-index: 44;
+				text-align: center;
+				color: #FFFFff;
+				height: 2.6rem;
+				line-height: 2.6rem;
+				background: #F13030;
+				font-size: 1rem;
+			}
+			#chahao{
+				position: fixed;
+				top: 2.6rem;
+				right: .6rem;
+				font-size: 1.4rem;
+				z-index: 444;
+			}
+			.weui_grid_icon{
+				text-align: center;
+				width: auto;
+			}
+			.icon{
+				font-size: 22px;
+			}
+		</style>
+</head>
+<body>
+        <header>
+			<i class="iconfont back" onclick="history.back()">&#xe647;</i>
+			<h3>数据查看</h3>
+
+		</header>
+		<div class="content">
+			<img src="/Images/she_back.png" style="width: 100%;padding: 10px;" />
+
+			<div class="weui_grids">
+				
+				
+				<a href="TodaySales" class="weui_grid js_grid">
+					<div class="weui_grid_icon sheng">
+						235
+					</div>
+					<p class="weui_grid_label">
+						今日销售额
+					</p>
+				</a>
+				
+				<a href="todayOrder" class="weui_grid js_grid">
+					<div class="weui_grid_icon sheng1">
+						42
+					</div>
+					<p class="weui_grid_label">
+						今日订单数
+					</p>
+				</a>
+				<a href="javascript:;" class="weui_grid js_grid">
+					<div class="weui_grid_icon">
+						45624
+					</div>
+					<p class="weui_grid_label">
+						今日浏览量
+					</p>
+				</a>
+				<a href="javascript:;" class="weui_grid js_grid" id="kucun">
+					<div class="weui_grid_icon">
+						<span class="icon icon-98"></span>
+					</div>
+					<p class="weui_grid_label">
+						查看库存
+					</p>
+				</a>
+				<a href="PlaceOrder" class="weui_grid js_grid">
+					<div class="weui_grid_icon">
+						<span class="icon icon-97"></span>
+					</div>
+					<p class="weui_grid_label">
+						商品进货
+					</p>
+				</a>
+				<a href="todayincome" class="weui_grid js_grid">
+					<div class="weui_grid_icon">
+					<span class="icon icon-42"></span>
+					</div>
+					<p class="weui_grid_label">
+						收入来源
+					</p>
+				</a>
+				<a href="week" class="weui_grid js_grid">
+					<div class="weui_grid_icon">
+						<span class="icon icon-1"></span>
+					</div>
+					<p class="weui_grid_label">
+						查看本周
+					</p>
+				</a>
+				<a href="month" class="weui_grid js_grid">
+					<div class="weui_grid_icon">
+						<span class="icon icon-1"></span>
+					</div>
+					<p class="weui_grid_label">
+						查看本月
+					</p>
+				</a>
+				<a href="Achievements" class="weui_grid js_grid">
+					<div class="weui_grid_icon">
+						<span class="icon icon-31"></span>
+					</div>
+					<p class="weui_grid_label">
+						绩效管控
+					</p>
+				</a>
+				
+			</div>
+
+		</div>
+		<div class="mask_she">
+			<div class="mask_content">
+				<i class="iconfont" id="chahao">&#xe617;</i>
+				<div class="weui_cells weui_cells_checkbox">
+            <label class="weui_cell weui_check_label" for="s11">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" class="weui_check" name="checkbox1" id="s11" checked="checked">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>分类一</p>
+                </div>
+            </label>
+            <label class="weui_cell weui_check_label" for="s12">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" name="checkbox1" class="weui_check" id="s12">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>分类一</p>
+                </div>
+            </label>
+            <label class="weui_cell weui_check_label" for="s13">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" name="checkbox1" class="weui_check" id="s13">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>分类一</p>
+                </div>
+            </label>   
+             <label class="weui_cell weui_check_label">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" name="checkbox1" class="weui_check">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>分类一</p>
+                </div>
+            </label>       
+            <label class="weui_cell weui_check_label">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" name="checkbox1" class="weui_check">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>分类一</p>
+                </div>
+            </label>   
+            <label class="weui_cell weui_check_label">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" name="checkbox1" class="weui_check">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>分类一</p>
+                </div>
+            </label>   <label class="weui_cell weui_check_label">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" name="checkbox1" class="weui_check">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>分类一</p>
+                </div>
+            </label>     <label class="weui_cell weui_check_label">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" name="checkbox1" class="weui_check">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>分类一</p>
+                </div>
+            </label>   <label class="weui_cell weui_check_label">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" name="checkbox1" class="weui_check">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>分类一</p>
+                </div>
+            </label>     <label class="weui_cell weui_check_label">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" name="checkbox1" class="weui_check">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>分类一</p>
+                </div>
+            </label>   <label class="weui_cell weui_check_label">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" name="checkbox1" class="weui_check">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>分类一</p>
+                </div>
+            </label>     <label class="weui_cell weui_check_label">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" name="checkbox1" class="weui_check">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>分类一</p>
+                </div>
+            </label>   <label class="weui_cell weui_check_label">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" name="checkbox1" class="weui_check">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>分类一</p>
+                </div>
+            </label>     <label class="weui_cell weui_check_label">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" name="checkbox1" class="weui_check">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>分类一</p>
+                </div>
+            </label>   <label class="weui_cell weui_check_label">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" name="checkbox1" class="weui_check">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>分类一</p>
+                </div>
+            </label>     <label class="weui_cell weui_check_label">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" name="checkbox1" class="weui_check">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>分类一</p>
+                </div>
+            </label>   
+           <label class="weui_cell weui_check_label">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" name="checkbox1" class="weui_check">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>分类一</p>
+                </div>
+            </label>   
+             
+             <div class="queding">
+             	确定
+             </div>
+             
+               
+        </div>
+			</div>
+		</div>
+		
+		
+		<script src="/Js/Mobile/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+$(document).on("click", "#kucun", function() {
+        $.actions({
+          title: "选择库存分类",
+          onClose: function() {
+            console.log("close");
+          },
+          actions: [
+            {
+              text: "全部商品库存",
+              className: "color-primary",
+              onClick: function() {
+               window.location.href="Stock";
+              }
+            },
+            {
+              text: "分类商品库存",
+              className: "color-warning",
+              onClick: function() {
+             window.location.href="Stock";
+              }
+            },
+            {
+              text: "活动商品库存",
+              className: 'color-danger',
+              onClick: function() {
+               window.location.href="Stock";
+              }
+            }
+          ]
+        });
+      }); 
+	
+	
+	
+</script>
+</body>
+</html>

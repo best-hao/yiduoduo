@@ -1,0 +1,562 @@
+@charset "UTF-8";
+
+.mygroup-page .header {
+      height: 4.2rem;
+}
+
+.mygroup-banner {
+      padding-top: 0.2rem;
+      text-align: center;
+      color: #fff;
+      position: relative;
+}
+
+.weui-flex-item.center {
+      color: #fff;
+      font-size: 0.32rem;
+      text-align: center;
+      line-height: 2;
+}
+
+.mygroup-banner .tx {
+      width: 1.6rem;
+      height: 1.6rem;
+      margin: 0 auto 0.2rem;
+      border-radius: 50%;
+      overflow: hidden;
+}
+
+.mygroup-banner .tx img {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      z-index: 3;
+      border-radius: 50%;
+      display: block;
+}
+
+.mygroup-banner .grade_a{
+      position: absolute;
+      padding: 1px 10px 1px 32px;
+      background: #E9E9E9;
+      font-size: 12px;
+      border-bottom-right-radius: 10px;
+      border-top-right-radius: 10px;
+      color: #A9A9A9;
+      left: 52%;
+      top: 12%;
+      z-index: 1;
+}
+
+.mygroup-banner .information span {
+      margin-right: 5px;
+}
+
+.mygroup-banner .information span i {
+      margin-right: 3px;
+}
+
+.recommend-jl {
+      margin-top: 0.2rem;
+      background: #fff;
+      padding: 0 0.3rem;
+}
+
+.recommend-jl h5 {
+      font-size: .3rem;
+      line-height: .8rem;
+      color: #A0A0A0;
+      font-weight: normal;
+      position: relative;
+}
+
+.recommend-jl:nth-child(3) h5:before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-top: 1px solid #a0a0a0;
+      border-right: 1px solid #a0a0a0;
+      background-color: transparent;
+      -webkit-transform: rotate(45deg);
+      transform: rotate(45deg);
+      position: absolute;
+      right: 0;
+      top: .35rem;
+}
+
+.recommend-jl ul {
+      display: flex;
+}
+
+.recommend-jl ul li {
+      flex: 1;
+      margin-bottom: 15px;
+      text-align: center;
+      position: relative;
+}
+
+.recommend-jl ul li:before {
+      content: "";
+      width: 1px;
+      height: 0.6rem;
+      position: absolute;
+      right: 0;
+      top: 0.15rem;
+      background-color: #ececec;
+}
+
+.recommend-jl ul li:last-child:before {
+      display: none;
+}
+
+.recommend-jl ul li span {
+      font-size: 14px;
+}
+
+.recommend-jl ul li h3 {
+      font-size: 18px;
+      font-weight: normal;
+}
+
+.recommend-jl ul li.rig-border {
+      border-right: 1px solid #E7E7E7;
+}
+
+.my-achievement {
+      padding: 0 15px 15px 15px;
+      background: #fff;
+}
+
+.mygroup-tit {
+      height: 50px;
+      line-height: 50px;
+      border-bottom: 1px solid #F8F8F8;
+      overflow: hidden;
+}
+
+.mygroup-tit .title {
+      font-size: 14px;
+      float: left;
+}
+
+.mygroup-tit a {
+      float: right;
+      color: #C7C7C7;
+}
+
+.my-achievement-cont {
+      padding-top: 15px;
+}
+
+.icon-cont {
+      float: left;
+      width: 50px;
+      height: 50px;
+      background: #FD2C3D;
+}
+
+.link-text {
+      margin-left: 65px;
+      line-height: 22px;
+      color: #4C4C4C;
+}
+
+.link-text a {
+      color: #4C4C4C;
+}
+
+.link-text span {
+      color: #F23949;
+}
+
+
+.search {
+      height: 30px;
+      line-height: 30px;
+      background: #fff;
+      margin: 0.2rem 0.3rem;
+      border-radius: 4px;
+      margin-bottom: 15px;
+}
+
+.search input {
+      float: left;
+      height: 30px;
+      width: 80%;
+      margin-left: 10px;
+      border: none;
+}
+
+.search i {
+      float: right;
+      margin-right: 10px;
+}
+
+.my-member {
+      padding: 0 0.3rem;
+}
+
+.member-tit {
+      font-size: .3rem;
+      line-height: .8rem;
+      color: #A0A0A0;
+      font-weight: normal;
+      position: relative;
+}
+
+.member-list {
+      padding: 0 2px 0 2px;
+      text-align: center;
+}
+
+.member-list li {
+      float: left;
+      width: 22%;
+      margin: 0.8rem 0.11rem 0.2rem 0.11rem;
+}
+
+.member-list li a:active{
+      color:#666;
+}
+
+.member-list li:nth-child(4n) {
+      margin-right: 0;
+}
+
+.membership-information {
+      height: 2.4rem;
+      background: #fff;
+      position: relative;
+      text-align: center;
+      border-radius: 3px;
+      box-shadow: 0 0 3px #cdcdcd;
+}
+
+.membership-information .head-portrait {
+      width: 1.2rem;
+      height: 1.2rem;
+      border-radius: 50%;
+      background: rgba(200, 200, 200, .9);
+      position: absolute;
+      top: -25px;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      font-size: 1.2rem;
+      color: #fff;
+      text-align: center;
+      line-height: 1.2rem;
+      overflow: hidden;
+}
+
+.membership-information .head-portrait img{
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+}
+
+.membership-information  i {
+      margin-top: 0.9rem;
+      line-height: 1;
+      display: inline-block;
+      font-size: .6rem;
+}
+
+.membership-information span {
+      color: #B2B2B2;
+}
+
+.return-btn {
+      background: #fff;
+      text-align: center;
+      padding-bottom: 10px;
+}
+
+.return-btn span {
+      display: inline-block;
+      padding-top: 12px;
+      font-size: 16px;
+      font-weight: bold;
+}
+
+.return-btn i {
+      float: left;
+      margin: 10px 0 0 10px;
+}
+
+.performance-more-content {
+      width: 100%;
+      max-width: 7.5rem;
+      height: 100%;
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      margin: 0 auto;
+      background-color: #f7f7f7;
+      z-index: 10;
+      overflow-y: auto;
+      display: none;
+}
+
+.performance-more-content:before{
+      content:'';
+      width: 100%;
+      max-width: 7.5rem;
+      height: 35%;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      margin: 0 auto;
+      background-color: #42454E;
+      z-index: 11;
+}
+
+.performance-more-box {
+      padding: .5rem .3rem;
+      margin-top: .85rem;
+}
+
+.prev-page-view {
+      width: 100%;
+      max-width: 7.5rem;
+      line-height: 1rem;
+      background-color: #fff;
+      color: #333;
+      font-size: 0.32rem;
+      text-align: center;
+      position: fixed;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      top: 0;
+      z-index: 11;
+}
+
+.prev-page-view .prev-page-btn {
+      font-size: 16px;
+      color: #666;
+      position: absolute;
+      left: 0.2rem;
+      top: 0;
+}
+
+.performance-more-div {
+      width: 100%;
+      padding: .3rem;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: .5rem;
+      background-color:#fff;
+      position: relative;
+      z-index: 12;
+      box-shadow: 0px 4px 8px #a3a3a3;
+}
+
+.performance-more-div:last-child{
+      margin-bottom: 0;
+}
+
+.performance-more-title {
+      color: #333;
+      font-size: 0.3rem;
+      text-align: center;
+      font-weight: normal;
+      margin: 0.1rem 0;
+}
+
+.performance-more-tips:nth-child(2){
+      color:#999;
+      font-size: 0.24rem;
+}
+.performance-more-info {
+      line-height: .8rem;
+      color: #333;
+      font-size: .26rem;
+      -webkit-display: flex;
+      display: flex;
+}
+
+.performance-more-info div {
+      text-align: right;
+      -webkit-flex: 1;
+      flex: 1;
+}
+
+.performance-more-info .performance-more-infoname {
+      color: #787878;
+      text-align: left;
+}
+
+/* myGroupDetail */
+
+.member_header {
+      background: #fff;
+      width: 100%;
+}
+
+.member_content {
+      background: #fff;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      position: relative;
+      top: -15px;
+}
+
+.member_content .member_grade {
+      position: relative;
+      top: -36px;
+      text-align: center;
+}
+
+.mem_avator {
+      width: 1.6rem;
+      height: 1.6rem;
+      border-radius: 50%;
+      position: absolute;
+      z-index: 2;
+      left: 40%;
+      background: #fff;
+}
+
+.member_content .member_grade .grade_a {
+      position: absolute;
+      padding: 1px 10px 1px 32px;
+      background: #E9E9E9;
+      font-size: 12px;
+      border-bottom-right-radius: 10px;
+      border-top-right-radius: 10px;
+      color: #A9A9A9;
+      left: 52%;
+      margin-top: 2%;
+      z-index: 1;
+}
+
+.member_content .member_grade .grade_b {
+      position: absolute;
+      right: 5%;
+      font-size: 14px;
+      background: #0096E3;
+      color: #fff;
+      padding: 5px 10px;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+      top: 36px;
+      box-shadow: 3px 3px 6px #a0a0a0;
+}
+
+.mem_name {
+      padding-top: 1rem;
+      text-align: center;
+      font-size: .28rem;
+}
+
+.mem_phone {
+      text-align: center;
+      margin-top: .2rem;
+      display: block;
+      font-size: .32rem;
+}
+
+.mem_phone .icon{
+      background-color: #66DAA9;
+      border-radius: 50%;
+      overflow: hidden;
+      color:#fff;
+      font-size: .26rem;
+      padding: 0.1rem;
+}
+
+.member_list .weui_cells .mem_time {
+      color: #787878;
+      font-size: .26rem;
+}
+
+.member_list .weui_cell_hd{
+      margin-right: .2rem;
+}
+
+.member_list .weui_cell_bd{
+      color:#333;
+      font-size: .36rem;
+}
+
+.member_list .weui_cells:before{
+      border-top: 0;
+}
+
+.fs14{
+      font-size: .26rem;
+}
+
+.fs16{
+      font-size: .36rem;
+}
+
+.my-member .f15{
+      text-align: center;
+}
+
+.member_list .weui_cells_access .weui_cell_ft:after{
+    height: 8px;
+    width: 8px;
+    border-width: 1px 1px 0 0;
+    border-color: #999;
+    top: -2px;
+}
+
+.member_list .weui_cells_access .weui_cell_ft.fs16:after{
+    display: none;
+}
+
+.member-tit-ta{
+      color: #333;
+      font-size: .36rem;
+}
+
+.weui_call_number{
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+}
+
+.icon-zuan{
+      width: 0.3rem;
+      height: 0.3rem;
+}
+.grade_1{
+      background: url(/Images/Mobile/usercenter/rVIP.png) no-repeat center center;
+      background-size: 0.3rem 0.3rem;
+}
+
+.grade_2{
+      background: url(/Images/Mobile/usercenter/VIP.png) no-repeat center center;
+      background-size: 0.3rem 0.3rem;
+}
+
+.grade_3{
+      background: url(/Images/Mobile/usercenter/mVIP.png) no-repeat center center;
+      background-size: 0.3rem 0.3rem;
+}
+
+.grade_4{
+      background: url(/Images/Mobile/usercenter/countyicon.png) no-repeat center center;
+      background-size: 0.3rem 0.3rem;
+}
+
+.grade_5{
+      background: url(/Images/Mobile/usercenter/cityicon.png) no-repeat center center;
+      background-size: 0.3rem 0.3rem;
+}
+
+.grade_6{
+      background: url(/Images/Mobile/usercenter/provinceicon.png) no-repeat center center;
+      background-size: 0.3rem 0.3rem;
+}
+
+
+.dropload-noData{
+      font-size: 15px;
+}

@@ -1,0 +1,330 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+	    <meta content="telephone=no" name="format-detection">
+	    <meta name="apple-touch-fullscreen" content="yes">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <title>分类列表-@{@WorkContext.SellerInfo.SellerName}</title>
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+	    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+	    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css"/>
+	     
+		<style type="text/css">
+			li{list-style: none;}
+			body{width: 7.5rem;margin: 0 auto;background: #f2f2f2;font-family: "微软雅黑";height: 100%;overflow: hidden;}
+			.wapper{height: 100%;display: none;}
+			.wapper *{z-index: 1;font-size: 0.24rem;}
+			.weui_mask_transparent *{font-size: 0.32rem;}
+			.weui_toast{font-size: 0.32rem;padding: 0;width: 2.6rem;height: 2.4rem;padding: 0 0.2rem 0.4rem 0.2rem;}
+			.searchbar_wrap{position: fixed;width: 7.5rem;top: 0;left: 50%;margin-left: -3.75rem;height: 44px;z-index: 2;}
+			.weui_search_bar{background: #fff;}
+			.weui_search_text{background: #f2f2f2;}
+			.cate-main{background: #fff;height: 100%;}
+			.cate{}
+			.cate.left{width: 1.8rem;text-align: center;position: relative;overflow-y: auto;margin-top: 44px;}
+			.cate.left:before{position: absolute;content: "";right: 0;top: 0;width: 1px;height: 100%;background: #f2f2f2;}
+			.left .cur-cate{height: 0.6rem;position: absolute;content: "";width: 3px;right: 0;top: 0.1rem;background: #ff4800;}
+			.left .cate-box{}
+			.left .cate-box .cate-li{height: 0.8rem;line-height: 0.8rem;position: relative;}
+			.left .cate-box .cate-li a{display: block; color: #555;font-size: 0.28rem;height: 0.8rem;line-height: 0.8rem;}
+			.left .cate-box .cur-li a{color: #ff4800;}
+			.cate.left::-webkit-scrollbar{width: 0;}
+			.cate-box .cate-li.cur-li:after{position: absolute;content: "";width: 3px;right: 0;top: 0.15rem;background: #ff4800;height: 0.5rem;}
+			.cate.right{padding: 0.2rem 0.1rem;width: 5.4rem;overflow-y: auto;margin-top: 44px;}
+			.cate.right::-webkit-scrollbar{width: 0;}
+			.right .cate-box{}
+			.right .brand-box{}
+			.right .brand-box a{display: block;width: 100%;}
+			.right .brand{display: block;width: 100%;}
+			.cateTwo{text-align: center;}
+			.cateTwo .title{color: #555;font-size: 0.28rem;position: relative;height: 0.8rem;line-height: 0.8rem;padding: 0 0.2rem;text-align: center;margin: 0 auto;}
+			.cateTwo .title:before{position: absolute;content: "";top: 50%;left: -0.4rem;width: 0.4rem;height: 1px;background: #d9d9d9;}
+			.cateTwo .title:after{position: absolute;content: "";top: 50%;right: -0.4rem;width: 0.4rem;height: 1px;background: #d9d9d9;}
+			.cateTwo li{width: 1.6rem;margin: 0.05rem;float: left;padding-bottom: 0.3rem;}
+			.cateTwo li .img-box{display: block;width: 1.2rem;margin: 0 auto;}
+			.cateTwo li .cate-img{width: 1.2rem;height: 1.2rem; margin: 0.0833rem auto;}
+			.cateTwo .cateThree{color: #555;display: block;}
+			.footer{text-align: center;position: fixed;width: 7.5rem;height: 51px; bottom: 0;left: 50%;margin-left: -3.75rem;background: #fff;border-top: 1px solid #f2f2f2;}
+			.item-box{width: 85%;margin: 0 auto;color: #000;}
+			.footer .weui-flex{height: 51px;}
+			.footer .weui-flex .iconfont{font-size: 20px;}
+			.footer .title{line-height: 24px;}
+			.footer .img-box{line-height: 26px;height: 26px!important;}
+			.footer .img-box img{display: block;width: 24px;height: 24px;margin: 1px auto;}
+			.ell{text-overflow: ellipsis;display: -webkit-box!important;-webkit-line-clamp: 1;-webkit-box-orient: vertical;}
+		</style>
+        <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/loading.css"/>
+		<script type="text/javascript">
+		</script>
+	</head>
+	<body>
+		<div class="wapper">
+			<div id="category">
+				<div class="searchbar_wrap"></div>
+				<div class="cate-main">
+					<div class="cate left" :style="{'height': height+'px'}">
+						<div class="cate-box">
+							<ul>
+								<li 
+									v-for="(item, index) of cateOne" 
+									:key="item.cateid" class="cate-li" 
+									v-on:click="getTwoCate(item, index)"
+									:class="{'cur-li': curIndex == index}"
+									:data-id="item.cateid"
+									class="ell"
+									 >
+									<a href="javascript:;" v-text="item.name"></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="cate right" :style="{'height': height+'px'}">
+						<div class="cate-content">
+							<div class="cate-box">
+								<div v-for="(obj, i) of cateOne" :key="obj.cateid">
+									<div class="brand-box"  v-if="obj.imgurl!='' && obj.cateid==curCateId">
+										<a>
+											<img :src="'@(WorkContext.ShopConfig.ImageCDN)'+obj.imgurl+'?w=500'" alt="" class="brand" />
+										</a>
+									</div>
+								</div>
+								<div class="cateTwo" v-for="(item, index) of cateTwo" :key="item.cateid">
+									<a class="title ell"  v-text="item.name" :href="'/m/product/list?cateid='+item.cateid" style='text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;'></a>
+									<ul>
+										<li v-for="(itemLi, indexLi) of item.nodes">
+											<a class="img-box" :href="'/m/product/list?cateid='+itemLi.cateid">
+												<img :src="itemLi.imgurl?'@(WorkContext.ShopConfig.ImageCDN)'+itemLi.imgurl+'?w=120&h=120':'/Images/Mobile/3.jpg'" alt="" class="cate-img" />
+											</a>
+											<a class="cateThree ell" v-text="itemLi.name" :href="'/m/product/list?cateid='+itemLi.cateid"></a>
+										</li>
+									</ul>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				
+				
+				<div class="footer" v-if="IsApp!=1">
+					<div class="weui-flex">
+			            <div v-for="(item, index) of footer.NavBar" class="weui-flex-item" :key="index">
+			            	<a class="item-box" :href="item.MenuUrl">
+			            		<div class="img-box">
+			            			<img :src="item.MenuPic+'?w=50&h=50'"/>
+			            		</div>
+			            		<div class="title">{{item.MenuName}}</div>
+			            	</a>
+			            </div>
+			        </div>
+				</div>
+			
+			</div>
+				
+			
+			
+			
+		</div>
+<div class="curtain hide">
+	<div class="loader Rotation"></div>
+	<div class="loadTit"><icon class='icon iconfont'>&#xe649;</icon></div>
+</div>
+		<script src="/Js/Mobile/vue.js"></script>
+		<script type="text/javascript">
+			$('.curtain').removeClass("hide")
+			var vm = new Vue({
+				el: "#category",
+				data: {
+					IsApp: Number('@WorkContext.IsApp'),
+					curCateId: 0,
+					curIndex: 0,
+					cateOne: [],
+					cateTwo: [],
+					cateThree: [],
+					height: Number($("body").height()-100),
+					historyId: 0,
+					direction: 0,
+					scrollTop: 0,
+					historyHeight: 0,
+					upState: true,
+					downState: true,
+					footer: []
+				},
+				created: function() {
+					this.getFooter();
+					//this.getCateData();
+					this.getOneCate();
+				},
+				methods: {
+					getOneCate: function() {
+						var _this = this;
+						$.ajax({
+							type: "get",
+							url: "/Api/Category/SysListByParentId?ParentId=0",
+							async: true,
+							dataType: "json",
+							success: function(rel) {
+								if(rel.code==1){
+									_this.cateOne = rel.data;
+								}
+								$(".wapper").css("display","block");
+								_this.getTwoCate(_this.cateOne[0],0);
+							}
+						});
+					},
+					getTwoCate: function(item,index) {
+						$('.curtain').addClass("hide");
+						var _this = this;
+						_this.curCateId = item.cateid;
+						_this.curIndex = index;
+						$.ajax({
+							type: "get",
+							url: "/Api/Category/SysList2ByParentId?ParentId="+item.cateid,
+							async: true,
+							dataType: "json",
+							success: function(rel) {
+								if(rel.code==1){
+									_this.cateTwo = _this.transDate(item.cateid,rel.data,"cateid","parentid");
+								}
+							}
+						});
+					},
+					transDate: function(cateid,list,idstr,pidstr) {
+						
+						var arr1 = [];
+						var arr2 = [];
+						
+						list.forEach(function(v,i){
+							if(cateid==v.parentid){
+								arr1.push(v);
+							}else{
+								arr2.push(v);
+							}
+						});
+						arr1.forEach(function(vo,j){
+							arr2.forEach(function(vv,k){
+								if(vo.cateid==vv.parentid){
+									arr1[j]["nodes"] || (arr1[j]["nodes"] = []);
+									arr1[j]["nodes"].push(vv);
+								}
+							});
+						});
+						var result = arr1;
+						return result;
+						/*var result = [],temp = {};
+						for(i = 0; i < list.length; i++){
+							temp[list[i][idstr]]=list[i];//将nodes数组转成对象类型
+						}
+						for(j=0; j<list.length; j++){
+							tempVp = temp[list[j][pidstr]]; //获取每一个子对象的父对象
+							if(tempVp){//判断父对象是否存在，如果不存在直接将对象放到第一层
+								if(!tempVp["nodes"]) tempVp["nodes"] = [];//如果父元素的nodes对象不存在，则创建数组
+								tempVp["nodes"].push(list[j]);//将本对象压入父对象的nodes数组
+							}else{
+								result.push(list[j]);//将不存在父对象的对象直接放入一级目录
+							}
+						}
+						return result;*/
+					},
+					getCateData: function() {
+						var _this = this;
+						$.ajax({
+							type: "get",
+							url: "/Api/Category/SysList",
+							async: true,
+							dataType: "json",
+							success: function(rel) {
+								if(rel.code==1){
+									$.hideLoading();
+									for(var i = 0;i < rel.data.length;i++){
+										if(rel.data[i].layer==1){
+											_this.cateOne.push(rel.data[i]);
+										}else if(rel.data[i].layer==2){
+											_this.cateTwo.push(rel.data[i]);
+										}else if(rel.data[i].layer==3){
+											_this.cateThree.push(rel.data[i]);
+										}
+									}
+									_this.curCateId = _this.cateOne[0].cateid;
+								}
+								$(".wapper").css("display","block");
+								$('.curtain').addClass("hide")
+							}
+						});
+					},
+					clickCateOne: function(item, index) {
+						this.curCateId = item.cateid;
+						this.curIndex = index;
+						$(".cate-li").removeClass("cur-li");
+						$(".cate-li").eq(index).addClass("cur-li");
+						var top = Number(index*0.8+0.1).toFixed(2);
+						var scolltop = $(".cate.right").scrollTop();
+						$(".left .cur-cate").animate({'top': top+"rem"},0);
+						var rharr = [];
+						var rh = 0;
+						for(var i=0; i<index; i++){
+							rharr[i] = $(".right .cate-box").eq(i).height();
+						}
+						rharr.forEach(function(vo, n){
+							rh = rh+vo;
+						});
+						$(".cate.right").scrollTop(rh);
+					},
+					getFooter: function() {
+						var _this = this;
+						$.ajax({
+			                type: "get",
+			                url: "/m/tool/navbar",
+			                async: true,
+			                success: function (rel) {
+			                    var rs = JSON.parse(rel);
+			                    if (rs.Code == 1) {
+			                        _this.footer = rs.Data;
+			                    }
+			                }
+			            });
+					}
+				}
+			});
+			$(function(){
+				
+			 	$('.searchbar_wrap').searchBar({
+				    cancelText:"取消",
+				    searchText:'搜索',
+				    onfocus: function (value) {
+				        
+				    },
+				    onblur:function(value) {
+				
+				    },
+				    oninput: function(value) {
+				 
+				    },
+				    onsubmit:function(value){
+				    	var search = value;
+						var url = '/m/product/list?cateid=0&search='+search;
+						window.location.href='/m/product/list?cateid=0&search='+search;
+				    },
+				    oncancel:function(){
+				
+				    },
+				    onclear:function(){
+				
+				    }
+				});
+  			}); 
+		</script>
+		
+	</body>
+</html>
+

@@ -1,0 +1,991 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>店铺首页-@(WorkContext.SellerInfo.SellerName)</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <link rel="stylesheet"  href="/Css/Mobile/shop/province.css" /> 
+    <link rel="stylesheet"  href="/Css/Mobile/shop/seller.css" /> 
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/shop/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weuix.min.css" /> -->
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/icon.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/swiper.min.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/mobile/footer.css" /> 
+    <script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>   
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/Mobile/Themes/huadong/static/weui/swiper.min.js" type="text/javascript" charset="utf-8"></script> 
+	<script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="/Css/Mobile/home.css" />
+	<style>
+#app{display:none;width: 7.5rem;overflow-x: hidden;}
+.weui_actionsheet_action .weui_tabbar_item {
+    width: 50%;
+    text-align: center;
+     padding: 4% 0!important; 
+    /* border: 1px solid #d9d9d9; */
+    color: #333;
+    font-size: 0.28rem;
+}
+.weui_tabbar {
+    position: fixed;
+    text-align: center;
+}
+.brouce-out{
+	    transform: translate(0,-14%);
+}
+
+.cityselect-content>.cityselect-item {
+    display: block;
+    height: inherit;
+    width:3.75rem;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 50%;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background-color: #FFF;
+}
+.cityselect-content {
+    height: 100%;
+    padding-top:0.4rem;
+    width: 7.5rem;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    overflow-x: hidden;
+}
+.cityselect-header:after{
+	/*border-bottom: none!important;*/
+}
+.cityselect-item-box{
+	padding:0;
+}
+.cityselect-item-box a{
+	padding-left: 0.2rem;
+}
+.mark {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    line-height: 22px;
+    border-radius: 7px;
+    background-color: #ff4800;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    font-size: 0.24rem;
+    margin-right:0.12rem;
+    
+}
+.cityselect-nav a{font-size: 0.28rem;}
+.cityselect-nav a.crt{color:#ff4800;}
+.soldOut span {
+    font-size: 0.24rem;
+    color: #ff4800;
+    margin-right: 0.1rem;
+}
+.shop-info.normal .name{
+          	    font-size: 0.28rem;
+              padding-right:1.56rem;
+          }
+.soldOut{display: flex;justify-content: space-between;}
+.m-cityselect{position:relative;top:8%}
+#classifyPanel .class-list{margin-top:0!important}
+#classifyPanel .search-wrap{padding:0.2rem 0 0 0;border-bottom:none}
+	</style>
+	<script>
+		   wx.config({
+            debug: false, /* 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。*/
+            appId: '@ViewData["AppId"]', /* 必填，公众号的唯一标识*/
+            timestamp: '@ViewData["Timestamp"]', /* 必填，生成签名的时间戳*/
+            nonceStr: '@ViewData["NonceStr"]', /* 必填，生成签名的随机串*/
+            signature: '@ViewData["Signature"]',/* 必填，签名*/
+            jsApiList: [
+                    'checkJsApi',
+                    'onMenuShareTimeline',
+                    'onMenuShareAppMessage',
+                    'onMenuShareQQ',
+                    'onMenuShareWeibo',
+                    'hideMenuItems',
+                    'showMenuItems',
+                    'hideAllNonBaseMenuItem',
+                    'showAllNonBaseMenuItem',
+                    'translateVoice',
+                    'startRecord',
+                    'stopRecord',
+                    'onRecordEnd',
+                    'playVoice',
+                    'pauseVoice',
+                    'stopVoice',
+                    'uploadVoice',
+                    'downloadVoice',
+                    'chooseImage',
+                    'previewImage',
+                    'uploadImage',
+                    'downloadImage',
+                    'getNetworkType',
+                    'openLocation',
+                    'getLocation',
+                    'hideOptionMenu',
+                    'showOptionMenu',
+                    'closeWindow',
+                    'scanQRCode',
+                    'chooseWXPay',
+                    'openProductSpecificView',
+                    'addCard',
+                    'chooseCard',
+                    'openCard'
+            ]
+        });
+
+        wx.error(function (res) {
+            /*alert(res);*/
+            /*console.log(res);*/
+            /*alert('验证失败');*/
+        });
+
+        wx.ready(function () {
+            var link = window.location.href+'&LeaderUid='+'@WorkContext.Uid';
+            var Logo = '@WorkContext.SellerInfo.Logo';
+            var imgUrl = '';
+            if (vm.sellerDetail.Logo !='') {
+                imgUrl = $('#logo_img').attr('src');
+            }
+            else {
+                imgUrl = '@WorkContext.SellerInfo.Logo';
+            }
+            var  title = "让商家越让利越多,消费者越花越富有";
+            var desc = "让消费者越花越富有,商家越让利越多";
+                /*转发到朋友圈*/
+                wx.onMenuShareTimeline({
+                    title: $('#hd_name').text(),
+                    link: link,
+                    imgUrl: imgUrl,
+                    describe:vm.sellerDetail.Description,
+                    success: function () {
+                        /*alert('转发成功！');*/
+                    },
+                    cancel: function () {
+                        /*alert('转发失败！');*/
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: $('#hd_name').text(),
+                    desc: vm.sellerDetail.Description,
+                    link: link,
+                    imgUrl: imgUrl,
+                    type: 'link',
+                    dataUrl: '',
+                    success: function () {
+                        /*alert('转发成功！');*/
+                    },
+                    cancel: function () {
+                        /*alert('转发失败！');*/
+                    }
+                });
+                
+                
+                
+                
+            });
+            var sellerid = "@WorkContext.SellerInfo.SellerId";
+	</script>
+</head>
+	<body >
+	<div id='app' >
+		<div  v-cloak style='width:7.5rem;margin:0 auto'>
+		
+		<header>
+			<div class="bg-white weui-header "> 
+		  		<div class="weui-header-left"> <a class="icon icon-109 fl333" onclick="goToBack()"></a>  </div>
+	   			<h1 class="weui-header-title fl333" style='color:#333'>店铺首页</h1>
+		    	<div class="weui-header-right">
+		    	<!-- <a class="icon icon-49 fl333" id="del"></a>  -->
+		    	<!--<a class="icon icon-41 fl333" id="del"></a>-->
+		    	</div> 
+	    	</div>  
+			</header>
+		<div id="js_addCart" style='margin-bottom:40px'>
+            <section id="index_sec" class="">
+            <div>
+            <!-- banner -->
+	            <div class="swiper-container" style='background: #fff;margin-top:0.92rem' v-if='bannerList.length>0'>
+			         <div class="swiper-wrapper">
+			             <div class="swiper-slide" style='height:4.8rem' v-for='(item,index) in bannerList'><img :src="'@(WorkContext.ShopConfig.ImageCDN)'+item.imgurl+'?w=750&mode=max'" alt=""></div>
+			         </div>
+	                 <div class="swiper-pagination"></div>
+                </div>
+                <div class="swiper-container" style='background: #fff;' v-else>
+		         <div class="swiper-wrapper">
+		             <div class="swiper-slide"><img src="/Images/Mobile/noimg.jpg" alt=""></div>
+		             <!--<div class="swiper-slide"><img src="http://m.huadong518.com/uploads/supperimg/20180616/534e411d64b7c5b9e027c7afe16fedf2.jpg" alt=""></div>-->
+		         </div>
+                 <div class="swiper-pagination"></div>
+                </div>
+	            <!-- 店铺动态 -->
+						<div class="J-component" data-spider="8" data-type="8" data-sectionid="801">
+							<section id="J-shop-info" class="shop-info normal">
+					    <!--顶部店铺信息容器-->
+					    <div id="index_hd_abs" class="wrap rel">
+					        <h3 id="vshop_icon" class="avatar">
+					        	<img width="100%" height="100%" v-if='sellerDetail.Logo!=""' :src="'@(WorkContext.ShopConfig.ImageCDN)'+sellerDetail.Logo+'?w=100'" id='logo_img'/>
+					            <img  width="100%" height="100%" v-else src="https://si.geilicdn.com/vshop160851740-1447481114.jpg.webp?w=291&h=291&cp=1" alt=""  id='logo_img'/>
+					        </h3>
+					        <div id="index_hd_shop_info" class="field">
+					            <h1 id="hd_name"  class="name over_hidden block">{{sellerDetail.ShopName}}</h1>
+					            <div id="hd_level_cert" class="cert-level hd_info_childrens">
+					                    <span style="width: 100%;" v-if='sellerDetail.StarCount==0' id="wd_level_wrap" href="#" class="level">&nbsp;</span>
+					                    <span v-else id="wd_level_wrap" href="#" class="level" v-bind:style="{width:sellerDetail.StarCount*20+'%'}">&nbsp;</span>
+					                    <!--<img src="https://si.geilicdn.com/hz_img_6b8c00000163d2ed51d50a02685e_97_30_unadjust.png" id="activity_logo" style="width:48.5px; height:15px">-->					                
+					            </div>					            
+					        </div>
+					        <div class="shop-dynamic" v-on:click='collectionFn()'>
+					        	{{collection}}
+					        </div>
+			               <div class="over_hidden ellipsis hd_info_childrens collect" v-if='sellerDetail.Mobile!=""'>
+			                		<!--em id="hd_fav_count_em">收藏6521</em-->
+			                		联系方式:
+			                		<span  v-on:click="callPhone(sellerDetail.Mobile)"><a href="javascript:;">{{sellerDetail.Mobile}}</a></span>
+			                		<span style="margin-left: 20px;padding: 3px 5px;background: #ff4800;color: #fff;border-radius: 5px;" onclick="webIM()">联系我们</span>
+			                </div>
+			                <div v-else class="over_hidden ellipsis hd_info_childrens collect" >
+			                		<!--em id="hd_fav_count_em">收藏6521</em-->
+			                		商家未留联系方式
+			                </div>
+					    </div>
+					       <div id="index_cert_box" class="cert-box  cert-more">
+							  <a href="javascript:;">
+							    <span class="guarantee-icon g_danbao"><i class='icon icon-71'></i>交易资金担保</span>
+							    <span class="guarantee-icon g_honesty"><i class='icon icon-71'></i>保证金保障</span>
+							    <span class="guarantee-icon g_brand_realname"><i class='icon icon-71'></i>店长实名认证</span>
+							    <!--<span class="guarantee-icon"><i class='icon icon-71'></i>食品特种经营认证</span>-->
+							  </a>
+					       </div>
+					    <div id="hd_intro" class="intro  hide ">
+					        <p id="hd_note" class="hide"></p>
+					    </div>
+					</section>
+					</div>
+	            <!-- tab选项卡 -->
+	            <div class="J-component">
+					<div class="weui-tab">
+					  <div class="weui-navbar sellerindex">
+					       <div class='weui_tabbar_item ' v-for="(item,index) in tabs" v-on:click='tab(item.id)' :key='index'>
+					   			<div :class="{'weui_tabbar_item_on':item.id == num}" >
+					   				{{item.name}}
+					   			</div>
+					   		</div>
+					   </div>
+					</div>
+					   <!-- 店铺首页 -->
+					   <div class="idx_tab_change" >
+					   <div class="list-block">
+							
+								<div class="weui-tab" v-if="num==1">
+								  <div class="weui-navbar sellerindex">
+								       <div class='weui_tabbar_item ' v-for="(item,index) in productcate" v-on:click='cateclick(item,index)' :key='index'>
+								   			<div :class="{'weui_tabbar_item_on':item.id == cateindex}" >
+								   				{{item.name}}
+								   			</div>
+								   		</div>
+								   </div>
+						        </div>
+						        <h3 class="list-title" v-if="num==2"><p class="content"> </p></h3>
+						        <h3 class="list-title" v-if="num==3"><p class="content"> </p></h3>
+								<div  class='recommend'>
+									<ul class="list-wrapper">
+									  <div class="li-container normal-container">
+									    <li class="list-item normal-cart " v-for="(item,index) in productList" :key='index'>
+									      <a class="link for_gaq" :href="'/m/product/detail?id='+item.ProductId+'&IsApp='+IsApp" >
+									        <div class="img-wrapper">
+									          <div class="img-inner">
+									            <span class="sellerOut">
+									             <img :src="'@(WorkContext.ShopConfig.ImageCDN)'+item.PicUrl+'?w=166&h=166'" class="proImg loaded"  style="opacity: 1;">
+									            </span>
+									          </div>
+									        </div>
+									        <p class="i_txt " style="text-indent: 0px">{{item.ProductName}}</p>
+									        <div class="i_pri_wrap">
+									         
+									          <p class="soldOut">
+									          	<span><b>¥</b>{{item.SalePrice}}</span>
+									          	<span><b class='mark'>送</b><b v-text='tofixedtr((item.Profits*item.SalePrice)*5/100)'></b>积分</span>
+									          	<!--<span>销量{{item.SaleCount}}</span>-->
+									          </p>
+									        
+									          
+									        </div>
+									      </a>
+									      <!--<div class="i_cart abs addCart icon-cart" v-on:click='addCart(item.ProductId,item.SkuId)'></div>-->
+									    </li>
+									    
+									    <div style="clear:both;"></div>
+									  </div>
+									</ul>
+								</div>
+							    <div class="loading" :style="{'margin-top':loadingTop+'rem'}">
+									<div class="weui_cells_title tcenter hide" id="more">
+										<div class="weui-loadmore">
+								            <i class="weui-loading"></i>
+								            <span class="weui-loadmore-tips">正在加载</span>
+								        </div>
+									</div>
+									<div v-if="page==1&&productList.length==0" class="weui_cells_title tcenter hide" id="nomore">
+										暂无数据
+									</div>
+									<div v-else-if="page==1" class="weui_cells_title tcenter hide" id="nomore">
+											没有更多数据了
+									</div>
+									<div v-else class="weui_cells_title tcenter hide" id="nomore">
+										没有更多数据了
+									</div>
+			                    </div>
+							</div>
+					   </div>
+					</div>
+	           </div>
+            <div style="text-align:center" id="showAllItems"></div>  
+           </section>
+       </div>
+       <!--底部-->
+				    @if(WorkContext.IsApp==1){
+		
+    				}else{
+				    <div class="weui_tabbar " v-show="footerLists" style="padding-top: 0.1rem;" >
+			            <a href='javascript:;' class="weui_tabbar_item" v-on:click='showDetail()'>
+			                <div class="weui_tabbar_icon">
+			                	<icon class='icon icon-81 colorsize '></icon>
+			                </div>
+			                <p class="weui_tabbar_label"  style="margin: 0;">分类</p>
+			            </a>
+			            <a href='/m/cart/index' class="weui_tabbar_item">
+			                <div class="weui_tabbar_icon">
+			                	<icon class='icon icon-24 colorsize'></icon>
+			                </div>
+			                <p class="weui_tabbar_label"  style="margin: 0;">购物车</p>
+			            </a>
+			            <a :href="'tel:'+sellerDetail.Mobile" class="weui_tabbar_item">
+			                <div class="weui_tabbar_icon">
+			                	<icon class='icon icon-104 colorsize'></icon>
+			                </div>
+			                <p class="weui_tabbar_label"  style="margin:0;">联系卖家</p>
+			            </a>
+			            <a href='javascript:;' class="weui_tabbar_item" v-on:click="goLogin()">
+			                <div class="weui_tabbar_icon">
+			                	<icon class='icon icon-85 colorsize'></icon>
+			                </div>
+			                <p class="weui_tabbar_label"  style="margin: 0;">个人中心</p>
+			            </a>
+                    </div>
+                  }
+                  <!--点击分类弹出层-->      
+		   <div id="classifyPanel"  class='show-panel jifen-detail' >		   	    
+		        <div class="wrap" >
+		        	<!--<icon class='icon icon-9 flicon' v-bind:class='iscate?"flicon-rotate-on":""' v-on:click='cateBtn()'></icon>-->
+		            <div class="search-wrap">
+		            	<div class='search-input-icon' v-on:click='closedetail()'>
+		            		<icon class='icon icon-109  '></icon>
+		            	</div>
+		            	
+		                <div class="search-input-wrap">
+		                    <!--<em class="search-icon"></em>-->
+		                    
+		                    <input class="search block wrap" type="search" v-model='searchvalue' placeholder="请输入商品名称">
+		                    <em class="search-clear"></em>
+		                </div>
+		                <span class="search-btn" v-on:click='searchbtn()'>搜索</span>
+		                <div class="clear"></div>
+		            </div>
+		            <div class="class-list">
+		                <h3 style="display: none;">商品分类</h3>
+		                <div id="classListScrollWrapper" style="position: relative; height: 500px;">
+		                	<!--商家分类-->
+		             <div   class='m-cityselect brouce-out'>
+				            <div class="cityselect-header">
+				            	 <div class="cityselect-nav" >
+				                  <a href="javascript:;"  v-for="(item,index) in titleList" :key="index" :class="{'crt':titleid==item.id}" v-on:click='titleclick(item,index)'> {{item.name}}</a>  
+				                </div>
+				                <!--<p class="cityselect-title"></p>-->
+				               
+				            </div>
+				            <ul  class="cityselect-content cityselect-move-animate"  :class="{'cityselect-next':isslider==true}" 
+				            	id="S_City_Show">
+				                <li class="cityselect-item" >
+				                    <div class="cityselect-item-box" id="Province_chioce" style='padding:0'>
+				                        <a style='padding-left: 0.2rem;' v-for="(item,index) in cateList" :key="index" :class="{'crt':CategoryId==item.id}" v-on:click='choseCategory(item,index)' 
+				                        	href="javascript:;" >
+				                          <span v-text='item.name'></span>
+				                          <span class='icon iconcounty' :class="{'crt':CategoryId==item.id}"></span>
+				                        </a>
+				                    </div>
+				                </li>
+				                <li class="cityselect-item">
+				                    <div class="cityselect-item-box" id="City_chioce">
+				                    	<a class="" v-for="(item,index) in twocateList" :key="index" :class="{'crt':twoCategoryId==item.id}" href="javascript:;" 
+				                    		v-on:click='chosetwoCategory(item,index)'><span v-text='item.name'></span></a>
+				                    </div>
+				                </li>
+				                <li class="cityselect-item">
+				                    <div class="cityselect-item-box" id="City_chioce">
+				                    	<a class="" v-for="(item,index) in threeCateList" :key="index" :class="{'crt':threeCategoryId==item.id}" href="javascript:;" 
+				                    		v-on:click='chosethreeCategory(item,index)'><span v-text='item.name'></span></a>
+				                    </div>
+				                </li>
+				               
+				            </ul>
+	                  </div>
+		                </div>
+		            </div>
+		            <div class="classify-arrow"></div>
+		        </div>
+		        <div class="mask-area">
+		        </div>
+		    </div>
+         <div></div>
+         </div>
+      </div>
+	<script>
+var IsApp = "@WorkContext.IsApp";
+function goToBack() {
+	var _this = this;
+	if(IsApp==1){
+		if(navigator.userAgent.indexOf("iPhone")>0){
+			gobacklastpage();
+		}
+		if(navigator.userAgent.indexOf("Android")>0){
+				window.js.goBack();
+			}
+	}else{
+		window.history.back();
+	}
+		
+}
+$.showLoading(); 
+
+function webIM() {
+
+    var SaleUserId = '@ViewData["SaleUserId"]';
+    if (Number(IsApp) == 1) {
+        if (navigator.userAgent.indexOf("iPhone") > 0) {
+            chatWithShopper(SaleUserId);
+        }
+        if (navigator.userAgent.indexOf("Android") > 0) {
+            window.js.chatWithShopper(SaleUserId);
+        }
+    }
+
+}
+
+
+var vm = new Vue({
+    el: '#app',
+    data: {
+        tabs: [
+        	{id:1,name:'全部商品'},
+        	{id:2,name:'首页推荐'},
+        	{id:3,name:'新品上线'},
+        ],
+        productcate: [
+        {id:1,name:'综合'},
+        {id:2,name:'特价'},
+        {id:3,name:'热卖'},
+        {id:4,name:'分类'},
+        ],
+        num: 1,
+        footerLists:[],//底部tabbar
+        cateindex:1,
+        windowHeight:0,
+        iscate:false,
+        sellerDetail:{},//商家基本详情
+        bannerList:[],//店铺相册
+        id:'@ViewData["ShopId"]',
+        oneCategory:[
+        {id:0,name:'零售'},
+        {id:1,name:'餐饮'},
+        {id:2,name:'全部'},
+        ],//一级分类
+        CategoryId:1,//分类id
+        twoCategoryId:1,//二级分类id
+        threeCategoryId:1,//三级分类id
+        isslider:false,
+        twoCategory:[
+        {industryid:0,industryvalue:'零售'},
+        {industryid:1,industryvalue:'零售'},
+        {industryid:2,industryvalue:'零售'},
+        ],//一级分类
+        productList:[],
+        loadingTop:0,
+        page:1,
+        cateList:[],
+        twocateList:[],
+        threeCateList:[],
+        titleid:1,
+        titleList:[
+        ],
+        cateid:'',
+        search:'',
+        searchvalue:'',
+        isSearch:false,
+        IsApp:"@WorkContext.IsApp",
+        collection:'',
+        isFavorite:false,
+        isScroll:false,
+    },
+    methods: {
+    	callPhone:function(phone){
+			var _this = this;
+			if(_this.IsApp==1){
+				if(navigator.userAgent.indexOf("iPhone")>0){
+	                callPhone(Number(phone));
+				}
+				if(navigator.userAgent.indexOf("Android")>0){
+					window.js.callPhone(phone)
+				}
+			}else{
+				window.location.href='tel:'+phone;
+			}
+        },
+    	collectionFn:function(){//收藏店铺
+    		var _this=this;
+    		$.ajax({
+						type: "get",
+						url: "/Api/Shop/SetFavoriteShop?UserId="+'@WorkContext.Uid'+'&ShopId='+_this.sellerDetail.ShopId,
+						async: true,
+						
+						dataType: "json",
+						success: function(rel) {
+							console.log(rel)
+							if(rel.code==1){
+								if(_this.isFavorite){
+								 $.toast('取消收藏')	
+								}else{
+								 $.toast('收藏成功')
+								}
+								
+							}else{
+								$.toast("登录后收藏店铺", "cancel");
+                            	return false;
+							}
+							_this.collectionStatus();
+						}
+					});
+    	},
+    	collectionStatus:function(){//收藏店铺状态判断
+    		var _this=this;
+    		$.ajax({
+					type: "get",
+					url: "/Api/Shop/GetFavoriteShopStatus?UserId="+'@WorkContext.Uid'+'&ShopId='+_this.sellerDetail.ShopId,
+					async: true,
+					dataType: "json",
+					success: function(rel) {
+						console.log(rel)
+						if(rel.code==1){
+							_this.collection='已收藏';
+							_this.isFavorite=true;
+						}else{
+							_this.isFavorite=false;
+				            _this.collection='收藏店铺';
+						}
+					}
+				});
+    	},
+    	addCart:function(ProductId,SkuId){
+    		   var _this=this;
+    		   $.ajax({
+						type: "post",
+						url: "/m/cart/addtocart",
+						async: true,
+						data: {
+							pid: ProductId,
+							skuid: SkuId,
+							pcount: 1
+						},
+						dataType: "json",
+						success: function(rel) {
+							console.log(rel)
+							if(rel.Code==1){
+								$.toast(rel.Message)
+							}else{
+								$.toast(rel.Message)
+							}
+						}
+					});
+    	},
+    	searchbtn:function(){
+    		var _this=this;
+    		_this.isSearch=true;
+    		_this.page=1;
+    		_this.getproductlist();
+    		_this.closedetail();
+    	},
+    	titleclick:function(item,index){
+    		var _this=this;
+    		_this.titleid=item.id;
+    		if(index==1){
+    			_this.isslider=false
+    		}
+    	},
+    	choseCategory:function(item,index){//选择一级分类
+    		var _this=this;
+    		_this.titleclick(item);
+    		_this.CategoryId=item.id;
+    		_this.titleList=[];
+    		_this.titleList[0]=item;//赋值给一级标题
+    		var data=_this.cateList;
+    		for(var i=0;i<data.length;i++){
+    			if(data[i].id==item.id){
+    				if(data[i].children.length==0){
+					_this.page=1;
+					_this.isSearch=false;
+    				_this.cateid=item.id;
+    				_this.cateindex=4;
+    				_this.getproductlist();
+    				_this.closedetail();
+    				}else{
+    					_this.twocateList=data[i].children;
+    				}
+    			}
+    		}
+    	},
+    		initCategory:function(item,index){//选择一级分类
+    		var _this=this;
+    		_this.titleclick(item);
+    		_this.CategoryId=item.id;
+    		_this.titleList=[];
+    		_this.titleList[0]=item;//赋值给一级标题
+    		var data=_this.cateList;
+    		for(var i=0;i<data.length;i++){
+    			if(data[i].id==item.id){
+    				if(data[i].children.length!=0){
+    					_this.twocateList=data[i].children;
+    				}
+    			}
+    		}
+    	},
+    	chosetwoCategory:function(item,index){//选择二级分类
+    		var _this=this;
+    		_this.titleclick(item);
+    		_this.twoCategoryId=item.id;
+    		_this.titleList[1]=item;//赋值给二级级标题
+    		_this.titleList[2]='';
+    		var data=_this.twocateList;
+    		for(var i=0;i<data.length;i++){
+    			if(data[i].id==item.id){
+    				if(data[i].children.length==0){
+    					_this.page=1;
+    					_this.isSearch=false;
+    					_this.cateindex=4;
+	    			    _this.cateid=item.id;
+	    				_this.getproductlist();
+	    				_this.closedetail();
+    				}else{
+    					_this.threeCateList=data[i].children;
+    					_this.isslider=true;
+    				}
+    			}
+    		}
+    		
+    	},
+    	chosethreeCategory:function(item,index){//选择三级分类
+    		var _this=this;
+    		_this.page=1;
+    		_this.isSearch=false;
+    		_this.titleclick(item);
+    		_this.threeCategoryId=item.id;
+    		_this.titleList[2]=item;//赋值给三级标题
+    		_this.cateid=item.id;
+    		_this.cateindex=4;
+    		_this.getproductlist();
+    		_this.closedetail();
+    	},
+        tab:function(index) {
+        	var _this=this;
+            this.num = index;
+            _this.isSearch=false;
+            console.log('num'+_this.num)
+               _this.page=1;            
+            if(index==1){
+            	_this.cateindex=1
+            }
+            _this.cateid='';
+            _this.getproductlist();	
+            
+        },
+        cateclick:function(item,index) {
+        	var _this=this;
+        	_this.page=1;
+        	_this.isSearch=false;
+        	if(item.id==4){
+            	_this.showDetail();
+            }else{
+	            this.cateindex = item.id;             
+            	_this.cateid='';
+            	_this.getproductlist();
+            }
+        	
+        },
+        cateBtn:function(){
+        	var _this=this;
+        	_this.iscate=!_this.iscate;
+        },
+        getdata:function(){//获取商品详情
+     			var _this=this;
+     			var id=window.location.href.split('=')[1];
+     			 $.ajax({
+		    			type:"post",
+		    			url:"/m/Shop/detail",
+		    			data:{
+		    				shopid:_this.id
+		    			},
+		    			async:true,
+		    			success: function(rel){
+		    				console.log(JSON.parse(rel));
+		    				var data=JSON.parse(rel).Data;
+		    				data.starscore=2*(data.Star1*50+data.Star2*25+data.Star3*15+data.Star4*5+data.Star5*5)/data.StarNum;
+		    				_this.sellerDetail=data;
+		    				console.log(_this.sellerDetail)
+		    				_this.getbanner();
+		    				_this.getcatelist();
+		    				_this.collectionStatus();
+		    			}
+		    		});
+     		},
+     		getbanner:function(){//获取banner图
+     			var _this=this;
+     			 $.ajax({
+		    			type:"get",
+		    			url:"/Api/Tool/GetPics?v="+Math.random()+"&ItemType=10&ItemId="+_this.id,
+		    			async:true,
+		    			success: function(rel){
+		    				var arr=[];
+		    				if(rel.code==1){
+		    					var data=rel.data;
+		    					for(var i=0;i<data.length;i++){
+		    						if(data[i].imgurl!='(null)'){
+		    							arr.push(data[i]);
+		    						}
+		    					}
+		    					_this.bannerList=arr;
+		    				}
+		    				console.log(rel.data);
+		    			}
+		    		});
+     		},
+     		getcatelist:function(){//获取门店分类
+     			var _this=this;
+     			 $.ajax({
+		    			type:"get",
+		    			url:"/m/Category/GetCate?v="+Math.random()+"&shopid="+_this.id,
+		    			async:true,
+		    			success: function(rel){
+		    					var code=JSON.parse(rel).Code
+		    					console.log(JSON.parse(rel).Data.children);
+		    					if(code==1){
+		    						_this.cateList=JSON.parse(rel).Data.children
+		    							_this.initCategory(_this.cateList[0],1)
+		    					}
+		    				 
+		    			}
+		    		});
+     		},
+     		getproductlist:function(){//获取门店商品
+     			var _this=this;
+     			var num=_this.num;
+     			$("#more").removeClass("hide");
+     			$('#nomore').addClass('hide')
+     			_this.loadingTop = 0;
+     			if(_this.isSearch){
+     				console.log('搜索');
+     				var url="/m/Product/ShopGoodsList?shopid="+_this.id+'&size=8&page='+_this.page+'&search='+_this.searchvalue+'&t='+Math.random();
+     			}else{
+     				if(num==1){//全部商品
+	     				if(_this.cateindex==1){
+	     					var url="/m/Product/ShopGoodsList?shopid="+_this.id+'&size=8&page='+_this.page+'&t='+Math.random();
+	     				    console.log('全部商品')
+	     				}else if(_this.cateindex==2){
+	     					console.log('特价')
+	     				    var url="/m/Product/ShopGoodsList?shopid="+_this.id+'&Tags='+3+'&size=8&page='+_this.page+'&t='+Math.random();
+	     				}else if(_this.cateindex==3){
+	     					console.log('热卖')
+	     				    var url="/m/Product/ShopGoodsList?shopid="+_this.id+'&Tags='+2+'&size=8&page='+_this.page+'&t='+Math.random();
+	     				}else  if(_this.cateindex==4){//分类
+	     			    	console.log('分类');
+	     			    	var url="/m/Product/ShopGoodsList?shopid="+_this.id+'&size=8&page='+_this.page+'&cateid='+_this.cateid+'&t='+Math.random();
+	     			    }
+	     			}else if(num==2){//首页推荐
+	     				console.log('首页推荐')
+	     				var url="/m/Product/ShopGoodsList?shopid="+_this.id+'&Tags='+4+'&size=8&page='+_this.page+'&t='+Math.random();
+	     			}else if(num==3){//新品上线
+	     				console.log('新品上线')
+	     				var url="/m/Product/ShopGoodsList?shopid="+_this.id+'&Tags='+1+'&size=8&page='+_this.page+'&t='+Math.random();
+	     			}
+     			}
+     			_this.isScroll=false;
+     			 $.ajax({
+		    			type:"get",
+		    			url:url,
+		    			async:true,
+		    			success: function(rel){
+		    				$("#more").addClass("hide");
+//		    				$("#nomore").removeClass("hide");
+		    				var code=JSON.parse(rel).Code
+		    				if(code==1){
+		    					var data=JSON.parse(rel).Data;
+		    					if(data.length==0){
+			    					if(_this.page==1){
+				    					_this.productList=[];
+				    					_this.productList=data;
+				    					_this.loadingTop = 1;
+				    					$('#nomore').removeClass('hide')
+			    					}else{
+			    						$("#more").addClass("hide");
+			    					}
+			    					_this.page++;
+		    					}else{
+		    						 if(_this.page>1){
+		    						 	_this.isScroll=true;
+		    						 	_this.productList=_this.productList.concat(data)
+		    						 }else{
+		    						 	_this.isScroll=true;
+		    						 	if(data.length<4){
+	    								   $('#nomore').removeClass('hide')
+	    							    }
+		    						 	_this.productList=[];
+//		    						 	_this.productList=_this.productList.concat(data)
+		    						 	_this.productList=data
+		    						 }
+		    					}
+		    				}else{
+		    					if(_this.page==1){
+									_this.loadingTop = 1;
+									_this.productList=[];
+//									$("#more").addClass("hide");
+									}
+									return false;
+				    		    }
+		    				$('#nomore').removeClass('hide');
+		    			}
+		    		});
+     		},
+     		showDetail :function(item){
+					var _this=this;
+					
+					$(".jifen-detail").animate({
+						right: "50%",
+						"margin-right": "-3.75rem"
+					}, 300);
+					
+				},
+     		closedetail:function(){
+					var _this=this;
+					$(".jifen-detail").animate({
+						right: "100%",
+						"margin-right": 0
+					}, 300);
+				},
+			goLogin:function(){
+				var _this = this;
+				if(_this.IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						alert(IsApp);
+						gotologinvc();
+					}
+					/*if(navigator.userAgent.indexOf("Android")>0){
+						window.js.goback();
+					}*/
+				}else{
+					window.location.href='/m/usercenter/home';
+				}
+			},
+			tofixedtr:function(str){//保留小数点3位
+						var arr=str.toString().split('.');
+							if(arr[1]!=undefined){
+								if(arr[1].substring(0,3).substring(2,3)!=0){//第三位不为零
+							  var a=arr[0]+'.'+arr[1].substring(0,3);	
+							}else{
+								if(arr[1].substring(0,3).substring(1,2)!=0){//第二位不为零
+									var a=arr[0]+'.'+arr[1].substring(0,2)
+								}else{
+									var a=arr[0]+'.'+arr[1].substring(0,1)
+								}
+							}
+						}else{
+							var a=str;
+						}
+					return a;
+			},
+    },
+    mounted:function(){
+    	var _this=this;
+    	_this.getdata();
+    	
+    	var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+　　         var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight; 
+        _this.windowHeight= (h+50) +'px';
+    },
+});
+$(function(){
+	
+	vm.getproductlist();
+
+     setTimeout(function(){
+		$('#app').css('display','block');
+		$.hideLoading();
+	},200);	
+    setTimeout(function(){
+		var mySwiper = new Swiper('.swiper-container',
+            {
+               speed:2000,//播放速度
+               autoHeight:true,
+               loop:true,//是否循环播放
+               setWrapperSize:true,
+               autoplay:
+               {
+                 delay: 5000,
+                 disableOnInteraction: false,
+              },
+               pagination:  '.swiper-pagination',//分页
+               effect : 'slide',//动画效果
+             });
+	},3000);
+	 $(window).scroll(function() {
+		var scrollTop = $(this).scrollTop();
+		var scrollHeight = $(document).height();
+		var windowHeight = $(this).height();
+			if(scrollTop + windowHeight == scrollHeight) {
+				if(vm.isScroll==false){
+					$("#nomore").removeClass("hide");
+	        	    $("#more").addClass("hide");
+		        	return false;
+				}else{
+					$("#nomore").removeClass("hide");
+//	        	    $("#more").addClass("hide");
+		        	vm.page++;
+		        	vm.getproductlist();	
+		        	return false;
+				}
+			}else{
+//			   console.log("scrollTop: "+scrollTop);
+//		       console.log("scrollHeight: "+scrollHeight);
+//		       console.log("windowHeight: "+windowHeight);
+			}
+		
+	});
+})
+	</script>
+	</body>
+</html>

@@ -1,0 +1,223 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>会员卡-@{@WorkContext.SellerInfo.SellerName}</title>
+    <link rel="stylesheet" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/vip.css" />
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/zepto.min.js"></script>
+    <style type="text/css">
+        body {
+            width: 7.5rem;
+            margin: 0 auto;
+        }
+
+        .header {
+            width: 7.5rem;
+            margin: 0 auto;
+            background: #fff;
+            padding: .3rem 0;
+        }
+
+        .card-box {
+            width: 6.9rem;
+            margin: 0 auto;
+            height: 3.84rem;
+            position: relative;
+        }
+
+            .card-box img {
+                width: 6.9rem;
+                height: 3.84rem;
+                z-index: 1;
+            }
+
+            .card-box span {
+                position: absolute;
+                z-index: 2;
+            }
+
+        .sheSmall {
+            font-size: 0.24rem;
+        }
+
+        .iconfont {
+            font-size: .5rem;
+        }
+
+        .big {
+            font-size: .5rem;
+        }
+    </style>
+</head>
+
+<body>
+    @{
+        Yitao.Core.VipCardStyleInfo vipCardStyleInfo = (Yitao.Core.VipCardStyleInfo)ViewData["VipCardStyleInfo"];
+    }
+    <div class="header">
+        <div class="card-box">
+            <img src="@(vipCardStyleInfo.Url)?w=600" class="Url" alt="">
+            <span class="NameCop" id="NameCop">@vipCardStyleInfo.NameCop</span>
+            <span class="CardType" id="CardType">@vipCardStyleInfo.CardType</span>
+            <span class="CardNum" id="CardNum">No.@WorkContext.UserInfo.CardSN</span>
+        </div>
+    </div>
+    <!--九宫格-->
+    <div class="weui_grids grids-small sheSmall">
+        <a href="javascript:;" class="weui_grid">
+            <div class="weui_grid_icon yue">
+                <i class="iconfont">&#xe6a7;</i>余额
+            </div>
+            <p class="weui_grid_label">
+                ￥@{@WorkContext.UserInfo.UserMoney}
+            </p>
+        </a>
+        <a href="/m/activity/Gift" class="weui_grid">
+            <div class="weui_grid_icon jifen">
+                <i class="iconfont">&#xe65e;</i>积分
+            </div>
+            <p class="weui_grid_label">
+                @{@WorkContext.UserInfo.UserScore}
+            </p>
+        </a>
+        <a href="/m/usercenter/paymentqrcode" class="weui_grid">
+            <div class="weui_grid_icon">
+                <i class="iconfont big">&#xe6d2;</i>
+            </div>
+            <p class="weui_grid_label">
+                付款码
+            </p>
+        </a>
+        <a href="javascript:;" class="weui_grid">
+            <div class="weui_grid_icon juan">
+                <i class="iconfont">&#xe61a;</i>电子券
+            </div>
+            <p class="weui_grid_label">
+                0
+            </p>
+        </a>
+        <a href="/m/settlement/recharge" class="weui_grid">
+            <div class="weui_grid_icon">
+                <i class="iconfont big">&#xe633;</i>
+            </div>
+            <p class="weui_grid_label">
+                在线充值
+            </p>
+        </a>
+        <a href="/m/home/service" class="weui_grid">
+            <div class="weui_grid_icon ">
+                <i class="iconfont big">&#xe651;</i>
+            </div>
+            <p class="weui_grid_label">
+                VIP客服
+            </p>
+        </a>
+        <a href="javascript:;" class="weui_grid">
+            <div class="weui_grid_icon ">
+                <i class="iconfont big">&#xe61f;</i>
+            </div>
+            <p class="weui_grid_label">
+                储值券激活
+            </p>
+        </a>
+        <a href="/m/usercenter/cardflow" class="weui_grid">
+            <div class="weui_grid_icon ">
+                <i class="iconfont big">&#xe793;</i>
+            </div>
+            <p class="weui_grid_label">
+                会员卡明细
+            </p>
+        </a>
+        <a href="/m/usercenter/scoreflow" class="weui_grid">
+            <div class="weui_grid_icon">
+                <i class="iconfont big">&#xe739;</i>
+            </div>
+            <p class="weui_grid_label">
+                积分明细
+            </p>
+        </a>
+    </div>
+    <input type="hidden" class="SellerId" value="@vipCardStyleInfo.SellerId">
+    <input type="hidden" class="StyleId" value="@vipCardStyleInfo.StyleId">
+    <input type="hidden" class="StyleName" value="@vipCardStyleInfo.StyleName">
+    <input type="hidden" class="Url" value="@vipCardStyleInfo.Url">
+    <input type="hidden" class="CardNumX" value="@vipCardStyleInfo.CardNumX">
+    <input type="hidden" class="CardNumY" value="@vipCardStyleInfo.CardNumY">
+    <input type="hidden" class="CardNumFontSize" value="@vipCardStyleInfo.CardNumFontSize">
+    <input type="hidden" class="CardNumFontColor" value="@vipCardStyleInfo.CardNumFontColor">
+    <input type="hidden" class="NameCop" value="@vipCardStyleInfo.NameCop">
+    <input type="hidden" class="NameX" value="@vipCardStyleInfo.NameX">
+    <input type="hidden" class="NameY" value="@vipCardStyleInfo.NameY">
+    <input type="hidden" class="NameFontSize" value="@vipCardStyleInfo.NameFontSize">
+    <input type="hidden" class="NameFontColor" value="@vipCardStyleInfo.NameFontColor">
+    <input type="hidden" class="CardType" value="@vipCardStyleInfo.CardType">
+    <input type="hidden" class="CardTypeX" value="@vipCardStyleInfo.CardTypeX">
+    <input type="hidden" class="CardTypeY" value="@vipCardStyleInfo.CardTypeY">
+    <input type="hidden" class="CardTypeFontSize" value="@vipCardStyleInfo.CardTypeFontSize">
+    <input type="hidden" class="CardTypeFontColor" value="@vipCardStyleInfo.CardTypeFontColor">
+    <input type="hidden" class="UpdateTime" value="@vipCardStyleInfo.UpdateTime">
+    <!--end-->
+    <script>
+        function pxToRem(item) {
+            item = Number(item / 50).toFixed(5);
+            item = item + 'rem';
+            return item;
+        }
+        function setCss(obj, top, left, font, color) {
+            obj.css({
+                top: top,
+                left: left,
+                fontSize: font,
+                color: color
+            });
+        }
+        $(function () {
+            var SellerId = $(".SellerId").val();
+            var StyleId = $(".StyleId").val();
+            var StyleName = $(".StyleName").val();
+            var Url = $(".Url").val();
+            var CardNumX = $(".CardNumX").val();
+            var CardNumY = $(".CardNumY").val();
+            var CardNumFontSize = $(".CardNumFontSize").val();
+            var CardNumFontColor = $(".CardNumFontColor").val();
+            var NameCop = $(".NameCop").val();
+            var NameX = $(".NameX").val();
+            var NameY = $(".NameY").val();
+            var NameFontSize = $(".NameFontSize").val();
+            var NameFontColor = $(".NameFontColor").val();
+            var CardType = $(".CardType").val();
+            var CardTypeX = $(".CardTypeX").val();
+            var CardTypeY = $(".CardTypeY").val();
+            var CardTypeFontSize = $(".CardTypeFontSize").val();
+            var CardTypeFontColor = $(".CardTypeFontColor").val();
+            var UpdateTime = $(".UpdateTime").val();
+            NameY = pxToRem(NameY);
+            NameX = pxToRem(NameX);
+            NameFontSize = pxToRem(NameFontSize);
+            CardNumX = pxToRem(CardNumX);
+            CardNumY = pxToRem(CardNumY);
+            CardNumFontSize = pxToRem(CardNumFontSize);
+            CardTypeX = pxToRem(CardTypeX);
+            CardTypeY = pxToRem(CardTypeY);
+            CardTypeFontSize = pxToRem(CardTypeFontSize);
+            setCss($("#NameCop"), NameY, NameX, NameFontSize, NameFontColor);
+            setCss($("#CardNum"), CardNumY, CardNumX, CardNumFontSize, CardNumFontColor);
+            setCss($("#CardType"), CardTypeY, CardTypeX, CardTypeFontSize, CardTypeFontColor);
+        });
+    </script>
+
+</body>
+
+</html>

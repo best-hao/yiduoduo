@@ -1,0 +1,1125 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet"  href="/Css/Mobile/shop/province.css" /> 
+    <link rel="stylesheet"  href="/Css/Mobile/shop/seller.css" /> 
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weuix.min.css" />
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/swipe.js" type="text/javascript" charset="utf-8"></script>
+    <script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/lazyimg.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/home.css" />
+    <style>
+    	.searchbg{background: transparent!important;border-bottom:none!important;transition: all .5s;box-shadow:none;}
+    	.searchbg-on{
+    		background: rgb(244, 174, 62)!important;
+    	}
+    	.searchPage{
+    		width: 100%;
+    position: absolute;
+    top: 0;
+    z-index: 11111111111111111111;
+  
+    background: #fff;
+    	}
+    </style>
+    <script>
+        wx.config({
+            debug: false, /* 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。*/
+            appId: '@ViewData["AppId"]', /* 必填，公众号的唯一标识*/
+            timestamp: '@ViewData["Timestamp"]', /* 必填，生成签名的时间戳*/
+            nonceStr: '@ViewData["NonceStr"]', /* 必填，生成签名的随机串*/
+            signature: '@ViewData["Signature"]',/* 必填，签名*/
+            jsApiList: [
+                    'checkJsApi',
+                    'onMenuShareTimeline',
+                    'onMenuShareAppMessage',
+                    'onMenuShareQQ',
+                    'onMenuShareWeibo',
+                    'hideMenuItems',
+                    'showMenuItems',
+                    'hideAllNonBaseMenuItem',
+                    'showAllNonBaseMenuItem',
+                    'translateVoice',
+                    'startRecord',
+                    'stopRecord',
+                    'onRecordEnd',
+                    'playVoice',
+                    'pauseVoice',
+                    'stopVoice',
+                    'uploadVoice',
+                    'downloadVoice',
+                    'chooseImage',
+                    'previewImage',
+                    'uploadImage',
+                    'downloadImage',
+                    'getNetworkType',
+                    'openLocation',
+                    'getLocation',
+                    'hideOptionMenu',
+                    'showOptionMenu',
+                    'closeWindow',
+                    'scanQRCode',
+                    'chooseWXPay',
+                    'openProductSpecificView',
+                    'addCard',
+                    'chooseCard',
+                    'openCard'
+            ]
+        });
+
+        wx.error(function (res) {
+            /*alert(res);*/
+            /*console.log(res);*/
+            /*alert('验证失败');*/
+        });
+
+        wx.ready(function () {
+            var link = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m';
+            var Logo = '@WorkContext.SellerInfo.Logo';
+            var imgUrl = '';
+            if (Logo.length == 0) {
+                imgUrl = "@(WorkContext.ShopConfig.ImageCDN)/upload/public/1805/05/9410ab49b6a04fd2ba0bb5e9c28828c2.png?w=100";
+            }
+            else {
+                imgUrl = "@(WorkContext.ShopConfig.ImageCDN)@{@WorkContext.SellerInfo.Logo}?w=100&h=100";
+            }
+                /*转发到朋友圈*/
+                wx.onMenuShareTimeline({
+                    title: '@WorkContext.SellerInfo.SellerName',
+                    link: link,
+                    imgUrl: imgUrl,
+                    success: function () {
+                        /*alert('转发成功！');*/
+                    },
+                    cancel: function () {
+                        /*alert('转发失败！');*/
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: '@WorkContext.SellerInfo.SellerName',
+                    desc: '@WorkContext.SellerInfo.Description',
+                    link: link,
+                    imgUrl: imgUrl,
+                    type: 'link',
+                    dataUrl: '',
+                    success: function () {
+                        /*alert('转发成功！');*/
+                    },
+                    cancel: function () {
+                        /*alert('转发失败！');*/
+                    }
+                });
+  
+            });
+            var sellerid = "@WorkContext.SellerInfo.SellerId";
+    </script>
+</head>
+<body ontouchstart>
+	@if(WorkContext.SellerInfo.SellerId==2 || WorkContext.SellerInfo.SellerId==43) 
+	{
+		if(ViewData["CloseAd"]=="0") 
+		{
+		<div class="ad-shade" style="display: none;">
+			<div class="ad-coupon">
+				<a href="/m/activity/coupon" >
+					<div class="tip-title">先领券 后购物</div>
+					<div class="get-coupon">立即领取</div>
+				</a>
+				<div class="close-ad">×</div>
+			</div>
+		</div>
+		}
+	}
+
+    <div id="app" style="display: none;" :style="{'display':pageIsShow}">
+    	
+        <div class="wapper" style="display: block;" >
+        	<div v-for='(item,index) in edit_list'>
+            <!--搜索框 tmpl-->
+            <div class="search" v-if='item.selector=="search"'>
+            	<header id="header" class="mui-bar mui-bar-transparent searchbg"  v-bind:class='windowScrollY>140?"searchbg-on":""'>
+							<a class="mui-icon" href="javascript:;" id="S_Address3" v-on:click='showprovince()'> 
+								<span id='ssx'>西安市</span>
+								<icon class='icon icon-74' style='font-size: 0.32rem;'></icon>
+							</a>
+							<a href="javascript:;" class='mui-a'>
+								<div class="soso clear">
+									<icon class='icon icon-4'></icon>
+									<div class="gosearch">
+										<input type="text" placeholder="秦商未来" style='height:0.6rem' readonly="readonly" v-on:click='togglesearch()'>
+										<div class='searchbtn' style='top:23%;'><icon class='icon icon-86' style='color:#fff'></icon></div>
+									</div>
+									
+								</div>
+							</a>			
+				   </header>
+                <!--<div class="searchbar_wrap"></div>-->
+            </div>
+            <!--轮播图 tmpl-->
+                <div  v-if="item.selector=='slide'">
+                    <div class="slide" v-if="item.type==1" v-bind:class="{slider:item.type==1}" style='height:3.52rem'>
+                        <ul>
+                            <li v-for="(slide, sindex) in item.slideLists">
+                                <a :href="slide.selectUrl">
+                                    <img :src="slide.picUrl+'?w=750$h=300&mode=pad'" style="width: 7.5rem;height: 3.52rem;" alt="">
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="dot">
+                            <span v-for="(slide,sindex) in item.slideLists" v-if="sindex==0" class="cur"></span>
+                            <span v-else></span>
+                        </div>
+                    </div>
+                    <div class="slide slide-banner" v-else>
+                        <div v-for="(slide, sindex) in item.slideLists">
+                            <a :href="slide.selectUrl">
+                                <img :src="slide.picUrl+'?w=750'" alt="">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                 <!--图片导航 tmpl-->
+	            <div v-if="item.selector=='hot_link'">
+	                <div class="weui-flex enter-into hot_link" >
+	                    <a  class="weui-flex-item" v-for="(hlist, hindex) in item.hotList" style="color: #666;" :href="hlist.selectUrl" v-on:click="Scan(hlist)">
+	                        <div>
+	                            <img v-if="hlist.picUrl" :src="hlist.picUrl" />
+	                        </div>
+	                        <p class="notice-title" v-text="hlist.title" ></p>
+	                    </a>
+	                </div>
+	            </div>
+	            <!--快报tmpl-->
+	          <div v-if="item.selector=='notice'">
+                <div class="notice">
+                    <div class="left notice-right">
+                        <div class="right-box">
+                            <div class="box">
+                                <div class="notice-box gd">
+                                    <ul>
+                                        <!--<li v-for="(item, index) in item.hotList" :key="index" style="line-height: 0.55rem;">
+                                            <a class="action_btn hidetxt1" :href="'/m/article/detail?id='+item.ArticleId" v-text="item.Title"></a>
+                                        </li>-->
+                                         <li  :key="index" style="line-height: 0.55rem;">
+                                            <a class="action_btn hidetxt1" :href="'/m/article/detail?id='+item.ArticleId" >秦商未来正式</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="left notice-icon">
+                        <img src="/Images/Mobile/notice.png?v=0.1" style="display: block;width: auto;height: 0.55rem;margin: 0 auto;" />
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <!--商品展示-->
+            <div v-if="item.selector=='goods_lists'">
+                <div class="goods_lists"  v-if="item.goodsListsData.length>0">
+                    <div  class="goods-lists" v-bind:class="{'style-1':item.type==1,'style-2':item.type==2,'style-3':item.type==3,'style-4':item.type==4,'style-5':item.type==5}">
+                       <div v-if="item.hasOwnProperty('ActivityType')">
+	                        <ul v-bind:style="{width:overX(item,index)}">
+	                            <li v-for="(item1, index1) in item.goodsListsData" :key="index1">
+	                                <a v-if="item1.ActivityType==1" :href="'/m/activity/CountDownDetail?id='+item1.ItemId" >
+	                                    <div class="goods-img-box weui-updown">
+	                                        <img v-if="item.type==5" :src="'@(WorkContext.ShopConfig.ImageCDN)/'+item1.SkuImg+'?w=750'" alt="" class="goods-img" />
+	                                        <img v-else :src="'@(WorkContext.ShopConfig.ImageCDN)/'+item1.SkuImg+'?w=300&h=300'" alt="" class="goods-img" />
+	                                    </div>
+	                                    <div class="goods-info-box">
+	                                        <div v-show="item.type!=2" class="goods-title hidetxt1" v-bind:class="{hidetxt2:item.type==3}" v-text="item1.Title"></div>
+	                                        <div class="goods-info">
+	                                            <span v-text="'秒杀价：'"></span>
+	                                            <span class="price" v-text="'¥ '+item1.ActivityPrice"></span>
+	                                        </div>
+	                                    </div>
+	                                    <div class="clearfix"></div>
+	                                </a>
+	                                <a v-else-if="item1.ActivityType==3" :href="'/m/activity/FirstBuyDetail?id='+item1.ItemId" >
+	                                    <div class="goods-img-box weui-updown">
+	                                        <img v-if="item.type==5" :src="'@(WorkContext.ShopConfig.ImageCDN)/'+item1.SkuImg+'?w=750'" alt="" class="goods-img" />
+	                                        <img v-else :src="'@(WorkContext.ShopConfig.ImageCDN)/'+item1.SkuImg+'?w=300&h=300'" alt="" class="goods-img" />
+	                                    </div>
+	                                    <div class="goods-info-box">
+	                                        <div v-show="item.type!=2" class="goods-title hidetxt1" v-bind:class="{hidetxt2:item.type==3}" v-text="item1.Title"></div>
+	                                        <div class="goods-info">
+	                                            <span v-text="'活动价：'"></span>
+	                                            <span class="price" v-text="'¥ '+item1.ActivityPrice"></span>
+	                                        </div>
+	                                    </div>
+	                                    <div class="clearfix"></div>
+	                                </a>
+	                                <a v-else-if="item1.ActivityType==10" :href="'/m/activity/giftDetail?id='+item1.ItemId" >
+	                                    <div class="goods-img-box weui-updown">
+	                                        <img v-if="item.type==5" :src="'@(WorkContext.ShopConfig.ImageCDN)/'+item1.SkuImg+'?w=750'" alt="" class="goods-img" />
+	                                        <img v-else :src="'@(WorkContext.ShopConfig.ImageCDN)/'+item1.SkuImg+'?w=300&h=300'" alt="" class="goods-img" />
+	                                    </div>
+	                                    <div class="goods-info-box">
+	                                        <div v-show="item.type!=2" class="goods-title hidetxt1" v-bind:class="{hidetxt2:item.type==3}" v-text="item1.Title"></div>
+	                                        <div class="goods-info">
+	                                            <span>@WorkContext.SellerInfo.ScoreName</span>
+	                                            <span class="price" v-text="'¥ '+item1.ActivityPrice"></span>
+	                                        </div>
+	                                    </div>
+	                                    <div class="clearfix"></div>
+	                                </a>
+	                                <a v-else :href="'/m/product/detail?id='+item1.ProductId">
+	                                    <div class="goods-img-box weui-updown">
+	                                        <img v-if="item.type==5" :src="'@(WorkContext.ShopConfig.ImageCDN)/'+item1.SkuImg+'?w=750'" alt="" class="goods-img" />
+	                                        <img v-else :src="'@(WorkContext.ShopConfig.ImageCDN)/'+item1.SkuImg+'?w=300&h=300'" alt="" class="goods-img" />
+	                                    </div>
+	                                    <div class="goods-info-box">
+	                                        <div v-show="item.type!=2" class="goods-title hidetxt1" v-bind:class="{hidetxt2:item.type==3}" v-text="item1.Title"></div>
+	                                        <div class="goods-info">
+	                                            <span v-text="'活动价：'"></span>
+	                                            <span class="price" v-text="'¥ '+item1.ActivityPrice"></span>
+	                                        </div>
+	                                    </div>
+	                                    <div class="clearfix"></div>
+	                                </a>
+	                                
+	                            </li>
+	                        </ul>
+	                        <div class="clearfix"></div>
+                        	
+                        </div>
+                        <div v-else>
+	                        <ul v-bind:style="{width:overX(item,index)}">
+	                            <li v-for="(item1, index1) in item.goodsListsData" :key="index1">
+	                                <a :href="'/m/product/detail?id='+item1.ProductId">
+	                                    <div class="goods-img-box weui-updown">
+	                                        <img v-if="item.type==5" :src="'@(WorkContext.ShopConfig.ImageCDN)/'+item1.PicUrl+'?w=750'" alt="" class="goods-img" />
+	                                        <img v-else :src="'@(WorkContext.ShopConfig.ImageCDN)/'+item1.PicUrl+'?w=300&h=300'" alt="" class="goods-img" />
+	                                    </div>
+	                                    <div class="goods-info-box">
+	                                        <div v-show="item.type!=2" class="goods-title hidetxt1" v-bind:class="{hidetxt2:item.type==3}" v-text="item1.ProductName"></div>
+	                                        <!--<div v-if="item1.hasOwnProperty('MarketPrice')">
+		                                        <div class="goods-info"  v-if="item1.MarketPrice>0">
+		                                            <span v-text="'原 价：'"></span>
+		                                            <del v-text="'¥ '+item1.MarketPrice"></del>
+		                                        </div>
+	                                        </div>-->
+	                                        <div class="goods-info">
+	                                            <span v-text="'售 价：'"></span>
+	                                            <span class="price" v-text="'¥ '+item1.SalePrice"></span>
+	                                        </div>
+	                                    </div>
+	                                    <div class="clearfix"></div>
+	                                </a>
+	                            </li>
+	                        </ul>
+	                        <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--橱窗一-->
+            <div v-if="item.selector=='window1'">
+                <div class="window1" >
+                    <div class="members_con">
+                        <section class="members_nav1">
+                            <ul class="clearfix">
+                                <li class="board3 big_board">
+                                    <span>
+                                        <a :href="item.window1[0].selectUrl" class="weui-updown">
+                                            <img :src="item.window1[0].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="board3 small_board">
+                                    <span>
+                                        <a :href="item.window1[1].selectUrl" class="weui-updown">
+                                            <img :src="item.window1[1].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="board3 small_board">
+                                    <span>
+                                        <a :href="item.window1[2].selectUrl" class="weui-updown">
+                                            <img :src="item.window1[2].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                            </ul>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <!--橱窗样式2-->
+            <div v-if="item.selector=='window2'">
+                <div class="window2" >
+                    <div class="members_con">
+                        <section class="members_nav1">
+                            <ul class="clearfix">
+                                <li class="board4 big_img" style="height:3.6rem">
+                                    <span>
+                                        <a :href="item.window2[0].selectUrl" class="weui-updown">
+                                            <img :src="item.window2[0].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="board4 mid_img" style="height:1.8rem;">
+                                    <span>
+                                        <a :href="item.window2[1].selectUrl" class="weui-updown">
+                                            <img :src="item.window2[1].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="board4 small_img" style="height:1.8rem;">
+                                    <span>
+                                        <a :href="item.window2[2].selectUrl" class="weui-updown">
+                                            <img :src="item.window2[2].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="board4 small_img" style="height:1.8rem;">
+                                    <span>
+                                        <a :href="item.window2[3].selectUrl" class="weui-updown">
+                                            <img :src="item.window2[3].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                            </ul>
+                        </section>
+                    </div>
+                </div>
+            </div>
+             <!--橱窗样式三-->
+            <div v-if="item.selector=='window3'">
+                <div class="window3"  >
+                    <div class="members_con">
+                        <section class="members_nav1">
+                            <ul class="clearfix">
+                                <li class="board6 mid1_img" style="height:1.8rem;">
+                                    <span>
+                                        <a :href="item.window3[0].selectUrl" class="weui-updown">
+                                            <img :src="item.window3[0].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="board6 small1_img" style="height:1.8rem;">
+                                    <span>
+                                        <a :href="item.window3[1].selectUrl" class="weui-updown">
+                                            <img :src="item.window3[1].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="board6 small1_img" style="height:1.8rem;">
+                                    <span>
+                                        <a :href="item.window3[2].selectUrl" class="weui-updown">
+                                            <img :src="item.window3[2].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="board6 mid1_img" style="height:1.8rem;">
+                                    <span>
+                                        <a :href="item.window3[3].selectUrl" class="weui-updown">
+                                            <img :src="item.window3[3].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="board6 small1_img" style="height:1.8rem;">
+                                    <span>
+                                        <a :href="item.window3[4].selectUrl" class="weui-updown">
+                                            <img :src="item.window3[4].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="board6 small1_img" style="height:1.8rem;">
+                                    <span>
+                                        <a :href="item.window3[5].selectUrl" class="weui-updown">
+                                            <img :src="item.window3[5].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                            </ul>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <!--橱窗样式四-->
+            <div v-if="item.selector=='window4'">
+                <div class="window4"  >
+                    <div class="members_con">
+                        <section class="members_nav1">
+                            <ul class="clearfix">
+                                <li class="board6 small_board1" style="height:1.8rem;" v-for="(winItem, sindex) in item.window4">
+                                    <span>
+                                        <a :href="winItem.selectUrl" class="weui-updown">
+                                            <img :src="winItem.picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+
+                            </ul>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <!--橱窗样式五-->
+            <div v-if="item.selector=='window5'">
+                <div class="window5"  >
+                    <div class="members_con">
+                        <section class="members_nav1">
+                            <ul class="clearfix">
+                                <li class="board6 small_board1" style="height:1.8rem;">
+                                    <span>
+                                        <a :href="item.window5[0].selectUrl" class="weui-updown">
+                                            <img :src="item.window5[0].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="board6 small_board1" style="height:1.8rem;">
+                                    <span>
+                                        <a :href="item.window5[1].selectUrl" class="weui-updown">
+                                            <img :src="item.window5[1].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="board6 small_board1" style="height:1.8rem;">
+                                    <span>
+                                        <a :href="item.window5[2].selectUrl" class="weui-updown">
+                                            <img :src="item.window5[2].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="board6 small_board1" style="height:1.8rem;">
+                                    <span>
+                                        <a :href="item.window5[3].selectUrl" class="weui-updown">
+                                            <img :src="item.window5[3].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="board6 small_board2" style="height:1.8rem;">
+                                    <span>
+                                        <a :href="item.window5[4].selectUrl" class="weui-updown">
+                                            <img :src="item.window5[4].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="board6 small_board2" style="height:1.8rem;">
+                                    <span>
+                                        <a :href="item.window5[5].selectUrl" class="weui-updown">
+                                            <img :src="item.window5[5].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="board6 small_board2" style="height:1.8rem;">
+                                    <span>
+                                        <a :href="item.window5[6].selectUrl" class="weui-updown">
+                                            <img :src="item.window5[6].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="board6 small_board2" style="height:1.8rem;">
+                                    <span>
+                                        <a :href="item.window5[7].selectUrl" class="weui-updown">
+                                            <img :src="item.window5[7].picUrl">
+                                        </a>
+                                    </span>
+                                </li>
+                            </ul>
+                        </section>
+                    </div>
+                </div>
+            </div>
+              <!--标题更多-->
+            <div v-if="item.selector=='more'">
+                    <div class="title-header more">
+                        <a class="l-block" v-for="(titem, tindex) in item.moreLists" :href="titem.selectUrl">
+                            <img class="icon fl" :src="titem.picUrl" style="width: auto;height: 0.52rem;padding-top: 0.14rem;">
+                            <!--<div class="clock clock_ing fl">
+                                 <em id="clockstate">距结束</em><span id="hour">07</span><i> : </i><span id="minute">16</span><i> : </i><span id="second">55</span>
+                            </div>
+                            <div class="clock clock_end fl" style="display: none;">
+                                <em>当前秒杀已结束，敬请期待</em>
+                            </div>-->
+                            <span class="fr"><span>更多&nbsp;&nbsp;></span></span>
+                            <div class="clearfix"></div>
+                        </a>
+	                    <div class="goods_lists" v-if="item.hasOwnProperty('goodsLists')">
+						    <div class="goods-lists style-4" v-if="item.goodsLists">
+						        <div>
+						            <ul v-bind:style="{width:overX(item,index)}">
+						                <li v-for="(sitem, sindex) in item.goodsLists">
+						                    <a :href="'/m/activity/CountDownDetail?id='+sitem.ItemId">
+						                        <div class="goods-img-box weui-updown">
+						                            <img :src="'@(WorkContext.ShopConfig.ImageCDN)'+sitem.ShareImg+'?w=300&h=300'" alt="" class="goods-img">
+						                        </div>
+						                        <div class="goods-info-box">
+						                            <div class="goods-title hidetxt1" v-text="sitem.ProductName"></div>
+						                            <div class="goods-info"><span v-text="'活动价：'"></span>  <span class="price" v-text="'¥ '+sitem.ActivityPrice"></span>
+						                            </div>
+						                        </div>
+						                        <div class="clearfix"></div>
+						                    </a>
+						                </li>
+						                
+						            </ul>
+						            <div class="clearfix"></div>
+						        </div>
+						    </div>
+						</div>
+                    </div>       
+            </div>
+             <!--间隔-->
+            <div v-if="item.selector=='line'">
+                <div >
+                    <div class="line" v-bind:style="{height:(item.lineHit/50)+'rem','background':'#f2f2f2'}"></div>
+                </div>
+            </div>
+           </div>
+        </div>
+        <!--底部菜单-->
+        
+        <div class="weui_tabbar " v-if="footerLists" style="padding-top: 0.1rem;" v-show="isShow">
+            <a v-for="(item, index) in footerLists" :key="index" :href="item.MenuUrl" class="weui_tabbar_item">
+                <div class="weui_tabbar_icon">
+                    <img v-if="item.MenuPic" :src="item.MenuPic" style="display: block;width: 0.5rem;height: 0.5rem;margin: 0 auto;" />
+                </div>
+                <p class="weui_tabbar_label" v-text="item.MenuName" style="margin: 0;"></p>
+            </a>
+        </div>
+        
+       <!--四级联动-->
+       
+         	<div  id="Show_City_Four" v-bind:class='isshowprovince?"brouce-in":"brouce-out"' class='m-cityselect'>
+         		<icon v-on:click='showprovince()' class='icon icon-9 mask-icon' v-bind:class='isshowprovince?"mask-icon-up":""'></icon>
+            <div class="cityselect-header">
+                <p class="cityselect-title">所在地区</p>
+                <div class="cityselect-nav" v-if='clickList.length>0'>
+                    <a v-for="(item,index) in clickList" 
+                    	:key="index" href="javascript:;" :class="{'crt':index == previndex}" v-text='item.regionname'
+                    	v-on:click='prevnext(index)'></a>                   
+                </div>
+                <div class="cityselect-nav" v-else>
+                    <a href="javascript:;" class="crt" >北京市</a>                    
+                </div>
+            </div>
+            <ul  class="cityselect-content cityselect-move-animate" :class="{'cityselect-next':isprevindex<isnextindex}" 
+            	id="S_City_Show">
+                <li class="cityselect-item" >
+                    <div class="cityselect-item-box" id="Province_chioce">
+                        <a v-for="(item,index) in provinceList" :key="index" :class="{'crt':index == provinceindex}" v-on:click='getCityList(item.regionid,item.regionname,index)' 
+                        	href="javascript:;" ><span v-text='item.regionname'></span></a>
+                    </div>
+                </li>
+                <li class="cityselect-item" v-show='iscity'>
+                    <div class="cityselect-item-box" id="City_chioce">
+                    	<a class="" v-for="(item,index) in cityList" :key="index" :class="{'crt':index == cityindex}" href="javascript:;" 
+                    		v-on:click='getCountyList(item.regionid,item.regionname,index)'><span v-text='item.regionname'></span></a>
+                    </div>
+                </li>
+                <li class="cityselect-item" v-show='iscounty'>
+                	 <div class="cityselect-item-box" id="Province_chioce">
+                      <a class="" v-for="(item,index) in countyList" :key="index" :class="{'crt':index == countyindex}" href="javascript:;" 
+                    		v-on:click='getTownList(item.regionid,item.regionname,index)'><span v-text='item.regionname'></span></a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="mask-black" v-show='isshowprovince'></div>
+        <!--搜索页面-->
+        <div class='searchPage' v-cloak v-if='isSearch' ref='more'  v-bind:style='{height:windowHeight}'>
+						  <header>
+								<div class="bg-white weui-header "> 
+							  		<div class="weui-header-left"> <a class="icon icon-109 fl333" v-on:click='togglesearch()'	></a>  </div>
+						   			<!--<h1 class="weui-header-title fl333" style='color:#333'>更多行业列表</h1>-->
+						   			<div class="search">
+						   				<div class="searchbar_wrap"></div>
+						   			</div>
+						   			
+						    	</div>  
+					      </header>
+                          <div class="weui_grids grids-small">     
+				            
+				         sdfasfas
+				            </div>
+				  </div>
+    </div>
+    <script type="text/javascript">
+//  	判断是否pc
+    	function IsPC() {
+	        var userAgentInfo = navigator.userAgent;
+	        var Agents = ["Android", "iPhone",
+	                    "SymbianOS", "Windows Phone",
+	                    "iPad", "iPod"];
+	        var flag = true;
+	        for (var v = 0; v < Agents.length; v++) {
+	            if (userAgentInfo.indexOf(Agents[v]) > 0) {
+	                flag = false;
+	                break;
+	            }
+	        }
+	        return flag;
+	    }
+    	/*获取优惠券列表*/
+		function couponLists() {
+        	$.ajax({
+        		type:"post",
+        		url:"/m/activity/coupon",
+        		async:true,
+        		data:{page:1,size:10,search:"",sort:0},
+        		dataType:"json",
+        		success:function(rel){
+        			if(rel.Code==1){
+        				if(rel.Data.length>0){
+        					$(".ad-shade").show();
+        				}
+        			}
+        		}
+        	});
+        }
+    	$.showLoading();
+    	/*function initiator() {
+    		
+    	}*/
+    	/*兼容所有浏览器，获取浏览器宽度，高度*/
+		var w = window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth;
+		var h = window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight;
+    	var datajson = [@ViewData["TemplateData"]];
+    	console.log(datajson)
+    	if(datajson.length>0){
+    		datajson = datajson[0];
+    	}
+    	Vue.config.productionTip = false;
+        var vm = new Vue({
+			el: '#app',
+			data: {
+				pageIsShow: 'none',
+				isShow: false,
+				modelIndex: 0,
+				pageModuleList: [],
+				editModuleList: [],
+				CateId: 0,
+	        	slideList: [],
+	        	noticeData: [],
+	        	productList: [],
+	        	footerLists: [],
+	        	searchKey: '',
+	        	page: 2,
+	        	showLoading: true,
+	        	showNoData: false,
+	        	selArr: [],
+	        	subArr: [],
+	        	html: [],
+	        	windowScrollY:0,//页面滚动距离
+	        	isshowprovince:false,
+	        	clickList:[],//选中的省市区列表
+	        	isprevindex:0,//上一个下标
+                isnextindex:0,//下一个下标
+                provinceList:[],
+		        cityList:[],
+		        countyList:[],
+		        iscity:false,
+                iscounty:false,
+                provinceindex:0,
+                cityindex:0,
+                countyindex:0,
+                previndex:0,
+                isSearch:false,//搜索页面显示隐藏
+                windowHeight:0,
+                edit_list:[],
+	        },
+	        created: function(){
+	        	var _this = this;
+	        	if(datajson){
+	        		datajson.forEach(function(v,i){
+	        			_this.pageModuleList = v.page_list;
+	        			_this.editModuleList = v.edit_list;
+	        		});
+	        		_this.editModuleList.forEach(function(v,i){
+	        			if(v.selector=="notice"){
+	        				_this.CateId = v.notice.CateId;
+	        			}else if(v.selector=="more"){
+	        				if(v.hasOwnProperty("moreLists")){
+	        					if(v.moreLists.length>0){
+	        						if(v.moreLists[0].hasOwnProperty("ActivityType")){
+		        						if(v.moreLists[0].ActivityType!=""){
+		        							var ActivityType = v.moreLists[0].ActivityType;
+		        							if(ActivityType==1){
+		        								_this.getCountDownGoods(v);
+		        							}
+		        						}
+	        						}
+	        					}
+	        				}
+	        				
+	        			}
+	        		});
+	        	}
+	        },
+	        mounted: function () {
+	        	var _this = this;
+			    this.$nextTick(function () {
+			    	/*_this.html[0] = $(".search");*/
+			    	this.pageModuleList.forEach(function(v,i){
+			    		var selector = '.'+v.selector;
+			    		if(_this.subArr[v.selector]){
+			    		}else{
+			    			Vue.set(_this.subArr,v.selector,0);
+			    		}
+		    			Vue.set(_this.selArr,i,{"selector":v.selector,"index":_this.subArr[v.selector]});
+			    		_this.subArr[v.selector]++;
+			    	});
+
+
+			    	_this.selArr.forEach(function(v,i){
+			    		var selector = '.'+v.selector;
+			    		_this.html[i] = $(selector).eq(v.index);
+			    	});
+			    	/*console.log(_this.html);*/
+		    		$(".wapper").html(_this.html);
+		    		
+			  		this.initSearch();
+			  		this.getNotice();
+			  		this.rollMessage();
+			  		this.lazyload();
+			  		/*this.getFooter();
+			  		_this.isShow = true;*/
+			  		if(IsPC()){
+			  			this.getFooter();
+			  			_this.isShow = true;
+			  		}else{
+			  			if('@ViewData["IsWeiXin"]'==1){
+			  				this.getFooter();
+			  				_this.isShow = true;
+			  			}else{
+			  				if('@WorkContext.IsApp'==1){
+			  					_this.isShow = false;
+				  			}else{
+				  				this.getFooter();
+				  				_this.isShow = true;
+				  			}
+			  				
+			  			}
+			  			
+			  		}
+			  		//console.log(this.editModuleList);
+			  	})
+			    window.addEventListener('scroll', this.handleScroll);
+			    var  w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+		　　         var  h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight; 
+		        _this.windowHeight= (h+150) +'px';
+		        _this.getData();
+		    },
+		    methods: {
+		    	getData:function(){
+		    		var _this=this;
+		    		console.log(datajson)
+		    		for(var i=0;i<datajson.length;i++){
+                      _this.edit_list=datajson[i].edit_list
+                    }
+		    	},
+		    	togglesearch:function(){
+		    		var _this=this;
+		    		_this.isSearch=!_this.isSearch;	
+		    	 },
+		    	 handleScroll:function () {
+		    	 	var _this=this;
+		    	 	_this.windowScrollY=window.scrollY;                    
+			     },
+			   showprovince:function(){
+					this.isshowprovince=!this.isshowprovince
+					console.log(this.isshowprovince)
+					this.getprovinceList()
+				},
+				getprovinceList:function(){
+					var _this=this;
+					$.ajax({
+			    			type:"get",
+			    			url:"/Api/User/GetProvinceList",
+			    			async:true,
+			    			success: function(rel){
+			    				console.log(rel.data)
+			    				_this.provinceList=rel.data	
+			    			}
+				    	});			
+				},
+				getCityList:function(id,name,index){
+					this.clickList=[];
+					this.clickList.push({regionid: id, regionname:name})
+					this.prevnext(0);
+				       var _this=this;
+				       console.log(id,index)
+				       _this.provinceindex=index;
+				       _this.addrname=name;
+				       _this.iscity=true;
+					    $.ajax({
+				    			type:"get",
+				    			url:"/Api/User/GetCityList?Province="+id,
+				    			async:true,
+				    			success: function(rel){
+				    				console.log(rel.data)
+				    				_this.cityList=rel.data;		    				
+				    			}
+				    		});
+				    	
+				},
+				getCountyList:function(id,name,index){
+					this.clickList.splice(1,1)
+					this.clickList.push({regionid: id, regionname:name});
+					this.prevnext(1);
+				       var _this=this;
+				       console.log(id,index)
+				       _this.cityindex=index;
+				       _this.iscounty=true;
+				       _this.addrname=name;
+					    $.ajax({
+				    			type:"get",
+				    			url:"/Api/User/GetCountyList?City="+id,
+				    			async:true,
+				    			success: function(rel){
+				    				console.log(rel.data);
+				    				_this.countyList=rel.data;		    				
+				    			}
+				    		});
+				},
+				getTownList:function(id,name,index){//根据省市区调用商家
+					var _this=this;
+					_this.prevnext(2)
+					_this.clickList.splice(2,1)
+					_this.clickList.push({regionid: id, regionname:name})
+					_this.countyindex=index;
+		//          _this.isshowprovince=!_this.isshowprovince;
+		            _this.addrname=name;
+		            var clickList=_this.clickList
+		            var shopurl="/Api/Shop/AllShopList?Province="+clickList[0].regionid+"&City="+clickList[1].regionid+"&County="+clickList[2].regionid+"&page=1&size=10";
+				},
+		
+				prevnext:function(index){
+					var _this=this;
+					if(_this.previndex>index){
+						_this.isprevindex=1;
+					    _this.isnextindex=0;
+					}else if(_this.previndex<index){
+						_this.isprevindex=0;
+					    _this.isnextindex=1;
+					}
+					_this.previndex=index;
+				},
+				getCountDownGoods: function(v) {
+					var _this = this;
+					$.post('/m/activity/CountDown', {
+				        page: 1,
+				        size: 10,
+				        type: 3
+				
+				    }, function (rel) {
+				        var datas = JSON.parse(rel);
+				        if (datas.Code == 1) {
+				        	Vue.set(v,'goodsLists',datas.Data);
+				        	console.log(_this.editModuleList);
+				        }
+				    }, 'JSON');
+				 	
+				},
+		    	initSearch: function () {
+		    		/*搜索*/
+		            $('.searchbar_wrap').searchBar({
+		                cancelText: "取消",
+		                searchText: '关键字',
+		                onsubmit:function(value){
+		                	var search = value;
+							var url = '/m/product/list?cateid=0&search='+search;
+							window.location.href='/m/product/list?cateid=0&search='+search;
+    					}
+
+		            });
+		    	},
+
+		    	initSlider: function (){
+					/*轮播图*/
+					$('.slider').swipeSlide({
+						autoSwipe:true,/*自动切换默认是*/
+						speed:3000,/*速度默认4000*/
+						continuousScroll:true,/*默认否*/
+						transitionType:'cubic-bezier(0.22, 0.69, 0.72, 0.88)',/*过渡动画linear/ease/ease-in/ease-out/ease-in-out/cubic-bezier*/
+						lazyLoad:true,/*懒加载默认否*/
+						firstCallback : function(i,sum,me){
+				            me.find('.dot').children().first().addClass('cur');
+				        },
+				        callback : function(i,sum,me){
+				            me.find('.dot').children().eq(i).addClass('cur').siblings().removeClass('cur');
+				        }
+					});
+		    	},
+		    	getNotice: function () {
+		    		//获取快报数据列表
+		    		var _this = this;
+		    		var CateId = 0;
+		    		CateId = _this.CateId;
+		    		$.ajax({
+						type:"post",
+						url:"/m/website/getarticlelist",
+						async:true,
+						data: {CateId: CateId,Size: 20,Page: 1},
+						dataType: "json",
+						success: function(rel){
+
+							if(rel.Code==0){
+							}else{
+								_this.noticeData = rel.Data;
+							}
+						}
+					});
+		    	},
+		    	rollMessage: function () {
+		    		/* 快报滚动*/
+		            var $this = $(".notice-box");
+		            var scrollTimer;
+		            function scrollNews(obj) {
+		                var $self = obj.find("ul");
+		                var lineHeight = $self.find("li:first").height();
+		                lineHeight = (lineHeight/100)*2;
+		                $self.animate({
+		                    "marginTop": -lineHeight + "rem"
+		                }, 500, function () {
+		                    $self.css({
+		                        marginTop: 0
+		                    }).find("li:first").appendTo($self);
+		                });
+		            }
+		            scrollTimer = setInterval(function () {
+		                scrollNews($this);
+		            }, 2000);
+		    	},
+		    	getFooter: function () {
+		    		var _this = this;
+		    		$.ajax({
+		    			type:"get",
+		    			url:"/m/tool/navbar",
+		    			async:true,
+		    			success: function(rel){
+		    				var rst = JSON.parse(rel);
+		    				if(rst.Code==1){
+		    						_this.footerLists = rst.Data;
+
+		    				}
+		    			}
+		    		});
+		    	},
+		    	lazyload: function () {
+		    		var lazyloadImg = new LazyloadImg({
+			            el: '.weui-updown [data-src]', //匹配元素
+			            top: 50, /*元素在顶部伸出长度触发加载机制*/
+			            right: 50, /*元素在右边伸出长度触发加载机制*/
+			            bottom: 50, /*元素在底部伸出长度触发加载机制*/
+			            left: 0, /*元素在左边伸出长度触发加载机制*/
+			            qriginal: false, /* true，自动将图片剪切成默认图片的宽高；false显示图片真实宽高*/
+			            load: function(el) {
+			                el.style.cssText += '-webkit-animation: fadeIn 01s ease 0.2s 1 both;animation: fadeIn 1s ease 0.2s 1 both;';
+			            },
+			            error: function(el) {
+
+			            }
+		        	});
+		    	},
+		    	overX: function (item,index) {
+					if(item.type==4){
+						var w = 2.5*item.goodsListsData.length;
+						w = w+'rem';
+						return w;
+
+					}else if(item.goodsLists){
+						var w = 2.5*item.goodsLists.length;
+						w = w+'rem';
+						return w;
+					}
+			    },
+			    
+			    getMessage: function(json) {
+			    	
+			    },
+			    
+			    Scan: function(hlist) {
+			    	if(hlist.title=="扫一扫"){
+				   		var device = '@ViewData["IsWeiXin"]';
+				   		if(device==1){
+				   			wx.ready(function() {
+						        wx.checkJsApi({
+						            jsApiList : ['scanQRCode'],
+						            success : function(res) {
+						
+						            }
+						        });
+								wx.scanQRCode({
+					                needResult : 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+					                scanType : [ "qrCode"], // 可以指定扫二维码还是一维码，默认二者都有
+					                success : function(res) {
+					                	//var jsonstr = JSON.stringify(res);
+					                	//alert(jsonstr);
+					                	
+					                	var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+					                	var jsonobj = JSON.parse(result);
+					                	window.location.href = jsonobj.url;//因为我这边是扫描后有个链接，然后跳转到该页面*/
+					                }
+					            });
+						
+						    });
+				   		}else{
+				   			if(navigator.userAgent.indexOf("iPhone")>0){
+				   				scan();
+				   			}
+				   			if(navigator.userAgent.indexOf("Android")>0){
+				   				//window.android.Scan();
+				   				window.js.openCamera();
+				   			}
+				   			/*var sponsor_id = $(this).attr('sponsor_id');
+							//跳转iphone客户端
+							if(isiphone=navigator.userAgent.indexOf("iPhone")>0){
+					        	msg ={
+					                'sponsor_id': sponsor_id
+					            }
+					            window.webkit.messageHandlers.initiator.postMessage();
+					        }
+					        //跳转安卓客户端
+					        if(isAndroid=navigator.userAgent.indexOf("Android")>0){
+					            Android.initiator(sponsor_id);
+					        }*/
+				   		}
+			    	}
+			    }
+		    }
+		});
+		$(function(){
+			couponLists();
+			setTimeout(function(){
+				$.hideLoading();
+				vm.pageIsShow = 'block';
+			},100);
+			setTimeout(function(){
+				vm.initSlider();
+			},2000);
+			$(".ad-shade").on("click",function(){
+				$(".ad-shade").hide();
+				$.ajax({
+					type:"post",
+					url:"/m/home/CloseAd",
+					async:true,
+					data:{CloseAd:1},
+					dataType:"json",
+					success:function(rel) {
+						
+					}
+				});
+			});
+		});
+    </script>
+</body>
+
+</html>

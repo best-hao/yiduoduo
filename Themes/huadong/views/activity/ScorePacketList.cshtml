@@ -1,0 +1,387 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>积分红包记录</title>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css"/>
+		<script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/swipe.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/icon/iconfont.js"></script>
+		<style type="text/css">
+			body{width:7.5rem;overflow-x:hidden;margin:0 auto}
+			.ell-1{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+			.ell-2{overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+			.color{color:#ff4800}
+			.bg{background:#ff4800}
+			.gary{color:#999}
+			.common-header{position:fixed;width:7.5rem;top:0;left:50%;margin-left:-3.75rem;background:#ff4800;height:.8rem;line-height:.8rem;margin-bottom:.06rem;-moz-box-shadow:0 2px 10px #d9d9d9;-webkit-box-shadow:0 2px 10px #d9d9d9;box-shadow:0 2px 10px #d9d9d9;z-index:110}
+			.common-header .title{text-align:center;padding:0 1rem;color:#fff;font-size:.3rem}
+			.common-header .header-back{position:absolute;top:0;left:0;width:.6rem;text-align:center;color:#fff}
+			.common-header .header-menu{position:absolute;top:0;right:0;width:.6rem;text-align:center}
+			.shade{display:none;position:fixed;width:7.5rem;height:100%;top:0;left:50%;margin-left:-3.75rem;background:rgba(0,0,0,.7);z-index:100}
+			.shade-mask{position:absolute;width:100%;height:100%;top:0;left:0;z-index:101}
+			.shade-content{position:absolute;bottom:0;left:0;height:8rem;background:#fff;z-index:102}
+			.weui_dialog_hd{padding:0}
+			.weui_toast{padding:0 15px;font-size:.32rem}
+			.score-hongbao{width:7.5rem;font-size:12px;margin:0 auto;color:#333;font-family:"微软雅黑";overflow: hidden;}
+			[v-cloak] {
+			    display: none;
+			}
+			.main{width: 7.1rem;overflow: hidden; margin:.2rem;background:#fff;border-radius:5px;margin-top:2.1rem}
+			.icon{width:1em;height:1em;vertical-align:-.15em;fill:currentColor;overflow:hidden}
+			li{list-style:none}
+			.tab-box{text-align:center;position:fixed;width:7.5rem;top:.8rem;left:50%;margin-left:-3.75rem;background:#f2f2f2;z-index:110;padding:.2rem 0}
+			.tab-box{text-align:center}
+			.tab-box .weui-flex-item{height:1rem;line-height:1rem;border-radius:5px;background:#e6e6e6;font-size:.32rem;font-weight:500}
+			.tab-box .cur{background:#fff}
+			.tab{width:7.1rem;margin:0 auto}
+			.list-box{position:relative;overflow:hidden;width:7.1rem;display: none;}
+			.list-box li{height:1rem;line-height:.5rem;padding:.2rem 0;border-bottom:1px solid #f2f2f2}
+			.list-box .li-item{height:1rem;line-height:.5rem;color:#333}
+			.list-box .icon-box{height:1rem;line-height:1rem;width:1rem}
+			.list-box .icon-box .iconfont{font-size:1rem;color:#cf3c35}
+			.list-box .info-box{width:3.8rem}
+			.list-box .score-box{width:1.8rem;height:1rem;line-height:1rem;text-align:right;padding-right:.2rem;font-size:.32rem}
+			.nodata{text-align:center;line-height:1rem;height:1rem;display:none}
+			.send{display: block;}
+			.recive{position:relative;left:100%;background:#fff;}
+			.loading{height:1rem;line-height:1rem;overflow:hidden}
+			.loading .weui_cells_title{margin:0;padding:0}
+			.loading .weui-loadmore{margin:0;width:100%;height:.6rem;line-height:.6rem;margin-top:.2rem}
+			.nomore{height:1rem;line-height:1rem;text-align:center;color:#999}
+
+		</style>
+		
+	</head>
+	<body>
+		<div id="score-hongbao" class="score-hongbao" v-cloak>
+			<div class="common-header"> 
+				<div class="header-back" onclick="goToBack()"><span class="icon iconfont">&#xe60e;</span></div>
+			    <div class="title ell-1">积分红包记录</div> 
+			    <!--<div class="header-menu"><span class="icon iconfont">&#xe620;</span></div>-->
+		    </div>
+		    <div class="tab-box">
+	    		<div class="weui-flex tab">
+	    			<div class="weui-flex-item" :class="{'cur':cur==0}" v-on:click="tabList(0)">发出的红包</div>
+	    			<div class="weui-flex-item" :class="{'cur':cur==1}"  v-on:click="tabList(1)">收到的红包</div>
+	    		</div>
+	    	</div>
+		    <div class="main">
+		    	
+		    	
+				<div class="list-box send"  :style="{'height':height}">
+					<ul class="list" >
+						<li v-for="(item, index) of list1">
+							<a href="javascript:;" class="li-item" v-on:click="linkFun(0,item)">
+								<div class="left icon-box">
+									<span class="icon iconfont">&#xe656;</span>
+								</div>
+								<div class="left info-box">
+									<div class="title ell-1">已领取{{calc(item.redpackecount,"-",item.redpacketnum,0)}}<span>/</span>{{item.redpackecount}}个，已拆{{calc(item.redpacketsum,"-",item.redpacketremain,3)}}<span>/</span>{{item.redpacketsum}}积分</div>
+									<div class="time">{{item.addtime}}</div>
+								</div>
+								<div class="right score-box">
+									{{item.redpacketsum}} 积分
+								</div>
+							</a>
+							<div class="clearfix"></div>
+						</li>
+					</ul>
+				</div>
+				<div class="list-box recive" :style="{'height':height}">
+					<ul class="list">
+						<li v-for="(item, index) of list2">
+							<a href="javascript:;" class="li-item" v-on:click="linkFun(1,item)">
+								<div class="left icon-box">
+									<span class="icon iconfont">&#xe656;</span>
+								</div>
+								<div class="left info-box">
+									<div class="title ell-1">来自-{{item.sellerusername}}</div>
+									<div class="time">{{item.addtime}}</div>
+								</div>
+								<div class="right score-box">
+									{{item.usescore}} 积分
+								</div>
+							</a>
+							<div class="clearfix"></div>
+						</li>
+					</ul>
+				</div>	
+		    </div>
+		    <div class="loading">
+				<div class="weui_cells_title tcenter hide" id="more">
+					<div class="weui-loadmore">
+			            <i class="weui-loading"></i>
+			            <span class="weui-loadmore-tips">正在加载</span>
+			        </div>
+				</div>
+				<div v-if="page[cur]==1" class="weui_cells_title tcenter hide" id="nodata">
+					暂无数据
+				</div>
+				<div v-else class="weui_cells_title tcenter hide" id="nomore">
+					没有更多数据了
+				</div>
+			</div>
+		    
+		</div>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script type="text/javascript">
+			var IsApp = "@WorkContext.IsApp";
+			var uid = "@WorkContext.Uid";
+			//返回交互
+			function goToBack() {
+	    		if(IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+						window.js.goBack();
+					}
+				}else{
+					self.location=document.referrer;
+				}
+	
+			}
+			var score_vue = new Vue({
+				el: '#score-hongbao',
+				data: {
+					cur: 0,
+					page: [1,1],
+					size: 10,
+					list1: [],
+					list2: [],
+					height: 0
+				},
+				created: function() {
+					this.getList1();
+					//this.getList2();
+				},
+				methods: {
+					tabList: function(index) {
+						this.cur = index;
+						this.height = 0;
+						this.page[index] = 1;
+						this.list1 = [];
+						this.list2 = [];
+						
+						if(index==1){
+							this.getList2();
+							$(".list-box").hide();
+							$(".list-box").eq(index).css("display","block");
+							$(".list-box").eq(1).animate({"left":"50%","margin-left":"-3.55rem"},300);
+						}else{
+							this.getList1();
+							$(".list-box").eq(1).animate({"left":"100%","margin-left":"0"},300);
+							$(".list-box").eq(index).css("display","block");
+							setTimeout(function(){
+								$(".recive").hide();
+							},300);
+						}
+						
+					},
+					linkFun: function(type,id){
+						var _this = this;
+						if(IsApp==1){
+							if (type == 1) {
+								var paymentsn = String(id.paymentsn);
+								if(navigator.userAgent.indexOf("iPhone")>0){
+									openRedPacket(paymentsn);
+								}
+								if(navigator.userAgent.indexOf("Android")>0){
+									window.js.openRedPacket(paymentsn);
+								}
+							}else{
+								var itemId = String(id.itemid);
+								if(navigator.userAgent.indexOf("iPhone")>0){
+									openRedPacket(itemId);
+								}
+								if(navigator.userAgent.indexOf("Android")>0){
+									window.js.openRedPacket(itemId);
+								}
+							}
+						}else{
+							if (type == 1) {
+								window.location.href="/m/activity/ScoreOpenPacket?ItemId="+id.paymentsn+"&IsApp="+IsApp;
+							}else{
+								window.location.href="/m/activity/ScoreOpenPacket?ItemId="+id.itemid+"&IsApp="+IsApp;
+							}
+						}
+					},
+					getList1: function(){
+						var _this = this;
+						    $.ajax({
+								type:"get",
+								url:"/Api/Activity/ScoreRedPacketList?userid="+uid+"&page="+_this.page[0]+"&size="+_this.size+"&t="+Math.random(),
+								async:true,
+								beforeSend: function() {
+									$("#more").show();
+								},
+								dataType:"json",
+								success: function(rel){
+									$("#more").hide();
+									if(rel.code==1){
+										if(rel.data.length>0 && rel.data!="[]" && rel.data!=""){
+											rel.data.forEach(function(v,i){
+												_this.list1.push(v);
+											});
+											_this.page[0]++;
+											_this.calcHeight();
+											if(rel.data.length<_this.size){
+												$("#nomore").show();
+											}
+										}else{
+											if(_this.page[_this.cur]==1){
+												$("#nodata").show();
+											}else{
+												$("#nomore").show();
+											}
+										}
+									}else{
+										if(_this.page[_this.cur]==1){
+											$("#nodata").show();
+										}else{
+											$("#nomore").show();
+										}
+									}
+								}
+								
+							});
+							
+					    
+					    
+					},
+					getList2: function(){
+						var _this = this;
+							$.ajax({
+								type:"get",
+								url:"/Api/User/GetUserScoreFlow?userid="+uid+"&FlowType=29&page="+_this.page[1]+"&size="+_this.size+"&t="+Math.random(),
+								async:true,
+								beforeSend: function() {
+									$("#more").show();
+								},
+								dataType:"json",
+								success: function(rel){
+									$("#more").hide();
+									if(rel.code==1){
+										if(rel.data.length>0 && rel.data!="[]" && rel.data!=""){
+											rel.data.forEach(function(v,i){
+												_this.list2.push(v);
+											});
+											_this.page[1]++;
+											_this.calcHeight();
+											if(rel.data.length<_this.size){
+												$("#nomore").show();
+											}
+										}else{
+											if(_this.page[_this.cur]==1){
+												$("#nodata").show();
+											}else{
+												$("#nomore").show();
+											}
+										}
+									}else{
+										if(_this.page[_this.cur]==1){
+											$("#nodata").show();
+										}else{
+											$("#nomore").show();
+										}
+									}
+								}
+								
+							});
+					},
+					calcHeight: function(){
+						if(this.cur==0){
+							var length = this.list1.length;
+							/*if(length==0 && this.page[this.cur]==1){
+								length = 1;
+							}*/
+							console.log(this.list1.length);
+							var h = this.calc(71,"*",length,2);
+							console.log(h);
+							h = this.calc(h,"/",50,6);
+							h = h+"rem";
+							this.height = h;
+							console.log(this.height);
+						}else if(this.cur==1){
+							var length = this.list2.length;
+							/*if(length==0 && this.page[this.cur]==1){
+								length = 1;
+							}*/
+							var h = this.calc(71,"*",length,2);
+							h = this.calc(h,"/",50,6);
+							h = h+"rem";
+							this.height = h;
+						}
+						
+					},
+					calc: function (arg1, op, arg2,dot) {
+				        var ra = 1, rb = 1, m;
+				        try {
+				            ra = arg1.toString().split('.')[1].length;
+				        } catch (e) {
+				        }
+				        try {
+				            rb = arg2.toString().split('.')[1].length;
+				        } catch (e) {
+				        }
+				        m = Math.pow(10, Math.max(ra, rb));
+				
+				        switch (op) {
+				            case '+':
+				            case '-':
+				                arg1 = Math.round(arg1 * m);
+				                arg2 = Math.round(arg2 * m);
+				                break;
+				            case '*':
+				                ra = Math.pow(10, ra);
+				                rb = Math.pow(10, rb);
+				                m = ra * rb;
+				                arg1 = Math.round(arg1 * ra);
+				                arg2 = Math.round(arg2 * rb);
+				                break;
+				            case '/':
+				                arg1 = Math.round(arg1 * m);
+				                arg2 = Math.round(arg2 * m);
+				                m = 1;
+				                break;
+				        }
+				        try {
+				            var result = eval('(' + '(' + arg1 + ')' + op + '(' + arg2 + ')' + ')/' + m);
+				        } catch (e) {
+				        }
+				        if(result.toString().indexOf(".")!=-1){
+				        	var strarr = result.toString().split(".");
+				        	if(strarr[1].length>dot){
+				        		result = strarr[0]+"."+strarr[1].substring(0,dot);
+				        	}
+				        }
+				        return result;
+				    }
+				}
+			});
+			$(function(){
+				$(window).scroll(function() {
+			        var scrollTop = $(this).scrollTop();
+			        var scrollHeight = $(document).height();
+			        var windowHeight = $(this).height();
+			        if (scrollTop + windowHeight == scrollHeight) {
+			        	
+			            if(score_vue.cur==0){
+			            	score_vue.getList1();
+			            }else if(score_vue.cur==1){
+			            	console.log(score_vue.cur);
+			            	score_vue.getList2();
+			            	
+			            }
+		        	}
+			    });
+			})
+		</script>
+	</body>
+</html>

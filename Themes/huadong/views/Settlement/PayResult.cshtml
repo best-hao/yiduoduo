@@ -1,0 +1,125 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>支付提醒</title>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/weui3.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/icon.css" />
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css">
+        body{
+            background-color:#fff;
+        }
+        .pay_result_status .weui_icon_msg:before{
+            font-size: 0.55rem;
+        }
+        .pay_result_status .weui_icon_title{
+            font-size: 0.4rem;
+            font-weight: 400;
+            color:#09bb07;
+        }
+        .pay_result_status .pay-amount{
+            font-size: 0.6rem;
+            color:#222;
+        }
+        .pay_result_status .weui_msg_desc{
+            font-size: 0.44rem;
+            color:#222;
+        }
+        .pay_result_status .weui_msg_pic{
+            width: 1.6rem;
+            /*height: 2rem;*/
+            margin: 0.1rem auto;
+        }
+        .pay_result_status .weui_msg_pic img{
+            width: 100%;
+            
+            display: block;
+        }
+        .weui_msg_pay_timmer{
+            margin-top: 0.5rem;
+        }
+        .pay_result_status .weui_msg_pay_timmer,
+        .pay_result_status .weui_msg_order_id{
+            font-size: 0.26rem;
+            line-height: 2;
+            color:#222;
+            text-align: center;
+        }
+        .pay_result_status .weui_btn_primary{
+            width: 4rem;
+            border:1px solid #09bb07;
+            background-color:#fff;
+            margin-top: 0.5rem;
+        }
+        .pay_result_status .weui_btn_primary a{
+            display: block;
+            color:#09bb07;
+        }
+        .pay_result_status .weui_btn_primary:not(.weui_btn_disabled):visited,
+        .weui_btn_primary:not(.weui_btn_disabled):visited{
+            color:#09bb07;
+        }
+        .pay_result_status .weui_btn_primary:not(.weui_btn_disabled):active{
+            color:#09bb07 ;
+            background-color:#fff;
+        }
+        .weui_btn.weui_btn_primary{
+            color:#09bb07 ;
+        }
+        .weui_btn_primary:not(.weui_btn_disabled):visited{
+            color:#09bb07 ;
+        }
+    </style>
+</head>
+<body>
+    @*<div class="container" id="container">
+        <div class="msg">
+            <div class="weui_msg">
+                <div class="weui_icon_area"><i class="weui_icon_success weui_icon_msg"></i></div>
+                <div class="weui_text_area">
+                    <h2 class="weui_msg_title">支付成功</h2>
+                    <p class="weui_msg_desc"></p>
+                </div>
+                <div class="weui_opr_area">
+                    <p class="weui_btn_area">
+                        <a href="/m/usercenter/home" class="weui_btn weui_btn_primary">返回个人中心</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+    <div class="weui_msg" id="PayResult">
+        <div class="pay_result_status">
+            <div class="weui_icon_area weui_icon_title"><i class="weui_icon_success weui_icon_msg"></i> 支付成功</div>
+            <div class="weui_icon_area pay-amount">¥@ViewData["OrderAmount"]</div>
+            <div class="weui_opr_area">
+                <div class="weui_msg_desc">收款商家</div>
+                <div class="weui_msg_pic">
+                    <img src='@(WorkContext.ShopConfig.ImageCDN)@ViewData["Logo"]?w=200&h=200' />
+                </div>
+                <div class="weui_msg_desc">@ViewData["ShopName"]</div>
+                <div class="weui_msg_pay_timmer">付款时间: @ViewData["AddTime"]</div>
+                <div class="weui_msg_order_id">订单编号: @ViewData["OrderSn"]</div>
+                <div class="complete-btn">
+                    <a href="/m/usercenter/home" class="weui_btn weui_btn_primary">完成</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

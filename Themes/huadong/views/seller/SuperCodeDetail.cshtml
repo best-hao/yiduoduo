@@ -1,0 +1,335 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta content="telephone=no" name="format-detection">
+	    <meta name="apple-touch-fullscreen" content="yes">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <title>粉丝详情-@{@WorkContext.SellerInfo.SellerName}</title>
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    	<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    	<link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/font/common.css" />
+    	<link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/seller/supercode/supercode.css" />
+    	<script type="text/javascript" charset="utf-8" src="/Mobile/weui/zepto.min.js"></script>
+    	<script type="text/javascript" charset="utf-8" src="/Js/Mobile/updown.js"></script>
+    	<script type="text/javascript" charset="utf-8" src="/Mobile/weui/ydui.flexible.js"></script>
+	</head>
+	<body>
+	@{
+		Yitao.Core.UserInfo userInfo = ViewData["UserInfo"] as Yitao.Core.UserInfo;
+	}
+		    <header class="header">
+				<div class="weui-flex">
+		            <div class="weui-flex-item lt" onclick="window.location.href='/m/seller/SuperCode'"><span class="icon icon-109"></span></div>
+		            <div class="weui-flex-item center">粉丝详情</div>
+		            <div class="weui-flex-item rt"></div>
+		        </div>
+			</header>
+			<div class="bg_gray"></div>
+			<div class="member_content">
+
+                <div class="member_grade">
+                    @if (userInfo.Avatar == ""){
+                        <img class="mem_avator" src="/images/photo.png" />
+                    }else{
+                        if (userInfo.Avatar.Contains("http"))
+                        {
+                            <img class="mem_avator" src="@(userInfo.Avatar)" />
+                        }
+                        else
+                        {
+                            <img class="mem_avator" src="@(WorkContext.ShopConfig.ImageCDN)@(userInfo.Avatar)" />
+                        }
+                    }
+
+                        @if (userInfo.UserType == 1)
+                            {
+                                <span class="grade_a grade_1">普通会员</span>
+                            }
+                            else if (userInfo.UserType == 2)
+                            {
+                                <span class="grade_a grade_2">VIP会员</span>
+                            }
+                            else if (userInfo.UserType == 3)
+                            {
+                                <span class="grade_a grade_3">实体商家</span>
+                            }
+                            else if (userInfo.UserType == 4)
+                            {
+                                <span class="grade_a grade_4">区县代理</span>
+                            }
+                            else if (userInfo.UserType == 5)
+                            {
+                                <span class="grade_a grade_5">市级代理</span>
+                            }
+                            else if (userInfo.UserType == 6)
+                            {
+                                <span class="grade_a grade_6">省级代理</span>
+                            }
+                        <!--span class="grade_b">直接会员</span-->
+                    </div>
+
+                    <p class="mem_name">@userInfo.UserName</p>
+
+				<!--div class="member_grade">
+					<img class="mem_avator" src="" alt="" />
+					<span class="grade_a">普通会员</span>
+					<span class="grade_b">直接会员</span>
+				</div>
+				<p class="mem_name">暂无昵称</p-->
+				<a href="tel:@userInfo.Mobile" class="mem_phone">@userInfo.Mobile
+					<i class="icon icon-104"></i>
+				</a>
+				<div class="member_list">
+					<div class="weui_cells">
+						<div class="weui_cell mem_time">
+							<div class="weui_cell_bd weui_cell_primary">
+								<p class="fs14">注册时间：@userInfo.AddTime</p>
+							</div>
+							<div class="weui_cell_ft fs14 text_color">消费金额: ¥@userInfo.PayOutAmount</div>
+						</div>
+						<div class="weui_cells_access ">
+							<a href=""></a>
+							<a class="weui_cell" href="javascript:;">
+								<div class="weui_cell_hd">
+									<i class="icon icon-84"></i>
+								</div>
+								<div class="weui_cell_bd weui_cell_primary">
+									<p class="fs16">Ta的推荐人</p>
+								</div>
+								<div class="weui_cell_ft fs16" id="leaderName">暂无昵称</div>
+							</a>
+							<a class="weui_cell my-performance" href="javascript:;">
+								<div class="weui_cell_hd">
+									<i class="icon icon-89"></i>
+								</div>
+								<div class="weui_cell_bd weui_cell_primary">
+									<p class="fs16">Ta的业绩</p>
+								</div>
+								<div class="weui_cell_ft"></div>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--member-cont start-->
+		    <div class="member-cont clearfix">
+		        <!--div class="search">
+		            <input type="text" placeholder="请输入您推荐伙伴的用户名"><i class="icon icon-4"></i>
+		        </div-->
+		        <div class="my-member weui_panel weui_panel_access">
+		            <div class="member-tit member-tit-ta">
+		                Ta的粉丝（<span class="team-number"></span>）人
+		            </div>
+		            <ul class="member-list clearfix weui_panel_bd">
+		            </ul>
+		        </div>
+		    </div>
+		    <!--member_cont end-->
+
+            <!--Ta的业绩-->
+            <div class="performance-more-content">
+                <div class="prev-page-view">
+                    <div class="prev-page-btn icon icon-109"></div>
+                    Ta的业绩
+                </div>
+                <div class="performance-more-box">
+                    <div class="performance-more-div">
+                        <div class="performance-more-info">
+                            <div class="performance-more-infoname">今日交易</div>
+                            <div class="performance-more-infovalue">¥500000</div>
+                        </div>
+                        <div class="performance-more-info">
+                            <div class="performance-more-infoname">总交易</div>
+                            <div class="performance-more-infovalue">¥500000</div>
+                        </div>
+                        <div class="performance-more-info">
+                            <div class="performance-more-infoname">今日让利</div>
+                            <div class="performance-more-infovalue">¥500000</div>
+                        </div>
+                        <div class="performance-more-info">
+                            <div class="performance-more-infoname">总让利</div>
+                            <div class="performance-more-infovalue">¥500000</div>
+                        </div>
+                        <div class="performance-more-info">
+                            <div class="performance-more-infoname">今日积分</div>
+                            <div class="performance-more-infovalue">¥500000</div>
+                        </div>
+                        <div class="performance-more-info">
+                            <div class="performance-more-infoname">总奖励积分</div>
+                            <div class="performance-more-infovalue">¥500000</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+	</body>
+
+<script>
+
+    $(document).on("click", ".my-performance", function(){
+        $(".performance-more-content").show();
+    });
+
+    $(document).on("click", ".prev-page-btn", function(){
+        var performanceMore = $(this).parents(".performance-more-content");
+        if(performanceMore.length > 0){
+            performanceMore.hide();
+        }
+    });
+
+    //上拉加载
+    $(function(){
+        var leaderuid = @ViewData["LeaderUid"],  //上级用户id
+            userid = @ViewData["UserId"],       //当前用户id
+            level = @ViewData["Level"], //通过上级过来的链接level参数获取当前level等级
+            levellast = level + 1; //当前等级下的会员level需要+1
+        //页数初始化
+        var page = 0;
+        // 每页展示4个
+        var size = 4;
+        $('.weui_panel').dropload({
+            scrollArea : window,
+            autoLoad : true,//自动加载
+            domDown : {//上拉
+                domClass   : 'dropload-down',
+                domRefresh : '<div class="dropload-refresh f15 "><i class="icon icon-20"></i>上拉加载更多</div>',
+                domLoad    : '<div class="dro pload-load f15"><span class="weui-loading"></span>正在加载中...</div>',
+                domNoData  : '<div class="dropload-noData">没有更多会员信息了</div>'
+            },
+            loadDownFn : function(me){//加载更多
+             page++;
+             window.history.pushState(null, document.title, window.location.href);
+             var result = '';
+                $.ajax({
+                    type: 'get',
+                    url:'/Api/User/GetChildren?userid='+userid+'&page='+page+'&size='+size,
+                    async: true,
+                    dataType: 'json',
+                    success: function(res){
+                        if(res.code == 1){
+                            var arrLen = res.data.length;
+                            var teamNumber = res.message; //获取团队人数
+                            var imgUrl = '@(WorkContext.ShopConfig.ImageCDN)';
+                            for(var i=0; i<arrLen; i++){
+                            	var imgUrlExp = res.data[i].avatar;
+                                var http = imgUrlExp.split(":")[0]; //获取当前avatar地址的http
+	                                result  +='<li>';
+                                    if(levellast < 3){ // 3级以下的会员无须查看会员详情
+                                        result  +='<a href="/m/seller/SuperCodeDetail?LeaderUid='+userid+'&userid='+res.data[i].userid+'&level='+levellast+'">';
+                                    }else{
+                                        result  +='<a href="javascript:void(0)" onclick="openTips()">';
+                                    }
+	                                result  +='<div class="membership-information">';
+                                    if(res.data[i].avatar == ""){
+                                        result  +='<div class="head-portrait icon icon-47"></div>';
+                                    }else{
+                                        result  +='<div class="head-portrait">';
+                                        if (http == 'http') {//判断当前avatar地址的http存在与否以添加imgUrl路径
+                                            result  +='<img src="'+res.data[i].avatar+'" alt="" />';
+                                        }else{
+                                            result  +='<img src="'+imgUrl+res.data[i].avatar+'" alt="" />';
+                                        }
+                                        result  +='</div>';
+                                    }
+                                    if(res.data[i].usertype == 1){
+                                        result  +='<i class="icon icon-120 grade_1"></i>';
+                                    }else if(res.data[i].usertype == 2){
+                                        result  +='<i class="icon icon-120 grade_2"></i>';
+                                    }else if(res.data[i].usertype == 3){
+                                        result  +='<i class="icon icon-120 grade_3"></i>';
+                                    }else if(res.data[i].usertype == 4){
+                                        result  +='<i class="icon icon-120 grade_4"></i>';
+                                    }else if(res.data[i].usertype == 5){
+                                        result  +='<i class="icon icon-120 grade_5"></i>';
+                                    }else if(res.data[i].usertype == 6){
+                                        result  +='<i class="icon icon-120 grade_6"></i>';
+                                    }
+                                result  +='<p class="weui_call_number">'+res.data[i].mobile+'</p>';
+                                result  +='<span>'+timeConversion(res.data[i].addtime)+'</span>';
+                                result  +='</div>';
+                                result  +='</a>';
+                                result  +='</li>';
+                            }
+                            //console.log(page);
+                        // 如果没有数据
+                        }else{
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+
+                        }
+
+                        // 为了测试，延迟500毫秒加载
+                        setTimeout(function(){
+                            $('.weui_panel_bd').append(result);
+                            // 每次数据加载完，必须重置
+                            me.resetload();
+                            //获取当前用户下线数量
+                            var personLen = $(".weui_panel_bd").find("li").length;
+                            $(".team-number").text(personLen);
+                        },500);
+                    },
+                    error: function(xhr, type){
+                        $.toast("Ajax error!", "forbidden");
+                        // 即使加载出错，也得重置
+                        me.resetload();
+                    }
+                });
+            }
+        });
+
+        // 通过接口/Api/User/GetUserByUserId获取当前用户的上级用户信息
+        $.ajax({
+            type: 'get',
+            url: '/Api/User/GetUserByUserId',
+            async: true,
+            dataType: 'json',
+            data:{
+                UserId: leaderuid //传值leaderuid给UserId获取当前用户的上一级用户信息
+            },
+            success: function(res){
+                if(res.code == 1){
+                    $("#leaderName").text(res.data.nickname); //获取上级用户的nickname
+                }else{
+                    $("#leaderName").text("暂无昵称");
+                }
+            },
+            error: function(res) {
+                $.toast("Ajax error!", "forbidden");
+            }
+        });
+    });
+
+    // 换算会员加入时间与当前时间比差
+    function timeConversion(time){
+        var timeStampNow = new Date().getTime();
+        var timeStampAdd = new Date(time).getTime();
+        var timeStampEnd = timeStampNow - timeStampAdd;
+        var dayBefore = Math.floor(timeStampEnd/1000/60/60/24);  //获取天数
+            if(dayBefore >= 7 && dayBefore< 14){
+                return "1周前";
+            }else if(dayBefore >= 14 && dayBefore< 21){
+                return "2周前";
+            }else if(dayBefore >= 21 && dayBefore< 28){
+                return "3周前";
+            }else if(dayBefore >= 28){
+                return "1月前";
+            }else{
+                return dayBefore+"天前";
+            }
+    }
+
+    function openTips(){
+        $.toast("无法查看", "forbidden");
+        return false;
+    }
+</script>
+
+</html>

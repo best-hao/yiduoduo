@@ -1,0 +1,53 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>关注公众号二维码-@{@WorkContext.SellerInfo.SellerName}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+        <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+        <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weuix.min.css" />
+        <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" charset="utf-8" src="/Mobile/weui/ydui.flexible.js"></script>
+        <style type="text/css" media="screen">
+            *{margin: 0 ; padding: 0;}
+            .qrcode-bg{
+                width: 100%;
+                height: 100%;
+                max-width: 7.5rem;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+                background:url(/Images/Mobile/qrcode-bg.jpg) no-repeat center center;
+                background-size: cover;
+                overflow: hidden;
+            }
+            .qrcode{
+                width: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+            }
+            .qrcode img{
+                width: 100%;
+                display: block;
+                margin: 0 auto;
+            }
+        </style>
+    </head>
+    <body>
+    <div class="qrcode-bg">
+        <div class="qrcode">
+            <img src="/Images/Mobile/qrcode.png" alt="" />
+        </div>
+    </div>
+    </body>
+</html>

@@ -1,0 +1,1078 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>店铺列表-@(WorkContext.SellerInfo.SellerName)</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <link rel="stylesheet"  href="/Css/Mobile/shop/province.css" /> 
+    <link rel="stylesheet"  href="/Css/Mobile/shop/seller.css" /> 
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/shop/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weuix.min.css" /> -->
+    <!--<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/icon.css" />-->
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css" />
+   <link rel="stylesheet" type="text/css" href="/Css/mobile/footer.css" /> 
+    <!-- <script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>   -->
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	<!--<script src="/Js/Mobile/shop/picker.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/Js/Mobile/shop/picker-city.js" type="text/javascript" charset="utf-8"></script>-->
+	<link rel="stylesheet" type="text/css" href="/Css/Mobile/home.css" />
+	<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/loading.css"/>
+	<script src="/Mobile/weui/lazyimg.js"></script>
+	<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8&key=a9dafa0e075a8037456fca8db2b05256"></script> 
+	<script src="/Mobile/weui/mAmaplbs.js"></script>
+<style>
+.weui_actionsheet_action .weui_tabbar_item {width: 50%;text-align: center;padding: 2% 0!important;/* border: 1px solid #d9d9d9; */color: #333;font-size: 0.28rem;}
+.weui_grids:before {content: '';position: absolute;box-sizing: border-box;width: 0!important; height:0!important;left: 0;top: 0;border: 1px solid #d9d9d9;-webkit-transform-origin: 0 0;transform-origin: 0 0;-webkit-transform: scale(.5);transform: scale(.5);}
+.weui_tabbar {position: fixed;text-align: center;}
+.moreList{position: absolute;top:0.9rem;width:7.5rem;margin:0 auto;height:100%!important;z-index: 1111111111111111;background: #fff;}
+.logo-img{text-align: center;	border:1px solid #ddd;line-height:1.38rem;height:1.38rem;}
+.logo-img icon{display:block;width: 45%;margin: 0 auto;line-height: 1.38rem;}
+ .logo-img icon{font-size: 0.56rem;	color:#e4393c;}
+ .warp{display: none;}
+ .foot_box{width:100%;text-align: center;height:auto;margin-bottom:0.06rem; }
+ .foot_box img{display: block;/*width: 0.5rem!important;height: 0.5rem!important;*/margin:0.03rem auto;}
+ .foot_box_p{color:#000!important}
+ .foot_pd{padding:0.07rem 0 0.02rem 0}
+ .footer_a{width:85%;margin:0 auto;text-align: center;padding:0!important;}
+ .loadTit{ margin-left: -11px; margin-top: -11px;}
+ .m-cityselect-1 {position: fixed;bottom: 0;/* left: 0; */width: 7.5rem;height:60%;z-index: 10;background-color: #fff;-webkit-transform: translate(0, 100%);transform: translate(0, 100%);-webkit-transition: -webkit-transform .4s;transition: -webkit-transform .4s;transition: transform .4s;transition: transform .4s, -webkit-transform .4s;overflow-y: scroll;}
+.m-cityselect-1.brouce-in {-webkit-transform: translate(0, 0);transform: translate(0, -9%);}
+</style>
+<style type="text/css">
+body{overflow-x: hidden;width: 7.5rem;overflow-x: hidden;margin: 0 auto;}
+#edit{font-size: 0.28rem;width: 7.5rem;overflow-x: hidden;}
+.shade-box{position: fixed;z-index: 111;bottom: -100%;left: 50%;background: rgba(0,0,0,0.5);width: 7.5rem;height: 100%;overflow: hidden;margin-left: -3.75rem;}
+.addr-shade{position: absolute;z-index: 10;bottom: 0;left: 0;background: #fff;width: 8rem;height: 7.44rem;}
+.addr-box{width: 15rem;}
+.addr-box .province{width: 3.75rem;height: 6rem;overflow-y: auto;position: relative;}
+.addr-box .province:after{position: absolute;right: 0;width: 1px;top: 0;background: #f2f2f2;content: "";}
+.addr-box .city{width: 3.75rem;height: 6rem;overflow-y: auto;}
+.addr-box .county{width: 3.75rem;height: 6rem;overflow-y: auto;}
+.addr-box .town{width: 3.75rem;height: 6rem;overflow-y: auto;}
+.addr-box ul li{padding: 0 0.2rem;line-height: 0.6rem;height: 0.6rem;}
+.curProvince{color: #f00;}
+li{list-style: none;}
+.curCity{color: #f00;}
+.curCounty{color: #f00;}
+.curTown{color: #f00;}
+.show-addr{height: 0.7rem;line-height: 0.7rem;padding: 0 0.2rem;}
+.show-addr{border-bottom: 1px solid #f2f2f2;}
+.show-addr li{line-height: 0.7rem;float: left;text-align: left;padding: 0 0.2rem;}
+.addr-shade .title{text-align: center;height: 0.7rem;line-height: 0.7rem;border-bottom: 1px solid #f2f2f2;}
+.cur-li{position: relative;color: #f00;}
+.cur-li:after{position: absolute;bottom: 0;content: "";left: 0;height: 2px; background: #fd4c60;width: 100%;}
+.weui-picker-modal .picker-items-col:eq(2){display: none !important;}
+.weui_dialog_hd{padding: 0;}
+.addr-box ul{padding-bottom: 1rem;}
+.bt .overflow_clear{display: inline-block;width: 66%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;-webkit-line-clamp: 1;}
+.overflow_clear span:first-child {display: inline-block;width: 66%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;-webkit-line-clamp: 1;}
+</style>
+</head>
+<body>
+	<div class="warp">
+		<div id='app' >	
+	 		<div v-if='allShow' v-cloak  style='width:7.5rem;margin:0 auto'> 
+					 	<!--头部-->
+						<header id="header" class="mui-bar mui-bar-transparent" >
+								<a v-if="IsApp==1" class="mui-icon" href="javascript:;" id="S_Address3" > 
+									<span id='ssx' v-if="addrJson" v-on:click="showAddr()">{{addrname}}</span>
+									<span id='ssx' v-else v-on:click='initGetAddr()'><span class="icon icon-68"></span></span>
+									<icon class='icon icon-74'></icon>
+								</a>
+								<a v-else class="mui-icon" href="javascript:;" id="S_Address3" v-on:click="showAddr()"> 
+									<span id='ssx'>{{addrname}}</span>
+									<icon class='iconfont'>&#xe619;</icon>
+								</a>
+								<a href="javascript:;" class='mui-a'>
+									<div class="soso clear">
+										<icon class='icon iconfont' >&#xe616;</icon>
+										<div class="gosearch" >
+											<input type="text" placeholder="秦商未来" v-model='searchvalue' >
+											<div class='searchbtn' v-on:click='searbtn()' >搜索</div>
+										</div>
+									</div>
+								</a>			
+					   </header>
+					   <!--底部-->	
+					   <div class="content" >					   	
+					   	<!--附近商家-->
+					   	<div class="section2">
+					   		<div class='weui_actionsheet_action cateaddr' >
+						   		<div class='weui_tabbar_item'  >
+						   			<div :class="{'weui_tabbar_item_on':num == 0}" v-on:click='tab(0)' >
+						   				<!--{{item}}-->{{catename}}
+						   				<icon class='iconfont' v-if='iscate'>&#xe64b;</icon>
+						   				<icon class='iconfont' v-else>&#xe619;</icon>
+						   			</div>
+						   		</div>
+						   		<div class='weui_tabbar_item'  >
+						   			<div :class="{'weui_tabbar_item_on':num == 1}" v-on:click='tab(1)' >
+						   				<!--{{item}}-->{{filtername}}
+						   				<icon class=' iconfont' v-if='isshowprovince'>&#xe64b;</icon>
+						   				<icon class=' iconfont' v-else>&#xe619;</icon>
+						   			</div>
+						   		</div>
+					   	    </div>
+					   	    <!--判断是app进入-->
+					   		<div class="idx_tab_change" >
+					   		<div  v-if="IsApp==1" class='isappaddr'>					   	    	 
+					   	         <div class='addrname' v-on:click='initGetAddr()' v-if='isnavigator'>
+						   	    	<div >当前位置:{{navigatorname}}</div>
+						   	    	<div><icon class='icon icon-21'></icon></div>
+					   	         </div>
+					   	         <div class='addrname' v-on:click='initGetAddr()' v-else>
+						   	    	<div >当前位置:定位失败</div>
+						   	    	<div><icon class='icon icon-21'></icon></div>
+					   	         </div>
+					   	         
+					   	    </div>
+					   	   <!--h5进入-->
+					   	    <div v-else class='isappaddr'>
+					   	    	
+					   	    	<div  v-if='longitude!=0' class='addrname' v-on:click='getnavgator()'  style='padding:2% 3% 1% 3%;'>
+						   	    	<div >当前位置:{{navigatorname}}</div> 
+						   	    	<div><icon class='iconfont'>&#xe61c;</icon></div>
+					   	        </div>
+					   	        <div v-else class='addrname' v-on:click='againgetnavgator()'  style='padding:2% 3% 1% 3%;'>
+						   	    	<div >当前位置:{{navigatorname}}</div> 
+						   	    	<div><icon class='iconfont'>&#xe61c;</icon></div>
+					   	        </div>
+					   	    </div>
+					   			<!--<div class='screening' >
+					   				<div  :class="{'on':ind === item.id}" v-for="(item,index) in screentab" class='br4' v-on:click='clickfilter(item.id)'>{{item.name}}</div>
+					   			</div>-->
+					   			<div class="recSeller_list_box mb10"  >
+					   				<ul >
+					   					<li class='recSeller_list' v-for="(item,index) in recSellerlist">   
+					   						<div class="storecur">
+												<span>让利</span>
+												<span>{{item.shopinfo.profits}}%</span>
+				                            </div>
+					   						   <div class="pub_img fl weui-updown">
+						   							<a v-bind:href="'/m/shop/detail?id='+item.shopinfo.shopid+'&IsApp='+@ViewData["IsApp"]" link-load="">
+						   								<img v-if="item.shopinfo.logo!=''" :src="'@(WorkContext.ShopConfig.ImageCDN)'+item.shopinfo.logo+'?w=200'" width="100" height="100">
+						   								<div v-else class='logo-img'>
+	       				                                      <icon class='icon iconfont'>&#xe649;</icon>
+	       			                                    </div>
+						   							</a>
+					   							</div>
+					   							<div class="pub_wz">            
+					   								<p class="bt">          
+					   									<a v-bind:href="'/m/shop/detail?id='+item.shopinfo.shopid+'&IsApp='+@ViewData["IsApp"]" class="overflow_clear" v-text='item.shopinfo.shopname'></a>     
+					   									<span class="fr"></span>             
+					   								</p>             
+					   								<div class="nr">        
+					   									<a v-bind:href="'/m/shop/detail?id='+item.shopinfo.shopid+'&IsApp='+@ViewData["IsApp"]" link-load="">   
+					   										<div class="star_box">
+					   											<span class=" black9">{{item.shopinfo.starnum}}人光临</span>
+					   											<span class="starBg">					   											
+													   				<span class="star" style="width:100%" v-if='item.shopinfo.starnum==0'></span>
+													   				<span class="star" v-bind:style="{width:item.shopinfo.starcount*20+'%'}" v-else></span>
+						   										</span>
+					   										</div>     
+					   										<div v-if='longitude!=0' class="juli_box overflow_clear">
+					   											<span>{{item.shopinfo.address}}</span>
+					   											<span class="black9 range fr" v-if='Number(item.distance)>1000'><em class="ico"></em>{{Number(item.distance/1000).toFixed(1)}}Km</span>
+					   											<span class="black9 range fr" v-else><em class="ico"></em>{{Number(item.distance).toFixed(1)}}m</span>
+					   										</div> 
+					   										<div v-else class="juli_box overflow_clear">{{item.shopinfo.address}}
+					   											<span class="black9 range fr" ><em class="ico"></em></span>
+					   										</div> 
+					   									</a>      
+					   							   </div>                                                
+					   							</div>   						
+					   					  </li>
+					   				</ul>
+					   			</div>
+					   			<div class="loading" :style="{'margin-top':loadingTop+'rem'}">
+									<div class="weui_cells_title tcenter hide" id="more">
+										<div class="weui-loadmore">
+								            <i class="weui-loading"></i>
+								            <span class="weui-loadmore-tips">正在加载</span>
+								        </div>
+									</div>
+									<div v-if="page==1" class="weui_cells_title tcenter hide" id="nomore">
+										正在加载
+									</div>
+									<div v-else-if="page==1&&recSellerlist.length==0" class="weui_cells_title tcenter hide" id="nomore">
+										正在加载
+									</div>
+									<div v-else class="weui_cells_title tcenter hide" id="nomore">
+										没有更多数据了
+									</div>
+			                    </div>
+					   		</div>
+					   	</div>
+					   </div>
+					   <!--底部-->
+					    @if(@WorkContext.IsApp==1){
+			  					
+			  			}else{
+			  				<div class="weui_tabbar foot_pd" v-if="footerLists"  >
+					            <a v-for="(item, index) in footerLists.NavBar" :key="index" :href="item.MenuUrl" class="weui_tabbar_item footer_a" style=''>
+					                <div class="weui_tabbar_icon foot_box">
+					                    <img v-if="item.MenuPic" :src="item.MenuPic" style="max-width:100%;width:0.5rem;height:0.5rem;" />
+					                </div>
+					                <p class="weui_tabbar_label foot_box_p" v-text="item.MenuName" style="margin: 0;"></p>
+					            </a>
+			                </div>
+			  			}
+	          <!--距离排序-->
+	         	<div  id="Show_City_Four" v-bind:class='isshowprovince?"brouce-in":"brouce-out"' class='m-cityselect'>
+	         		<icon v-on:click='showprovince()' class='icon  mask-icon' v-bind:class='isshowprovince?"mask-icon-up":""'></icon>
+	            <div class="cityselect-header">
+	                <p class="cityselect-title"></p>
+	                <!--<div class="cityselect-nav" v-if='clickList.length>0'>
+	                    <a v-for="(item,index) in clickList" 
+	                    	:key="index" href="javascript:;" :class="{'crt':index == previndex}" v-text='item.regionname'
+	                    	v-on:click='prevnext(index)'></a>                   
+	                </div>
+	                <div class="cityselect-nav" v-else>
+	                    <a href="javascript:;" class="crt" >{{curcounty}}</a>                    
+	                </div>-->
+	            </div>
+	            <ul  class="cityselect-content cityselect-move-animate"  style='overflow-y: scroll' :class="{'cityselect-next':isprevindex<isnextindex}" 
+	            	id="S_City_Show">
+	                <li class="cityselect-item" >
+	                    <div class="cityselect-item-box" id="Province_chioce" style='padding:0'>
+	                    	 <!--<a :class="{'crt': filterId==-1}"  v-on:click='getfilterList(-1,regionname)' 
+	                        	href="javascript:;" style='padding-left:0.2rem;'><span>全部</span>
+	                           <span  class='icon iconcounty' :class="{'icon-71': filterId==-1}"></span>
+	                        </a>-->
+	                        <a style='padding-left:0.2rem;' v-for="(item,index) in filterList" :key="index" :class="{'crt': filterId==item.id}" v-on:click='getfilterList(item.id,item.name,index)' 
+	                        	href="javascript:;" ><span v-text='item.name'></span>
+	                         <span class='icon iconcounty' :class="{'icon-71':filterId==item.id}"></span>
+	                        </a>
+	                    </div>
+	                </li>
+	            </ul>
+	        </div>
+	        <!--商家分类-->
+	        <div  id="Show_City_Four" v-bind:class='iscate?"brouce-in":"brouce-out"' class='m-cityselect '>
+	         		<icon v-on:click='showcate()' class='icon  mask-icon' v-bind:class='iscate?"mask-icon-up":""'></icon>
+	            <div class="cityselect-header">
+	                <p class="cityselect-title"></p>
+	            </div>
+	            <ul  class="cityselect-content cityselect-move-animate" :class="{'cityselect-next':isprevindex<isnextindex}" 
+	            	id="S_City_Show">
+	                <li class="cityselect-item" >
+	                    <div class="cityselect-item-box" id="Province_chioce" style='padding:0'>
+	                        <a style='padding-left: 0.2rem;' v-for="(item,index) in oneCategory" :key="index" :class="{'crt':CategoryId==item.id}" v-on:click='choseCategory(item.id,item.name)' 
+	                        	href="javascript:;" >
+	                          <span v-text='item.name'></span>
+	                          <span class='icon iconcounty' :class="{'crt':CategoryId==item.id}"></span>
+	                        </a>
+	                    </div>
+	                </li>
+	                <li class="cityselect-item">
+	                    <div class="cityselect-item-box" id="City_chioce">
+	                    	<a class="" v-for="(item,index) in twoCategory" :key="index" :class="{'crt':twoCategoryId==item.industryid}" href="javascript:;" 
+	                    		v-on:click='chosetwoCategory(item.industryid,item.industryvalue)'><span v-text='item.industryvalue'></span></a>
+	                    </div>
+	                </li>
+	            </ul>
+	        </div>
+	      <!--四级联动-->  
+	    <div class="shade-box">
+		    <div class="addr-shade">
+		    	<div class="title">
+		    		<!--<icon v-on:click='hideAddr()' v-if='isshowprovince' >&#xe619;</icon>-->
+		    		<!--<icon v-on:click='hideAddr()'  class='iconfont' > &#xe619;</icon>-->
+		    	</div>
+		    	<div class="show-addr">
+		    		<ul>
+		    			<li class="prov-li" 
+		    				:class="{'cur-li':curIndex==0}"
+		    				v-on:click="getProvinceTab(initProvince,curProvinceName)"
+		    				>{{curProvinceName}}</li>
+		    			<li class="city-li" 
+		    				:class="{'cur-li':curIndex==1}"
+		    				v-on:click="getCityTab(initCity,curCityName)"
+		    				>{{curCityName}}</li>
+		    			<li class="county-li" 
+		    				:class="{'cur-li':curIndex==2}"
+		    				v-on:click="getCountyTab(initCounty,curCountyName)"
+		    				>{{curCountyName}}</li>
+		    			<li class="town-li" 
+		    				:class="{'cur-li':curIndex==3}"
+		    				v-on:click="getTownTab(initTown,curTownName)"
+		    				>{{curTownName}}</li>
+		    		</ul>
+		    	</div>
+				<div class="addr-box">
+					<div class="province left">
+						<ul>
+							<li v-for="(item, index) of Province" 
+								:key="item.regionid" 
+								v-on:click="getCity(item.regionid,item.regionname)"
+								:class="{'curProvince':curProvince==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+					<div class="city left">
+						<ul v-if="City.length>0">
+							<li v-for="(item, index) of City" 
+								:key="item.regionid" 
+								v-on:click="getCounty(item.regionid,item.regionname)"
+								:class="{'curCity':curCity==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+					<!--<div class="county left">
+						<ul v-if="County.length>0">
+							<li v-for="(item, index) of County" 
+								:key="item.regionid" 
+								v-on:click="getTown(item.regionid,item.regionname)"
+								:class="{'curCounty':curCounty==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>-->
+					<!--<div class="town left">
+						<ul v-if="Town.length>0">
+							<li v-for="(item, index) of Town" 
+								:key="item.regionid" 
+								v-on:click="selTown(item.regionid,item.regionname)"
+								:class="{'curTown':curTown==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>-->
+				</div>
+		    </div>
+	    </div>
+	        <div class="mask-black" v-show='isshowprovince'></div>
+	     </div>
+	    </div>   
+	</div>
+<div class="curtain hide">
+	<div class="loader Rotation"></div>
+	<div class="loadTit">
+		<icon class='icon iconfont'>&#xe649;</icon>
+	</div>
+</div>
+<script>
+function getAddr(json) {
+	if(json=="" || json==null || json=="{}"){
+		vm.addrname='定位失败请重新获取';
+	}else{
+		json = JSON.parse(json);
+		vm.addrJson = true;
+		vm.addrname = json.city;
+	}
+}	
+//$.showLoading();
+$('.curtain').removeClass("hide")
+var vm = new Vue({
+    el: '#app',
+    data: {
+    	IsApp: '@ViewData["IsApp"]',
+    	addrJson: [],
+    	pageIsShow:'none',
+    	allShow:false,
+        tabs: ["商家分类", "离我最近"],
+        screentab:[
+        	{id:1,name:'评分'},
+        	{id:2,name:'销量'},
+        ],
+        footerLists:[],//底部tabbar
+        CategoryId:-1,//分类id
+        twoCategoryId:-1,//二级分类id
+        oneCategory:[
+        {id:-1,name:'全部分类'},
+        {id:0,name:'零售'},
+        {id:1,name:'餐饮'},
+        {id:2,name:'美食'},
+        {id:3,name:'休闲娱乐'},
+        {id:4,name:'酒店住宿'},
+        {id:5,name:'生活服务'},
+        {id:7,name:'百货商超'},
+        {id:6,name:'美容美体'},
+        {id:8,name:'家具，房产'},
+        {id:9,name:'教育培训'},
+        {id:10,name:'爱车'},
+        {id:11,name:'其他行业'},
+        ],//一级分类
+        cateList:[],//餐饮列表
+        retail:[],//零售列表
+        twoCategory:[],
+        IndustryInfoList:[],//行业列表
+        IndustryInfomoreList:[],
+        addrname:'请选择',
+        num: 0,
+        ind :0,
+        windowHeight:0,
+        recSellerlist:[],
+        cateSellerlist:[],
+        isMore:false,
+        isSellerList:false,
+        isshowprovince:false,//判断四级联动显示隐藏
+        isshowprovince1:false,
+        iscate:false,//点击分类
+        provinceList:[],
+        cityList:[],
+        countyList:[],
+        iscity:false,
+        iscounty:false,
+        provinceindex:0,
+        clickList:[],//选中的省市区列表
+        countyindex:-1,
+        catetitle:'',
+        previndex:0,//三级联动选中的省市区下标
+        isprevindex:0,//上一个下标
+        isnextindex:0,//下一个下标
+        positiondata:{},
+        curcounty:'北京市',
+        curProvinceId: 0,
+        curCityId:0,
+        curCountyId:-1,
+        filterList:[
+        {id:1,name:'离我最近'},
+        {id:2,name:'人气最高 '},
+        {id:3,name:'好评优先'},
+        ],//筛选列表
+        filterId:1,
+        filtername:'离我最近',
+        catename:'全部分类',
+        isfliter:false,
+        //////////////////列表//////////
+        page:1,
+        loadingTop:1,
+        shopurl:'',
+        pagelist:[1],
+        regionname:'',
+        searchvalue:'',
+        longitude:0,
+        latitude:0,
+        isnavigator:false,//定位当前位置
+        navigatorname:'定位失败',//根据定位获取地址
+        Sort:1,
+        iscatefliter:false,
+        //////////////四级联动数据//////////////////
+        curIndex: 0,
+		Province: [],
+		City: [],
+		County: [],
+		Town: [],
+		curProvince: "",
+		curProvinceName: "",
+		curCity: "",
+		curCityName: '',
+		curCounty: "",
+		curCountyName: '',
+		curTown: "",
+		initProvince: "",
+		initCity: "",
+		initCounty: "",
+		initTown: "",
+		curTownName: '',
+		isInit: true,
+		Addr: "",
+		Address: "",
+		industrytype:0,
+		isregionid:true,
+		curCityregionid:0,
+    },
+    methods: {
+    	lazyload: function (){
+		    		var lazyloadImg = new LazyloadImg({
+			            el: '.weui-updown [data-src]', //匹配元素
+			            top: 50, /*元素在顶部伸出长度触发加载机制*/
+			            right: 50, /*元素在右边伸出长度触发加载机制*/
+			            bottom: 50, /*元素在底部伸出长度触发加载机制*/
+			            left: 0, /*元素在左边伸出长度触发加载机制*/
+			            qriginal: false, /* true，自动将图片剪切成默认图片的宽高；false显示图片真实宽高*/
+			            load: function(el) {
+			                el.style.cssText += '-webkit-animation: fadeIn 01s ease 0.2s 1 both;animation: fadeIn 1s ease 0.2s 1 both;';
+			            },
+			            error: function(el) {
+			            }
+		        	});
+		    	},
+    	searbtn:function(){  //点击搜索  		
+    		var _this=this;
+    		_this.isfliter=false;
+    		_this.fliterId=0;
+    		if(_this.searchvalue!=''){
+    			_this.initdata();
+    			_this.sellerList();
+    		}	
+    	},
+    	chosetwoCategory:function(id,name){//选择二级分类 点击分类
+    		var _this=this;
+    		_this.twoCategoryId=id;
+    		_this.catename=name;
+    		_this.showcate();
+    		_this.page=1;
+    		_this.curCountyId=-1;
+    		_this.searchvalue='';
+    		//初始筛选条件
+            _this.Sort=1
+			_this.filterId=1;
+			_this.filtername='离我最近';
+			_this.iscatefliter=true;
+    		_this.sellerList()
+    	},
+    	choseCategory:function(id,name){//点击一级分类触发事件
+    		var _this=this;
+    		_this.CategoryId=id;
+    		if(id==-1){
+    			_this.catename=name;
+    		}
+    		_this.industrytype=id;
+             if(id==-1){
+            	_this.searchvalue='';
+            	_this.showcate();
+            	_this.page=1;
+            	_this.twoCategory=[];
+            	//初始筛选条件
+	            _this.Sort=1
+				_this.filterId=1;
+				_this.iscatefliter=false
+				_this.filtername='离我最近';
+				  _this.sellerList();
+            }else{
+            	_this.getList()
+            }
+    	},
+    	getList: function () {//获取分类列表
+    		var _this = this;
+    		 _this.twoCategory=[];
+    		 _this.retail=[];
+    		$.ajax({
+    			type:"get",
+    			url:"/Api/Home/IndustryInfo",
+    			async:true,
+    			success: function(rel){
+    				console.log(rel)
+    				var data=rel.data;
+    				if(rel.code==1){    						
+    						for(var i=0;i<data.length;i++){
+    			               if(data[i].industrytype==_this.industrytype){
+    				               _this.retail.push(data[i])
+				    		   }
+				    		}
+                        _this.twoCategory=_this.retail
+    				}
+    			}
+    		});
+		},    
+    	initGetAddr: function() {//app定位
+    		var _this = this;
+    		if(this.IsApp==1){
+				if(navigator.userAgent.indexOf("iPhone")>0){
+					getUserLocation();
+				}
+				if(navigator.userAgent.indexOf("Android")>0){
+					var json = window.js.locationJson();
+					if(json=="" || json==null || json=="{}"){
+						_this.addrname='定位失败请重新获取';
+					}else{
+						json = JSON.parse(json);
+						var code = json.code;
+						_this.addrJson = true;
+						_this.addrname = json.town;
+					}
+				}	
+			}
+    	},
+    	curposition:function(){//获取当前位置
+    		var _this=this;
+    		$.ajax({
+    			type:"get",
+    			url:"/Api/tool/GetCurrentRegion",
+    			async:true,
+    			success: function(rel){
+    				var data=rel;
+    				if(data.code==1){
+    					_this.getname(data.data.parentid);//根据id获取对应区县名称
+    					_this.curProvince=data.data.parentid;
+                        _this.curCityregionid=data.data.regionid
+    					_this.curCity=data.data.regionid;
+                        _this.curCityName=data.data.regionname
+                        _this.addrname=data.data.regionname
+                        _this.sellerList();
+    				}
+    			}
+    		});
+    	},
+    	getname:function(id){////根据id获取对应区县名称
+    		var _this=this;
+    		$.ajax({
+    			type:"get",
+    			url:"/Api/tool/GetRegionInfo?RegionId="+id,
+    			async:true,
+    			success: function(rel){
+    				console.log(rel);
+    				if(rel.code==1){
+    					var name=rel.data.regionname;
+    					_this.curProvinceName=name;
+    				}
+    			}
+    		});
+    	},
+        tab:function(index) {//商家分类   区域选择
+        	var _this=this;
+            _this.num = index;
+            if(index==1){
+            	if(this.iscate){
+            		_this.showcate();
+            	}
+            	_this.showprovince();
+            }else if(index==0){
+            	if(this.isshowprovince){
+            		_this.showprovince();
+            	}
+            	_this.showcate();
+            }
+        },
+        showprovince:function(){//区域选择开关
+			var _this = this;
+			this.isshowprovince=!this.isshowprovince
+		},
+		showcate:function(){//商家分类开关
+			var _this = this;
+			this.iscate=!this.iscate
+		},
+        getFooter: function(){//底部
+    		var _this = this;
+    		$.ajax({
+    			type:"get",
+    			url:"/m/tool/navbar",
+    			async:true,
+    			success: function(rel){
+    				var rst = JSON.parse(rel);
+    				if(rst.Code==1){
+    						_this.footerLists = rst.Data;
+    				}
+    			}
+    		});
+		},		
+		getfilterList:function(id,name,index){//根据条件筛选
+			this.filterId=id;
+			this.Sort=id
+			this.filtername=name;
+			this.isfliter=true;
+			var _this=this;
+			_this.showprovince();
+			_this.page=1;
+            _this.sellerList();
+		},
+		initdata:function(){
+			var _this=this;
+			_this.page=1;
+//			条件筛选初始
+			this.Sort=1
+			this.filterId=1;
+			this.filtername='离我最近';
+//			分类初始
+            _this.twoCategory=''
+			_this.CategoryId=-1;
+			_this.catename='全部分类';
+			_this.twoCategoryId=-1;
+        	_this.curCountyId=-1;
+        	_this.industrytype=-1;
+//      	_this.searchvalue='';
+        	_this.iscatefliter=false;
+        	_this.isregionid=true;
+        	
+		},
+		sellerList:function(){//商家列表接口   1,搜索 2.分类  
+			var _this=this;
+			_this.loadingTop = 0;
+			$("#more").removeClass("hide")
+			if(_this.isregionid){
+				if(_this.searchvalue!=''){//搜索
+				console.log('搜索');
+				var shopurl="/Api/Shop/AllShopList?size=10&page="+_this.page+'&Sort='+_this.Sort+'&Search='+_this.searchvalue+'&Province='+_this.curProvince+'&City='+_this.curCity+'&t='+Math.random()+'&Latitude='+_this.latitude+'&Longitude='+_this.longitude;
+				}else {
+					if(_this.iscatefliter==false){//初始化
+						console.log('全部');
+						var shopurl="/Api/Shop/AllShopList?Province="+_this.curProvince+'&Sort='+_this.Sort+"&City="+_this.curCity+"&size=10&page="+_this.page+'&Latitude='+_this.latitude+'&Longitude='+_this.longitude+'&t='+Math.random();
+					}else {//分类
+						console.log('分类');
+						var shopurl="/Api/Shop/AllShopList?Province="+_this.curProvince+'&Sort='+_this.Sort+"&City="+_this.curCity+"&size=10&page="+_this.page+'&IndustryId='+_this.twoCategoryId+'&Latitude='+_this.latitude+'&Longitude='+_this.longitude+'&t='+Math.random();
+					}
+				}
+			}else{
+				_this.Sort=0;
+				if(_this.searchvalue!=''){//搜索
+				console.log('搜索');
+				var shopurl="/Api/Shop/AllShopList?size=10&page="+_this.page+'&Sort='+_this.Sort+'&Search='+_this.searchvalue+'&Province='+_this.curProvince+'&City='+_this.curCity+'&t='+Math.random()+'&Latitude='+_this.latitude+'&Longitude='+_this.longitude;
+				}else {
+					if(_this.iscatefliter==false){//初始化
+						console.log('全部');
+						var shopurl="/Api/Shop/AllShopList?Province="+_this.curProvince+'&Sort='+_this.Sort+"&City="+_this.curCity+"&size=10&page="+_this.page+'&Latitude='+_this.latitude+'&Longitude='+_this.longitude+'&t='+Math.random();
+					}else {//分类
+						console.log('分类');
+						var shopurl="/Api/Shop/AllShopList?Province="+_this.curProvince+'&Sort='+_this.Sort+"&City="+_this.curCity+"&size=10&page="+_this.page+'&IndustryId='+_this.twoCategoryId+'&Latitude='+_this.latitude+'&Longitude='+_this.longitude+'&t='+Math.random();
+					}
+				}
+			}
+		_this.shopurl=shopurl;
+//		$.alert(shopurl)
+		if(_this.page==1){
+			_this.recSellerlist=[];
+        }
+            _this.pagelist=[]
+		     $.ajax({
+    			type:"get",
+    			url:shopurl,
+    			async:true,
+    			success: function(rel){
+    				$("#more").addClass("hide");
+    				if(rel.code==1){
+    					console.log(rel.data)
+    					if(rel.data.length==0){
+    						if(_this.page==1){
+								_this.loadingTop = 1;
+								_this.recSellerlist=rel.data;
+								$('#nomore').removeClass('hide')
+							}else{
+								$("#more").addClass("hide");
+							}
+    					   _this.page++;
+    					}else{
+    						if(_this.page>1){
+    							   _this.pagelist=rel.data;
+    							   _this.recSellerlist=_this.recSellerlist.concat(rel.data);
+    						}else{
+	    							var recdata=rel.data;
+	    							for(var i=0;i<recdata.length;i++){
+recdata[i].shopinfo.starscore=(Number(recdata[i].shopinfo.star1)*50+Number(recdata[i].shopinfo.star2)*25+Number(recdata[i].shopinfo.star3)*15+Number(recdata[i].shopinfo.star4)*2+Number(recdata[i].shopinfo.star5*1))/Number(recdata[i].shopinfo.starnum)
+	    							}
+	    							_this.recSellerlist=rel.data;
+	    							console.log(_this.recSellerlist)
+	    							if(rel.data.length<10){
+	    								$('#nomore').removeClass('hide')
+	    							}
+	    							_this.pagelist=rel.data;
+    						}  
+    					}
+    				}else{
+    					if(_this.page==1){
+						_this.loadingTop = 1;
+						}
+						return false;
+    				}
+    			},
+    			fail:function(a){
+    				 $.alert(a)
+    			}
+	    	 });
+		},
+		againgetnavgator:function(){
+			$.alert('请刷新页面，允许地理位置授权',function(){
+				window.location.reload()
+			})
+		},
+		getnavgator:function(){//获取当前位置按钮
+			var _this=this;
+           mMap.getCurrentPosition(_this.locationFunc)
+	    },
+	    locationFunc:function(){
+	     	var _this=this;
+		    var data = JSON.parse(sessionStorage.getItem("location"));
+		    console.log(data)
+		    var nav=data.formattedAddress.toString().split(data.addressComponent.district)[1]
+		    _this.navigatorname=nav;
+		    _this.bd_encrypt(data.position.lng,data.position.lat)
+        },
+		 bd_encrypt:function(gg_lng, gg_lat) {//高德坐标转百度（传入经度、纬度）
+		 	var _this=this;
+		    var X_PI = Math.PI * 3000.0 / 180.0;
+		    var x = gg_lng, y = gg_lat;
+		    var z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * X_PI);
+		    var theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * X_PI);
+		    var bd_lng = z * Math.cos(theta) + 0.0065;
+		    var bd_lat = z * Math.sin(theta) + 0.006;
+		    _this.latitude=bd_lat;
+		    _this.longitude=bd_lng;
+		    _this.curposition();
+		},
+	///////////////////////////////////////////////////////////////////四级联动、////////////////////////
+	          initAddr:function() {
+	    			var _this = this;
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/User/GetCityList?Province="+_this.initProvince,
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						_this.City = rel.data;
+	    					}
+	    				}
+	    			});
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/User/GetCountyList?City="+_this.initCity,
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						_this.County = rel.data;
+	    					}
+	    				}
+	    			});
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/User/GetTownList?County="+_this.initCounty,
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						_this.Town = rel.data;
+	    					}
+	    				}
+	    			});
+	    		},
+	    		showAddr: function (){
+	    			$(".shade-box").animate({"bottom":0},100);
+	    		},
+	    		hideAddr: function (){
+	    			$(".shade-box").animate({"bottom":"-100%"},100);
+	    		},
+	    		clearAddr: function() {
+	    			var _this = this;
+	    			_this.curCity = 0;
+	    			_this.curCityName = "";
+	    			_this.curCounty = 0;
+	    			_this.curCountyName = "";
+	    			_this.curTown = 0;
+	    			_this.curTownName = "";
+	    		},
+	    		getProvince: function() {
+	    			var _this = this;
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/User/GetProvinceList",
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						_this.Province = rel.data;
+	    						
+	    					}
+	    				}
+	    			});
+	    		},
+	    		getAddrName: function(id,type) {
+	    			var _this = this;
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/Tool/GetRegionInfo?Regionid="+id,
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						if(type==0){
+	    							_this.curProvinceName = rel.data.regionname
+	    						}else if(type==1){
+	    							_this.curCityName = rel.data.regionname
+	    						}else if(type==2){
+	    							_this.curCountyName = rel.data.regionname
+	    						}else if(type==3){
+	    							_this.curTownName = rel.data.regionname
+	    						}
+	    						_this.Addr = _this.curProvinceName+_this.curCityName+_this.curCountyName+_this.curTownName;
+    							console.log(_this.Addr);
+	    					}
+	    				}
+	    			});
+	    		},
+	    		getProvinceTab: function(regionid,regionname) {
+	    			$(".addr-box").animate({"margin-left":0},100);
+	    			this.curIndex = 0;
+	    		},
+	    		getCityTab: function(regionid,regionname) {
+	    			$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+	    			this.curIndex = 1;
+	    		},
+	    		getCountyTab: function(regionid,regionname) {
+	    			$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+	    			this.curIndex = 2;
+	    		},
+	    		getTownTab: function(regionid,regionname) {
+	    			$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+	    			this.curIndex = 3;
+	    		},
+	    		getCity: function(regionid,regionname) {
+	    			var _this = this;
+	    			_this.isInit = false;
+	    			_this.curProvince = regionid;
+	    			_this.curProvinceName = regionname;
+	    			_this.addrname=regionname;
+	    			_this.curCity = 0;
+	    			_this.curCityName = "";
+	    			_this.curCounty = 0;
+	    			_this.curCountyName = "";
+	    			_this.curTown = 0;
+	    			_this.curTownName = "";
+	    			_this.curIndex = 0;
+	    			//$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/User/GetCityList?Province="+regionid,
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						_this.City = rel.data;
+	    					}
+	    				}
+	    			});
+	    		},
+	    		getCounty: function(regionid,regionname) {
+	    			var _this = this;
+	    			_this.curCity = regionid;
+	    			_this.curCityName = regionname;
+	    			_this.addrname=regionname;
+	    			_this.curCounty = 0;
+	    			_this.curCountyName = "";
+	    			_this.curTown = 0;
+	    			_this.curTownName = "";
+	    			var index = $(".cur-li").index();
+	    			if(_this.curIndex<index){
+	    				$(".addr-box").animate({"margin-left":0},100);
+	    			}else{
+	    				$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+	    			}
+	    			_this.curIndex = 1;
+	    			
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/User/GetCountyList?City="+regionid,
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+//	    						_this.County = rel.data;
+	    						$(".shade-box").animate({"bottom":"-100%"},100);
+	    						_this.searchvalue=''
+	    						_this.initdata();
+	    						console.log(regionid)
+	    						console.log(_this.curCityregionid)
+	    						if(regionid!=_this.curCityregionid){
+	    							_this.isregionid=false
+	    						}
+	    						_this.sellerList();
+	    					}
+	    				}
+	    			});
+	    		},
+	    		getTown: function(regionid,regionname) {
+	    			var _this = this;
+	    			_this.curCounty = regionid;
+	    			_this.curCountyName = regionname;
+	    			_this.curTown = 0;
+	    			_this.curTownName = "";
+//	    			_this.addrname=regionname;
+	    			var index = $(".cur-li").index();
+	    			if(_this.curIndex<index){
+	    				$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+	    			}else{
+	    				$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+	    			}
+	    			_this.curIndex = 2;
+	    			$.ajax({
+	    				type:"get",
+	    				url:"/Api/User/GetTownList?County="+regionid,
+	    				async:true,
+	    				dataType:"json",
+	    				success: function(rel) {
+	    					if(rel.code==1){
+	    						_this.Town = rel.data;
+	    					}
+	    				}
+	    			});
+	    		},
+//	    		selTown: function(regionid,regionname) {
+//	    			var _this = this;
+//	    			_this.curTown = regionid;
+//	    			_this.curTownName = regionname;
+//	    			_this.curIndex = 3;
+//	    			_this.Addr = _this.curProvinceName+_this.curCityName+_this.curCountyName+_this.curTownName;
+//	    			$(".shade-box").animate({"bottom":"-100%"},100);
+//	    			$("#addr").val("");
+//	    			_this.Address = "";
+//	    			$('#Longitude').text("");
+//	    			$('#Latitude').text("");
+//	    		}
+    },
+    mounted:function(){
+    	var _this=this;
+    	_this.lazyload();
+    	_this.getFooter();
+		_this.curposition();
+		_this.getList();
+    	var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+　　            var  h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight; 
+        _this.windowHeight= (h+46) +'px';
+    },
+    created:function(){
+    	var _this=this;
+    	_this.allShow=true;
+    	_this.choseCategory(0,'全部分类');
+    	this.getProvince();
+		this.initAddr();
+		this.getAddrName(this.curProvince,0);
+		this.getAddrName(this.curCity,1);
+		this.getAddrName(this.curCounty,2);
+		this.getAddrName(this.curTown,3);
+    },
+    beforeCreate:function(){
+    	var _this=this;
+    },
+});
+
+$(function(){
+    setTimeout(function(){
+//		$.hideLoading();
+$('.curtain').addClass("hide")
+		$(".warp").css("display","block");
+		vm.initGetAddr();
+	},200);
+      $(window).scroll(function() {
+		var scrollTop = $(this).scrollTop();
+		var scrollHeight = $(document).height();
+		vm.windowHeight=scrollHeight;
+		var windowHeight = $(this).height();
+			if(scrollTop + windowHeight == scrollHeight) {
+	        	if(vm.pagelist.length==0){
+	        		$("#nomore").removeClass("hide");
+	        	    $("#more").addClass("hide");
+	        		return false;
+	        	}else{
+	        		$("#nomore").addClass("hide");
+	        	    $("#more").removeClass("hide");
+	        	vm.page++;
+	        	vm.sellerList();	
+	        	return false;
+	        	}
+			}else{
+//				 console.log("scrollTop: "+scrollTop);
+//		       console.log("scrollHeight: "+scrollHeight);
+//		       console.log("windowHeight: "+windowHeight);
+			}
+		
+	});
+	vm.getnavgator();		
+})
+	
+</script>
+ </body>
+</html>

@@ -1,0 +1,294 @@
+﻿@model List<Yitao.Core.ArticleInfo>
+    @{
+        Layout = null;
+    }
+    <!doctype html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+        <meta content="telephone=no" name="format-detection">
+        <meta name="apple-touch-fullscreen" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <title>列表-@{@WorkContext.SellerInfo.SellerName}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+        <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+        <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weuix.min.css" />
+        <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/Mobile/weui/lazyimg.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/Mobile/weui/updown.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+        <script>
+            
+        </script>
+
+        <style>
+body{width:7.5rem;margin:0 auto;}
+.weui_cells, .weui_panel {
+    margin-top: 0;
+}
+.weui_cell {
+    padding: 5px 15px;
+}
+.weui_cell:before{left:0}
+a {
+display: inline-block;
+color: #000;
+font-size: 0.8rem;
+/*white-space :nowrap;*/
+overflow: hidden;
+}
+a p {
+word-break: break-all;
+text-overflow: ellipsis;
+display: -webkit-box; /** 对象作为伸缩盒子模型显示 **/
+-webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
+-webkit-line-clamp: 1; /** 显示的行数 **/
+overflow: hidden;}
+a > div:last-of-type {width: 12rem;}
+.time {line-height: 0.8rem;margin-right: 1.5rem;font-size: 0.24rem!important;color: #333!important;margin-right: 15px;}
+.articleli{display: flex;justify-content: space-between;padding:0.24rem 0;width:6.9rem;margin:0 auto;overflow: hidden;}
+.img-box{width:1.8rem;height:1.35rem;line-height: 1.35rem;overflow: hidden;border:1px solid #ddd;}
+ .img-box img{width:100%; }
+ .articleli_r{padding-left: 0.2rem; position: relative;}
+ .articleli_r p{font-size: 0.28rem;-webkit-line-clamp: 2;position: absolute;bottom: -0.14rem;height:0.7rem;overflow: hidden;}
+ .weui_cell_ft .time{text-align: left;font-size: 0.28rem; }
+ .weui_cell_ft{display: flex;justify-content: space-between;text-align: left; position: absolute;top: 0.2rem;  }
+.weui_cell_ft span{font-size:0.24rem;line-height:0.8rem;color:#333!important;}
+.weui_cell_ft i{line-height:0.8rem}
+.img-box icon{font-size: 0.88rem;display: block;width:100%;text-align: center;color:#999;}
+.cate-box{height: 1.2rem;background: #fff;border-bottom: 1px;font-size: 0.24rem;}
+.cate-box ul li {
+    list-style: none;
+    height: 1.2rem;
+    line-height: 1.2rem;
+    padding: 0 10px;
+}
+.cate-box li.cur{
+	color: #ff4800;
+	position: relative;
+}
+.cate-box li.cur:after {
+    position: absolute;
+    content: "";
+    height: 2px;
+    background: #ff4800;
+    width: 70%;
+    bottom: 0;
+    left: 15%;
+}
+.ell-1{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ell-2{overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+a.weui_cell{font-size: 0.28rem;}
+</style>
+    </head>
+    <body ontouchstart>
+        <!--头部-->
+        <div class="weui-header" style='background:#ff4800;'>
+            <div class="weui-header-left">
+                <a class="icon icon-109 f-black" href="javascript:;" onclick="goToBack()" style='color:#fff!important'></a>
+            </div>
+            <h1 class="weui-header-title f-black" style='color:#fff!important'>
+            	@if (@ViewData["CateId"].ToString() =="2715"){
+            		<span>帮助中心</span>
+            	}
+            	else
+            	{
+            		<span>新闻列表</span>
+            	}
+            </h1>
+        </div>
+        @if (@ViewData["CateId"].ToString() =="2715"){
+        <div class="cate-box">
+        	<ul>
+        		<li  class="left cate-li cur"  onclick="getArticle(2716,0)">
+        			<div class="cate-title">用户相关</div>
+        		</li>
+        		<li  class="left cate-li"  onclick="getArticle(2717,1)">
+        			<div class="cate-title">商家相关</div>
+        		</li>
+        		<li  class="left cate-li"  onclick="getArticle(2718,2)"b>
+        			<div class="cate-title">权益说明</div>
+        		</li>
+        		<li  class="left cate-li"  onclick="getArticle(2719,3)">
+        			<div class="cate-title">线上操作</div>
+        		</li>
+        		<li  class="left cate-li"  onclick="getArticle(2853,4)">
+        			<div class="cate-title">积分</div>
+        		</li>
+        	</ul>
+        </div>	
+        }
+        <!--上拉刷新-->
+        <div class=" weui_panel weui_panel_access">
+            <div class="weui_panel_bd weui_cells">
+                @foreach (Yitao.Core.ArticleInfo info in Model)
+                { 
+                	if(info.LinkUrl!=""){
+                		<a class="weui_cell articleli"  href="@info.LinkUrl">
+                    	<div class='img-box'> 
+                    		@if (info.Thumbnail!=""){
+                    			<img src="@(WorkContext.ShopConfig.ImageCDN)@{@info.Thumbnail}?w=600">
+                    		}else{
+                    		    <icon class='icon icon-54'></icon>
+                    		}
+                    		
+                    	</div>
+                        <div class="weui_cell_bd weui_cell_primary articleli_r">
+                            <p>@info.Title</p>
+                            <div class="weui_cell_ft">
+                        	<span class="time">@info.AddTime.ToString("yyyy-MM-dd")</span>
+                        	<span>阅读：@info.Click</span>
+                        	<i class="icon "></i>
+                           </div>
+                        </div>
+                      </a>
+                	}else{
+                		<a class="weui_cell articleli"  href="/m/article/detail?id=@{@info.ArticleId}">
+                    	<div class='img-box'> 
+                    		@if(info.Thumbnail!=""){
+                    			<img src="@(WorkContext.ShopConfig.ImageCDN)@{@info.Thumbnail}?w=600">
+                    		}else{
+                    		    <icon class='icon icon-54'></icon>
+                    		}
+                    	</div>
+                        <div class="weui_cell_bd weui_cell_primary articleli_r">
+                            <p>@info.Title</p>
+                            <div class="weui_cell_ft">
+                        	<span class="time">@info.AddTime.ToString("yyyy-MM-dd")</span>
+                        	<span>阅读：@info.Click</span>
+                        	<i class="icon "></i>
+                           </div>
+                        </div>
+                    </a>
+                	}
+                }
+            </div>
+        </div>
+        
+        <script id="tpl" type="text/html">
+        	<% for(var i in Data){ %>
+        	<%if(Data[i].LinkUrl!=""){%>
+        	<a class="weui_cell articleli"  href="<%=Data[i].LinkUrl%>">
+        	<%}else{%>
+        	<a class="weui_cell articleli"  href="/m/article/detail?id=<%=Data[i].ArticleId%>">
+        	<%}%>
+	        	<div class='img-box'> 
+	        		<% if (Data[i].Thumbnail!=""){ %>
+	        			<img src="@(WorkContext.ShopConfig.ImageCDN)<%=Data[i].Thumbnail%>?w=600">
+	        		<% }else{ %>
+	        		    <icon class='icon icon-54'></icon>
+	        		<% } %>
+	        		
+	        	</div>
+	            <div class="weui_cell_bd weui_cell_primary articleli_r">
+	                <p><%=Data[i].Title%></p>
+	                <div class="weui_cell_ft">
+	            	<span class="time"><%=Data[i].AddTime.replace("T"," ")%></span>
+	            	<span>阅读：<%=Data[i].Click%></span>
+	            	<i class="icon "></i>
+	               </div>
+	            </div>
+	        </a>
+	        <% } %>
+        </script>
+        
+    </body>
+ <script>
+ 	//页数
+    var page = 1;
+    // 每页展示10个
+    var size = 10;
+    var cateid='@ViewData["CateId"]';
+    if(Number(cateid)==2715){
+    	cateid = 2716;
+    	page = 0;
+    }
+ 	var IsApp = "@WorkContext.IsApp";
+	function goToBack() {
+		var _this = this;
+		if(IsApp==1){
+			if(navigator.userAgent.indexOf("iPhone")>0){
+				gobacklastpage();
+			}
+			if(navigator.userAgent.indexOf("Android")>0){
+				window.js.goBack();
+			}
+		}else{
+			window.history.back();
+		}
+			
+	}
+	function getArticle(id,index) {
+		$(".dropload-down").remove();
+		$('.weui_panel_bd').html("");
+		cateid = id;
+		page=0;
+		$(".cate-li").removeClass("cur");
+		$(".cate-li").eq(index).addClass("cur");
+		getList();
+	}
+	function getList() {
+		$('.weui_panel').dropload({
+            scrollArea: window,
+            autoLoad: true, //自动加载
+            domDown: { //上拉
+                domClass: 'dropload-down',
+                domRefresh: '<div class="dropload-refresh f15 "><i class="icon icon-20"></i>上拉加载更多</div>',
+                domLoad: '<div class="dropload-load f15"><span class="weui-loading"></span>正在加载中...</div>',
+                domNoData: '<div class="dropload-noData">没有更多数据了</div>'
+            },
+            domUp: { //下拉
+                domClass: 'dropload-up',
+                domRefresh: '<div class="dropload-refresh"><i class="icon icon-114"></i>上拉加载更多</div>',
+                domUpdate: '<div class="dropload-load f15"><i class="icon icon-20"></i>释放更新...</div>',
+                domLoad: '<div class="dropload-load f15"><span class="weui-loading"></span>正在加载中...</div>'
+            },
+            loadDownFn: function (me) { //加载更多
+            	page++;
+//                      window.history.pushState(null, document.title, window.location.href);
+                var result = '';
+                $.ajax({
+                    type: 'POST',
+                    url: 'List?t='+ Math.random(),
+                    data:{cateid:cateid,page:page,size:size},
+                    dataType: 'json',
+                    success: function (data) { 
+                    
+                      /*var arrLen = data.length;*/
+                      console.log(data.Code);
+                      if(data.Code ==1){
+                      	var tplx = document.getElementById('tpl').innerHTML;
+						var desc1=tpl(tplx,data);
+                      	$('.weui_panel_bd').append(desc1);
+                      	me.resetload();
+                      
+                      }else{
+                      		// 锁定
+							me.lock();
+		
+							// 无数据
+							$(".dropload-down").html('<div class="dropload-noData">没有更多数据了</div>')
+                      }
+                    },
+                    error: function (xhr, type) {
+                        //alert('Ajax error!');
+                        // 即使加载出错，也得重置
+                        me.resetload();
+                    }
+                });
+            }
+        });
+	}
+	
+	$(function () {
+        getList();     
+        
+    });
+	
+	
+	
+ </script>
+</html>

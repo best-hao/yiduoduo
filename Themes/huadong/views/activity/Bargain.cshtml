@@ -1,0 +1,1002 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>砍价帮-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta content="@WorkContext.ShopConfig.SEODescription" name="description">
+    <meta content="@WorkContext.ShopConfig.SEOKeyword" name="keywords">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css"/>
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css"/>
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css"/>
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/bargain.css" />
+	<script type="text/javascript" charset="utf-8" src="/Js/Mobile/zepto.min.js" ></script>
+	<script type="text/javascript" charset="utf-8" src="/Mobile/weui/ydui.flexible.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/Js/vue/dist/vue.min.js" ></script>
+    <script src="/Mobile/weui/icon/iconfont.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+    	.show-addr li{
+    		display: inline-block;
+    		line-height: 0.8rem;
+		    float: none!important;
+		    text-align: left;
+		    padding: 0 0.2rem;
+    	}
+    	.addr-box ul li {
+    padding: 0 0.2rem;
+    /* line-height: 0.6rem; */
+    height: 0.6rem;
+     overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap
+}
+.address-con:last-child:before{
+	    content: "添加新收货地址";
+        position: absolute;
+	    left: 0.3rem;
+	    top: 0.45rem;
+}
+.weui_media_box.weui_media_appmsg .weui_media_hd{margin-right: 0.2rem;}
+.role-box{position:fixed;display: none;width: 7.5rem;top:0;left: 50%;margin-left: -3.75rem; height: 100%;background: #fff;color: #333;font-size: 0.24rem;z-index: 110;}
+			.role-info{padding: 0.2rem;font-size: 0.28rem;}
+    </style>
+</head>
+<body>
+	<div class="bargain-content" id="bargainContent" v-cloak>
+		<div class="common-header">
+			<div class="header-back" v-on:click="goToBack()"><span class="icon iconfont">&#xe60e;</span></div>
+		    <div class="title ell-1">砍价帮</div>
+		    <div class="header-menu" style="width: auto;" onclick="showRole()"><span style="padding-right: 0.2rem;">砍价规则</span></div>
+	    </div>
+	    
+	    <div class="bargain-list">
+	    	<div class="bargain-banner">
+	    		<img src="/Images/Mobile/bargain/bargain-banner.jpg" />
+	    	</div>
+	    	<div class="weui_cells weui_cells_access">
+	            <a class="weui_cell" href="javascript:;" v-on:click='goMyBargain()'> 
+	                <div class="weui_cell_hd" style='line-height:0.48rem'>
+	                	<i class="icon iconfont icon-tips">&#xe65b;</i>
+	                </div>
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <p>我的砍价</p>
+	                </div>
+	                <div class="weui_cell_ft"></div>
+	            </a>
+	        </div>
+	        <div class="weui_panel_bd">
+                <div v-for="(item, index) of goodsList" class="weui_media_box weui_media_appmsg">
+                    <div class="weui_media_hd">
+                    	<a :href="'/m/activity/BargainDetail?Id='+item.itemid+'&IsApp=@{@WorkContext.IsApp}'">
+                    		<img class="weui_media_appmsg_thumb" :src="'@(WorkContext.ShopConfig.ImageCDN)/'+item.shareimg" alt="">
+                    	</a>
+                    </div>
+                    <div class="weui_media_bd">
+                    	<a :href="'/m/activity/BargainDetail?Id='+item.itemid+'&IsApp=@{@WorkContext.IsApp}'">
+                    		<h4 class="weui_media_title">{{item.productname}}</h4>
+                        	<p class="weui_media_desc">原价¥{{item.activityprice}} 最低砍至<strong class="bargain-price">¥{{item.limitprice}}</strong></p>
+                    	</a>
+                        <p class="weui_media_desc">{{item.salecount}}人已购买<span class="bargain-buy" v-on:click="openShade(item.itemid)">发起砍价</span></p>
+                    </div>
+                </div>
+            </div>
+			<div class="shade" v-show="shadeok">
+				<div class="shade-mask" v-on:click="closeShade()"></div>
+				<div class="shade-content">
+					<div v-show="attrContent" v-bind:class="[specContent ? 'shade-spec-active' : '','shade-spec']">
+						<div class="header-box">
+							<div class="img-box" v-if="activityPic !=''">
+	                            <img v-bind:src="'@WorkContext.ShopConfig.ImageCDN'+activityPic" alt="" />
+							</div>
+							<div class="img-box" v-else>
+	                            <img src="/Images/wutu.png" alt="" />
+							</div>
+							<div class="txt-box">
+								<div class="price color">¥<span class="price activity-price">{{activityPrice}}</span></div>
+								<div class="spec-selected ell-2">已选：<span class="spec-txt spec-name">{{skuName}}</span></div>
+							</div>
+							<div class="close" v-on:click="closeShade()"><span class="icon iconfont">&#xe62d;</span></div>
+						</div>
+						<div class="spec-box">
+		                	<div class="spec-list" v-for="(item,index) of listproductspecinfo">
+		                		<div class="spec-item">{{item.specname}}</div>
+								<div class="spec-item-val">
+									<a href="javascript:;" ref="specValue" v-for="(itemone,indexone) of listproductspecvalueinfo" class="spec-val" v-bind:data-productid="itemone.productid" v-bind:data-productid="itemone.productid" v-bind:data-specvalue="itemone.specvalue" v-bind:data-specvalueid="itemone.specvalueid" v-if="item.specid == itemone.specid">{{itemone.specvalue}}</a>
+								</div>
+							</div>
+						</div>
+						<div class="confirm-spec bg" v-on:click="confirmSpec()">确定</div>
+					</div>
+					<div v-bind:class="[addressContent ? 'shade-spec-active' : '','shade-spec']" style='height:5.8rem;overflow-y: scroll;'>
+						<div class="address-title">选择收货地址 <span class="icon iconfont" v-on:click="closeShade()">&#xe62d;</span></div>
+						<div class="address-con" v-for='(item,index) in AddressList' :key='index' >
+							<a href="javascript:;"  v-on:click="sureAddress(item)">
+								<div class="address-up">{{item.Consignee}}: {{item.Mobile}}</div>
+								<div class="address-down">{{item.Address}}</div>
+							</a>
+						</div>
+						<div class="address-con"  v-on:click="addressAdd()" style='height:100%'>
+							<!--<a href="javascript:;"  v-on:click="addressAdd()">
+								<div style='line-height:1.2rem'>添加新收货地址</div>
+							</a>-->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="loading">
+				<div class="weui-loadmore" v-show="loadmore">
+		            <i class="weui-loading"></i>
+		            <span class="weui-loadmore-tips">正在加载</span>
+		        </div>
+				<div class="weui_cells_title tcenter" v-show="nomore">
+					没有更多砍价商品了
+				</div>
+			</div>
+	    </div>
+	    <div class="" id="select_add" v-show='viewShow'>
+			<div class="select_add_ab">
+				<div class="select_add_re">
+
+					<div class="m-navbar"  v-on:click='addressAdd()'>
+						<span class="navbar-item select_back" id="add_back"><i class="iconfont">&#xe60e;</i></span>
+						<div class="navbar-center">
+							<span class="navbar-title">地址添加</span>
+						</div>
+					</div>
+					<div class="formbox">
+						<div class="inputbox">
+							<div class="fl">收货人姓名</div>
+							<div class="fr">
+								<input type="text" placeholder="收货人姓名" name="" value="" class="weui-input" id="Consignee_Name" v-model='Consignee'>
+							</div>
+						</div>
+						<div class="inputbox">
+							<div class="fl">联系方式</div>
+							<div class="fr">
+								<input type="tel" placeholder="联系方式" name="" maxlength="11" value="" class="weui-input" id="Consignee_Phone" v-model='Mobile'>
+							</div>
+						</div>
+						<!--  选择地址  dom 样式之后再做修改 -->
+						<div class="inputbox">
+							<div class="fl">选择省市</div>
+							<div class="fr">
+								<input name="" class="weui-input" type="text"  readonly="readonly" id="selectAddr" v-on:click="showAddr()" placeholder="请选择省市区镇" v-model="Addr">
+				                <input type="hidden" name="Province" id="Province" v-model="curProvince" />
+				                <input type="hidden" name="City" id="City" v-model="curCity" />
+				                <input type="hidden" name="County" id="County" v-model="curCounty" />
+				                <input type="hidden" name="Town" id="Town" v-model="curTown" />
+							</div>
+						</div>
+						
+						<div class="inputbox">
+							<div class="fl">详细地址</div>
+							<div class="fr">
+								<input type="text" class="weui-input" name="" id="Consignee_Map" value="" placeholder="详细地址" v-model='addressdetail'>
+								<div id="searchResultPanel" style="border1px solid #C0C0C0;width：150px;height:auto; display:none;" class="searchResultPanel"></div>
+							</div>
+						</div>
+						<div class="inputbox">
+							<div class="fl"><span class="total-text">设置默认地址</span></div>
+							<div class="fr">
+								<input class="weui_switch" type="checkbox" id="morenMap"  v-model='IsDefault'>
+							</div>
+						</div>
+						<div class="hideBtn" v-on:click='saveForm(2)'>保存</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<!--四联动-->
+		<div class="shade-box" style='touch-action: pan-x;'>
+		    <div class="addr-shade" style='touch-action: pan-x;'>
+		    	<div class="title">
+		    		所在地区
+		    	</div>
+		    	<div class="show-addr" style='width:7.5rem;padding:0;height:0.8rem;touch-action: pan-x;'>
+		    		<ul style='display:block;width:7.5rem;overflow-x:auto;height:0.8rem;white-space: nowrap;touch-action: pan-x;'>
+		    			<li class="prov-li" 
+		    				:class="{'cur-li':curIndex==0}"
+		    				v-on:click="getProvinceTab(initProvince,curProvinceName)"
+		    				>{{curProvinceName}}</li>
+		    			<li class="city-li" 
+		    				:class="{'cur-li':curIndex==1}"
+		    				v-on:click="getCityTab(initCity,curCityName)"
+		    				>{{curCityName}}</li>
+		    			<li class="county-li" 
+		    				:class="{'cur-li':curIndex==2}"
+		    				v-on:click="getCountyTab(initCounty,curCountyName)"
+		    				>{{curCountyName}}</li>
+		    			<li class="town-li" 
+		    				:class="{'cur-li':curIndex==3}"
+		    				v-on:click="getTownTab(initTown,curTownName)"
+		    				>{{curTownName}}</li>
+		    		</ul>
+		    	</div>
+				<div class="addr-box">
+					<div class="province left">
+						<ul>
+							<li v-for="(item, index) of Province" 
+								:key="item.regionid" 
+								v-on:click="getCity(item.regionid,item.regionname)"
+								:class="{'curProvince':curProvince==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+					<div class="city left">
+						<ul v-if="City.length>0">
+							<li v-for="(item, index) of City" 
+								:key="item.regionid" 
+								v-on:click="getCounty(item.regionid,item.regionname)"
+								:class="{'curCity':curCity==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+					<div class="county left">
+						<ul v-if="County.length>0">
+							<li v-for="(item, index) of County" 
+								:key="item.regionid" 
+								v-on:click="getTown(item.regionid,item.regionname)"
+								:class="{'curCounty':curCounty==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+					<div class="town left">
+						<ul v-if="Town.length>0">
+							<li v-for="(item, index) of Town" 
+								:key="item.regionid" 
+								v-on:click="selTown(item.regionid,item.regionname)"
+								:class="{'curTown':curTown==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+				</div>
+		    	
+		    </div>
+	    </div>
+		<!--end-->
+	</div>
+	<div class="role-box">
+		    	<div class="common-header"> 
+					<div class="header-back" onclick="hideRole()"><span class="icon iconfont">&#xe60e;</span></div>
+				    <div class="title ell-1">砍价规则</div> 
+			    </div>
+			    <div class="role-info">
+			    	<p>1、同款商品在砍价进行中时不能多次发起砍价</p>
+			    	<p>2、邀请好友砍价时，好友注册为新会员则锁定邀请人为推荐人</p>
+			    	<p>3、砍至接近底价时可购买，自发起时48小时内未完成购买作废</p>
+			    	<p>4、成功支付购买后商家按照收货地址发货</p>
+			    	<p>活动最终解释权归秦商未来所有</p>
+			    </div>
+		    </div>
+</body>
+<script>
+	//打开积分规则
+			function showRole(){
+				$(".role-box").css("display","block");
+			}
+			//关闭积分规则
+			function hideRole(){
+				$(".role-box").css("display","none");
+			}
+	$.showLoading();
+	var vm = new Vue({
+		el: "#bargainContent",
+		data: {
+			IsApp: "@WorkContext.IsApp",
+			weixin:"@WebHelper.IsWeiXin()",
+			shadeok: false,
+			attrContent: true,
+			addressContent: false, //地址栏展示条件
+			specContent: true,    //属性框展示条件
+			goodsList: [],  //砍价商品列表
+			page: 1,   //初始加载当前页码
+			size: 6,   //每页展示数据量
+			loadmore: false,
+			nomore: false,
+			listproductspecinfo:[], //商品属性名
+			listproductspecvalueinfo:[], //商品属性值
+			itemId: 0,
+			productId: 0,
+			skuId: 0,
+			activityType: 11,  //砍价活动类型
+			skuName:"",
+			activityPrice: 0,
+			AddressList:[],
+			activityPic: "",
+			userId:'@WorkContext.Uid',
+			///////////////////////地址添加///////////
+			AddressId:'',
+	        Mobile:'',
+	        Address:'',
+	        addressdetail:'',
+	        Consignee:'',
+	        IsDefault:true,
+	        Provinceid:'',
+	        Cityid:'',
+	       Countyid:'',
+	       Townid:'',
+		    curIndex: 0,
+			Province: [],
+			City: [],
+			County: [],
+			Town: [],
+			curProvince: "",
+			curProvinceName: "",
+			curCity: "",
+			curCityName: '',
+			curCounty: "",
+			curCountyName: '',
+			curTown: "",
+			initProvince: "",
+			initCity: "",
+			initCounty: "",
+			initTown: "",
+			curTownName: '',
+			isInit: true,
+			Addr: "",
+			Address: "",
+			viewShow:false,
+		},
+		created: function() {
+			var _this = this;
+			_this.loadmore = !_this.loadmore;
+			_this.getInfo();
+			this.getProvince();
+			this.initAddr();
+			this.getAddrName(this.curProvince,0);
+			this.getAddrName(this.curCity,1);
+			this.getAddrName(this.curCounty,2);
+			this.getAddrName(this.curTown,3);
+		},
+		methods:{
+//			四级联动
+		initAddr:function() {
+			var _this = this;
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetCityList?Province="+_this.initProvince,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.City = rel.data;
+					}
+				}
+			});
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetCountyList?City="+_this.initCity,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.County = rel.data;
+					}
+				}
+			});
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetTownList?County="+_this.initCounty,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.Town = rel.data;
+					}
+				}
+			});
+		},
+		showAddr: function (){
+			$("#app-addr").click();
+			setTimeout(function(){
+				$(".shade-box").css("display","block");
+				$(".shade-box").css("z-index","111111113");
+			},20);
+		},
+		clearData:function(){
+    		 var _this=this;
+             _this.AddressId='';
+	 		 _this.Mobile='';
+			 _this.Addr='';
+			 _this.addressdetail=''
+			 _this.Consignee='';
+			 _this.IsDefault=true;
+			 _this.curProvince='';
+			 _this.City=[];
+			 _this.County=[];
+			 _this.Town=[];
+			 _this.curCity='';
+			 _this.curCounty='';
+			 _this.curTown='';
+			 _this.curProvinceName='';
+			 _this.curCityName='';
+			 _this.curCountyName='';
+			 _this.curTownName='';
+			 _this.initProvince='';
+			 _this.initCity='';
+			 _this.initCounty='';
+			 _this.initTown='';
+			  this.getAddrName(this.curProvince,0);
+			  this.getAddrName(this.curCity,1);
+			  this.getAddrName(this.curCounty,2);
+			  this.getAddrName(this.curTown,3);
+			  $(".addr-box").animate({"margin-left":"0rem"},100);
+			this.curIndex = 0;
+    	},
+		getProvince: function() {
+			var _this = this;
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetProvinceList",
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.Province = rel.data;
+					}
+				}
+			});
+		},
+		getAddrName: function(id,type) {
+			var _this = this;
+			$.ajax({
+				type:"get",
+				url:"/Api/Tool/GetRegionInfo?Regionid="+id,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						if(type==0){
+							_this.curProvinceName = rel.data.regionname
+						}else if(type==1){
+							_this.curCityName = rel.data.regionname
+						}else if(type==2){
+							_this.curCountyName = rel.data.regionname
+						}else if(type==3){
+							_this.curTownName = rel.data.regionname
+						}
+						_this.Addr = _this.curProvinceName+'-'+_this.curCityName+'-'+_this.curCountyName+'-'+_this.curTownName;
+						console.log(_this.Addr);
+					}
+				}
+			});
+		},
+		getProvinceTab: function(regionid,regionname) {
+			$(".addr-box").animate({"margin-left":0},100);
+			this.curIndex = 0;
+		},
+		getCityTab: function(regionid,regionname) {
+			$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+			this.curIndex = 1;
+		},
+		getCountyTab: function(regionid,regionname) {
+			$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+			this.curIndex = 2;
+		},
+		getTownTab: function(regionid,regionname) {
+			$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+			this.curIndex = 3;
+		},
+		getCity: function(regionid,regionname) {
+			var _this = this;
+			_this.isInit = false;
+			_this.curProvince = regionid;
+			_this.curProvinceName = regionname;
+			_this.curCity = 0;
+			_this.curCityName = "";
+			_this.curCounty = 0;
+			_this.curCountyName = "";
+			_this.curTown = 0;
+			_this.curTownName = "";
+			_this.curIndex = 0;
+			//$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetCityList?Province="+regionid,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						if(rel.data.length==0){
+							$(".shade-box").css("display","none");
+							_this.Addr = _this.curProvinceName
+						}else{
+							_this.City = rel.data;
+						}
+					}
+				}
+			});
+		},
+		getCounty: function(regionid,regionname) {
+			var _this = this;
+			_this.curCity = regionid;
+			_this.curCityName = regionname;
+			_this.curCounty = 0;
+			_this.curCountyName = "";
+			_this.curTown = 0;
+			_this.curTownName = "";
+			var index = $(".cur-li").index();
+			if(_this.curIndex<index){
+				$(".addr-box").animate({"margin-left":0},100);
+			}else{
+				$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+			}
+			_this.curIndex = 1;
+			
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetCountyList?City="+regionid,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						if(rel.data.length==0){
+							$(".shade-box").css("display","none");
+							_this.Addr = _this.curProvinceName+'-'+_this.curCityName
+						}else{
+							_this.County = rel.data;
+						}
+					
+					}
+				}
+			});
+		},
+		getTown: function(regionid,regionname) {
+			var _this = this;
+			_this.curCounty = regionid;
+			_this.curCountyName = regionname;
+			_this.curTown = 0;
+			_this.curTownName = "";
+			var index = $(".cur-li").index();
+			if(_this.curIndex<index){
+				$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+			}else{
+				$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+			}
+			_this.curIndex = 2;
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetTownList?County="+regionid,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						if(rel.data.length==0){
+							$(".shade-box").css("display","none");
+							_this.Addr = _this.curProvinceName+'-'+_this.curCityName+'-'+_this.curCountyName
+						}else{
+							_this.Town = rel.data;
+						}
+						
+					}
+				}
+			});
+		},
+		selTown: function(regionid,regionname) {
+			var _this = this;
+			_this.curTown = regionid;
+			_this.curTownName = regionname;
+			_this.curIndex = 3;
+			_this.Addr = _this.curProvinceName+'-'+_this.curCityName+'-'+_this.curCountyName+'-'+_this.curTownName;
+			$(".shade-box").css("display","none");
+			$("#addr").val("");
+			_this.Address = "";
+			$('#Longitude').text("");
+			$('#Latitude').text("");
+		},
+		selectaddr: function(item) {
+			window.parent.reloadData(item);
+		},
+		    //、、、、、、、、//////////////
+
+			addressAdd:function(){
+				var _this=this;
+				_this.viewShow=!_this.viewShow;
+				  _this.clearData();
+			},
+			saveForm:function(num,item){//保存编辑 1.编辑  2.保存 3.设置默认
+    		
+    		var _this=this;
+    		var IsDefault;
+    		var dataForm = {};
+    		if(num==3){//设置默认
+    			if(_this.IsDefault){
+	    			IsDefault=1
+	    		}else{
+	    			IsDefault=0
+	    		}
+    			dataForm={
+    				AddressId: item.AddressId,
+					Mobile: item.Mobile,
+					Address: item.Address,
+					Consignee: item.Consignee,
+					IsDefault: IsDefault,
+					Province: item.Province,
+					City:item.City,
+					County: item.County,
+					Town: item.Town,
+    		    }
+    		}else{//编辑保存
+	    			var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+	    		if(_this.Consignee==''){
+	    			$.toptips('姓名不能为空');
+	    			return false;
+	    		}else if(_this.Mobile==''){
+	    			$.toptips('手机号不能为空');
+	    			return false;
+	    		}else if(!myreg.test(_this.Mobile)){
+	    			$.toptips('手机号格式不正确');
+	    			return false;
+	    		}else if(_this.Addr==''){
+	    			$.toptips('请选择地址');
+	    			return false;
+	    		}else if(_this.addressdetail==''){
+	    			$.toptips('详细地址不能为空')
+	    			return false;
+	    		}
+	    		if(_this.IsDefault){
+	    			IsDefault=1
+	    		}else{
+	    			IsDefault=0
+	    		}
+    			dataForm={
+    				AddressId: _this.AddressId,
+					Mobile: _this.Mobile,
+					Address: _this.Addr+'~'+_this.addressdetail,
+					Consignee: _this.Consignee,
+					IsDefault: IsDefault,
+					Province: _this.curProvince,
+					City: _this.curCity,
+					County: _this.curCounty,
+					Town: _this.curTown,
+    		    }
+    		}
+    		$.ajax({
+				type: "POST",
+				url: "/m/order/AddressSave",
+				async: true,
+				data:dataForm,
+				dataType: "json",
+				success: function(rel) {
+					
+					if(rel.Code==1){
+						if(num==1){
+						}else if(num==2){
+//							_this.addRess();
+                        _this.viewShow=false;
+                        _this.getAddressList();
+                        _this.clearData();
+						}
+						$(".adr-addrlist").css("display","block");
+					}else{
+					}
+				}
+			});
+    	},
+			getInfo: function() {
+				var _this = this;
+				$.ajax({
+					type:"get",
+					url:"/Api/Activity/BargainList?v="+Math.random(),
+					async:true,
+					dataType:"json",
+					data:{
+						page: _this.page,
+						size: _this.size,
+					},
+					success: function(rel) {
+						//console.log(rel);
+						$.hideLoading();
+						if(rel.code==1){
+							_this.loadmore = !_this.loadmore;
+							_this.goodsList = _this.goodsList.concat(rel.data);//_this.goodsList追加数据返回数组副本
+							_this.page++;
+						}else{
+							_this.loadmore = false;
+							_this.nomore = true;
+						}
+					},
+					error: function(){
+						$.toast("Ajax error!", "forbidden");
+					}
+				});
+			},
+			//返回交互
+			goToBack:function() {
+				var that = this;
+				if(that.IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+		                window.js.goBack();
+					}
+				}else{
+					window.history.back();
+				}
+			},
+			//激活弹框获取当前商品数据
+			openShade: function(itemId) {
+				    var that = this;
+					if('@WorkContext.Uid'<1){
+						   if(Number(that.IsApp==1)){
+								if(navigator.userAgent.indexOf("iPhone")>0){
+									gotologinvc();
+								}
+								if(navigator.userAgent.indexOf("Android")>0){
+									window.js.goLogin();
+								}
+							}else{
+								if(that.weixin=="False"){
+									var url = window.location.href;
+									window.location.href = '/m/account/login?returnUrl='+url;
+								}else{
+									var url = window.location.href;
+									window.location.href = '/m/user/bind?returnUrl='+url;
+								}
+						  }
+	     			}else{
+			     	    that.openshadeFn(itemId);
+					}
+			},
+			openshadeFn:function(itemId){
+				var that = this;
+				that.shadeok = !that.shadeok;
+					$.ajax({
+						type:"get",
+						url:"/Api/Activity/BargainDetail?v="+Math.random()+"&Id="+itemId,
+						async:true,
+						dataType:"json",
+						success: function(rel) {
+							if(rel.code==1){
+								var arrInfo = [];
+								that.listproductspecinfo = rel.data.listproductspecinfo;
+								that.listproductspecvalueinfo = rel.data.listproductspecvalueinfo;
+								that.productId = rel.data.bargaininfo.productid;
+								that.itemId = itemId;
+								arrInfo.push(rel.data.productitem);
+								arrInfo.forEach(function(element, index){
+									that.skuId = element.skuid;  //给全局skuId赋值
+									that.activityPic = element.picurl; //给activityPic赋图片路径
+									// 判断该商品是否存在规格
+									if(element.specstatus == 0){
+										that.skuName = element.skuname;
+										that.activityPrice = element.saleprice;
+
+									}else{
+										// 存在规格时调用 getMoney函数
+										getMoney(element.specprops, that.skuId);
+									}
+
+								});
+							}
+						}
+					});
+			},
+			goMyBargain:function(){//去我的砍价页面
+				var that = this;
+					if('@WorkContext.Uid'<1){
+						   if(Number(that.IsApp==1)){
+								if(navigator.userAgent.indexOf("iPhone")>0){
+									gotologinvc();
+								}
+								if(navigator.userAgent.indexOf("Android")>0){
+									window.js.goLogin();
+								}
+							}else{
+								if(that.weixin=="False"){
+									var url = window.location.href;
+									window.location.href = '/m/account/login?returnUrl='+url;
+								}else{
+									var url = window.location.href;
+									window.location.href = '/m/user/bind?returnUrl='+url;
+								}
+						  }
+	     			}else{
+	     				window.location.href ='/m/usercenter/MyBargain?IsApp='+that.IsApp
+					}
+			},
+			closeShade: function() {
+				var that = this;
+				that.specContent=true;
+				that.addressContent=false;
+				that.shadeok = !that.shadeok;
+				clearSpec(); //关闭弹框时清除所选规格
+			},
+			confirmSpec: function(){
+				var that = this;
+					that.addressContent = !that.addressContent;
+					that.specContent = !that.specContent;
+			},
+			sureAddress:function(item) {
+				var that = this;
+				//这里需要调此商品设定的快递运费
+		        $.confirm('"'+item.Consignee+","+item.Mobile+','+item.Address+'"', "请确认您的收货地址", function() {
+                     
+		        	that.addOrder(item.AddressId,that.itemId,that.skuId)
+
+		        }, function() {
+		          //取消操作
+		          that.closeShade()
+		        	$.toast("取消!");
+		        });
+		    },
+		    getAddressList:function(){
+    		 var _this=this;
+	    		$.ajax({
+					type: "get",
+					url: "/m/order/address?userid="+"@WorkContext.Uid",
+					async: true,
+					dataType: "json",
+					success: function(rel) {
+						//console.log(rel)
+						if(rel.Code==1){
+							_this.AddressList=rel.Data
+						}else{
+
+						}
+					}
+				});
+    	    },
+    	    addOrder:function(addressid,itemid,skuid){//创建临时订单
+    	    	var _this=this;
+    	    	var dataList={
+    	    		addressid:addressid,
+    	    		itemid:itemid,
+    	    		skuid:skuid,
+    	    		userid:_this.userId
+    	    	}
+    	    	$.ajax({
+					type: "post",
+					url: "/Api/Activity/OrderBargainAdd",
+					async: true,
+					dataType: "json",
+					data:dataList,
+					success: function(rel) {
+						console.log(rel)
+						if(rel.code==1){
+//							$.toast(rel.message);
+							_this.orderid=rel.data
+//							_this.bargain(_this.userId,rel.data,_this.userId)
+                                  if(_this.IsApp==1){
+					                	if(navigator.userAgent.indexOf("iPhone")>0){
+											bargainCommodity(_this.orderid.toString());
+										}
+					                	if(navigator.userAgent.indexOf("Android")>0){
+											window.js.bargainCommodity(_this.orderid.toString());
+										}
+				                	}else{
+				                	   window.location.href="/m/activity/BargainStatus?IsApp="+_this.IsApp+'&orderid='+rel.data;
+				                    }
+							
+						}else{
+							_this.closeShade()
+							$.toast(rel.message);
+						}
+					}
+				});
+    	    },
+    	    bargain:function(userid,orderid,bargainuid){//好友砍价
+    	    	var _this=this;
+    	    	var dataList={
+    	    		orderid:orderid,
+    	    		userid:userid,
+    	    		BargainUserId:bargainuid
+    	    	}
+    	    	$.ajax({
+					type: "post",
+					url: "/Api/Activity/Bargain",
+					async: true,
+					dataType: "json",
+					data:dataList,
+					success: function(rel) {
+						console.log(rel)
+						if(rel.code==1){
+							$.toast(rel.message);
+							      if(_this.IsApp==1){
+					                	if(navigator.userAgent.indexOf("iPhone")>0){
+											bargainCommodity(orderid.toString());
+										}
+					                	if(navigator.userAgent.indexOf("Android")>0){
+											window.js.bargainCommodity(orderid.toString());
+										}
+				                	}else{
+				                	   
+				                    }
+							
+						}else{
+							$.toast(rel.message);
+						}
+					}
+				});
+    	    }
+		}
+	});
+
+	//上拉加载
+    $(function(){
+    	vm.getAddressList();
+    	$(window).scroll(function(){   //滚动加载商品列表
+	    	var winScrollTop = $(this).scrollTop(),
+	    		docHeight = $(document).height(),
+	    		windowHeight = $(this).height();
+	    		if (windowHeight + winScrollTop == docHeight) {
+	    			vm.getInfo();
+	    		}
+    	});
+
+    	//选择商品规格同时调用规格价格
+    	$(document).on("click", ".spec-val",function(){
+    		$(this).addClass("cur-spec").siblings().removeClass("cur-spec");
+			SkuName = [];
+			SpecPropsList = [];
+			$(".cur-spec").each(function(i, v){
+				var name = $(this).text();
+				var specProps = $(this).data("specvalueid");
+				SkuName.push(name);
+				SpecPropsList.push(specProps);
+			});
+			var SkuNameStr = SkuName.join(",");
+			var specPropsStr = SpecPropsList.join(",");
+			$(".spec-name").text(SkuNameStr);
+			getMoney(specPropsStr,vm.skuId);
+			//console.log(vm.skuId+"........"+specPropsStr);
+    	});
+
+    });
+
+    //获取规格价格
+	function getMoney(specPropsStr,skuId) {
+		$.ajax({
+			type: "post",
+			url: "/m/product/getactivityskuinfo",
+			async:true,
+			data: {
+                SkuId:skuId,
+                ProductId:vm.productId,
+                ItemId:vm.itemId,
+                SpecProps:specPropsStr,
+                ActivityType:vm.activityType,
+			},
+			dataType: 'json',
+			success: function(rel) {
+				if(rel.Code == 1) {
+					vm.activityPrice = rel.Data.ActivityPrice;
+                    vm.skuName = rel.Data.SkuName;
+                    vm.skuId = rel.Data.SkuId;
+					var specPropsArr = specPropsStr.split(",");  //specPropsStr分割成字符串数组
+					specPropsArr.forEach(function(el,index){    //循环specPropsArr与.spec-val比配筛选初始规格
+						$(".spec-val").each(function() {
+							if(Number($(this).data("specvalueid")) == Number(el)){
+								$(this).addClass("cur-spec");
+							}
+						});
+					});
+				}
+			}
+		});
+	}
+
+	//关闭弹框时清除所选规格
+	function clearSpec(){
+		$(".spec-val").each(function() {
+			if($(this).hasClass("cur-spec")){
+				$(this).removeClass("cur-spec");
+			}
+		});
+	}
+</script>
+</html>

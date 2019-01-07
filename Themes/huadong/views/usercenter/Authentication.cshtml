@@ -1,0 +1,564 @@
+﻿@model Yitao.Web.Mobile.Models.ShipAddressListModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>实名认证</title>
+		<meta charset="utf-8">
+	    <meta content="telephone=no" name="format-detection">
+	    <meta name="apple-touch-fullscreen" content="yes">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <meta content="@WorkContext.ShopConfig.SEODescription" name="description">
+	    <meta content="@WorkContext.ShopConfig.SEOKeyword" name="keywords">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/icon.css" />
+	    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			body{background: #f6f6f6;width: 7.5rem;margin: 0 auto;}
+			a.apply:active{color: #fff;}
+			.weui-header{background: #fff;color: #666;font-size: 0.28rem;font-family: "微软雅黑";}
+			.weui-header a{color: #666;}
+			.weui-header .weui-header-left a{color: #666;}
+			.weui-header .weui-header-title, .weui-header h1{color: #666;}
+			.main{font-size: 0.28rem;font-family: "微软雅黑";color: #666;}
+			.weui_cells:after, .weui_cells:before{border: none;height: 0;}
+			.weui_cells{background: transparent;}
+			.weui_cells .weui_cell{padding: 0 0.2rem;height: 0.7rem;line-height: 0.7rem;margin-bottom: 0.4rem;}
+			.weui_cells .weui_cell_bd.weui_cell_primary{background: #fff;width: 5.1rem;padding: 0 0.2rem;}
+			.weui_label{width: 1.3rem;font-size: 0.28rem}
+			.weui_input{font-size: 0.28rem;height: 0.7rem;line-height: 0.7rem;}
+			
+			.weui_cell:before{border: none;height: 0;}
+			.weui_cell:after{border: none;height: 0;}
+			.btn{width: 7.1rem;margin: 0 auto;height: 0.7rem;line-height: 0.7rem;color: #fff;background:#ff4800;border-radius: 5px;text-align: center;}
+			.weui_dialog_hd{padding: 0;}
+			.weui_toast {	width:3rem;min-height:3rem;left: 31%;top: 35%; margin-left: 0;}
+			.memo{width:7.1rem;margin: 0.6rem auto;text-align: left;color:#ff4800;font-size: 0.28rem;}
+			  .alipaycr{color:#56abe4!important}
+	          .weixincr{color:#09bb07!important}
+			/*.weui_cell:before {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 1px;
+    border-top: 1px solid #d9d9d9;
+    color: #d9d9d9;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+    left: 15px;
+}*/
+.wd23{width:4.3rem;color:#999;}
+.we-rt{text-align: right;font-size: 0.28rem;}
+.bgt{background: transparent!important;}
+.mb0{margin-bottom:0.4rem!important;background: #fff;}
+.wd23 icon{margin-right: 0.2rem;}
+.bankbox{height: 100%;position: absolute;top:0;background: #fff;width:7.5rem;margin:0 auto;}
+.we-rt{color:#4869d3}
+.we-rt icon{color:#333}
+.wd20{width:2rem;}
+.changecard{font-size: 0.28rem;color:#ff4800;}
+		</style>
+	</head>
+	<body>
+	<div id="app" style='display: none;'>
+		<div class="weui-header"> 
+	    		<div class="weui-header-left"> <a href="javascript:history.back()"  class="icon icon-109"></a>  </div>
+				<h1 class="weui-header-title">认证中心</h1>
+	    		<div class="weui-header-right"></div> 
+	        </div>
+	        <div class="main">
+	        	<div class="weui_cells weui_cells_form">
+		            <div class="weui_cell mb0" v-on:click='bindcard()'>
+		                <div class="weui_cell_hd">
+		                	<label class="weui_label wd23" v-if='isbind'><icon class='icon icon-84' style='color:#4869d3'></icon>实名认证(已认证)</label>
+		                	<label class="weui_label wd23" v-else><icon class='icon icon-84' style='color:#4869d3'></icon>实名认证</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary bgt">
+		                  <div class="we-rt" v-if='isbind'>去修改 <icon class='icon icon-108'></div>
+		                  <div class="we-rt" v-else>立即认证<icon class='icon icon-108'></div>
+		                </div>
+		            </div>
+		            <div class="weui_cell mb0" v-on:click='bindzf()'>
+		                <div class="weui_cell_hd">
+		                	<label class="weui_label wd23" v-if='isalipay'> <icon class='icon icon-11 alipaycr' ></icon>支付宝绑定(已绑定)</label>
+		                	<label class="weui_label wd23" v-else> <icon class='icon icon-11 alipaycr' ></icon>支付宝绑定</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary bgt">
+		                    <div v-if='isalipay' class="we-rt">去修改<icon class='icon icon-108'></div>
+		                    <div v-else class="we-rt">立即绑定<icon class='icon icon-108'></div>
+		                </div>
+		            </div>
+		            <div class="weui_cell mb0" v-on:click='topwd()'>
+		                <div class="weui_cell_hd">
+		                	<label class="weui_label wd23" > <icon class='icon icon-31' style='color:#e4393c'></icon>忘记支付密码</label>
+		                </div>
+		                <div class="weui_cell_bd weui_cell_primary bgt">
+		                    <div  class="we-rt">去找回<icon class='icon icon-108'></div>
+		                </div>
+		            </div>
+		            
+        				@if (WorkContext.WeChatUserInfo != null)
+                         {
+		            <div class="weui_cell mb0" >
+		                <div class="weui_cell_hd"><label class="weui_label wd23"><icon class='icon icon-14' style='color:#04be02'></icon>微信绑定</label></div>
+		                <div class="weui_cell_bd weui_cell_primary bgt">
+		                	   @if(WorkContext.WeChatUserInfo.UserId!=0){
+		                          <div class="we-rt" > 微信已绑定 <icon class='icon icon-108'></icon></div>
+		                      }else{
+		                    	 <div class="we-rt" v-on:click='bindweixin()'> 微信登录 <icon class='icon icon-108'></icon></div>
+		                       }
+		                </div>
+		            </div>
+		             }else{
+		             	<div class="weui_cell mb0" >
+			                <div class="weui_cell_hd">
+			                	<label class="weui_label wd23"><icon class='icon icon-14' style='color:#04be02'></icon>微信绑定</label>
+			                </div>
+			                <div class="weui_cell_bd weui_cell_primary bgt">			                	  
+			                    	 <div class="we-rt" v-on:click='bindweixin()'> 微信登录 <icon class='icon icon-108'></icon></div>			                       
+			                </div>
+		               </div>
+		             }
+		           
+		           
+		        </div>
+	        </div>
+	        <!--银行卡页面-->
+		<div v-if='setcardshow' class='bankbox'>
+			<div class="weui-header"> 
+	    		<div class="weui-header-left"> <a href="javascript:;" v-on:click='bindcard()' class="icon icon-109"></a>  </div>
+				<h1 class="weui-header-title">实名认证</h1>
+	    		<div class="weui-header-right"></div> 
+	        </div>
+	        <div class="main" v-if='isbind'>
+	        	<div class="weui_cells weui_cells_form">
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd"><label class="weui_label">真实姓名</label></div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input class="weui_input" id="name" type="text" maxlength="30"  placeholder="请输入真实姓名"  v-model='username' readonly="readonly"/>
+		                </div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd"><label class="weui_label">身份证号</label></div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input class="weui_input" id="card-num" type="text" v-model='idcard' oninput="if(value.length>18)value=value.slice(0,18)" maxlength="18" placeholder="请输入开户人身份证号" readonly="readonly"/>
+		                </div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd"><label class="weui_label">银行卡号</label></div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                	<input type="hidden" />
+		                    <input class="weui_input" id="band-num" type="tel" v-model='bankusersn' v-focus='vfocus' oninput="if(value.length>20)value=value.slice(0,20)" maxlength="20" placeholder="请输入真实姓名名下的银行卡号"  v-bind:readOnly='isReadOnly' />
+		                </div>
+		                <div class="weui_cell_hd changecard" v-on:click='changecardbtn()'>更换卡号</div>
+		            </div>		           
+		            <div class="btn btn2"  v-if='isReadOnly'>确定更换</div>
+		            <div class="btn btn2" v-on:click='changecardfn()' v-else>确定更换</div>
+		        </div>
+		        <div class='memo'>注：请填写合法有效信息;银行卡请尽量绑定中国银行，中国建设银行，中国农业银行，中国工商银行</div>
+	        </div			
+		   </div>
+	        <div class="main main1" v-else>
+	        	<div class="weui_cells weui_cells_form">
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd"><label class="weui_label">真实姓名</label></div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input class="weui_input" id="name" type="text"  maxlength="30" placeholder="请输入真实姓名" maxlength='20' v-model='username' />
+		                </div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd"><label class="weui_label">身份证号</label></div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input class="weui_input" id="card-num" type="text" v-model='idcard' oninput="if(value.length>18)value=value.slice(0,18)" maxlength="18" placeholder="请输入开户人身份证号"/>
+		                </div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd"><label class="weui_label">银行卡号</label></div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                	<input type="hidden" />
+		                    <input class="weui_input" id="band-num" type="number" v-model='bankusersn' oninput="if(value.length>20)value=value.slice(0,20)" maxlength="20" placeholder="请输入真实姓名名下的银行卡号"/>
+		                </div>
+		            </div>
+		          
+		            <div class="btn btn4" v-on:click='submitbindcard()'>确定</div>
+		        </div>
+		        <div class='memo'>注：请填写合法有效信息，认证通过身份信息不能修改</div>
+	        </div			
+		</div>
+		</div>
+		<!--支付宝页面-->
+		<div v-if='setzfshow' class='bankbox'>
+			<div class="weui-header"> 
+	    		<div class="weui-header-left"> <a href="javascript:;" v-on:click='bindzf()' class="icon icon-109"></a>  </div>
+				<h1 class="weui-header-title">支付宝绑定</h1>
+	    		<div class="weui-header-right"></div> 
+	        </div>
+	        <!--更换-->
+	        <div class="main" v-if='isalipay'>
+	        	<div class="weui_cells weui_cells_form">
+		           
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd"><label class="weui_label wd20">绑定支付宝</label></div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input class="weui_input" id="card-num" type="text" v-model='zfid' oninput="if(value.length>30)value=value.slice(0,30)" maxlength="30" placeholder="请输入支付宝账号" v-bind:readOnly='isaliReadOnly'/>
+		                </div>
+		                 <div class="weui_cell_hd changecard" v-on:click='changealipaybtn()'>更换支付宝</div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd"><label class="weui_label wd20">交易密码</label></div>
+		                <div class="weui_cell_bd weui_cell_primary">
+ <input class="weui_input" id="band-num" type="password" v-model='paypwd' oninput="if(value.length>6)value=value.slice(0,6)" maxlength="6" placeholder="请输入交易密码" />
+		                </div>
+		            </div>
+		            
+		            <div class="btn btn3" v-on:click='submitbindzf()'>确定更换</div>
+		        </div>
+		        <div class='memo'>注：请填写合法有效信息</div>
+	        </div>
+	        
+	         <div class="main" v-else>
+	        	<div class="weui_cells weui_cells_form">
+		           
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd"><label class="weui_label wd20">绑定支付宝</label></div>
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <input class="weui_input" id="card-num" type="email" v-model='zfid' oninput="if(value.length>30)value=value.slice(0,30)" maxlength="30" placeholder="请输入支付宝账号"/>
+		                </div>
+		            </div>
+		            <div class="weui_cell">
+		                <div class="weui_cell_hd"><label class="weui_label wd20">交易密码</label></div>
+		                <div class="weui_cell_bd weui_cell_primary">
+ <input class="weui_input" id="band-num" type="password" v-model='paypwd' oninput="if(value.length>6)value=value.slice(0,6)" maxlength="6" placeholder="请输入交易密码" />
+		                </div>
+		            </div>
+		            
+		            <div class="btn btn3" v-on:click='submitbindzf()'>确定</div>
+		        </div>
+		        <div class='memo'>注：请填写合法有效信息</div>
+	        </div>
+			
+		</div>
+		
+    </div> 
+        <script type="text/javascript">
+
+$.showLoading();
+var vm = new Vue({
+    el: '#app',
+    data: {
+    	username:'',
+    	bankusersn:'',
+    	idcard:'',
+    	userId:'@WorkContext.Uid',
+    	setcardshow:false,
+    	setzfshow:false,
+    	isbind:false,
+        cardAuthentication:'立即认证',
+        mobile:@WorkContext.UserInfo.Mobile,
+        ispaypwd:false,
+        zfid:'',
+        paypwd:'',
+        rzinfo:{},
+        isalipay:false,//判断支付宝是否绑定
+        isReadOnly:true,
+        isaliReadOnly:true,
+        vfocus:false,
+        ismobile:true,
+    },
+    methods:{
+    	topwd:function(){
+    		if(this.ispaypwd){
+    			window.location.href='/m/account/resetpaypwd'
+    		}else{
+    			  $.confirm("是否去设置交易密码", "未设置密码", function(){
+    		   	        window.location.href='/m/user/Setting'            
+			        }, function() {
+			        });
+    		}
+    	},
+    	changecardbtn:function(){
+    		  this.isReadOnly=false;
+    		  this.vfocus=true;
+    		  this.bankusersn='';
+    	},
+    	changealipaybtn:function(){
+    		  this.isaliReadOnly=false;
+    		  this.vfocus=true;
+    		  this.zfid='';
+    	},
+    	changecardfn:function(){//更换银行卡
+    		var _this=this;
+    		var idcardReg=/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/;
+    		var bankReg = /^[1-9]\d*$/;
+    		var nameReg = /^([\u4e00-\u9fa5]){2,7}$/;//只能输入中文
+    		 if(_this.bankusersn==''){
+    			$.alert("请输入真实姓名名下的银行卡号");
+        		return false;
+    		}else if(!bankReg.test(_this.bankusersn)){
+                $.alert('请输入真实银行卡号');
+                return false;
+    		}
+    	    var dataform={
+    			UserId:_this.userId,
+    			IdCard:_this.rzinfo.idcard,
+    			BankCardSN:_this.bankusersn,
+    			UserName:_this.rzinfo.username
+    		}
+    		$.ajax({
+    			type:"post",
+    			url:"/Api/Account/Authentication",
+    			data:dataform,
+    			async:true,
+    			success: function(rel){
+    				var data=rel;
+    				if(data.code==1){
+    				   $.alert(data.message,function(){window.location.href='/m/usercenter/home'})	
+    				}else{
+    					$.alert(data.message);
+    				}
+    				
+    			}
+    		});
+    	},
+    	bindcard:function(){
+    		var _this=this;
+    		_this.setcardshow=!_this.setcardshow;
+    		if(_this.setcardshow==false){
+    			if(_this.rzinfo.bankcardsn){
+    				_this.bankusersn=_this.rzinfo.bankcardsn.replace(/^(.{6})(?:\d+)(.{4})$/,"$1******$2");
+    				_this.isReadOnly=true
+    			}
+    			 
+    		}
+    		
+    	},
+    	bindzf:function(){
+    		var _this=this;
+    		_this.setzfshow=!_this.setzfshow; 
+    		if(_this.setzfshow==false){
+    			if(_this.rzinfo.alipayaccount){ 
+    				if(_this.rzinfo.alipayaccount!=''){ 
+	    				_this.zfid=_this.rzinfo.alipayaccount;
+	    				_this.isaliReadOnly=true;
+    				}
+    			}
+    		}
+    		if(_this.isbind==false){
+    		   $.confirm("", "请先去实名认证", function() {
+                 _this.bindcard();                  
+               _this.setzfshow=!_this.setzfshow;
+		        }, function() {
+		          _this.setzfshow=!_this.setzfshow;
+		        });
+    		}else if(_this.ispaypwd==false){
+    			  $.confirm("", "去设置交易密码", function(){
+    		   	        window.location.href='/m/usercenter/home'            
+		        }, function() {
+		            _this.setzfshow=!_this.setzfshow;
+		        });
+    		}
+    	},
+    	judegebind:function(){//判断是否实名
+    		var _this=this;
+    		$.ajax({
+    			type:"get",
+    			url:"/Api/Account/IsAuthentication?v="+Math.random()+"&UserId="+_this.userId,
+    			success: function(rel){
+    				var data=rel;
+    				if(data.code==1){
+    					var str=data.data.username;
+    					_this.isbind=true; 
+    				    _this.cardAuthentication='已认证'
+    				    _this.rzinfo=data.data;
+    				    _this.username=new Array(str.length).join('*') + str.substr(-1);
+    				    _this.idcard=data.data.idcard.replace(/^(\d{3})(\d+)(\d{4})$/gi,"$1********$3");
+    				    _this.bankusersn=data.data.bankcardsn.replace(/^(.{6})(?:\d+)(.{4})$/,"$1******$2");
+    				    if(data.data.alipayaccount!=''){
+    				    	_this.isalipay=true;
+                            _this.zfid=data.data.alipayaccount;
+    				    }
+    				}    				
+    			}
+    		});
+    	},
+    	userinfo:function(){//判断是否有交易密码
+    		var _this=this;
+    		$.ajax({
+                    type: "get",
+                    url: '/Api/User/GetUserByMobile?v='+Math.random()+'&Mobile=' +@WorkContext.UserInfo.Mobile,
+                    async: true,
+                    success: function(rel) {
+                    	console.log(rel)
+                       if(rel.code==1){
+                       	if(rel.data.paypwd!=''){
+                       	   _this.ispaypwd=true;
+                       	}
+                       }
+                       
+                    }
+                 });
+    	},
+    	bindweixin:function(){
+    		var _this=this;
+  		    $.alert('您没有绑定微信，请关注秦商未来公众号并绑定');
+    	},
+    	submitbindcard:function(){
+    		var _this=this;
+    		var idcardReg=/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/;
+    		var bankReg = /^[1-9]\d*$/;
+    		var nameReg = /^([\u4e00-\u9fa5]){2,7}$/;//只能输入中文
+    		
+    		if(_this.username==''){
+    			$.alert("请输入您的真实姓名");
+        		return false;
+    		}else if(!nameReg.test(_this.username)){
+    			$.alert('姓名格式不正确');
+    			return false;
+    		}else if(_this.idcard==''){
+    			$.alert("请输入开户人身份证号");
+        	    return false;
+    		}else if(!idcardReg.test(_this.idcard)){
+    			$.alert("身份证号码输入错误");
+        	    return false;
+    		}else if(_this.bankusersn==''){
+    			$.alert("请输入真实姓名名下的银行卡号");
+        		return false;
+    		}else if(!bankReg.test(_this.bankusersn)){
+                $.alert('请输入真实银行卡号');
+                return false;
+    		}
+    	    var dataform={
+    			UserId:_this.userId,
+    			IdCard:_this.idcard,
+    			BankCardSN:_this.bankusersn,
+    			UserName:_this.username
+    		}
+    		$.ajax({
+    			type:"post",
+    			url:"/Api/Account/Authentication",
+    			data:dataform,
+    			async:true,
+    			success: function(rel){
+    				var data=rel;
+    				if(data.code==1){
+    				   $.alert(data.message,function(){window.location.href='/m/usercenter/home'})	
+    				}else{
+    					$.alert(data.message);
+    				}
+    			}
+    		});
+    	},
+    	submitbindzf:function(){//支付宝绑定
+    		var _this=this;
+    		var nameReg = /^([\u4e00-\u9fa5]){2,7}$/;//只能输入中文
+    		var padReg=/^\d{6}$/;
+    		console.log(_this.ismobile);
+    		var email_reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+    		if(_this.zfid==''){
+    			$.alert('支付宝账号不能为空');
+    			return false;
+    		}else if(nameReg.test(_this.zfid)){
+    			$.alert('支付宝不能输入中文');
+    			return false;
+    		}
+//  		else if(!/^1[3|4|5|7|8|9][0-9]\d{4,8}$/.test(_this.zfid)){
+//  			if(!/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/.test(_this.zfid)){
+//  			 $.alert('支付宝格式不正确');
+//  			  return false;	
+//  			}    			
+//  		}
+    		else if(/\s/.test(_this.zfid)){
+    			$.alert('支付宝账户不能有空格');
+    			return false;
+    		}else if(_this.paypwd==''){
+    			$.alert('交易密码不能为空');
+    			return false;
+    		}else if(!padReg.test(_this.paypwd)){
+    			$.alert('交易密码格式不正确');
+    			return false;
+    		}else{
+    			if(_this.ismobile){
+    				if(!/^1[3|4|5|7|8|9][0-9]\d{4,8}$/.test(_this.zfid)){
+    					$.alert('支付宝格式不正确');
+    			        return false;	
+    				}else{
+    					if(_this.zfid.length!=11){
+    						$.alert('支付宝格式不正确');
+    			           return false;
+    					}
+    				}
+    			}else{    				
+					if(!/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/.test(_this.zfid)){
+	    			 $.alert('支付宝格式不正确');
+	    			  return false;	
+	    			} 
+    					
+    			}
+    		}
+    		var dataform={
+    			UserId:_this.userId,
+    			PayPwd:_this.paypwd,
+    			AlipayAccount:_this.zfid,
+    		}
+    		$.ajax({
+    			type:"post",
+    			url:"/Api/Account/UpdateAuthentication",
+    			data:dataform,
+    			async:true,
+    			success: function(rel){
+    				var data=rel;
+    				console.log(rel)
+    				if(data.code==1){
+    				   $.alert(data.message,function(){window.location.href='/m/usercenter/home'})	
+    				}else{
+    					$.alert(data.message);
+    				}
+    				
+    			}
+    		});
+    	},
+    		
+    	},
+    	mounted:function(){
+    		var _this=this;
+    	},
+    	created:function(){
+    		var _this=this;
+    	},
+    	watch:{
+    		zfid:function(val){
+    			var _this=this;
+    			if(!/^[0-9]+.?[0-9]*$/.test(val)){
+    				_this.ismobile=false;
+    			}else{
+    				_this.ismobile=true;
+    			}
+    		}
+    	}
+   
+})
+$(function(){
+	setTimeout(function(){
+		$('#app').css('display','block');
+	$.hideLoading();
+	vm.judegebind();
+	vm.userinfo();
+	},200)
+})
+</script>
+        
+	</body>
+</html>

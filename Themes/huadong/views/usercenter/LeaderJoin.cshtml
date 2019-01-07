@@ -1,0 +1,828 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		
+	    <meta name="format-detection" content="telephone=no">
+	    <meta name="apple-mobile-web-app-capable" content="yes" />
+	    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+	    <meta http-equiv="Pragma" content="no-cache" />
+	    <meta http-equiv="Cache-Control" content="no-cache" />
+	    <meta http-equiv="Expires" content="0" />
+	    <title>合伙人申请-@{@WorkContext.SellerInfo.SellerName}</title>
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weuix.min.css" />
+		<link rel="stylesheet" href="/Css/Mobile/guide.css"> 
+		<script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=nT6ySqHzG1p7QMRpZ1k9rMAT0weeSERr"></script>
+		<style type="text/css">
+			form *{font-size: 14px !important;}
+			select,.weui_cells_form input{width: 90%;padding: 0 5%;height: 30px;border-radius: 3px;border: 1px solid #f2f2f2;}
+			.weui_cell_ft:before{content: ""}
+			.weui_cell_ft:after{content: "";width: 0;height: 0;border: 0}
+			
+/*城市四联动*/
+
+.m-cityselect.brouce-in {
+	-webkit-transform: translate(0, 0);
+	transform: translate(0, 0);
+}
+
+.m-cityselect {
+	border-top: 1px solid #e1e1e1;
+}
+
+.m-cityselect {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 75%;
+	z-index: 1000;
+	background-color: #fff;
+	-webkit-transform: translate(0, 100%);
+	transform: translate(0, 100%);
+	-webkit-transition: -webkit-transform .3s;
+	transition: -webkit-transform .3s;
+	transition: transform .3s;
+	transition: transform .3s, -webkit-transform .3s;
+}
+
+.cityselect-header {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1;
+}
+
+.cityselect-title {
+	width: 100%;
+	font-size: 0.94rem;
+	text-align: center;
+	height: 45px;
+	line-height: 45px;
+	position: relative;
+}
+
+.cityselect-title:after {
+	content: '';
+	position: absolute;
+	z-index: 0;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 1px;
+	border-bottom: 1px solid #B2B2B2;
+	-webkit-transform: scaleY(0.5);
+	transform: scaleY(0.5);
+	-webkit-transform-origin: 0 100%;
+	transform-origin: 0 100%;
+}
+
+.cityselect-nav {
+	width: 100%;
+	padding-left: .2rem;
+	overflow: hidden;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+}
+
+.cityselect-nav>a {
+	font-size: 0.86rem;
+	color: #222;
+	display: block;
+	height: 40px;
+	line-height: 46px;
+	padding: 0 .6rem;
+	position: relative;
+	margin-right: .6rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 40%;
+}
+
+.cityselect-nav>a.crt {
+	color: #F23030;
+}
+
+.cityselect-nav>a.crt:after {
+	content: '';
+	width: 100%;
+	height: 2px;
+	background-color: #F23030;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	z-index: 2;
+}
+
+.cityselect-header:after {
+	content: '';
+	position: absolute;
+	z-index: 0;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 1px;
+	border-bottom: 1px solid #D9D9D9;
+	-webkit-transform: scaleY(0.5);
+	transform: scaleY(0.5);
+	-webkit-transform-origin: 0 100%;
+	transform-origin: 0 100%;
+}
+
+.cityselect-content {
+	height: 100%;
+	padding-top: 85px;
+	width: 100%;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+}
+
+.cityselect-content.cityselect-move-animate {
+	-webkit-transition: -webkit-transform .3s;
+	transition: -webkit-transform .3s;
+	transition: transform .3s;
+	transition: transform .3s, -webkit-transform .3s;
+}
+
+.cityselect-content.cityselect-prev {
+	-webkit-transform: translate(0, 0);
+	transform: translate(0, 0);
+}
+
+.cityselect-content>.cityselect-item {
+	display: block;
+	height: inherit;
+	width: 50%;
+	-webkit-box-flex: 0;
+	-webkit-flex: 0 0 50%;
+	-ms-flex: 0 0 50%;
+	flex: 0 0 50%;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	background-color: #FFF;
+}
+
+.cityselect-item-box {
+	width: 100%;
+	height: inherit;
+	display: block;
+	padding: 0 .4rem;
+}
+.cityselect-nav>a.crt {
+	color: #F23030;
+}
+.cityselect-item-box>a {
+	color: #333;
+	font-size: 0.86rem;
+	height: 40px;
+	line-height: 2.6rem;
+	overflow: hidden;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	-ms-flex-align: center;
+	align-items: center;
+	width: 100%;
+	position: relative;
+	z-index: 1;
+}
+
+.cityselect-item-box>a:before {
+	content: '';
+	position: absolute;
+	z-index: 0;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 1px;
+	border-bottom: 1px solid #D9D9D9;
+	-webkit-transform: scaleY(0.5);
+	transform: scaleY(0.5);
+	-webkit-transform-origin: 0 100%;
+	transform-origin: 0 100%;
+}
+.cityselect-item-box > a.crt:after{
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 20%;
+	height: 2px;
+	border-bottom: 2px solid #f13030;
+}
+.cityselect-item-box > a.crt{
+	
+color: #f13030;
+}
+.cityselect-item-box>a span {
+	-webkit-box-flex: 1;
+	-webkit-flex: 1;
+	-ms-flex: 1;
+	flex: 1;
+	display: block;
+}
+
+.cityselect-content>.cityselect-item:nth-child(2n) {
+	background-color: #F5F5F5;
+}
+
+.cityselect-content.cityselect-next {
+	-webkit-transform: translate(-50%, 0);
+	transform: translate(-50%, 0);
+}
+
+.mask-black {
+	background-color: rgba(0, 0, 0, 0.4);
+	position: fixed;
+	z-index: 500;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	top: 0;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	-ms-flex-align: center;
+	align-items: center;
+}
+
+
+.brouce-out {
+	-webkit-transform: translate(0, 100%);
+	transform: translate(0, 100%);
+}
+
+.cityselect-end {
+	-webkit-transform: translate(-50%, 0);
+	transform: translate(-100%, 0);
+}
+.weui_mask{
+	z-index: 99;
+}
+ 
+    
+
+/*end*/    
+		</style>
+	</head>
+	<body>
+		<header>
+			<i class="iconfont back" onclick="history.back() "></i>
+			<h3>申请导购</h3>
+		</header>
+		<div class="content">
+
+		
+       <form id="form" method="post">
+		<div class="weui_cells weui_cells_form " style="margin: 0;">  
+			<div class="weui_cell">
+                <div class="weui_cell_hd"><label for="" class="weui_label">导购等级:</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <select name="LeaderLevelId" id="LeaderLevelId" data-type="ajax" required emptyTips="请选择等级">
+                        @foreach (Yitao.Core.LeaderLevelInfo info in ViewData["LeaderLevelInfoList"] as List<Yitao.Core.LeaderLevelInfo>)
+                        {
+                            <option value="@info.LeaderLevelId">
+                                @info.LeaderLevelName
+                            </option>
+                        }
+                    </select>
+                </div>
+            </div> 
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label for="" class="weui_label">姓名:</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input class="weui_input" type="text" value="" id="name" name="username" required emptyTips="请输入姓名"/>
+                </div>
+            </div>  
+      		<div class="weui_cell">
+                <div class="weui_cell_hd"><label for="" class="weui_label">电话:</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input class="weui_input" type="text" value="" id="mobile" name="mobile" required pattern="[0-9]{11}" maxlength="11" placeholder="输入你现在的手机号" emptyTips="请输入手机号" notMatchTips="请输入正确的手机号"/>
+                </div>
+            </div>  
+            <div class="weui_cell weui_vcode">
+                <div class="weui_cell_hd"><label class="weui_label">验证码</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input class="weui_input" type="number" name="code" id="code" required placeholder="请输入验证码" emptyTips="请输入验证码"/>
+                </div>
+                <div class="weui_cell_ft" id="get_code" click-num="0">
+                    <a href="javascript:;" class="weui-vcode-btn">获取验证码</a>
+                </div>
+            </div>
+
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label for="" class="weui_label">省市县:</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input class="weui_input" name="address" type="text" value="" id='address' required emptyTips="请选择省市县"/>
+                </div>
+            </div>  
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label for="" class="weui_label">详细地址:</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input class="weui_input" type="text" name="Consignee_Map" value="" id="Consignee_Map" required emptyTips="请输入详细地址"/>
+                </div>
+            </div>  
+ 		</div>
+		</form>
+	</div>
+		<div class="weui_btn_area">
+	        <a id="formSubmitBtn" href="javascript:" class="weui_btn weui_btn_primary">提交</a>
+	    </div>
+			
+		<div class="footer">
+
+		</div>
+		<!-- 城市四联动 -->
+		<div class="m-cityselect brouce-out" id="Show_City_Four">
+			<div class="cityselect-header">
+				<p class="cityselect-title">所在地区</p>
+				<div class="cityselect-nav">
+					<a href="javascript:;" class="crt">北京市</a>
+					<a href="javascript:;" class=""></a>
+					<a href="javascript:;" class=""></a>
+					<a href="javascript:;" class=""></a>
+				</div>
+			</div>
+			<!--cityselect-move-animate cityselect-prev-->
+			<ul class="cityselect-content cityselect-move-animate cityselect-prev" id="S_City_Show">
+				<li class="cityselect-item">
+					<div class="cityselect-item-box" id="Province_chioce">
+						<a class="crt" href="javascript:;" data-province="11"><span>北京市</span></a>
+						<a class="" href="javascript:;" data-province="12"><span>天津市</span></a>
+						<a class="" href="javascript:;" data-province="13"><span>河北省</span></a>
+						<a class="" href="javascript:;" data-province="14"><span>山西省</span></a>
+						<a class="" href="javascript:;" data-province="15"><span>内蒙古自治区</span></a>
+						<a class="" href="javascript:;" data-province="21"><span>辽宁省</span></a>
+						<a class="" href="javascript:;" data-province="22"><span>吉林省</span></a>
+						<a class="" href="javascript:;" data-province="23"><span>黑龙江省</span></a>
+						<a class="" href="javascript:;" data-province="31"><span>上海市</span></a>
+						<a class="" href="javascript:;" data-province="32"><span>江苏省</span></a>
+						<a class="" href="javascript:;" data-province="33"><span>浙江省</span></a>
+						<a class="" href="javascript:;" data-province="34"><span>安徽省</span></a>
+						<a class="" href="javascript:;" data-province="35"><span>福建省</span></a>
+						<a class="" href="javascript:;" data-province="36"><span>江西省</span></a>
+						<a class="" href="javascript:;" data-province="37"><span>山东省</span></a>
+						<a class="" href="javascript:;" data-province="41"><span>河南省</span></a>
+						<a class="" href="javascript:;" data-province="42"><span>湖北省</span></a>
+						<a class="" href="javascript:;" data-province="43"><span>湖南省</span></a>
+						<a class="" href="javascript:;" data-province="44"><span>广东省</span></a>
+						<a class="" href="javascript:;" data-province="45"><span>广西壮族自治区</span></a>
+						<a class="" href="javascript:;" data-province="46"><span>海南省</span></a>
+						<a class="" href="javascript:;" data-province="50"><span>重庆市</span></a>
+						<a class="" href="javascript:;" data-province="51"><span>四川省</span></a>
+						<a class="" href="javascript:;" data-province="52"><span>贵州省</span></a>
+						<a class="" href="javascript:;" data-province="53"><span>云南省</span></a>
+						<a class="" href="javascript:;" data-province="54"><span>西藏自治区</span></a>
+						<a class="" href="javascript:;" data-province="61"><span>陕西省</span></a>
+						<a class="" href="javascript:;" data-province="62"><span>甘肃省</span></a>
+						<a class="" href="javascript:;" data-province="63"><span>青海省</span></a>
+						<a class="" href="javascript:;" data-province="64"><span>宁夏回族自治区</span></a>
+						<a class="" href="javascript:;" data-province="65"><span>新疆维吾尔自治区</span></a>
+						<a class="" href="javascript:;" data-province="71"><span>台湾省</span></a>
+						<a class="" href="javascript:;" data-province="81"><span>香港特别行政区</span></a>
+						<a class="" href="javascript:;" data-province="82"><span>澳门特别行政区</span></a>
+					</div>
+				</li>
+				<li class="cityselect-item">
+					<div class="cityselect-item-box" id="City_chioce">
+					</div>
+				</li>
+				<li class="cityselect-item">
+					<div class="cityselect-item-box" id="County_chioce">
+					</div>
+				</li>
+				<li class="cityselect-item">
+					<div class="cityselect-item-box" id="Town_chioce">
+					</div>
+				</li>
+			</ul>
+		</div>
+	
+	  
+	<!--end-->
+	<div id="l-map"></div>
+	<div id="allmap"></div>
+<style>
+	#l-map {
+		width: 1px;
+		height: 1px;
+	}
+
+	#allmap {
+		width: 1px;
+		height: 1px;
+	}
+
+	.searchResultPanel {
+		z-index: 9999;
+		position: absolute;
+	}
+
+	#tangram-suggestion--TANGRAM__1m-main {
+		position: absolute;
+		z-index: 9999;
+	}
+
+	.tangram-suggestion-main {
+		position: absolute;
+		z-index: 9999;
+	}
+	.disabled{
+		background: #eeeeee;
+	}
+</style>
+
+        <script type="text/javascript">
+        	
+        	$(function(){
+				var b = '@ViewData["IsLeaderJoin"]';
+				if(b != 0){
+					$.alert("您已经申请过导购了、请等待审核或重新查看身份",function(){
+						var url = "/m/usercenter/home";
+						location.href = url;
+					});
+					$("#formSubmitBtn").addClass("disabled");
+				}else{
+
+				}
+				$.ajax({
+                type: "get",
+                url: "/m/tool/navbar",
+                async: true,
+                success: function (rel) {
+
+                    var dete = JSON.parse(rel);
+                    console.log(dete);
+                    if (dete.Code == 1) {
+                        var html = '';
+                        html += '<div class="weui_tabbar " style="padding-top: 0.1rem;">';
+                        for (var i = 0; i < dete.Data.length; i++) {
+                            var doms = dete.Data[i];
+                            html += '<a href="' + doms.MenuUrl + '" class="weui_tabbar_item"><div class="weui_tabbar_icon">';
+                            html += '<img src="' + doms.MenuPic + '?w=50&amp;h=50" style="display: block; width: 1.6rem; height: 1.6rem; margin: 0px auto;"></div>';
+                            html += '<p class="weui_tabbar_label" style="margin: 0px;">' + doms.MenuName + '</p></a>';
+                        }
+                        html += '</div>';
+                        $('.footer').append(html);
+                    } else {
+
+                    }
+                }     
+            });
+        		var timer;
+        		//手机验证函数
+	            function IsTel(Tel) {
+	                var re = new RegExp(/^1(3|4|5|7|8)\d{9}$/);
+	                var retu = Tel.match(re);
+	                if (retu) {
+	                    return true;
+	                } else {
+	                    return false;
+	                };
+	            };
+        		
+        		
+			    $("#get_code").on("click",function(){
+			    	var click_num = $(this).attr('click-num');
+			    	var mobile = $("#mobile").val();
+			    	if(IsTel(mobile)){
+				    	if(click_num==0){
+				    		$("#get_code a").html("60秒后重新获取");
+				    		$("#get_code a").css({"background":"#d9d9d9","color":"#fff"});
+				    		$(this).attr('click-num',1);
+				    		var t = 60;
+				    		timer = setInterval(function(){
+				    			if(t>0){
+				    				t--;
+				    				var html = t+'秒后重新获取';
+				    				$("#get_code a").html(html);
+				    			}else{
+				    				
+				    				$("#get_code a").css({"background":"#fff","color":"#3cc51f"});
+				    				clearInterval(timer);
+				    				$("#get_code a").html("获取验证码");
+				    			}
+				    		},1000);
+				    		$.ajax({
+				    			type:"post",
+				    			url:"/m/tool/SendCode",
+				    			async:true,
+				    			data:{phone:mobile},
+				    			dataType:'json',
+				    			success:function(rel) {
+				    				if(rel.Code==0){
+				    					$.toast("获取失败","cancel");
+				    					$("#get_code a").css({"background":"#fff","color":"#3cc51f"});
+					    				clearInterval(timer);
+					    				$("#get_code a").html("获取验证码");
+				    				}
+				    			}
+				    		});
+				    	}
+			    		
+			    	}else{
+			    		$.toast("手机号错误","cancel");
+			    	}
+			    	
+			    	
+			    	
+			    });
+			    
+			    var $form = $("#form");
+				$form.form();
+	        	$('#formSubmitBtn').click(function(){
+					if($(this).hasClass("disabled")){
+
+					}else{
+
+				
+					$form.validate(function(error){
+				        if(error){
+				            
+				        }else{
+				        	var UserName = $("#name").val();
+							var Mobile = $("#mobile").val();
+							var Address = $("#address").val();
+							var Towns = $("#towns").val();
+							var LeaderLevelId = $("#LeaderLevelId").val();
+							var Code = $("#code").val();
+				            $.ajax({
+				            	type:"post",
+				            	url:"/m/usercenter/LeaderJoin",
+				            	async:true,
+				            	data:{LeaderLevelId:LeaderLevelId, UserName:UserName, Mobile:Mobile, Code:Code, Address:Address, Towns:Towns},
+				            	dataType:'json',
+				            	success:function(rel) {
+				            		if(rel.Code==1){
+				            			$.toast("提交成功");
+				            		}else{
+				            			$.toast(rel.Message,"cancel");
+				            		}
+				            		$("#get_code a").css({"background":"#fff","color":"#3cc51f"});
+				    				clearInterval(timer);
+				    				$("#get_code a").html("获取验证码");
+				            	}
+				            });
+				        }
+				    });
+				 }
+	
+				});
+				
+
+				
+				
+				
+
+        	});
+			$("#address").on('click', function (event) {
+			$("#address").blur();
+			dizhiguanli = true;
+			var html = '<div class="mask-black"></div>';
+			$('body').append(html);
+			$("#Show_City_Four").addClass("brouce-in");
+			$("#Show_City_Four").removeClass("brouce-out");
+
+		});
+		$('body').on('click', '.mask-black', function () {
+			$("#Show_City_Four").removeClass("brouce-in");
+			$("#Show_City_Four").addClass("brouce-out");
+			$(".mask-black").remove();
+		});
+
+
+		//  头部
+		$(".cityselect-nav").on('click', 'a', function () {
+			$(".cityselect-nav a").removeClass('crt');
+			$(this).addClass("crt");
+			if ($(this).index() == 0) {
+				$("#S_City_Show").removeClass('cityselect-next');
+				$("#S_City_Show").removeClass('cityselect-end');
+				$("#S_City_Show").addClass('cityselect-prev');
+
+			}
+			if ($(this).index() == 1) {
+				$("#S_City_Show").removeClass('cityselect-next');
+				$("#S_City_Show").removeClass('cityselect-end');
+				$("#S_City_Show").addClass('cityselect-prev');
+			}
+			if ($(this).index() == 2) {
+				$("#S_City_Show").removeClass('cityselect-end');
+				$("#S_City_Show").removeClass('cityselect-prev');
+				$("#S_City_Show").addClass('cityselect-next');
+			}
+			if ($(this).index() == 3) {
+				$("#S_City_Show").removeClass('cityselect-next');
+				$("#S_City_Show").removeClass('cityselect-prev');
+				$("#S_City_Show").addClass('cityselect-end');
+			}
+
+		});
+			//  选择省   加载市区
+			$("#Province_chioce").on("click", "a", function () {
+			var dom = $(this).parents("#Province_chioce");
+			$($(dom).find("a")).removeClass('crt');
+			$(this).addClass('crt');
+			var Province = $(this).attr("data-Province");
+			$($(".cityselect-nav").find("a")).removeClass('crt');
+			$($($(".cityselect-nav").find("a"))[0]).addClass('crt');
+			$($($(".cityselect-nav").find("a"))[0]).text($($(this).find('span')).text().trim());
+			$($(".cityselect-nav a")[0]).attr("data-Province", Province);
+			$.get('/m/Order/GetCityList', {
+				'Province': Province
+			}, function (data) {
+				var datas = JSON.parse(data);
+				var dete = datas.Data;
+				var html1 = "";
+				for (var i = 0; i < dete.length; i++) {
+					html1 += '<a class="" href="javascript:;" data-City="' + dete[i].RegionId + '"><span>';
+					html1 += dete[i].RegionName + '</span></a>'
+				};
+				$($("#City_chioce").find("a")).remove();
+				$("#City_chioce").append(html1);
+			}, 'JSON');
+		});
+		//  选择市  加载区
+		$("#City_chioce").on('click', 'a', function () {
+			var dom = $(this).parents("#City_chioce");
+			$($(dom).find("a")).removeClass('crt');
+			$(this).addClass('crt');
+			$($(".cityselect-nav").find("a")).removeClass('crt');
+			$($($(".cityselect-nav").find("a"))[1]).addClass('crt');
+			$($($(".cityselect-nav").find("a"))[1]).text($($(this).find('span')).text().trim());
+			var City = $(this).attr("data-City");
+			$($(".cityselect-nav a")[1]).attr("data-City", City);
+
+
+			$.get('/m/Order/GetCountyList', {
+				'City': City
+			}, function (data) {
+				var datas = JSON.parse(data);
+				var dete = datas.Data;
+				var html1 = "";
+				for (var i = 0; i < dete.length; i++) {
+					html1 += '<a class="" href="javascript:;" data-County="' + dete[i].RegionId + '"><span>';
+					html1 += dete[i].RegionName + '</span></a>';
+				}
+				$($("#County_chioce").find("a")).remove();
+				$("#County_chioce").append(html1);
+				$("#S_City_Show").removeClass('cityselect-prev');
+				$("#S_City_Show").addClass('cityselect-next');
+			}, 'JSON');
+		});
+		//  选择区  加载城镇
+		$("#County_chioce").on('click', 'a', function () {
+			var dom = $(this).parents("#County_chioce");
+			$($(dom).find("a")).removeClass('crt');
+			$(this).addClass('crt');
+			var County = $(this).attr("data-County");
+			$($(".cityselect-nav a")[2]).attr("data-County", County);
+
+			$($(".cityselect-nav").find("a")).removeClass('crt');
+			$($($(".cityselect-nav").find("a"))[2]).addClass('crt');
+			$($($(".cityselect-nav").find("a"))[2]).text($($(this).find('span')).text().trim());
+			$.get('/m/Order/GetTownList', {
+				'County': County
+			}, function (data) {
+				var datas = JSON.parse(data);
+				var dete = datas.Data;
+				var html1 = "";
+				for (var i = 0; i < dete.length; i++) {
+					html1 += '<a class="" href="javascript:;" data-Town="' + dete[i].RegionId + '"><span>';
+					html1 += dete[i].RegionName + '</span></a>';
+				}
+				$($("#Town_chioce").find("a")).remove();
+				$("#Town_chioce").append(html1);
+				$("#S_City_Show").removeClass('cityselect-next');
+				$("#S_City_Show").addClass('cityselect-end');
+			}, 'JSON');
+		});
+		//  选择镇
+		$("#Town_chioce").on('click', 'a', function () {
+			var dom = $(this).parents("#Town_chioce");
+			$($(dom).find("a")).removeClass('crt');
+			$(this).addClass('crt');
+			var Town = $(this).attr("data-Town");
+			$($(".cityselect-nav a")[3]).attr("data-Town", Town);
+			$($(".cityselect-nav").find("a")).removeClass('crt');
+			$($($(".cityselect-nav").find("a"))[3]).addClass('crt');
+			$($($(".cityselect-nav").find("a"))[3]).text($($(this).find('span')).text().trim());
+
+			$("#Show_City_Four").removeClass("brouce-in");
+			$("#Show_City_Four").addClass("brouce-out");
+			$(".mask-black").remove();
+
+		
+				$("#address").attr("data-Province", $($(".cityselect-nav a")[0]).attr("data-Province"));
+				$("#address").attr("data-City", $($(".cityselect-nav a")[1]).attr("data-City"));
+				$("#address").attr("data-County", $($(".cityselect-nav a")[2]).attr("data-County"));
+				$("#address").attr("data-Town", $($(".cityselect-nav a")[3]).attr("data-Town"));
+				$("#address").val($($(".cityselect-nav a")[0]).text() + '-' + $($(".cityselect-nav a")[1]).text() + '-' + $($(".cityselect-nav a")[2]).text() + '-' + $($(".cityselect-nav a")[3]).text());
+			
+
+		});
+
+
+		</script>
+		<script type="text/javascript">
+			// 百度地图API功能
+			var cityNames = "";
+			var map = new BMap.Map("allmap");
+			var point = new BMap.Point(116.331398, 39.897445);
+			map.centerAndZoom(point, 12);
+		
+			function myFun(result) {
+				var cityName = result.name;
+				map.setCenter(cityName);
+				//   这里是当前的城市
+				cityNames = cityName;
+				getCity(cityNames);
+				//	alert("当前定位城市:"+cityName);
+			};
+			var myCity = new BMap.LocalCity();
+			myCity.get(myFun);
+		
+			function getCity(cityNames) {
+				// 百度地图API功能
+		
+				var map = new BMap.Map("l-map");
+				console.log(cityNames);
+				map.centerAndZoom(cityNames, 12);
+			};
+		
+			// 初始化地图,设置城市和地图级别。
+			function G(id) {
+				return document.getElementById(id);
+			};
+			var ac = new BMap.Autocomplete( //建立一个自动完成的对象
+				{
+					"input": "Consignee_Map",
+					"location": map
+				});
+		
+			ac.addEventListener("onhighlight", function (e) { //鼠标放在下拉列表上的事件
+				var str = "";
+				var _value = e.fromitem.value;
+				var value = "";
+				if (e.fromitem.index > -1) {
+					value = _value.province + _value.city + _value.district + _value.street + _value.business;
+				};
+				str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+		
+				value = "";
+				if (e.toitem.index > -1) {
+					_value = e.toitem.value;
+					value = _value.province + _value.city + _value.district + _value.street + _value.business;
+				};
+				str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+				G("searchResultPanel").innerHTML = str;
+			});
+		
+			var myValue;
+			ac.addEventListener("onconfirm", function (e) { //鼠标点击下拉列表后的事件
+				var _value = e.item.value;
+				myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+				G("searchResultPanel").innerHTML = "onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+				 // 这里是地图点击后的获取的汗汉字坐标信息
+		
+				setPlace();
+			});
+		
+		
+			function setPlace() {
+				map.clearOverlays(); /*清除地图上所有覆盖物*/
+				function myFun() {
+					var pp = local.getResults().getPoi(0).point; //获取第一个智能搜索的结果
+					map.centerAndZoom(pp, 18);
+					map.addOverlay(new BMap.Marker(pp)); //添加标注
+				}
+				var local = new BMap.LocalSearch(map, { //智能搜索
+					onSearchComplete: myFun
+				});
+				local.search(myValue);
+			}; 
+		</script>
+		
+	</body>
+</html>

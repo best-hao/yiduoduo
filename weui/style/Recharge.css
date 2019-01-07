@@ -1,0 +1,202 @@
+﻿
+
+::-webkit-scrollbar {
+	width: 1px;
+	float: right;
+}
+
+::-webkit-scrollbar:horizontal {
+	height: 0em;
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+	outline: none;
+    touch-action: pan-y;
+}
+
+ul li {
+	list-style: none;
+}
+
+a {
+	color: #323232;
+}
+
+body {
+	min-width: 320px;
+	max-width: 640px;
+	margin: 0 auto;
+	font-family: "微软雅黑", "microsoft yahei";
+	background: #EDEDED;
+	color: #323232;
+}
+
+
+/**/
+
+header {
+	height: 2.66rem;
+	box-shadow: 1px 3px 3px #E1E1E1;
+	background: #FFFFFF;
+	z-index: 3;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+
+header h3 {
+	line-height: 2.66rem;
+	text-align: center;
+	font-weight: inherit;
+	font-size: 1rem;
+}
+
+.back {
+	position: absolute;
+	display: inline-block;
+	top: 0;
+	left: 0;
+	right: 0;
+	padding: 0px 0.6rem;
+	line-height: 2.66rem;
+}
+
+.con_head {
+	padding: 0.6rem;
+	width: 100%;
+	overflow-x: hidden;
+	position: relative;
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid #E1E1E1;
+}
+
+.con_head p {
+	line-height: 2.26rem;
+	position: relative;
+	font-size: 1.2rem;
+}
+
+.con_head p:first-child {
+	font-size: 0.98rem;
+}
+
+.con_head p:first-child:after {
+	content: "";
+	height: 1px;
+	bottom: 0;
+	left: 0rem;
+	right: 4rem;
+	display: inline-block;
+	position: absolute;
+	background: #E1E1E1;
+}
+
+.contaion {
+	background: #FFFFFF;
+	padding-top: 2.66rem;
+}
+
+.user_show {
+	position: absolute;
+	top: 1.8rem;
+	right: 1rem;
+	bottom: 0;
+	color: #FFFFFF;
+	line-height: 1.9rem;
+	text-align: center;
+	font-size: 1.6rem;
+	display: inline-block;
+	width: 2rem;
+	height: 2rem;
+	border-radius: 50%;
+	border: 1px solid #04be02;
+	margin: 0 auto;
+	background: #04be02;
+}
+
+.footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 3rem;
+	line-height: 3rem;
+	background: #04be02;
+	color: #FFFFFF;
+	border-top: 1px solid #E1E1E1;
+	text-align: center;
+}
+
+
+/* 支付 */
+
+.start h3 {
+	font-weight: inherit;
+	line-height: 2.26rem;
+	font-size: 0.94rem;
+	color: #666;
+}
+
+.weui-payselect-a {
+	border-radius: 4px;
+}
+
+.start {
+	padding: 0px 0.6rem;
+}
+
+
+/*end*/
+
+.weui_cells_title {
+	font-size: 0.94rem;
+	line-height: 2.26rem;
+	color: #666;
+}
+
+.weui-payselect-ul {
+	margin-top: 10px;
+}
+
+.weui_cells p {
+	font-size: 0.98rem;
+}
+
+a:active {
+	color: #04be02;
+}
+
+.weui-payselect-a {
+	border: 1px solid #444;
+	color: #444;
+}
+
+.weui-payselect-on {
+	border: 1px solid #04be02;
+	color: #04be02;
+}
+
+.User_id {
+	font-size: 0.8rem;
+}
+ .weui_cells:before{
+ 	left: 0.9rem;
+ }
+ .weui_cells_title:before{
+ 	position: absolute;
+ 	content: "";
+ 	top: 0;
+ 	left: 0;
+ 	right: 0;
+ 	width: 100%;
+ 	height: 1px;
+ 	background: #E1E1E1;
+ 	
+ }
+.weui_cells_title{
+	position: relative;
+}

@@ -1,0 +1,101 @@
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="apple-touch-icon" href="favicon.png">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Cache-Control" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <title>物流查询-@{@WorkContext.SellerInfo.SellerName}</title>
+        <link rel="stylesheet" href="/Mobile/weui/style/weui.css" />
+        <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+        <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/font/common.css" />
+        <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/usercenter/express/express.css?v=0.1" />
+        <script src="/Mobile/weui/zepto.min.js"></script>
+        <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+    </head>
+
+    <body>
+        <header>
+            <a href="javascript:;" class="back" onclick="window.history.back()">
+                <i class="icon icon-109"></i>
+            </a>
+            <h3 class="title">
+                查看物流
+            </h3>
+        </header>
+        <div class="express-info" id="express">
+            <div class="express-name">物流公司: <span>{{expressName}}</span></div>
+            <div class="express-number">运单号码: <span>{{expressNum}}</span></div>
+            <div class="express-tel">物流公司联系电话: <span>{{expressTel}}</span></div>
+            <div class="express-list">
+                <ul>
+
+                    <li v-for="(item,index) of expressInfoList" :key="index">
+                        <div class="time">{{item.time}}</div>
+                        <div :class="[index == 0 ? 'current' : 'context']">{{item.context}}</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </body>
+    <script>
+        $.showLoading();
+        var expressNum = '@ViewData["ShipSN"]';  //快递单号
+        var expressAbbr = '@ViewData["ExpressCode"]';
+        var vm = new Vue({
+            el: "#express",
+            data: {
+                expressNum: expressNum ,
+                expressAbbr: expressAbbr ,
+                expressName: "",
+                expressTel: "",
+                expressUpdateStr: "",
+                expressInfoList:[],
+            },
+            created: function() {
+                var that = this;
+                var url = "";
+                if(that.expressAbbr == null || that.expressAbbr == ""){
+                    //that.expressAbbr 快递公司字母简称，没有简称时使用'auto'代替，自动识别快递单号所属公司（成功率99%）
+                    url = "https://ali-deliver.showapi.com/showapi_expInfo?v="+Math.random()+"&com=auto"+"&nu="+that.expressNum;
+                }else{
+                    url = "https://ali-deliver.showapi.com/showapi_expInfo?v="+Math.random()+"&com="+that.expressAbbr+"&nu="+that.expressNum;
+                }
+                $.ajax({
+                    headers: {
+                        "Content-Type":"application/json; charset=utf-8",
+                        "Authorization":"APPCODE aa347ac9584746c8b45ca79e37de04ff"
+                    },
+                    type: "get",
+                    url: url,
+                    dataType: "json",
+                    async: true,
+                    success:function(res){
+                        //console.log(res);
+                        var data = res.showapi_res_body.data;
+                        if(res.showapi_res_code == 0){
+                            $.hideLoading();
+                            if(res.showapi_res_body.flag){
+                                that.expressTel = res.showapi_res_body.tel;
+                                that.expressName = res.showapi_res_body.expTextName;
+                                that.expressUpdateStr = res.showapi_res_body.updateStr;
+                                data.forEach(function(element, index){
+                                    that.expressInfoList.push(element);
+                                });
+                            }else{
+                                $.toast("信息获取失败", "cancel");
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</html>

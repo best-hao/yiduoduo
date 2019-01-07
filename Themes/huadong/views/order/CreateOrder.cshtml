@@ -1,0 +1,3091 @@
+﻿@{
+    Layout = null;
+    Yitao.Core.ShipAddressInfo shipAddressInfo = ViewData["MyAddress"] as Yitao.Core.ShipAddressInfo;
+    Yitao.Core.ProductInfo productInfo = ViewData["ProductInfo"] as Yitao.Core.ProductInfo; Yitao.Core.ProductSkuInfo productSkuInfo = ViewData["ProductSkuInfo"] as Yitao.Core.ProductSkuInfo; 
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>提交订单-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="/Css/mobile/goods/ydui.css" />
+    <script src="/Js/Mobile/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="/Css/mobile/goods/jiesuan.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css"/>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=nT6ySqHzG1p7QMRpZ1k9rMAT0weeSERr"></script>
+<script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+    	body{width: 7.5rem;}
+    .jifen::after{content:"注：@(WorkContext.SellerInfo.ScoreName)无法抵邮费";position:absolute;font-size:12px;color:#999;margin-left:.4rem}
+	.Coupon_con2 li:after{content:""}
+	.Coupon_ul1 label.cell-right{padding:0}
+	.youhuiOK{position:fixed;bottom:0;width:100%;text-align:center;background:#fff;padding:10px;border-top:1px solid #f2f2f2}
+	.Coupon_con{margin-bottom:50px}
+	#amount_formated:before,.freight_title:before,.order_total_ul .subtotal em:before{content:""}
+	#goods_tags1:before{content:"-"}
+	#jifenkoukuan:before{content:"-"}
+	#coupon-price:before{content:"-"}
+	#goods_tags0:before{content:"+"}
+	.youhuiOK{position:fixed;bottom:0;width:100%;text-align:center;background:#fff;padding:0;border-top:1px solid #f2f2f2;height:46px;line-height:46px}
+.youhuiOK .OKbTN{display:inline-block;width:50%;background:#F13030;color:#FFF;line-height:46px;border-radius:0}
+.youhuiOK div{float:left;width:50%!important}
+.hide{display:none}
+.total-text .iconfont{color:red;font-size:20px;margin-right:10px;font-size:16px}
+.total-text .total.huiyuan{float:none}
+#l-map{width:1px;height:1px}
+#allmap{width:1px;height:1px}
+.searchResultPanel{z-index:9999;position:absolute}
+#tangram-suggestion--TANGRAM__1m-main{position:absolute;z-index:9999}
+.tangram-suggestion-main{position:absolute;z-index:9999}
+.no-addr{line-height:1.4rem;height:1.5rem;display:block;font-size:.34rem;color:#323232;display:none;cursor:pointer;text-align:center}
+.no-addr:before{content:"";display:inline-block;width:.6rem;height:.6rem;background-repeat:no-repeat;background-position:0 -1.65rem;background-size:4rem auto;vertical-align:middle}
+.has-addr{display:none}
+
+   
+#app-addr .back{position:absolute;top:0;left:0;display:inline-block;padding:0 .6rem;line-height:3rem;color:#323232}
+#app-addr header{position:fixed;z-index:11;top:0;left:0;right:0;min-width:320px;max-width:640px;margin:0 auto;height:3rem;box-shadow:1px 2px 3px #E1E1E1;background:#FFF}
+#app-addr header h3{font-weight:inherit;text-align:center;line-height:3rem;font-size:1rem}
+#app-addr .tentent{padding-top:2.6rem}
+#app-addr .list_con,.list_item{display:inline-block;width:100%;position:relative}
+#app-addr .list_item{background:#FFF;margin-top:.6rem;padding:.6rem;box-sizing: content-box;width: 6.94rem;}
+#app-addr .list_head{line-height:2.6rem}
+#app-addr .list_head .Myhome{white-space:nowrap;font-size:1rem;color:#323232;position:relative}
+#app-addr .name{padding-right:.6rem}
+#app-addr .phone{position:relative;padding-left:.6rem}
+#app-addr .list_body p{font-size:.9rem;color:#666}
+#app-addr .Isdefault{display:inline-block;float:left}
+#app-addr .weui_cell_ft{display:inline-block;font-size:.84rem}
+#app-addr .weui_switch{height:32px;position:relative;top:5px}
+#app-addr .editsa{display:inline-block;float:right;padding:.4rem;color:#323232}
+#app-addr .weui_switch:before{height:30px!important}
+#app-addr .weui_switch:after{height:30px!important}
+#app-addr .Iselit{margin-right:.6rem}
+#app-addr .checked_img{width:16px;position:relative;top:4px;left:5px}
+#app-addr .Isdefault{font-size:.84rem;color:#666;padding:.6rem}
+#app-addr .list_down{display:inline-block;width:100%}
+#app-addr #addRess{position:fixed;z-index:33;bottom:15%;background:#F13030;color:#FFF;font-size:1rem;text-align:center;height:2.2rem;line-height:2.2rem;border-radius:4px;width:92%;left:0;right:0;margin:auto}
+#app-addr #addRess:active{background:#F17F7F}
+#app-addr #select_add{position:fixed;z-index:200;top:0;left:0;right:0;bottom:0;width:100%;height:100%;overflow:hidden;background:#FFF}
+#app-addr #select_edt{position:fixed;z-index:200;top:0;left:0;right:0;bottom:0;width:100%;height:100%;overflow:hidden;background:#FFF}
+#app-addr .select_add_ab{position:absolute;width:100%;height:100%;overflow:hidden}
+#app-addr .select_add_re{display:inline-block;width:100%;height:100%;overflow:scroll}
+#app-addr .m-navbar{height:3rem;position:relative;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;background-color:rgba(255,255,255,.98)}
+#app-addr .navbar-item:first-child{width:3rem;min-width:3rem;position:absolute;z-index:20;color:#5C5C5C;left:0;top:0}
+#app-addr .navbar-item:first-child{-webkit-box-ordinal-group:2;-webkit-order:1;-ms-flex-order:1;order:1;margin-right:-25%}
+#app-addr .navbar-item{height:3rem;min-width:25%;-webkit-box-flex:0;-webkit-flex:0 0 25%;-ms-flex:0 0 25%;flex:0 0 25%;padding:0 .2rem;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center;font-size:.94rem;white-space:nowrap;overflow:hidden;color:#5C5C5C}
+#app-addr .icon{display:inline-block;width:.5rem;height:.5rem;background-repeat:no-repeat;background-position:0 0;background-size:3.5rem auto;vertical-align:middle}
+#app-addr .icon.back{background-position:-2.4rem -.48rem;width:.4rem}
+#app-addr .navbar-center{-webkit-box-ordinal-group:3;-webkit-order:2;-ms-flex-order:2;order:2;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center;height:3rem;width:50%;margin-left:25%}
+#app-addr .navbar-center .navbar-title{text-align:center;width:100%;white-space:nowrap;overflow:hidden;display:block;text-overflow:ellipsis;font-size:1rem;color:#323232}
+#app-addr .m-navbar:after{content:'';position:absolute;z-index:2;bottom:0;left:0;width:100%;height:1px;border-bottom:1px solid #B2B2B2;-webkit-transform:scaleY(.5);transform:scaleY(.5);-webkit-transform-origin:0 100%;transform-origin:0 100%}
+#app-addr .m-cell{background:#fff;margin-bottom:0;border-bottom:0;position:relative}
+#app-addr .cell-item{background:#fff;min-height:3rem;padding:0 .6rem}
+#app-addr .cell-item{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:inline-block;position:relative;padding-left:.6rem;overflow:hidden;width:100%;margin-top:-6px}
+#app-addr .cell-left{color:#333;font-size:.94rem;white-space:nowrap;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center}
+#app-addr .cell-left{font-size:1rem;color:#323232;width:25%;display:inline-block;line-height:3rem;text-align:left;float:left;position:relative}
+#app-addr .cell-right{color:#525252;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:end;-webkit-justify-content:flex-end;-ms-flex-pack:end;justify-content:flex-end}
+#app-addr .cell-right{padding-right:.6rem}
+#app-addr .cell-right{min-height:3rem}
+#app-addr .select_add_re .cell-right{display:inline-block;text-align:left;position:relative;font-size:1rem;float:left;width:75%}
+#app-addr .select_add_re .cell-right{text-align:right}
+#app-addr .cell_input,.selcet_chioce{display:block;width:100%;height:2rem;line-height:2rem;position:absolute;top:50%;left:0;border:0;color:#323232;font-size:.94rem;text-indent:5px;margin-top:-.9rem}
+#app-addr .cell-item:not(:last-child):after{margin-left:2rem;content:'';position:absolute;z-index:0;bottom:0;left:0;width:100%;height:1px;border-bottom:1px solid #D9D9D9;-webkit-transform:scaleY(.5);transform:scaleY(.5);-webkit-transform-origin:0 100%;transform-origin:0 100%}
+#app-addr textarea{outline:0;border-radius:0;-webkit-appearance:none;-moz-appearance:none;overflow:auto;resize:none;font:100% tahoma,\5b8b\4f53,arial}
+#app-addr .cell_textarea{line-height:3rem;color:#323232;width:75%;font-size:1rem;border-radius:3px;display:inline-block;float:left;border:0;position:absolute;right:0;text-align:left;text-indent:.6rem}
+#app-addr .searchResultPanel{z-index:9999;position:absolute}
+#app-addr .cell-item:not(:last-child):after{margin-left:.6rem;content:'';position:absolute;z-index:0;bottom:0;left:0;width:100%;height:1px;border-bottom:1px solid #D9D9D9;-webkit-transform:scaleY(.5);transform:scaleY(.5);-webkit-transform-origin:0 100%;transform-origin:0 100%;z-index:555}
+#app-addr .moren{text-align:right;color:#888;position:absolute;right:2rem;top:4px}
+#app-addr .weui_switch:after,.weui_switch:before{content:" ";position:absolute;top:0;left:0;height:28px;border-radius:15px;-webkit-transition:-webkit-transform .3s}
+#app-addr .weui_switch:after,.weui_switch:before{content:" ";position:absolute;top:0;left:0;height:28px;border-radius:15px;-webkit-transition:-webkit-transform .3s}
+#app-addr .addMap,.hideBtn{display:block;border:0;border-radius:4px;line-height:2.4rem;color:#fff;font-size:1rem;margin:0 auto;position:fixed;bottom:1rem;left:0;right:0;width:96%;background:#D62B17;text-align:center;z-index:444}
+#app-addr #add_back i{line-height:3rem;padding:0 .6rem}
+#app-addr .cell-item:first-child{margin-top:0}
+#app-addr .cell-left:after{content:":";position:absolute;right:0;z-index:5}
+#app-addr .total-text{line-height:3rem}
+#app-addr #select_add{display:none}
+#app-addr .m-cityselect.brouce-in{-webkit-transform:translate(0,0);transform:translate(0,0)}
+#app-addr .m-cityselect{border-top:1px solid #e1e1e1}
+#app-addr .m-cityselect{position:fixed;bottom:0;left:0;width:100%;height:75%;z-index:1000;background-color:#fff;-webkit-transform:translate(0,100%);transform:translate(0,100%);-webkit-transition:-webkit-transform .3s;transition:-webkit-transform .3s;transition:transform .3s;transition:transform .3s,-webkit-transform .3s}
+#app-addr .cityselect-header{position:absolute;top:0;left:0;width:100%;z-index:1}
+#app-addr .cityselect-title{width:100%;font-size:.94rem;text-align:center;height:45px;line-height:45px;position:relative}
+#app-addr .cityselect-title:after{content:'';position:absolute;z-index:0;bottom:0;left:0;width:100%;height:1px;border-bottom:1px solid #B2B2B2;-webkit-transform:scaleY(.5);transform:scaleY(.5);-webkit-transform-origin:0 100%;transform-origin:0 100%}
+#app-addr .cityselect-nav{width:100%;padding-left:.2rem;overflow:hidden;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}
+#app-addr .cityselect-nav>a{font-size:.86rem;color:#222;display:block;height:40px;line-height:46px;padding:0 .6rem;position:relative;margin-right:.6rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40%}
+#app-addr .cityselect-nav>a.crt{color:#F23030}
+#app-addr .cityselect-nav>a.crt:after{content:'';width:100%;height:2px;background-color:#F23030;position:absolute;bottom:0;left:0;z-index:2}
+#app-addr .cityselect-header:after{content:'';position:absolute;z-index:0;bottom:0;left:0;width:100%;height:1px;border-bottom:1px solid #D9D9D9;-webkit-transform:scaleY(.5);transform:scaleY(.5);-webkit-transform-origin:0 100%;transform-origin:0 100%}
+#app-addr .cityselect-content{height:100%;padding-top:85px;width:100%;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}
+#app-addr .cityselect-content.cityselect-move-animate{-webkit-transition:-webkit-transform .3s;transition:-webkit-transform .3s;transition:transform .3s;transition:transform .3s,-webkit-transform .3s}
+#app-addr .cityselect-content.cityselect-prev{-webkit-transform:translate(0,0);transform:translate(0,0)}
+#app-addr .cityselect-content>.cityselect-item{display:block;height:inherit;width:50%;-webkit-box-flex:0;-webkit-flex:0 0 50%;-ms-flex:0 0 50%;flex:0 0 50%;overflow-y:auto;-webkit-overflow-scrolling:touch;background-color:#FFF}
+#app-addr .cityselect-item-box{width:100%;height:inherit;display:block;padding:0 .4rem}
+#app-addr .cityselect-nav>a.crt{color:#F23030}
+#app-addr .cityselect-item-box>a{color:#333;font-size:.86rem;height:40px;line-height:18px;overflow:hidden;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center;width:100%;position:relative;z-index:1}
+#app-addr .cityselect-item-box>a:before{content:'';position:absolute;z-index:0;bottom:0;left:0;width:100%;height:1px;border-bottom:1px solid #D9D9D9;-webkit-transform:scaleY(.5);transform:scaleY(.5);-webkit-transform-origin:0 100%;transform-origin:0 100%}
+#app-addr .cityselect-item-box>a.crt:after{content:"";position:absolute;bottom:0;left:0;width:20%;height:2px;border-bottom:2px solid #f13030}
+#app-addr .cityselect-item-box>a.crt{color:#f13030}
+#app-addr .cityselect-item-box>a span{-webkit-box-flex:1;-webkit-flex:1;-ms-flex:1;flex:1;display:block}
+#app-addr .cityselect-content>.cityselect-item:nth-child(2n){background-color:#F5F5F5}
+#app-addr .cityselect-content.cityselect-next{-webkit-transform:translate(-50%,0);transform:translate(-50%,0)}
+#app-addr .mask-black{background-color:rgba(0,0,0,.4);position:fixed;z-index:500;bottom:0;right:0;left:0;top:0;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center}
+#app-addr .brouce-out{-webkit-transform:translate(0,100%);transform:translate(0,100%)}
+#app-addr .cityselect-end{-webkit-transform:translate(-100%,0);transform:translate(-100%,0)}
+#app-addr .weui_mask{z-index:99}
+#app-addr .weui_dialog,.weui_toast{z-index:9999}
+
+#app-addr{width:7.5rem;margin:0 auto;height: 100%;position: fixed;top: 0;left: 50%;margin-left: -3.75rem;background: #f2f2f2;z-index: 9999;display: none;}
+#app-addr #addRess{position:relative;margin-top:30px;bottom:0}
+#app-addr #l-map{width:1px;height:1px}
+#app-addr #allmap{width:1px;height:1px}
+#app-addr .searchResultPanel{z-index:9999;position:absolute}
+#app-addr #tangram-suggestion--TANGRAM__1m-main{position:absolute;z-index:9999}
+#app-addr .tangram-suggestion-main{position:absolute;z-index:9999}
+#app-addr #select_add{display:block}
+#app-addr .name{padding-right:.28rem}
+#app-addr .phone{position:relative;padding-left:.28rem}
+#app-addr header h3{font-weight:inherit;text-align:center;line-height:.9rem;font-size:.28rem}
+#app-addr .addr-box ul li{font-size:.28rem}
+#app-addr .list_down{display:block}
+#app-addr .show-addr li{font-size:.28rem}
+#app-addr .addr-shade .title{font-size:.28rem}
+#app-addr .list_head{line-height:.9rem}
+#app-addr .editsa{display:inline-block;float:right;padding:0;color:#323232}
+#app-addr .back{position:absolute;top:0;left:0;display:inline-block;padding:0 .28rem;line-height:.9rem;color:#323232}
+#app-addr .list_item{background:#FFF;margin-top:.18rem;padding:.28rem .28rem 0 .28rem}
+#app-addr .tentent{padding-top:.9rem}
+#app-addr .navbar-center .navbar-title{text-align:center;width:100%;white-space:nowrap;overflow:hidden;display:block;text-overflow:ellipsis;font-size:.28rem;color:#323232}
+#app-addr .m-navbar{height:.9rem;position:relative;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;background-color:rgba(255,255,255,.98)}
+#app-addr .navbar-item:first-child{width:3rem;min-width:3rem;position:absolute;z-index:20;color:#5C5C5C;left:0;top:0}
+#app-addr .navbar-center{height:.9rem;width:50%;margin-left:25%}
+#app-addr .item{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;position:relative;padding-left:.28rem;overflow:hidden;width:100%;margin-top:-6px}
+#app-addr .left{font-size:.28rem;color:#323232;width:25%;display:inline-block;line-height:.9rem;text-align:left;float:left;position:relative}
+#app-addr .select_add_re .right{font-size:.28rem}
+#app-addr #add_back i{line-height:.9rem;padding:0 .28rem}
+#app-addr .item{background:#fff;min-height:1.2rem;padding:0 .28rem}
+#app-addr .total-text{line-height:.9rem;font-size:.28rem}
+#app-addr .navbar-item:first-child{width:3rem;min-width:3rem;min-height:.9rem;position:absolute;z-index:20;color:#5C5C5C;left:0;top:0}
+#app-addr .navbar-item{height:.9rem}
+#app-addr .addMap,.hideBtn{display:block;border:0;border-radius:4px;line-height:.8rem;color:#fff;font-size:.28rem;margin:0 auto;position:fixed;bottom:.28rem;left:0;right:0;width:96%;background:#D62B17;text-align:center;z-index:444}
+#app-addr .right{min-height:.9rem;padding-right:.28rem}
+#app-addr .item:not(:last-child):after{margin-left:.28rem}
+#app-addr .selcet_chioce,.weui_input{height:.6rem;line-height:.6rem;font-size:.28rem;top:90%}
+#app-addr .moren{text-align:right;color:#888;position:absolute;right:1rem;top:-16px}
+#app-addr .item:not(:last-child):after{bottom:.2rem}
+#app-addr .weui_toast{width:3rem;min-height:3rem;left:31%;top:35%;margin-left:0}
+#app-addr header{position:fixed;z-index:11;top:0;left:0;right:0;min-width:320px;width: 7.5rem; margin:0 auto;height:.9rem;line-height:.9rem;box-shadow:1px 2px 3px #E1E1E1;background:#FFF}
+#app-addr .list_head .Myhome{white-space:nowrap;font-size:.28rem;color:#323232;position:relative}
+#app-addr .list_body p{font-size:.28rem;color:#666}
+#app-addr .Iselit{margin-right:.1rem;font-size:.28rem}
+#app-addr .Isdefault{font-size:.28rem;color:#666;padding:.2rem 0}
+#app-addr #addRess{z-index:33;bottom:15%;background:#F13030;color:#FFF;font-size:.28rem;text-align:center;height:1rem;line-height:1rem;border-radius:4px;width:92%;left:0;right:0;margin:auto}
+#app-addr .weui_toast_content{font-size:.28rem}
+#app-addr body{overflow-x: hidden;width: 7.5rem;overflow-x: hidden;margin: 0 auto;font-size: 0.24rem;}
+#app-addr .fl{float:left}
+#app-addr .fr{float:right}
+#app-addr .inputbox{width: 7.1rem;height: 0.7rem;line-height: 0.7rem;padding: 0 0.2rem;font-size: 0.28rem;margin: 0.2rem auto;}
+#app-addr .weui-input{height: 0.7rem;line-height: 0.7rem;border: 0;outline: 0;width: 4.6rem;}
+#app-addr #edit{font-size: 0.28rem;width: 7.5rem;overflow-x: hidden;}
+/*.shade-box{position: fixed;z-index: 222;bottom: -100%;left: 50%;background: rgba(0,0,0,0.5);width: 7.5rem;height: 100%;overflow: hidden;margin-left: -3.75rem;z-index:111111111}*/
+#app-addr .shade-box{position: fixed;display: none; top: 0;left: 50%;background: rgba(0,0,0,0.5);width: 7.5rem;height: 100%;overflow: hidden;margin-left: -3.75rem;z-index:111111111}
+#app-addr .addr-shade{position: absolute;z-index: 10;bottom: 0;left: 0;background: #fff;width: 8rem;height: 7.44rem;z-index:111111112}
+#app-addr .addr-box{width: 15rem;}
+#app-addr .addr-box .province{width: 3.75rem;height: 6rem;overflow-y: auto;position: relative;}
+#app-addr .addr-box .province:after{position: absolute;right: 0;width: 1px;top: 0;background: #f2f2f2;content: "";}
+#app-addr .addr-box .city{width: 3.75rem;height: 6rem;overflow-y: auto;}
+#app-addr .addr-box .county{width: 3.75rem;height: 6rem;overflow-y: auto;}
+#app-addr .addr-box .town{width: 3.75rem;height: 6rem;overflow-y: auto;}
+#app-addr .addr-box ul li{padding: 0 0.2rem;/*line-height: 0.6rem;*/height: 0.6rem;}
+#app-addr .curProvince{color: #f00;}
+li{list-style: none;}
+#app-addr .curCity{color: #f00;}
+#app-addr .curCounty{color: #f00;}
+#app-addr .curTown{color: #f00;}
+#app-addr .show-addr{height: 0.7rem;line-height: 0.7rem;padding: 0 0.2rem;}
+#app-addr .show-addr{border-bottom: 1px solid #f2f2f2;}
+#app-addr .show-addr li{line-height: 0.7rem;float: left;text-align: left;padding: 0 0.2rem;}
+#app-addr .addr-shade .title{text-align: center;height: 0.7rem;line-height: 0.7rem;border-bottom: 1px solid #f2f2f2;}
+#app-addr .cur-li{position: relative;color: #f00;}
+#app-addr .cur-li:after{position: absolute;bottom: 0;content: "";left: 0;height: 2px; background: #fd4c60;width: 100%;}
+#app-addr .weui-picker-modal .picker-items-col:eq(2){display: none !important;}
+#app-addr .weui_dialog_hd{padding: 0;}
+#app-addr .addr-box ul{padding-bottom: 1rem;}
+#app-addr .icon{background-image:none}
+#app-addr #add-addRess{background: #ff4800;height: 0.9rem;line-height: 0.9rem;color: #fff;border-radius: 5px;width: 7.1rem;margin: 0 auto;text-align: center;font-size: 0.32rem;margin-top: 0.4rem;}
+.payment-bar{width: 7.5rem;}
+.share-box{width: 0.6rem;position: absolute;right: 0;bottom: 8px;width: 0.6rem;text-align: center;}
+.share-box .icon-box{height: 17px;}
+.share-box .share-txt{height: 19px;}
+.icon {
+  /* 通过设置 font-size 来改变图标大小 */
+  width: 1em; height: 1em;
+  /* 图标和文字相邻时，垂直对齐 */
+  vertical-align: -0.15em;
+  /* 通过设置 color 来改变 SVG 的颜色/fill */
+  fill: currentColor;
+  /* path 和 stroke 溢出 viewBox 部分在 IE 下会显示
+     normalize.css 中也包含这行 */
+  overflow: hidden;
+}
+.shade-piker{font-size: 0.24rem;background: #fff;width: 7.5rem;height: 8.6rem;position: fixed;bottom: 0;left: 50%;margin-left: -3.75rem;z-index: 101;display: none;}
+.shade-piker .title{height: 0.7rem;line-height: 0.7rem;text-align: center;background: #eee;}
+.shade-piker .confirm-piker{height: 0.7rem;line-height: 0.7rem;text-align: center;background: #ff4800;color: #fff;}
+.piker-time-box{font-size: 0.24rem;text-align: center;background: #fff;height: 7.2rem;}
+li{list-style: none;}
+.piker-time-box li{height: 0.8rem;line-height: 0.8rem;}
+.piker-day li{position: relative;}
+.piker-day li:after{position: absolute;content: "";bottom: 0;left: 0;width: 100%;height: 1px;background: #f2f2f2;}
+.piker-day{position: relative;}
+.piker-day:after{position: absolute;content: "";top: 0;right: 0;width: 1px;height: 100%;background: #f2f2f2;}
+.piker-time .time-li{width: 50%;}
+.time-item{padding: 5px 8px;background: #f2f2f2;}
+.shade-piker .cur{background: #ff4800;color: #fff;}
+.piker-day .cur{background: #fff;color: #ff4800;}	
+.weui-flex {
+ display: -webkit-box;
+display: -webkit-flex;
+    display: flex;
+}
+.weui-flex-item {
+     -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+}
+.left{float: left;}
+.mask-shade{position: fixed;top: 0;width: 7.5rem;height: 100%;left: 50%;margin-left: -3.75rem;background: rgba(0,0,0,0.8);z-index: 99;display: none;}	
+    </style>
+</head>
+
+<body>
+
+    <form action="" method="post">
+        <input type="hidden" id="IsCart" value='@ViewData["IsCart"]'>
+        <input type="hidden" id="Weight" value="">
+        <input type="hidden" id="Quantity" value="">
+        <input type="hidden" id="ShipDate" value="">
+        
+        <input type="hidden" id="FullFreeAmount" value='@ViewData["FullFreeAmount"]'>
+        <!-- 头部 -->
+        <header class="m-navbar">
+            <a href="javascript:;" onclick="goToBack()" class="navbar-item"><i class="icon iconfont">&#xe60e;</i></a>
+            <div class="navbar-center"><span class="navbar-title">确认订单</span></div>
+        </header>
+        <!--end-->
+        <!-- tab  -->
+        <div id="J_Tab" class="m-tab">
+            <ul class="tab-nav">
+                <li class="tab-nav-item tab-active">
+                    <a href="javascript:;">快递</a>
+                </li>
+                <li class="tab-nav-item">
+                    <a href="javascript:;">自提</a>
+                </li>
+                <!--li class="tab-nav-item">
+                    <a href="javascript:;">配送</a>
+                </li-->
+            </ul>
+            <div class="tab-panel">
+                <div class="tab-panel-item tab-active">
+
+                    <!-- 地址信息 -->
+                    <div class="map_contnt">
+                        <!--  当没有地址的时候 -->
+                        <a  id="get-addr" class="no-addr" onclick="openAddr()" data-hasaddr="0" style="display:block">
+                        	去选择地址
+                        </a>
+                        <!--  已有地址  -->
+                        <div class="has-addr map_title cell-arrow" onclick="openAddr()" id="get-addr">
+                            <p class="map_user">
+                                <span id="map_name">姓名</span>
+                                <span id="map_phon">电话</span>
+                            </p>
+                            <p class="map_goods">
+                                <span id="map_map">
+                                	地址
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <!--end-->
+                    <!--店铺订单-->
+
+                </div>
+                <div class="tab-panel-item">
+                    <!--表单-->
+                    <div class="m-cell">
+                        <div class="cell-item">
+                            <div class="cell-left">取货人：</div>
+                            <div class="cell-right"><input type="text" id="Consignee1" required="required" pattern="/^[\u4e00-\u9fa5]+$/" value="@WorkContext.UserInfo.UserName" class="cell-input" placeholder="取货人" autocomplete="off"></div>
+                        </div>
+
+                        <div class="cell-item">
+                            <div class="cell-left">联系电话：</div>
+                            <div class="cell-right"><input type="number" id="Mobile1" value="@WorkContext.UserInfo.Mobile" pattern="[0-9]*" class="cell-input" placeholder="请输入手机号" autocomplete="off"></div>
+                        </div>
+                        <div class="cell-item">
+                            <div class="cell-left">提货时间：</div>
+                            <div class="cell-right"><input id="pickTime" type="text" class="cell-input" placeholder="选择提货时间" autocomplete="off"></div>
+                        </div>
+
+                        <div class="cell-item">
+                            <div class="cell-left">自提店点：</div>
+                            <div class="cell-right"><input id="J_ShowActionSheet" type="text" class="cell-input" placeholder="请选择自提店点" autocomplete="off"></div>
+                        </div>
+                    </div>
+                    <!--end-->
+                </div>
+                <div class="tab-panel-item">
+                    <!-- 表单 -->
+                    <div class="m-cell">
+                        <div class="cell-item">
+                            <div class="cell-left">收货人：</div>
+                            <div class="cell-right"><input type="text" id="Consignee2" value="@WorkContext.UserInfo.UserName" class="cell-input" placeholder="收货人" autocomplete="off"></div>
+                        </div>
+
+                        <div class="cell-item">
+                            <div class="cell-left">联系电话：</div>
+                            <div class="cell-right"><input type="number" id="Mobile2" value="@WorkContext.UserInfo.Mobile" pattern="[0-9]*" class="cell-input" placeholder="请输入手机号" autocomplete="off"></div>
+                        </div>
+
+                        <div class="cell-item">
+                            <div class="cell-left">收货地址：</div>
+                            <div class="cell-right cell-arrow">
+                                <input type="text" class="cell-input J_Address2" readonly id="S_Address2" data-Province="" data-City="" data-County="" data-town="" value="" placeholder="请选择收货地址">
+                            </div>
+                        </div>
+                        <div class="cell-item">
+                            <div class="cell-left">详细地址：</div>
+                            <div class="cell-right">
+                                <input type="text" id="Address2" class="cell-input " placeholder="详细地址" autocomplete="off">
+                                <div id="searchResultPanel2" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;" class="searchResultPanel"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!--end-->
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- end -->        
+
+        <div class="m-cell" style="padding-bottom: 1rem">
+    
+            @foreach (Yitao.Core.CartItem info in ViewData["CartItemList"] as List
+            <Yitao.Core.CartItem>)
+            {
+                <article class="m-list list-theme4 goods-list" id="Article" data-price="@info.StockSalePrice" data-num="@info.Quantity" data-Pid="@info.ProductId" data-Bid="@info.BrandId" data-Cid="@info.CateId">
+                    <input type="hidden" class="SkuId" value="@info.SkuId">
+                    <input type="hidden" class="ProductId" value="@info.ProductId">
+					<input type="hidden" class="BrandId" value="@info.BrandId">
+					<input type="hidden" class="CateId" value="@info.CateId">
+					<input type="hidden" class="SellerId" value="@info.SellerId">
+                    <div class="list_items_con">
+
+                        <div class="list-item" data-weight="@info.Weight">
+                            <div class="list-img">
+                                @if (info.ImgUrl.Length > 0)
+                                {
+                                    <img src="@(WorkContext.ShopConfig.ImageCDN)/@{@info.ImgUrl}?w=160&h=160&mode=pad"> }
+                                else
+                                {
+                                    <span class="icon icon-54 icon-img"></span>
+                                }
+                            </div>
+                            <div class="list-mes">
+                                <h3 class="list-title">@info.ProductName</h3>
+                                <p class="list-mes-item">
+                                   @info.SkuName 
+                                </p>
+
+                                <div class="list-mes_right">
+                                    <div class="price">¥<span class="list_price"> @info.StockSalePrice </span></div> 
+                                    <div class="number">x<span class="list_number"> @info.Quantity </span></div>
+                                </div>
+
+                            </div> 
+                        </div>
+
+                    </div>
+                </article>
+            }
+
+            <div class="cell-item Service_price textarea_con">
+                <div class="cell-left">商品留言：</div>
+                <div class="cell-right">
+                    <input name="message[]" class="textarea" maxlength="50" placeholder="在这里给店家留言">
+                </div>
+            </div>
+            <!-- 选择发票 -->
+            <!-- <div class="invoice_chioce">
+                <div class="m-cell">
+                    <div class="cell-item">
+                        <div class="cell-left">发票</div>
+                        <div class="cell-right cell-arrow">
+                            <p id="invoice_p_title">电子<span id="in_p_span"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <!--  优惠券  -->
+            <!--<div class="Coupon_chioce">
+                <div class="m-cell">
+                    <div class="cell-item">
+                        <div class="cell-left">优惠券</div>
+                        <div class="cell-right cell-arrow" id="Coupon_she">无可用</div>
+                    </div>
+                </div>
+            </div>-->
+            <!-- end -->
+            <!-- 订单价格 -->
+
+            <ul class="ct-list order_total_ul">
+                <li>
+                    <div class="subtotal">
+                        <div class="sub_con">
+                            <span class="total-text">订单金额</span>
+                            <em class="total" id="goods_tags">0.00</em>
+                        </div>
+                        <div class="sub_con youfei">
+                        	<span class="total-text">运费</span>
+                        	<em class="total" id="goods_tags0">0.00</em>
+                        </div>
+                        <div class="sub_con" style="display: none">
+                            <span class="total-text">配送费</span>
+                            <em class="total" id="peisongfei">0.00</em>
+                        </div>   
+                        <div class="sub_con" style="display: none">
+                            <span class="total-text">合计</span>
+                            <em class="total" id="zongjiage">0.00</em>
+                        </div>  
+                    </div>
+                </li>
+            </ul>
+            <!--<div>返回购物车</div>-->
+        </div>
+        <!--end-->
+        <!-- 提交按钮 -->
+
+        <div class="payment-bar">
+            <input type="button" class="settlement" id="settlement"  value="提交订单">
+            <div class="paytot">
+                <span class="total-text">应付金额：</span>
+                <strong class="price_total"><span id="amount_formated"></span></strong>
+            </div>
+        </div>
+        <!--end-->
+        
+
+        
+
+        <!--end-->
+        <!--选择门店 -->
+        <section class="g-scrollview">
+
+            <div class="m-actionsheet" id="J_ActionSheet">
+                <div id="J_con">
+                    <a href="#" class="actionsheet-item">示例菜单 - Javascript API</a>
+                    <a href="#" class="actionsheet-item">示例菜单 - Javascript API</a>
+                    <a href="#" class="actionsheet-item">示例菜单 - Javascript API</a>
+                    <a href="#" class="actionsheet-item">示例菜单 - Javascript API</a>
+                    <a href="javascript:;" class="actionsheet-action" id="J_Cancel">取消</a>
+                </div>
+            </div>
+
+        </section>
+
+        <!--'end'-->
+        <!-- 发票信息 -->
+        <div id="invoice">
+            <div class="invoice_contaion">
+
+                <!-- 头部 -->
+                <div class="invoice_head">
+                    <a href="#" class="navbar-item"><i class="icon back back_invoice"></i></a>
+                    <div class="navbar-center"><span class="navbar-title">发票信息</span></div>
+                </div>
+                <!-- 发票提示 -->
+                <div class="invoice_tishi">
+                    <p>部分地区仅提供电子普通发票，用户可自行打印，效力等同纸质普通发票。发票内容已根据税法调整</p>
+                </div>
+                <!-- 发票类型 -->
+                <div class="invoice_type">
+                    <div class="invo_type_head">
+                        <h3 class="invoice_title">发票类型</h3>
+                    </div>
+                    <div class="type_tab">
+                        <ul class="type_tab_ul">
+                            <li>
+                                <span class="type_chioce">普通发票</span>
+                            </li>
+                            <li>
+                                <span>电子普通发票</span>
+                            </li>
+                            <li>
+                                <span class="disableds">增值税专用发票</span>
+                            </li>
+
+                        </ul>
+                        <p id="invoice_talk">部分试点地区仅提供电子普通发票，具体以实际出具为准</p>
+                    </div>
+
+                </div>
+                <!-- 发票抬头 -->
+                <div class="invoice_taitou">
+                    <h3 class="invoice_title">发票抬头</h3>
+                    <div class="m-cell">
+                        <label class="cell-item">
+                            <span class="cell-left">个人</span>
+                            <label class="cell-right">
+                                <input type="radio" value="0" name="checkbox" checked="" id="geren">
+                                <i class="cell-checkbox-icon"></i>
+                            </label>
+                        </label>
+                        <label class="cell-item">
+                            <span class="cell-left">单位</span>
+                            <label class="cell-right">
+                                <input type="radio" value="1" name="checkbox" id="company">
+                                <i class="cell-checkbox-icon"></i>
+                            </label>
+                        </label>
+                    </div>
+                    <!-- 公司 -->
+                    <div class="gongsi">
+                        <input type="text" id="gongsi_name" value="" />
+                        <input type="text" id="shibiehao" placeholder="请再次填写纳税人识别号" />
+                    </div>
+                </div>
+                <!-- 收票人信息 -->
+                <div class="invoice_user">
+                    <h3 class="invoice_title">收票人信息</h3>
+                    <div class="m-cell">
+                        <div class="cell-item">
+                            <div class="cell-left">收票人手机：</div>
+                            <div class="cell-right"><input type="text" class="cell-input" placeholder="请输入手机号" autocomplete="off"></div>
+
+                        </div>
+                        <div class="cell-item">
+                            <div class="cell-left">收票人邮箱：</div>
+                            <div class="cell-right"><input type="text" class="cell-input" placeholder="用来接收电子发票邮件，可选填" autocomplete="off"></div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <!--  发票内容 -->
+                <div class="invoice_neitong">
+                    <h3 class="invoice_title">发票内容 <span class="invoice_span">发票内容已根据税法调整，具体以展示为准</span></h3>
+                    <ul>
+                        <li>
+                            <span class="type_chioce">商品明细</span>
+                        </li>
+                        <li>
+                            <span>商品类别</span>
+                        </li>
+
+                    </ul>
+                    <p id="neirong">发票内容将显示详细商品名称与价格信息</p>
+
+                </div>
+            </div>
+            <div class="invoice_footer">
+                <button id="Determine" type="button">确定</button>
+            </div>
+        </div>
+        <!-- end -->
+        <!-- 优惠券 -->
+        <div id="Coupon">
+            <div class="Coupon_contaion">
+
+                <!-- 头部 -->
+                <div class="Coupon_head">
+                    <a href="javascript:;" class="navbar-item"><i class="icon iconfont back_invoice">&#xe6a7;</i></a>
+                    <div class="navbar-center"><span class="navbar-title">使用优惠券</span></div>
+                </div>
+                <!-- 优惠券 tab -->
+                <div class="Coupon_tab">
+                    <ul class="Coupon_tab_ul">
+                        <li>
+                            <span class="chioce">可用优惠券 <label class="tab_number">0</label></span>
+                        </li>
+                        <li>
+                            <span>不可用优惠券 <label class="tab_number">0</label></span>
+                        </li>
+                    </ul>
+                </div>
+                <!--end-->
+                <!--可用优惠券-->
+                <div class="Coupon_con Coupon_con1">
+                    <ul class="Coupon_ul1">
+
+                    </ul>
+                </div>
+                <!--不可用优惠券-->
+                <div class="Coupon_con Coupon_con2">
+                    <ul class="Coupon_ul1">
+                    </ul>
+                </div>
+                <!-- //  确定 -->
+                <div class="youhuiOK">
+                    <div class="OKbTN">确定</div>
+                    <div class="cancel-coupon">不使用</div>
+                </div>
+
+            </div>
+        </div>
+        <!-- end -->
+    </form>
+    <div id="l-map"></div>
+    <div id="allmap"></div>
+	<script id="tpl-coupon-0" type="text/html">
+		<% for(var i in UseCoupon) {   %>
+			<% if(UseCoupon[i].AmountMode==0){ %>
+			<li>
+				<div class="Coupon_li1">
+	            	<span class="Cou_tag"><%=UseCoupon[i].Money%></span>
+	            	<p class="Cou_title">
+	            		<% if(UseCoupon[i].UseMode==0){ %>
+	            			全店通用
+	            		<% }else if(UseCoupon[i].UseMode==1){ %>
+	            			指定分类
+	            		<% }else if(UseCoupon[i].UseMode==2){ %>
+	            			指定品牌
+	            		<% }else if(UseCoupon[i].UseMode==3){ %>
+	            			指定商品
+	            		<% } %>
+	            	</p>
+            	</div>
+            	<div class="Coupon_li2">
+		            <p class="Couli2_title">
+		            	<% if(UseCoupon[i].AmountMode==0){ %>
+		            		不限制金额
+		            		<!--<% if(UseCoupon[i].IsOverlay==0){ %>
+			            		<span style="color: #999;">(不可叠加)</span>
+			            		<% }else if(UseCoupon[i].IsOverlay==1){ %>
+			            		<span style="color: #fd4c60;">(可叠加)</span>	
+			            		<% } %>-->
+		            	<% }else if(UseCoupon[i].AmountMode==1){ %>
+	            			满<span class="tag_jian"><%=UseCoupon[i].AmountLower%></span>元可用
+	            			<!--<% if(UseCoupon[i].IsOverlay==0){ %>
+			            		<span style="color: #999;">(不可叠加)</span>
+			            		<% }else if(UseCoupon[i].IsOverlay==1){ %>
+			            		<span style="color: #fd4c60;">(可叠加)</span>	
+			            		<% } %>-->
+	            		<% } %>
+		            </p>
+		            <p><%= UseCoupon[i].Title %></p>
+		            <p class="Couli2_time"><%=UseCoupon[i].StartTime.split("T")[0]%> - <%=UseCoupon[i].EndTime.split("T")[0]%></p>
+	            </div>
+	            <div class="Coupon_li3 cell-item">
+		            <label class="cell-right">
+	            		<input type="radio" class="cou_input" data-money="<%=UseCoupon[i].Money%>" data-IsOverLay="<%=UseCoupon[i].IsOverlay%>" value="<%=UseCoupon[i].ItemId%>" name="CouponId">
+	    				<i class="cell-checkbox-icon"></i>
+	            	</label>
+	            </div>
+			</li>
+			<% }else if(UseCoupon[i].AmountMode==1 && Totals>=UseCoupon[i].AmountLower  && Ctime>=new Date(UseCoupon[i].StartTime.replace("T"," ")).getTime() && Ctime<=new Date(UseCoupon[i].EndTime.replace("T"," ")).getTime()){ %>
+			<li>
+				<div class="Coupon_li1">
+	            	<span class="Cou_tag"><%=UseCoupon[i].Money%></span>
+	            	<p class="Cou_title">
+	            		<% if(UseCoupon[i].UseMode==0){ %>
+	            			全店通用
+	            		<% }else if(UseCoupon[i].UseMode==1){ %>
+	            			指定分类
+	            		<% }else if(UseCoupon[i].UseMode==2){ %>
+	            			指定品牌
+	            		<% }else if(UseCoupon[i].UseMode==3){ %>
+	            			指定商品
+	            		<% } %>
+	            	</p>
+            	</div>
+            	<div class="Coupon_li2">
+		            <p class="Couli2_title">
+		            	<% if(UseCoupon[i].AmountMode==0){ %>
+		            		不限制金额
+		            		<!--<% if(UseCoupon[i].IsOverlay==0){ %>
+			            		<span style="color: #999;">(不可叠加)</span>
+			            		<% }else if(UseCoupon[i].IsOverlay==1){ %>
+			            		<span style="color: #fd4c60;">(可叠加)</span>	
+			            		<% } %>-->
+		            	<% }else if(UseCoupon[i].AmountMode==1){ %>
+	            			满<span class="tag_jian"><%=UseCoupon[i].AmountLower%></span>元可用
+	            			<!--<% if(UseCoupon[i].IsOverlay==0){ %>
+			            		<span style="color: #999;">(不可叠加)</span>
+			            		<% }else if(UseCoupon[i].IsOverlay==1){ %>
+			            		<span style="color: #fd4c60;">(可叠加)</span>	
+			            		<% } %>-->
+	            		<% } %>
+		            </p>
+		            <p><%= UseCoupon[i].Title %></p>
+		            <p class="Couli2_time"><%=UseCoupon[i].StartTime.split("T")[0]%> - <%=UseCoupon[i].EndTime.split("T")[0]%></p>
+	            </div>
+	            <div class="Coupon_li3 cell-item">
+		            <label class="cell-right">
+            			<input type="radio" data-money="<%=UseCoupon[i].Money%>" data-IsOverLay="<%=UseCoupon[i].IsOverlay%>" class="cou_input" value="<%=UseCoupon[i].ItemId%>" name="CouponId">
+    					<i class="cell-checkbox-icon"></i>
+	            	</label>
+	            </div>
+			</li>	
+			<% } %>	
+        <% } %>
+	</script>
+	<script id="tpl-coupon-1" type="text/html">
+		<% for(var i in UseCoupon) {   %>
+			<% if(UseCoupon[i].AmountMode==0){ %>
+				<% if(Ctime < new Date(UseCoupon[i].StartTime.replace("T"," ")).getTime() || Ctime > new Date(UseCoupon[i].EndTime.replace("T"," ")).getTime()){ %>
+				<li>
+					<div class="Coupon_li1">
+		            	<span class="Cou_tag"><%=UseCoupon[i].Money%></span>
+		            	<p class="Cou_title">
+		            		<% if(UseCoupon[i].UseMode==0){ %>
+		            			全店通用
+		            		<% }else if(UseCoupon[i].UseMode==1){ %>
+		            			指定分类
+		            		<% }else if(UseCoupon[i].UseMode==2){ %>
+		            			指定品牌
+		            		<% }else if(UseCoupon[i].UseMode==3){ %>
+		            			指定商品
+		            		<% } %>
+		            	</p>
+	            	</div>
+	            	<div class="Coupon_li2">
+			            <p class="Couli2_title">
+			            	<% if(UseCoupon[i].AmountMode==0){ %>
+			            		不限制金额
+			            		<% if(UseCoupon[i].IsOverlay==0){ %>
+			            		<span style="color: #999;">(不可叠加)</span>
+			            		<% }else if(UseCoupon[i].IsOverlay==1){ %>
+			            		<span style="color: #fd4c60;">(可叠加)</span>	
+			            		<% } %>
+			            	<% }else if(UseCoupon[i].AmountMode==1){ %>
+		            			满<span class="tag_jian"><%=UseCoupon[i].AmountLower%></span>元可用
+		            			<% if(UseCoupon[i].IsOverlay==0){ %>
+			            		<span style="color: #999;">(不可叠加)</span>
+			            		<% }else if(UseCoupon[i].IsOverlay==1){ %>
+			            		<span style="color: #fd4c60;">(可叠加)</span>	
+			            		<% } %>
+		            		<% } %>
+			            </p>
+			            <p><%= UseCoupon[i].Title %></p>
+			            <p class="Couli2_time"><%=UseCoupon[i].StartTime.split("T")[0]%> - <%=UseCoupon[i].EndTime.split("T")[0]%></p>
+		            </div>
+		            <div class="Coupon_li3 cell-item">
+			            <label class="cell-right">
+	            			
+		            	</label>
+		            </div>
+				</li>	
+				<% }%>
+			<% }else{ %>
+				<% if(Totals<UseCoupon[i].AmountLower || Ctime < new Date(UseCoupon[i].StartTime.replace("T"," ")).getTime() || Ctime > new Date(UseCoupon[i].EndTime.replace("T"," ")).getTime()){ %>
+				<li>
+					<div class="Coupon_li1">
+		            	<span class="Cou_tag"><%=UseCoupon[i].Money%></span>
+		            	<p class="Cou_title">
+		            		<% if(UseCoupon[i].UseMode==0){ %>
+		            			全店通用
+		            		<% }else if(UseCoupon[i].UseMode==1){ %>
+		            			指定分类
+		            		<% }else if(UseCoupon[i].UseMode==2){ %>
+		            			指定品牌
+		            		<% }else if(UseCoupon[i].UseMode==3){ %>
+		            			指定商品
+		            		<% } %>
+		            	</p>
+	            	</div>
+	            	<div class="Coupon_li2">
+			            <p class="Couli2_title">
+			            	<% if(UseCoupon[i].AmountMode==0){ %>
+			            		不限制金额
+			            		<% if(UseCoupon[i].IsOverlay==0){ %>
+			            		<span style="color: #999;">(不可叠加)</span>
+			            		<% }else if(UseCoupon[i].IsOverlay==1){ %>
+			            		<span style="color: #fd4c60;">(可叠加)</span>	
+			            		<% } %>
+			            	<% }else if(UseCoupon[i].AmountMode==1){ %>
+		            			满<span class="tag_jian"><%=UseCoupon[i].AmountLower%></span>元可用
+		            			<% if(UseCoupon[i].IsOverlay==0){ %>
+			            		<span style="color: #999;">(不可叠加)</span>
+			            		<% }else if(UseCoupon[i].IsOverlay==1){ %>
+			            		<span style="color: #fd4c60;">(可叠加)</span>	
+			            		<% } %>
+		            		<% } %>
+			            </p>
+			            <p><%= UseCoupon[i].Title %></p>
+			            <p class="Couli2_time"><%=UseCoupon[i].StartTime.split("T")[0]%> - <%=UseCoupon[i].EndTime.split("T")[0]%></p>
+		            </div>
+		            <div class="Coupon_li3 cell-item">
+			            <label class="cell-right">
+	            			
+		            	</label>
+		            </div>
+				</li>
+				<% }%>
+			<% } %>	
+        <% } %>
+	</script>
+	
+	
+	<script id="tpl-coupons-0" type="text/html">
+		<% for(var i in UseCoupon) {   %>
+			<li>
+				<div class="Coupon_li1">
+	            	<span class="Cou_tag"><%=UseCoupon[i].Money%></span>
+	            	<p class="Cou_title">
+	            		<% if(UseCoupon[i].UseMode==0){ %>
+	            			全店通用
+	            		<% }else if(UseCoupon[i].UseMode==1){ %>
+	            			指定分类
+	            		<% }else if(UseCoupon[i].UseMode==2){ %>
+	            			指定品牌
+	            		<% }else if(UseCoupon[i].UseMode==3){ %>
+	            			指定商品
+	            		<% } %>
+	            	</p>
+            	</div>
+            	<div class="Coupon_li2">
+		            <p class="Couli2_title">
+		            	<% if(UseCoupon[i].AmountMode==0){ %>
+		            		不限制金额
+		            	<% }else if(UseCoupon[i].AmountMode==1){ %>
+	            			满<span class="tag_jian"><%=UseCoupon[i].AmountLower%></span>元可用
+	            		<% } %>
+		            </p>
+		             <% if(UseCoupon[i].Description!="") { %>
+		            <p><%= UseCoupon[i].Description %></p>
+		            <% }else { %>
+	            	<p><%= UseCoupon[i].Title %></p>
+		            <% } %>
+		            <p class="Couli2_time"><%=UseCoupon[i].StartTime.split("T")[0]%> - <%=UseCoupon[i].EndTime.split("T")[0]%></p>
+	            </div>
+	            <div class="Coupon_li3 cell-item">
+		            <label class="cell-right">
+	            		<input type="radio" class="cou_input" data-money="<%=UseCoupon[i].Money%>" data-IsOverLay="<%=UseCoupon[i].IsOverlay%>" value="<%=UseCoupon[i].ItemId%>" name="CouponId">
+	    				<i class="cell-checkbox-icon"></i>
+	            	</label>
+	            </div>
+			</li>
+        <% } %>
+	</script>
+	<script id="tpl-coupons-1" type="text/html">
+		<% for(var i in UnUseCoupon) {   %>
+			<li>
+				<div class="Coupon_li1" style="background: #d9d9d9;">
+	            	<span class="Cou_tag"><%=UnUseCoupon[i].Money%></span>
+	            	<p class="Cou_title">
+	            		<% if(UnUseCoupon[i].UseMode==0){ %>
+	            			全店通用
+	            		<% }else if(UnUseCoupon[i].UseMode==1){ %>
+	            			指定分类
+	            		<% }else if(UnUseCoupon[i].UseMode==2){ %>
+	            			指定品牌
+	            		<% }else if(UnUseCoupon[i].UseMode==3){ %>
+	            			指定商品
+	            		<% } %>
+	            	</p>
+            	</div>
+            	<div class="Coupon_li2" style="color: #999;">
+		            <p class="Couli2_title">
+		            	<% if(UnUseCoupon[i].AmountMode==0){ %>
+		            		不限制金额
+		            	<% }else if(UnUseCoupon[i].AmountMode==1){ %>
+	            			满<span class="tag_jian"><%=UnUseCoupon[i].AmountLower%></span>元可用
+	            		<% } %>
+		            </p>
+		            <% if(UnUseCoupon[i].Description!="") { %>
+		            <p><%= UnUseCoupon[i].Description %></p>
+		            <% }else { %>
+	            	<p><%= UnUseCoupon[i].Title %></p>
+		            <% } %>
+		            <p class="Couli2_time"><%=UnUseCoupon[i].StartTime.split("T")[0]%> - <%=UnUseCoupon[i].EndTime.split("T")[0]%></p>
+	            </div>
+	            <div class="Coupon_li3 cell-item">
+		            <label class="cell-right">
+	            		
+	            	</label>
+	            </div>
+			</li>
+        <% } %>
+	</script>
+	
+	
+	
+	
+	<div id="app-addr" style='display:none'>
+	    <header onclick="addrToBack()">
+			<i class=" back icon iconfont">&#xe60e;</i>
+			<h3>地址管理</h3>
+		</header>
+		<!-- 地址列表 -->
+		<div class="adr-addrlist">
+			<div class="tentent">
+				<ul class="list_con">
+				    <li class="list_item" v-for='(item,index) in addressList' :key='index'>
+				    	<div class="list_head" v-on:click="selectaddr(item)">
+				    		<p class="Myhome">
+				    			<span class="name">{{item.Consignee}}</span>
+				    			<span class="phone">{{item.Mobile}}</span>
+				    		</p>
+				    	</div>
+				    	<div class="list_body" v-on:click="selectaddr(item)">
+				    		<p>{{item.Address}}</p>
+				    	</div>
+				    	<div class="list_down">
+				    		<span class="Isdefault"  v-on:click='chosedefault(item)'>
+				    			默认地址 <span class='icon iconfont' v-if='item.IsDefault==0' >&#xe648;</span>
+				    			       <span class='icon iconfont' v-if='item.IsDefault==1' >&#xe61b;</span>
+				    		</span>
+				    		<div class="editsa">
+				    			<span class="Iselit" v-on:click='editaddRess(item)'>
+				    				<i class="icon icon-116" ></i>编辑
+				    			</span>
+				    			<span class="IsRemove"  v-on:click='deleteitem(item.AddressId)'>
+					    			<span class="Iselit">
+					    				<i class="icon icon-26"></i>删除
+					    			</span>
+				    			</span>
+				    		</div>
+				    	</div>
+				    	
+				    </li>
+				</ul>
+	
+			</div>
+			<div id="add-addRess" v-on:click='addRess(0)'>
+				添加地址
+			</div>
+		</div>
+		<!--//  添加地址表单-->
+		<div class="" id="select_add" v-show='viewShow'>
+			<div class="select_add_ab">
+				<div class="select_add_re">
+
+					<div class="m-navbar"   v-on:click='addRess(1)'>
+						<span class="navbar-item select_back" id="add_back"><i class="iconfont">&#xe60e;</i></span>
+						<div class="navbar-center">
+							<span class="navbar-title">地址添加</span>
+						</div>
+					</div>
+					<div class="formbox">
+						<div class="inputbox">
+							<div class="fl">收货人姓名</div>
+							<div class="fr">
+								<input type="text" placeholder="收货人姓名" name="" value="" class="weui-input" id="Consignee_Name" v-model='Consignee'>
+							</div>
+						</div>
+						<div class="inputbox">
+							<div class="fl">联系方式</div>
+							<div class="fr">
+								<input type="tel" placeholder="联系方式" name="" maxlength="11" value="" class="weui-input" id="Consignee_Phone" v-model='Mobile'>
+							</div>
+						</div>
+						<!--  选择地址  dom 样式之后再做修改 -->
+						<div class="inputbox">
+							<div class="fl">选择省市</div>
+							<div class="fr">
+								<input name="" class="weui-input" type="text"  readonly="readonly" id="selectAddr" v-on:click="showAddr()" placeholder="请选择省市区镇" v-model="Addr">
+				                <input type="hidden" name="Province" id="Province" v-model="curProvince" />
+				                <input type="hidden" name="City" id="City" v-model="curCity" />
+				                <input type="hidden" name="County" id="County" v-model="curCounty" />
+				                <input type="hidden" name="Town" id="Town" v-model="curTown" />
+							</div>
+						</div>
+						
+						<div class="inputbox">
+							<div class="fl">详细地址</div>
+							<div class="fr">
+								<input type="text" class="weui-input" name="" id="Consignee_Map" value="" placeholder="详细地址" v-model='addressdetail'>
+								<div id="searchResultPanel" style="border1px solid #C0C0C0;width：150px;height:auto; display:none;" class="searchResultPanel"></div>
+							</div>
+						</div>
+						<div class="inputbox">
+							<div class="fl"><span class="total-text">设置默认地址</span></div>
+							<div class="fr">
+								<input class="weui_switch" type="checkbox" id="morenMap"  v-model='IsDefault'>
+							</div>
+						</div>
+						<div class="hideBtn" v-on:click='saveForm(2)'>保存</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		<!--编辑地址-->
+		<div class="" id="select_edt" v-show='editShow'>
+			<div class="select_add_ab">
+				<div class="select_add_re">
+
+					<div class="m-navbar"   v-on:click='editaddRess()'>
+						<span class="navbar-item select_back" id="add_back"><i class="iconfont">&#xe60e;</i></span>
+						<div class="navbar-center">
+							<span class="navbar-title">地址编辑</span>
+						</div>
+					</div>
+					<div class="formbox">
+						<div class="inputbox">
+							<div class="fl">收货人姓名</div>
+							<div class="fr">
+								<input type="text" placeholder="收货人姓名" name="" value="" class="weui-input" id="Consignee_Name" v-model='Consignee'>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="inputbox">
+							<div class="fl">联系方式</div>
+							<div class="fr">
+								<input type="tel" placeholder="联系方式" maxlength="11" name="" value="" class="weui-input" id="Consignee_Phone" v-model='Mobile'>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<!--  选择地址  dom 样式之后再做修改 -->
+						<div class="inputbox">
+							<div class="fl">选择省市</div>
+							<div class="fr">
+								<input name="" class="weui-input" type="text"  readonly="readonly" id="selectAddr" v-on:click="showAddr()" placeholder="请选择省市区镇" v-model="Addr">
+				                <input type="hidden" name="Province" id="Province" v-model="curProvince" />
+				                <input type="hidden" name="City" id="City" v-model="curCity" />
+				                <input type="hidden" name="County" id="County" v-model="curCounty" />
+				                <input type="hidden" name="Town" id="Town" v-model="curTown" />
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						
+						<div class="inputbox">
+							<div class="fl">详细地址</div>
+							<div class="fr">
+								<input type="text" class="weui-input" name="" id="Consignee_Map" value="" placeholder="详细地址" v-model='addressdetail'>
+								<div id="searchResultPanel" style="border1px solid #C0C0C0;width：150px;height:auto; display:none;" class="searchResultPanel"></div>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="inputbox">
+							<div class="fl"><span class="total-text">设置默认地址</span></div>
+							<div class="fr">
+								<input class="weui_switch" type="checkbox" id="morenMap"  v-model='IsDefault'>
+							</div>
+						</div>
+						<div class="hideBtn" v-on:click='saveForm(1)'>保存</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		<!--end-->
+		<!--四联动-->
+		<div class="shade-box">
+		    <div class="addr-shade">
+		    	<div class="title">
+		    		所在地区
+		    	</div>
+		    	<div class="show-addr">
+		    		<ul>
+		    			<li class="prov-li" 
+		    				:class="{'cur-li':curIndex==0}"
+		    				v-on:click="getProvinceTab(initProvince,curProvinceName)"
+		    				>{{curProvinceName}}</li>
+		    			<li class="city-li" 
+		    				:class="{'cur-li':curIndex==1}"
+		    				v-on:click="getCityTab(initCity,curCityName)"
+		    				>{{curCityName}}</li>
+		    			<li class="county-li" 
+		    				:class="{'cur-li':curIndex==2}"
+		    				v-on:click="getCountyTab(initCounty,curCountyName)"
+		    				>{{curCountyName}}</li>
+		    			<li class="town-li" 
+		    				:class="{'cur-li':curIndex==3}"
+		    				v-on:click="getTownTab(initTown,curTownName)"
+		    				>{{curTownName}}</li>
+		    		</ul>
+		    	</div>
+				<div class="addr-box">
+					<div class="province left">
+						<ul>
+							<li v-for="(item, index) of Province" 
+								:key="item.regionid" 
+								v-on:click="getCity(item.regionid,item.regionname)"
+								:class="{'curProvince':curProvince==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+					<div class="city left">
+						<ul v-if="City.length>0">
+							<li v-for="(item, index) of City" 
+								:key="item.regionid" 
+								v-on:click="getCounty(item.regionid,item.regionname)"
+								:class="{'curCity':curCity==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+					<div class="county left">
+						<ul v-if="County.length>0">
+							<li v-for="(item, index) of County" 
+								:key="item.regionid" 
+								v-on:click="getTown(item.regionid,item.regionname)"
+								:class="{'curCounty':curCounty==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+					<div class="town left">
+						<ul v-if="Town.length>0">
+							<li v-for="(item, index) of Town" 
+								:key="item.regionid" 
+								v-on:click="selTown(item.regionid,item.regionname)"
+								:class="{'curTown':curTown==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+				</div>
+		    	
+		    </div>
+	    </div>
+	</div>
+	
+	<div class="mask-shade"></div>
+	<div class="shade-piker"  id="piker-time-vue">
+		<div class="title">选择自提时间</div>
+		<div class="piker-time-box">
+			<div class="weui-flex">
+				<div class="weui-flex-item piker-day">
+					<ul>
+						<li 
+							v-for="(item, index) of pikerDay" 
+							:key="index" 
+							v-on:click="clickPikerDay(item,index)" 
+							v-bind:class="{'cur':dayIndex==index}">{{item}}</li>
+					</ul>
+				</div>
+				<div class="weui-flex-item piker-time">
+					<ul>
+						<li class="left time-li" :key="index" v-for="(item, index) of pikerTime" v-if="(index>curIndex && index>0)" v-on:click="clickPikerTime(item,index)">
+							<span class="time-item" v-bind:class="{'cur':timeIndex==index}">{{item}}</span>
+						</li>
+					</ul>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
+		<div class="confirm-piker" v-on:click="confirmPiker()">确定</div>
+	</div>
+	
+	
+	
+	
+    <script src="/Js/mobile/jquery-2.1.4.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Js/mobile/ydui.city.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Js/mobile/ydui.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Js/mobile/pickTime.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="/js/jquery.form.min.js"></script>
+    <script src="/Js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+    
+    <script type="text/javascript">
+		/*js模板引擎*/
+		var tpl = function (a, d) {
+		    var c = function (l) {
+		        var j, h = [],
+		            g = [];
+		        for (j in l) {
+		            h.push(j);
+		            g.push(l[j])
+		        }
+		        return (new Function(h, c.$)).apply(l, g)
+		    };
+		    if (!c.$) {
+		        var f = a.split("<%");
+		        c.$ = "var $=''";
+		        for (var b = 0; b < f.length; b++) {
+		            var e = f[b].split("%>");
+		            if (b != 0) {
+		                c.$ += "=" == e[0].charAt(0) ? "+(" + e[0].substr(1) + ")" : ";" + e[0].replace(/\r\n/g, "") + "$=$"
+		            }
+		            c.$ += "+'" + e[e.length - 1].replace(/\'/g, "\\'").replace(/\r\n/g, "\\n").replace(/\n/g, "\\n").replace(/\r/g, "\\n") + "'"
+		        }
+		        c.$ += ";return $;"
+		    }
+		    return d ? c(d) : c
+		};
+	</script>
+    <script type="text/javascript">
+    var sellerid = '@ViewData["SellerId"]';	
+    var user_id = "@WorkContext.Uid";	
+    var IsApp = "@WorkContext.IsApp";
+    var FullFreeAmount = '@ViewData["FullFreeAmount"]';//满多少免运费
+	function goToBack() {
+		var _this = this;
+		if(IsApp==1){
+			if(navigator.userAgent.indexOf("iPhone")>0){
+				gobacklastpage();
+			}
+			if(navigator.userAgent.indexOf("Android")>0){
+				window.js.goBack();
+			}
+		}else{
+			window.history.back();
+		}
+			
+	}
+	//设置默认值
+	var tab_index = 0; //默认选中快递收货方式
+	var freight = 0; //默认运费
+	var GoodsMoney = 0; //单个或多个商品数量*价格的金额合计
+	var coupon_ids = []; //使用优惠券的id集合
+	var CouponPrice = 0; //使用优惠券的金额合计
+	var coupon_page = 1; //优惠券列表 分页 页数
+	var is_over_use = []; //判断优惠券叠加使用  临时数组
+	var coupon_index = 0;
+	var ProductIds = []; //商品id集合
+	var BrandIds = []; //商品品牌集合
+	var CateIds = []; //商品分类集合
+	var UserScore = "@WorkContext.UserInfo.UserScore"; //用户现有积分
+	var UserCardMoney = "@WorkContext.UserInfo.UserMoney"; //用户现有会员卡余额
+	UserCardMoney = Number(UserCardMoney);
+	UserScore = parseInt(UserScore);
+	var finalTotal = 0;
+	var AddressId = "",
+	    RegionId = "",
+	    default_addr_name = "",
+	    ShipMode = 0,
+	    PayScore = 0,
+	    IsCart = "",
+	    ProductId = "",
+	    SkuId = "",
+	    Quantity = "",
+	    Weight = "",
+	    UserMoney = "",
+	    Memo = "",
+	    InvoiceId = "",
+	    Consignee = "",
+	    Mobile = "",
+	    ShipTime = "",
+	    ShopId = "",
+	    Province = "",
+	    City = "",
+	    County = "",
+	    Town = "",
+	    Address = "",
+	    DiscountAmount = "",
+	    OrderAmount = "",
+	    ShipDate = "",
+	    ShipFee = "",
+	    PayCreditMoney = "",
+	    CouponIds = [],
+        CouponPrice = 0;
+	    
+
+	var dialog = YDUI.dialog;
+	var bianji = false;
+	var dizhiguanli = false;
+	var shanchu = false;
+	//  上拉菜单  选择自提店铺
+	var $myAs = $('#J_ActionSheet');
+	var ScoreValue = "@WorkContext.SellerInfo.ScoreValue";
+	var ScoreMoneyValue = "@WorkContext.SellerInfo.ScoreMoneyValue";
+	var ScoreMoneyMax = "@(WorkContext.SellerInfo.ScoreMoneyMax)"; //每笔订单最大可以用积分抵扣订单金额的
+	var ScoreName = "@WorkContext.SellerInfo.ScoreName";
+	var yxhuiyuan = "@WorkContext.UserInfo.UserMoney";
+	var yxjifen = $(".jifen").text();
+	var guize = Number(ScoreMoneyValue / ScoreValue);
+	//重新处理获取优惠券 
+	var cpage = 1;
+	var cindex = 0;
+	couponObj = {
+		isShow: 'none',
+		mainIsShow: 'block',
+		couponIsShow: 'none',
+		canUse: true,
+		cantUse: false,
+		curShop: -1,
+		PidPrice: {},
+		BidPrice: {},
+		CidPrice: {},
+		Uid: "@WorkContext.UserInfo.UserId",
+		ProductIds: "",
+		ProductId: "",
+		Quantity: 0,
+		SkuId: "",
+		SellerId: "@WorkContext.SellerInfo.SellerId",
+		IsReserve: 0,//是否预约
+		name: "@WorkContext.UserInfo.UserName",//订餐联系人
+		mobile: "@WorkContext.UserInfo.Mobile",//订餐联系人电话
+		deskNum: 0,//店内就餐桌号
+		eatingNum: "",//预约就餐人数
+		eatingTime: "",//预约就餐时间
+		countMoney: 0,//商品金额合计
+	    dissCardMoney: 0,//会员卡付的钱
+	    dissMaxMoney: 0,//最大多少钱可以用积分进行抵扣
+	    dissMaxScore: 0,//dissMaxMoney相当于多少积分
+	    couponMoney: 0,//使用的优惠券 价值总额
+	    dissCouponMoney: 0,//最终优惠券抵扣了多少钱
+	    total: 0,//最终付款金额
+	    couponIds: [],//使用优惠券的id集合
+	    showDissCardMoney: 0,//页面上显示使用会员卡付的钱
+	    showDissMaxMoney: 0,//页面上显示可用多少积分来抵扣
+	    showDissMaxScore: 0,//页面上显示可用积分抵扣的钱
+	    showDissCouponMoney: 0,//页面上显示优惠券抵扣的钱
+	    
+	    
+	    isUseScore: false,
+	    isUseCard: false,
+	    isUseCoupon: false,
+	    shopRoom: "none",
+	    orderRoom: "none",
+	    curType: 0,
+	    curDesk: 0,//选择桌号
+	    eatNum: "",//填写就餐人数
+	    eatTime: "",//填写就餐时间
+	    shopData: [],
+	    areaData: [],
+	    deskData: [],
+	    couponNum: "无可用",
+	    canUseCoupon: [],
+	    cantUseCoupon: [],
+	    remark: ''
+	};
+	function getCouponLists() {
+		
+		var _this = couponObj;
+		$.ajax({
+	        type: "post",
+	        url: '/m/usercenter/mycoupons',
+	        data: {
+	            page: cpage,
+	            size: 50,
+	            type: cindex
+	        },
+	        dataType: "json",
+	        beforeSend: function() {
+	            
+	        },
+	        success: function(rs) {
+	        	console.log(rs);
+	        	var nowtime = (new Date()).getTime();
+	        	if(rs.Code==1){
+	        		rs.Data.forEach(function(v,i){
+		        		var startTime = new Date(v.StartTime).getTime();
+		        		var endTime = new Date(v.EndTime).getTime();
+		        		//v.StartTime = v.StartTime.replace("T", " ");
+		        		//v.EndTime = v.EndTime.replace("T", " ");
+		        		if(nowtime<startTime){
+		        			//现在时间小于优惠券开始时间，则表示，还不能使用
+		        			_this.cantUseCoupon.push(v);
+		        		}else{
+		        			if(nowtime>endTime){
+		        				//现在时间大于 优惠券结束时间，表示已经过期，不能使用
+		        				_this.cantUseCoupon.push(v);
+		        			}else{
+			                	if(v.UseMode==3){
+			                		//走判断商品id的逻辑
+			                		var pids = v.Products.split(",");
+			                		$.each(pids, function(r,t) {
+			                			if($.inArray(t,ProductIds)!=-1){
+			                				var ppid = "pid"+t;
+											if(typeof(_this.PidPrice[ppid])=="undefined"){
+			                				
+			                				}else{
+				                				var price = Number(_this.PidPrice[ppid]);
+				                				if(v.AmountMode==1){
+				                					if(price>=v.AmountLower){
+					                					_this.canUseCoupon.push(v);
+					                				}else{
+					                					_this.cantUseCoupon.push(v);
+					                				}
+				                				}else{
+				                					_this.canUseCoupon.push(v);
+				                				}
+											}
+			                			}else{
+			                				//_this.cantUseCoupon.push(v);
+			                			}
+			                			
+			                		});
+			                	}else if(v.UseMode==2){
+			                		//走判断品牌id的逻辑
+			                		var bids = v.Brands.split(",");
+			                		$.each(bids, function(r,t) {
+			                			if($.inArray(t,BrandIds)!=-1){
+			                				var ppid = "bid"+t;
+			                				if(typeof(_this.BidPrice[ppid])=="undefined"){
+			                				
+			                				}else{
+												var price = Number(_this.BidPrice[ppid]);
+				                				if(v.AmountMode==1){
+				                					if(price>=v.AmountLower){
+					                					_this.canUseCoupon.push(v);
+					                				}else{
+					                					_this.cantUseCoupon.push(v);
+					                				}
+				                				}else{
+				                					_this.canUseCoupon.push(v);
+				                				}
+											
+											}
+			                			}else{
+			                				//_this.cantUseCoupon.push(v);
+			                			}
+			                			
+			                		});
+			                	}else if(v.UseMode==1){
+			                		//走判断分类id的逻辑
+			                		
+			                		var cids = v.Cates.split(",");
+			                		$.each(cids, function(r,t) {
+			                			if($.inArray(t,CateIds)!=-1){
+				                			var ppid = "cid"+t;
+				                			if(typeof(_this.CidPrice[ppid])=="undefined"){
+			                				
+			                				}else{
+												var price = Number(_this.CidPrice[ppid]);
+												console.log("price:"+price);
+				                				if(v.AmountMode==1){
+				                					if(price>=v.AmountLower){
+					                					_this.canUseCoupon.push(v);
+					                				}else{
+					                					_this.cantUseCoupon.push(v);
+					                				}
+				                				}else{
+				                					_this.canUseCoupon.push(v);
+				                				}
+											
+											}
+				                		}else{
+				                			//_this.cantUseCoupon.push(v);
+				                		}
+			                		});
+			                		
+			                		
+			                		
+			                		
+			                	}else if(v.UseMode==0){
+			                		//走全店逻辑
+			                		if(v.AmountMode==1){
+			                			if(_this.countMoney>=v.AmountLower){
+		                					_this.canUseCoupon.push(v);
+		                				}else{
+		                					_this.cantUseCoupon.push(v);
+		                				}
+			                		}else{
+			                			_this.canUseCoupon.push(v);
+			                		}
+			                	}
+		        			}
+		        		}
+		        	});
+	        	}
+		        	
+	        	_this.couponNum = _this.canUseCoupon.length+"张可用";
+	        	
+	        	rs.UseCoupon =  _this.canUseCoupon;
+	        	rs.UnUseCoupon =  _this.cantUseCoupon;
+	        	var tplx = document.getElementById("tpl-coupons-0").innerHTML;
+                var desc1 = tpl(tplx, rs);
+                var tplx2 = document.getElementById("tpl-coupons-1").innerHTML;
+                var desc2 = tpl(tplx2, rs);
+                $(".Coupon_con1 ul").append(desc1);
+                $(".Coupon_con2 ul").append(desc2);
+                $(".Coupon_tab_ul li").eq(0).find(".tab_number").text(_this.canUseCoupon.length);
+                $(".Coupon_tab_ul li").eq(1).find(".tab_number").text(_this.cantUseCoupon.length);
+                if($(".Coupon_con1 ul li").length==0){
+                	var html = "";
+	                html += '<div class="Cou_nomore"><div class="Cou_nomore_content"><i class="iconfont">&#xe611;</i>';
+	                html += '<span>很遗憾</span><p>您暂无可用的优惠券</p></div></div>';
+                	$(".Coupon_con1 ul").html(html);
+                }
+                
+                if($(".Coupon_con2 ul li").length==0){
+                	$(".Coupon_con2 ul").html('<p style="text-align:center;padding:30px 0;color:#999;font-size:14px;">暂无数据</p>');
+                }
+                coupon_page = coupon_page + 1;
+                if (coupon_index == 0 && $(".Coupon_con1 ul li").length > 0) {
+                    $("#Coupon_she").text($(".Coupon_con1 ul li").length + "张可用");
+                    $(".Coupon_chioce").show();
+                }
+	        }
+	    });
+					
+	}
+	
+	! function() {
+		FullFreeAmount = '@ViewData["FullFreeAmount"]';
+		//自提快递tab
+	    //  tab
+	    var $tab = $('#J_Tab');
+	    $tab.tab({
+	        nav: '.tab-nav-item',
+	        panel: '.tab-panel-item',
+	        activeClass: 'tab-active'
+	    });
+	    $tab.find('.tab-nav-item').on('open.ydui.tab', function(e) {
+	        //	console.log('索引：%s - [%s]正在打开', e.index, $(this).text());
+	        if (e.index == 0) {
+	            $(".youfei").show();
+	            $($("#peisongfei").parents(".sub_con")).hide();
+	        }
+	        if (e.index == 1) {
+	            $(".youfei").hide();
+	            $($("#peisongfei").parents(".sub_con")).hide();
+	        }
+	        if (e.index == 2) {
+	            $($("#peisongfei").parents(".sub_con")).show();
+	        }
+	        
+	    });
+	  /*  $tab.find('.tab-nav-item').on('open.ydui.tab', function(e) {
+	        setTimeout(function(){
+	        	
+	        },100);
+	    });*/
+	    
+	    $(".tab-nav").on("click",function(){
+	    	tab_index = $(this).index();
+	    	sum_total();
+	    });
+	    
+	    $('#J_ShowActionSheet').on('focus', function(event) {
+	        event.stopPropagation();
+	        $("#J_ShowActionSheet").blur();
+	        $.get('GetShops', {SellerId:$(".SellerId").eq(0).val()}, function(data) {
+	            //   示例菜单 - Javascript API
+	            var dete = data.Data;
+	            var html = "";
+	            for (var i = 0; i < dete.length; i++) {
+	                html += '<a href="#" class="actionsheet-item" onclick="ClickedBranch(this)" data-ShopId="' + dete[i].ShopId + '" >' + dete[i].ShopName;
+	                html += '</a>';
+	            }
+	            $("#J_con").find(".actionsheet-item").remove();
+	            $("#J_Cancel").before(html);
+	            $(".g-scrollview").show();
+	            event.stopPropagation();
+	            $myAs.actionSheet('open');
+	        }, 'JSON');
+	    });
+	    $('#J_Cancel').on('click', function() {
+	        $(".g-scrollview").css({
+	            'display': 'none'
+	        });
+	        $myAs.actionSheet('close');
+	    });
+	    // 上拉菜单
+	    $myAs.on('open.ydui.actionsheet', function() {
+	        //	console.log('打开了');
+	    }).on('close.ydui.actionsheet', function() {
+	        //	console.log('关闭了');
+	    });
+	    //提交
+	    $("#settlement").on("click", function() {
+	        //  判断是从哪里提交的
+	        var ship = $(".tab-panel .tab-active").index();
+	        //  购物车过来还是直接过来
+	        IsCart = $("#IsCart").val();
+	        // 订单备注
+	        Memo = $(".textarea").val();
+	        // 发票类型  暂时不加这个功能
+	        InvoiceId = "";
+	        //  使用积分
+	        // PayScore
+	        //  Quantity
+	        if (IsCart == 1) {
+	            // 直接过来
+	            var list_number = 0;
+	            for (var _i = 0; _i < $(".list_number").length; _i++) {
+	                list_number = list_number+Number($(".list_number").eq(_i).text().trim());
+	            };
+	            $("#Quantity").val(list_number.toFixed(0));
+	        } else {
+	            // 不是从购物车直接过来的
+	            $("#Quantity").val($(".list_number").text().trim());
+	        };
+	        //  产品的ID   ProductId SkuId
+	        if ($(".SkuId").length > 2) {
+	            // 这里是多个商品  就不传值了;
+	            ProductId = "";
+	            SkuId = "";
+	        } else {
+	            ProductId = $(".ProductId").val();
+	            SkuId = $(".SkuId").val();
+	        };
+	        //  UserMoney  会员卡扣金额
+	        // 订单结算后的总金额
+	        OrderAmount = Number($("#amount_formated").text().trim());
+	        
+	        //  这里是快递方式
+	        if (ship == 0) {
+	            // 这里是快递  的提交方式   1、 是否选择地址 2、
+	            ShipMode = 1;
+	            // 已选地址
+	            ShipFee = $("#goods_tags0").text();
+	            if (AddressId == "" || typeof(AddressId) == "undefined") {
+	                YDUI.dialog.alert("当前选择地址无效、请添加或者重新编辑改地址");
+	            } else {
+	            	if(RegionId==0 || RegionId=="" || typeof(RegionId)=="undefined"){
+		            	YDUI.dialog.alert("当前选择地址无效、请添加或者重新编辑改地址");
+		            	return false;
+		            }else{
+		            	// 可以提交
+		            	tijiao();
+		            }
+	            };
+	        } else if (ship == 1) {
+	            // 这里是自提的提交方式
+	            Consignee = $("#Consignee1").val();
+	            if (Consignee == '') {
+	                YDUI.dialog.alert("请输入取货人");
+	                return false;
+	            };
+	            var han = /^[\u4e00-\u9fa5]{0,}$/;
+	            if (!han.test(Consignee)) {
+	                YDUI.dialog.alert("取货人请输入中文");
+	                return false;
+	            };
+	            Mobile = $("#Mobile1").val();
+	            ShopId = $("#J_ShowActionSheet").attr("data-ShopId");
+	            ShipDate = $("#ShipDate").val();
+	            ShipMode = 2;
+	            ShipFee = 0;
+	            //  验证手机号
+	            if (isPoneAvailable(Mobile)) {
+	                if (Consignee == "" || ShipDate == "" || ShopId == "" || typeof(ShopId) == "undefined" || typeof(ShipDate) == "undefined" || typeof(Consignee) == "undefined") {
+	                    YDUI.dialog.alert("还有关键资料未填写、货物无法送达哦");
+	                } else {
+	                    // 资料验证通过   可以提交
+	                    tijiao();
+	                };
+	            } else {
+	                // 手机验证没通过
+	                YDUI.dialog.alert("请填写正确的手机号!");
+	            };
+	            // 验证收货人和分店
+	        }
+	
+	        function tijiao() {
+	        	$("body #settlement").attr("disabled","disabled");
+	        	var couponids_str = "";
+	        	if(coupon_ids.length>0){
+	        		couponids_str = coupon_ids.join(",");
+	        	}
+	            Weight = $("#Weight").val();
+	            Quantity = $("#Quantity").val();
+	            OrderAmount = $("#amount_formated").text().trim();
+	            PayScore = Number($("#jifenkoukuan").text().trim()) / Number(ScoreMoneyValue / ScoreValue);
+	            PayScore = Math.ceil(PayScore);
+	            PayCreditMoney = Number($("#jifenkoukuan").text().trim());
+	            UserMoney = Number($("#goods_tags1").text().trim());
+	            CouponPrice = $("#coupon-price").text();
+	            if(CouponPrice==0 || CouponPrice=="0"){
+	            	couponids_str = "";
+	            }
+	            ShipFee = $("#goods_tags0").text();
+	            
+	            var tabindex = $(".tab-nav .tab-active").index();
+	            if(tabindex==1){
+	            	ShipFee = 0;
+	            }
+	            $.post('SaveOrder', {
+	                AddressId: AddressId, // 地址
+	                RegionId: RegionId, // 地区邮寄地区的最后一个的id
+	                ShipMode: ShipMode, // 配送方式   1  2  4
+	                PayScore: PayScore, // 使用积分
+	                IsCart: IsCart, // 购物车过来还是直接购买过来  0 / 1
+	                ProductId: ProductId, // 如果是直接过来穿商品ID
+	                SkuId: SkuId, // 如果是直接过来 传产品
+	                Quantity: Quantity, // 如果是直接过来 这里穿数量
+	                PayCreditMoney: PayCreditMoney, // 积分抵扣的钱
+	                UserMoney: UserMoney, // 会员卡扣金额
+	                Memo: Memo, // 订单备注
+	                InvoiceId: InvoiceId, // 发票类型
+	                Consignee: Consignee, // 收货人姓名
+	                Mobile: Mobile, // 联系电话
+	                ShipTime: ShipDate, // 提货时间
+	                ShopId: ShopId, // 自提店铺
+	                Province: Province, // 选择的省
+	                City: City, // 选择的市
+	                County: County, // 选择的区
+	                Town: Town, // 选择的镇
+	                Address: Address, // 详细地址
+	                DiscountAmount: DiscountAmount, // 活动优惠的金额
+	                OrderAmount: OrderAmount, // 订单结算后的总金额
+	                ShipFee: ShipFee,
+	                Weight: Weight,
+	                CouponPrice:CouponPrice,
+	                CouponIds:couponids_str
+	            }, function(datas) {
+	            	$("body #settlement").removeAttr("disabled");
+	                if (datas.Message == "恭喜您，订单已成功提交！") {
+	                	var IsApp = '@ViewData["IsApp"]';
+	                	if(IsApp==1){
+		                	if(navigator.userAgent.indexOf("iPhone")>0){
+								settleShoppingCart(datas.OrderId);
+							}
+		                	if(navigator.userAgent.indexOf("Android")>0){
+								window.js.settleShoppingCart(datas.OrderId);
+							}
+	                	}else{
+	                		var url = datas.Data;
+	                		location.href = url;
+	                		return true;
+	                	}
+	                } else {
+	                    YDUI.dialog.alert(datas.Message);
+	                }
+	            }, 'JSON');
+	        }
+	    });
+	}();
+	
+	//  手机号验证
+	function isPoneAvailable(phone) {
+	    var myreg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+	    if (!myreg.test(phone)) {
+	        return false;
+	    } else {
+	        return true;
+	    };
+	};
+	//  清空所有的input
+	function clearInput() {
+	    $("#Consignee_Name").val("");
+	    $("#Consignee_Phone").val("");
+	    $("#Consignee_Map").val("");
+	    //  省市区暂时不知道是个什么形式的  先空着
+	};
+	//  选择门店
+	function ClickedBranch(_this) {
+	    $("#J_ShowActionSheet").val($(_this).text().trim());
+	    $("#J_ShowActionSheet").attr("data-ShopId", $(_this).attr("data-ShopId"));
+	    $myAs.actionSheet('close');
+	};
+	
+	//给子页面 地址页传值
+	//把地址列表页选择的数据设置到提交订单页
+	function reloadData(item){
+		$("#app-addr").css("display","none");
+		$("body #settlement").removeAttr("disabled");
+		Address = item.Address;
+		AddressId = item.AddressId;
+		Mobile = item.Mobile;
+		Consignee = item.Consignee;
+		Province = item.Province;
+		City = item.City;
+		County = item.County;
+		Town = item.Town;
+		RegionId = Town;
+		
+		
+		
+		$("#map_name").text(item.Consignee);
+		$("#map_phon").text(item.Mobile);
+		$("#map_map").text(item.Address);
+		sum_total();
+		$(".no-addr").css("display","none");
+		$(".has-addr").css("display","block");
+	}
+	//打开地址选择列表
+	function openAddr(){
+		/*layer.open({
+		    type: 2,
+		    title: '选择地址',
+		    shadeClose: true,
+		    shade: 0.8,
+		    area: ['100%', '100%'],
+		    content: '/m/usercenter/address?pagetype=1'
+		}); */
+		$("#app-addr").css("display","block");
+	}
+	//关闭
+	function closeLayer(){
+		layer.closeAll();
+	}
+	//根据code获取城市名字
+	function getAddrName(id,type) {
+		var ProvinceName = "";
+		var CityName = "";
+		var CountyName = "";
+		var TowmName = "";
+		var Addr = "";
+		$.ajax({
+			type:"get",
+			url:"/Api/Tool/GetRegionInfo?Regionid="+id,
+			async:true,
+			dataType:"json",
+			success: function(rel) {
+				if(rel.code==1){
+					if(type==0){
+						ProvinceName = rel.data.regionname;
+					}else if(type==1){
+						CityName = rel.data.regionname;
+					}else if(type==2){
+						CountyName = rel.data.regionname;
+					}else if(type==3){
+						TowmName = rel.data.regionname;
+					}
+				}
+				Addr = ProvinceName+CityName+CountyName+TowmName;
+			}
+		});
+	}
+	//  get 默认地址
+	function getDefaultAddress(){
+		RegionId = Town;
+		$.ajax({
+			type:"get",
+			url: "/m/order/address?userid="+"@WorkContext.Uid",
+			async:true,
+			success: function(rel){
+				var rst = JSON.parse(rel);
+				$("body #settlement").removeAttr("disabled");
+				var data = rst.Data;
+		        var IsDefault = false;
+		        var curI = 0;
+		        if(rst.Code==1){
+        			data.forEach(function(v, i){
+        				if(v.IsDefault==1){
+        					IsDefault = true;
+        					curI = i;
+        				}
+        			});
+	        		AddressId = data[curI].AddressId;
+					Province = data[curI].Province;
+					City = data[curI].City;
+					County = data[curI].County;
+					Town = data[curI].Town;
+					Mobile = data[curI].Mobile;
+					Consignee = data[curI].Consignee;
+					RegionId = Town;
+	        		Address = data[curI].Address;
+	        		$("#map_name").text(Consignee);
+	        		$("#map_phon").text(Mobile);
+	        		$("#map_map").text(Address);
+	        		$(".no-addr").css("display","none");
+		        	$(".has-addr").css("display","block");
+		        	sum_total();
+		        }
+			}
+		});
+	}
+	
+	
+	//计算商品总价
+	function sum_product_money() {
+		$(".goods-list").each(function(i, v){
+			var money = Number($(this).find(".list_price").text());
+			var num = Number($(this).find(".list_number").text());
+			GoodsMoney = GoodsMoney+money*num;
+			var pid = Number($(this).attr("data-Pid"));
+			var bid = Number($(this).attr("data-Bid"));
+			var cid = Number($(this).attr("data-Cid"));
+			var tmoney = Number($(this).attr("data-price"))*Number($(this).attr("data-num"));
+			pid = "pid"+pid;
+			if(typeof(couponObj.PidPrice[pid])=="undefined"){
+				couponObj.PidPrice[pid] = tmoney;
+			}else{
+				couponObj.PidPrice[pid] = couponObj.PidPrice[pid]+tmoney;
+			}
+			bid = "bid"+bid;
+			if(typeof(couponObj.BidPrice[bid])=="undefined"){
+				couponObj.BidPrice[bid] = tmoney;
+			}else{
+				couponObj.BidPrice[bid] = couponObj.BidPrice[bid]+tmoney;
+			}
+			cid = "cid"+cid;
+			if(typeof(couponObj.CidPrice[cid])=="undefined"){
+				couponObj.CidPrice[cid] = tmoney;
+			}else{
+				couponObj.CidPrice[cid] = couponObj.CidPrice[cid]+tmoney;
+			}
+		});
+		GoodsMoney = Math.floor(GoodsMoney * 100) / 100 ;
+		GoodsMoney = Number(GoodsMoney).toFixed(2);
+		$("#goods_tags").text(GoodsMoney);
+		$("#amount_formated").text(GoodsMoney);
+	}
+	
+	//加减乘除计算
+	function calc (arg1, op, arg2,dot) {
+	    var ra = 1, rb = 1, m;
+	    try {
+	        ra = arg1.toString().split('.')[1].length;
+	    } catch (e) {
+	    }
+	    try {
+	        rb = arg2.toString().split('.')[1].length;
+	    } catch (e) {
+	    }
+	    m = Math.pow(10, Math.max(ra, rb));
+	
+	    switch (op) {
+	        case '+':
+	        case '-':
+	            arg1 = Math.round(arg1 * m);
+	            arg2 = Math.round(arg2 * m);
+	            break;
+	        case '*':
+	            ra = Math.pow(10, ra);
+	            rb = Math.pow(10, rb);
+	            m = ra * rb;
+	            arg1 = Math.round(arg1 * ra);
+	            arg2 = Math.round(arg2 * rb);
+	            break;
+	        case '/':
+	            arg1 = Math.round(arg1 * m);
+	            arg2 = Math.round(arg2 * m);
+	            m = 1;
+	            break;
+	    }
+	    try {
+	        var result = eval('(' + '(' + arg1 + ')' + op + '(' + arg2 + ')' + ')/' + m);
+	    } catch (e) {
+	    }
+	    if(result.toString().indexOf(".")!=-1){
+	    	var strarr = result.toString().split(".");
+	    	if(strarr[1].length>dot){
+	    		result = strarr[0]+"."+strarr[1].substring(0,dot);
+	    	}
+	    }
+	    return result;
+	};
+	
+	
+	
+	//计算最终付款金额
+	function sum_total() {
+		tab_index = $("#J_Tab .tab-nav .tab-active").index();
+		if(tab_index==0){
+			$(".youfei").css("display","block");
+			sum_freight();
+		}else{
+			$(".youfei").css("display","none");
+			$("#amount_formated").text(GoodsMoney);
+		}
+	}
+	
+	
+	//根据地址计算运费
+	function freigthByAddr(){
+	    $.get('/m/Order/GetShipTemplate', {
+	        Province: Province,
+	        City: City,
+	        Country: County,
+	        Town: Town,
+	        SellerId: '@ViewData["SellerId"]',
+	        t: Math.random()
+	    }, function(data) {
+	        var datas = data;
+	        if (datas.Code == 1) {
+	            /*
+	             * 运费计算公式
+	             * NumWeight  超出首重的重量(总重 - 运费模版首重) / 运费模版超重重量基数 + 没填重量的商品的个数*5
+	             * CountShipFee 运费模版首重money + NumWeight * 运费模版超重价格基数
+	             */
+	            var NumWeight = 0;
+	            if (Weight > datas.Data.Weight) {
+	            	NumWeight = calc(Weight, '-' , datas.Data.Weight,2);
+	            	if(Number(datas.Data.AddWeight)!=0 || datas.Data.AddWeight!=""){
+	            		NumWeight = Math.ceil(NumWeight / datas.Data.AddWeight);
+	            	}else{
+	            		NumWeight = 0;
+	            	}
+	            }
+	            NumWeight = Number(NumWeight).toFixed(2);
+	            var CountShipFee = calc (datas.Data.Price,'+', NumWeight * datas.Data.AddPrice,2);
+	            freight = CountShipFee;
+	            if(Weight<=0){
+	            	freight = datas.Data.Price;
+	            }
+	            $("#goods_tags0").text(freight);
+	            if(freight && freight>0){
+			    	$("#goods_tags0").parent().show();
+				}else{
+					$("#goods_tags0").parent().hide();
+				}
+				var total = calc (GoodsMoney,'+', freight,2);
+				$("#amount_formated").text(total);
+	        } else {
+	            YDUI.dialog.alert("当前地址无效、请重新选择");
+	        }
+	    }, 'JSON');
+	    
+	}
+	function getWeight(){
+		Weight = 0;
+		$(".list-item").each(function(){
+       		var cur_weight = $(this).attr("data-weight");
+       		var cur_num = $(this).find(".list_number").text().trim();
+       		Weight = Number(Weight+cur_weight*cur_num ) ;
+        });
+		Weight = Number(Weight).toFixed(2);
+        $("#Weight").val(Weight);
+	}
+	//计算运费
+	function sum_freight() {
+		getWeight();
+		FullFreeAmount = Number(FullFreeAmount);
+		if(FullFreeAmount>0 && GoodsMoney>FullFreeAmount){
+			//满多少金额免运费
+			freight = 0;
+			$("#goods_tags0").text(0);
+		}else{
+			//根据地址计算运费
+		    if(Town!="" && typeof(Town)!="undefined"){
+				freigthByAddr(Province,City,County,Town);
+			}else{
+		    	$("#goods_tags0").text(freight);
+		    	if(freight && freight>0){
+			    	$("#goods_tags0").parent().show();
+				}else{
+					$("#goods_tags0").parent().hide();
+				}
+				var total = calc (GoodsMoney,'+', freight,2);
+				$("#amount_formated").text(total);
+		    }
+		}
+		
+		
+	}
+	//  使用优惠券
+	function getCoupon(coupon_page, coupon_index) {
+	    $.ajax({
+	        type: "post",
+	        url: '/m/usercenter/mycoupons',
+	        data: {
+	            page: coupon_page,
+	            size: 30,
+	            type: coupon_index
+	        },
+	        dataType: "json",
+	        beforeSend: function() {
+	            //$.showLoading("正在加载");
+	        },
+	        success: function(rs) {
+	            //$.hideLoading();
+	            if (rs.Code == 1) {
+	                var Totals = $("#goods_tags").text();
+	                var Ctime = new Date().getTime();
+	                rs.Totals = Totals;
+	                rs.Ctime = Ctime;
+	                rs.coupon_page = coupon_page;
+	                rs.coupon_index = coupon_index;
+	                var new_arr = [];
+	                var use_coupon = [];
+	                var unuse_coupon = [];
+	                $.each(rs.Data, function(n,m) {
+	                	if(m.UseMode==3){
+	                		//走判断商品id的逻辑
+	                		//couponProductId(rs,n,m);
+	                		//console.log("是否在数组中:"+$.inArray(m.Products,ProductIds));
+	                		var pids = m.Products.split(",");
+	                		$.each(pids, function(r,t) {
+	                			if($.inArray(t,ProductIds)!=-1){
+	                				use_coupon.push(m);
+	                			}
+	                			
+	                		});
+	                	}else if(m.UseMode==2){
+	                		//走判断品牌id的逻辑
+	                		//couponBrandId(rs,n,m);
+	                		var bids = m.Brands.split(",");
+	                		$.each(bids, function(r,t) {
+	                			if($.inArray(t,BrandIds)!=-1){
+	                				use_coupon.push(m);
+	                			}
+	                			
+	                		});
+	                	}else if(m.UseMode==1){
+	                		//走判断分类id的逻辑
+	                		//couponCateId(rs,n,m);
+	                		var cids = m.Cates.split(",");
+	                		console.log(cids);
+	                		console.log(CateIds);
+	                		$.each(cids, function(r,t) {
+	                			if($.inArray(t,CateIds)!=-1){
+		                			use_coupon.push(m);
+		                		}
+	                		});
+	                		
+	                	}else if(m.UseMode==0){
+	                		//走全店逻辑
+	                		//couponSellerId(rs,n,m);
+	                		use_coupon.push(m);
+	                	}
+	                });
+	                console.log(use_coupon);
+	                
+	                rs.UseCoupon = use_coupon;
+	                var id = 'tpl-coupon-0';
+	                var tplx = document.getElementById(id).innerHTML;
+	                var desc1 = tpl(tplx, rs);
+	                var id2 = 'tpl-coupon-1';
+	                var tplx2 = document.getElementById(id2).innerHTML;
+	                var desc2 = tpl(tplx2, rs);
+	                $(".Coupon_con1 ul").append(desc1);
+	                $(".Coupon_con2 ul").append(desc2);
+	                $(".Coupon_tab_ul li").eq(0).find(".tab_number").text($(".Coupon_con1 ul li").length);
+	                $(".Coupon_tab_ul li").eq(1).find(".tab_number").text($(".Coupon_con2 ul li").length);
+	                if($(".Coupon_con1 ul li").length==0){
+	                	var html = "";
+		                html += '<div class="Cou_nomore"><div class="Cou_nomore_content"><i class="iconfont">&#xe611;</i>';
+		                html += '<span>很遗憾</span><p>您暂无可用的优惠券</p></div></div>';
+	                	$(".Coupon_con1 ul").html(html);
+	                }
+	                
+	               if($(".Coupon_con2 ul li").length==0){
+	                	$(".Coupon_con2 ul").html('<p style="text-align:center;padding:30px 0;color:#999;font-size:14px;">暂无数据</p>');
+	                }
+	                coupon_page = coupon_page + 1;
+	                if (coupon_index == 0 && $(".Coupon_con1 ul li").length > 0) {
+	                    $("#Coupon_she").text($(".Coupon_con1 ul li").length + "张可用");
+	                    $(".Coupon_chioce").show();
+	                }
+	            } else {
+	                setTimeout(function() {
+	                    return false;
+	                }, 1000);
+	            }
+	        },
+	        timeout: 15000
+	    });
+	}
+	function totalCoupon() {
+		CouponPrice = 0;
+		var obj = $(".Coupon_ul1 li .cou_input:checked");
+		if(obj.length>0){
+			coupon_ids = [];
+	    	var coupon_prices = 0;
+	    	obj.each(function(i, v){
+	    		var coupon_id = $(this).val();
+	    		coupon_ids.push(coupon_id);
+	    		var coupon_price = $(this).attr("data-money");
+				coupon_prices = coupon_prices+Number(coupon_price);
+			});
+			if(coupon_prices>0){
+				$("#coupon-price").text(coupon_prices);
+				$("#coupon-price").parent().show();
+				var product_totals = $("#goods_tags").text();
+				product_totals = Number(product_totals);
+				var total_monry = product_totals-coupon_prices;
+				CouponPrice = coupon_prices;
+				//$("#amount_formated").text(total_monry);
+			}else{
+				CouponPrice = 0;
+			}
+		}else{
+			CouponPrice = 0;
+		}
+		
+	}
+	
+	
+	
+	
+	
+	$(function() {
+		IsCart = '@ViewData["IsCart"]';
+		if (IsCart == 1) {
+            // 直接过来
+            var list_number = 0;
+            for (var _i = 0; _i < $(".list_number").length; _i++) {
+                list_number += Number($($(".list_number")[_i]).text().trim());
+            };
+            $("#Quantity").val(list_number.toFixed(0));
+        } else {
+            // 不是从购物车直接过来的
+            $("#Quantity").val($(".list_number").text().trim());
+        };
+		
+		/*获取商品id集合*/
+	  	$(".ProductId").each(function(i,v){
+	  		ProductIds.push($(this).val());
+	  	});
+		/*获取商品品牌id集合*/
+	  	$(".BrandId").each(function(i,v){
+	  		BrandIds.push($(this).val());
+	  	});
+	  	/*获取商品分类id集合*/
+	  	$(".CateId").each(function(i,v){
+	  		CateIds.push($(this).val());
+	  	});
+	  	/*初始化计算商品总价*/
+	  	sum_product_money();
+		/*初始化 获取默认地址  计算邮费*/
+		getDefaultAddress();
+		
+		//优惠券
+	    /*初始化执行一次获取优惠券，计算可用数量，显示优惠券按钮*/
+	    //getCoupon(1, 0);
+	    getCouponLists();
+	    $(".OKbTN").on("click", function() {
+	    	//确定选中优惠券 计算总价
+	    	$("#Coupon").hide();
+	    	totalCoupon();
+			//Total();
+			sum_total();
+		});
+		$("#Coupon").on("click", ".back", function() {
+		    $("#Coupon").hide();
+		});
+		$(".Coupon_tab_ul li").on("click", function() {
+			$(".Coupon_tab_ul").find("span").removeClass("chioce");
+			$(this).find("span").addClass("chioce");
+			var index = $(this).index();
+			index+=1;
+			$(".Coupon_con").hide();
+			$(".Coupon_con"+index).show();
+		});
+		
+		//不使用优惠券
+		$(".cancel-coupon").on("click",function(){
+			$(".Coupon_ul1 li input[type='radio']").prop("checked",false);
+			//确定选中优惠券 计算总价
+	    	$("#Coupon").hide();
+	    	totalCoupon();
+			//Total();
+			sum_total();
+		});
+		
+		$("#invoice").on("click", ".back", function() {
+		    $("#invoice").hide();
+		});
+		$(document).on("change",".cou_input",function(){
+			var _this = $(this);
+			var ischeck = _this.prop("checked");
+			var CouponId = _this.val();
+			var checkLen = $(".Coupon_ul1 li .cou_input:checked").length;
+			
+			var isOverLay = _this.attr("data-IsOverLay");
+			if(ischeck){
+				if(checkLen>1){
+					$(".Coupon_ul1 li .cou_input:checked").each(function(i, v){
+						if($(this).attr("data-IsOverLay")==0){
+							YDUI.dialog.alert("不可叠加使用");
+							_this.prop("checked",false);
+						}
+					});
+				}
+			}else{
+				
+			}
+			
+		});
+		$(".Coupon_chioce").on("click", function() {
+	        $("#Coupon").show();
+		    
+		});
+		//   发票
+		$("#Determine").on("click", function() {
+		    //  验证表单
+		    if ($("#geren").prop("checked")) {
+		        //  选择的是个人   判断选择的是普通发票还是电子普通发票
+		        var putong = $($($(".invoice_type").find(".type_chioce")).parents("li")).index();
+		        if (putong == 0) {
+		            //	 这里是普通发票  收票人手机是否为空
+		            if (isPoneAvailable($($($(".invoice_user").find("input"))[0]).val())) {
+		                // 验证成功   获取发票类型和发票内容
+		                var leixing = $($(".invoice_type").find(".type_chioce")).text().trim();
+		                var S_neirong = $($(".invoice_neitong").find(".type_chioce")).text().trim();
+		                $("#invoice_p_title").text("电子(" + leixing + "-" + S_neirong + ")");
+		                //  提交表单
+		                //  隐藏dom
+		                $("#invoice").hide();
+		            } else {
+		                //  验证失败
+		                dialog.alert("请填写正确的手机号码!");
+		            };
+		        } else {
+		            //  这里是电子发票   验证收票人手机号是否为空
+		            if (isPoneAvailable($($($(".invoice_user").find("input"))[0]).val())) {
+		                // 验证成功   获取发票类型和发票内容
+		                //  提交表单
+		                //  隐藏dom
+		                var leixing = $($(".invoice_type").find(".type_chioce")).text().trim();
+		                var S_neirong = $($(".invoice_neitong").find(".type_chioce")).text().trim();
+		                $("#invoice_p_title").text("电子(" + leixing + "-" + S_neirong + ")");
+		                $("#invoice").hide();
+		            } else {
+		                //  验证失败
+		                dialog.alert("请填写正确的手机号码!");
+		            };
+		        };
+		    } else {
+		        var putong = $($($(".invoice_type").find(".type_chioce")).parents("li")).index();
+		        //  选择的是单位
+		        if (putong == 0) {
+		            //	 这里是普通发票  收票人手机是否为空
+		            if (isPoneAvailable($($($(".invoice_user").find("input"))[0]).val())) {
+		                //
+		                if ($("#shibiehao").val() != "") { // 验证纳税人识别号是否填写
+		                    //  // 验证成功   获取发票类型和发票内容
+		                    var leixing = $($(".invoice_type").find(".type_chioce")).text().trim();
+		                    var S_neirong = $($(".invoice_neitong").find(".type_chioce")).text().trim();
+		                    $("#invoice_p_title").text("电子(" + leixing + "-" + S_neirong + ")" + $("#gongsi_name").val());
+		                    //  提交表单
+		                    $("#invoice").hide();
+		                    //  隐藏dom
+		                } else {
+		                    //  验证失败
+		                    dialog.alert("请填写纳税人识别号!");
+		                }
+		            } else {
+		                //  验证失败
+		                dialog.alert("请填写正确的手机号码!");
+		            }
+		        } else {
+		            //  这里是电子发票   验证收票人手机号是否为空
+		            if (isPoneAvailable($($($(".invoice_user").find("input"))[0]).val())) {
+		                //
+		                if ($("#shibiehao").val() != "") { // 验证纳税人识别号是否填写
+		                    //  // 验证成功   获取发票类型和发票内容;
+		                    var leixing = $($(".invoice_type").find(".type_chioce")).text().trim();
+		                    var S_neirong = $($(".invoice_neitong").find(".type_chioce")).text().trim();
+		                    $("#invoice_p_title").text("电子(" + leixing + "-" + S_neirong + ")" + $("#gongsi_name").val());
+		                    //  提交表单
+		                    $("#invoice").hide();
+		                    //  隐藏dom
+		                } else {
+		                    //  验证失败
+		                    dialog.alert("请填写纳税人识别号!");
+		                }
+		            } else {
+		                //  验证失败
+		                dialog.alert("请填写正确的手机号码!");
+		            };
+		        };
+		    };
+		    // 提交表单    赋值dom
+		    //  隐藏这个界面
+		});
+		// 发票
+		$(".type_tab_ul").on('click', 'li', function() {
+		    if ($(this).index() == 0) {
+		        $(".invoice_user").hide();
+		        $(".type_tab span").removeClass('type_chioce');
+		        $($(this).find("span")).addClass("type_chioce");
+		    }
+		    if ($(this).index() == 1) {
+		        $(".invoice_user").show();
+		        $(".type_tab span").removeClass('type_chioce');
+		        $($(this).find("span")).addClass("type_chioce");
+		    }
+		    if ($(this).index() == 2) {
+		        dialog.alert("本商品不支持开增值税发票");
+		    }
+		});
+		$("#geren").change(function() {
+		    if ($(this).prop('checked')) {
+		        $(".gongsi").hide();
+		    } else {
+		        $(".gongsi").show();
+		    }
+		});
+		$("#company").change(function() {
+		    if ($(this).prop('checked')) {
+		        $(".gongsi").show();
+		    } else {
+		        $(".gongsi").hide();
+		    }
+		});
+		//  头部
+		$(".cityselect-nav").on('click', 'a', function() {
+		    $(".cityselect-nav a").removeClass('crt');
+		    $(this).addClass("crt");
+		    if ($(this).index() == 0) {
+		        $("#S_City_Show").removeClass('cityselect-next');
+		        $("#S_City_Show").removeClass('cityselect-end');
+		        $("#S_City_Show").addClass('cityselect-prev');
+		    }
+		    if ($(this).index() == 1) {
+		        $("#S_City_Show").removeClass('cityselect-next');
+		        $("#S_City_Show").removeClass('cityselect-end');
+		        $("#S_City_Show").addClass('cityselect-prev');
+		    }
+		    if ($(this).index() == 2) {
+		        $("#S_City_Show").removeClass('cityselect-end');
+		        $("#S_City_Show").removeClass('cityselect-prev');
+		        $("#S_City_Show").addClass('cityselect-next');
+		    }
+		    if ($(this).index() == 3) {
+		        $("#S_City_Show").removeClass('cityselect-next');
+		        $("#S_City_Show").removeClass('cityselect-prev');
+		        $("#S_City_Show").addClass('cityselect-end');
+		    }
+		});
+		$(".invoice_chioce").on("click", function() {
+		    $("#invoice").show();
+		});
+		$("#Consignee_Map").on("click", function() {
+		    $("#Consignee_Map").focus();
+		});
+		$(".cell-input").click(function() {
+		    $(this).focus();
+		});
+		
+		$(".weui_switch").click(function() {
+		    if ($(this).prop("checked")) {
+		    	if($(this).attr("id")=="use-score"){
+			    	if(Number(ScoreMoneyMax)==0){
+		        		$(this).prop("checked",false);
+		        		YDUI.dialog.alert("抱歉，您不能进行"+ScoreName+"抵扣，商家设置最大抵扣比例为 0");
+		        	}else{
+		        		$($($(this).parents(".sub_con")).find(".total")).text(yxjifen);
+		        	}
+		    	}else if($(this).attr("id")=="vip-card"){
+		    		if(Number(yxhuiyuan)==0){
+		        		$(this).prop("checked",false);
+		        		YDUI.dialog.alert("抱歉，您的余额为 0");
+		        	}else{
+		        		
+		        		$($($(this).parents(".sub_con")).find(".total")).text(yxhuiyuan);
+		        	}
+		    	}
+		    } else {
+		        if ($($($(this).parents(".sub_con")).find(".total")).hasClass("huiyuan")) {
+		            // 这里是会员的勾选
+		            $($($(this).parents(".sub_con")).find(".total")).text(yxhuiyuan);
+		        } else {
+		            $($($(this).parents(".sub_con")).find(".total")).text(yxjifen);
+		        };
+		    };
+		    //Total();
+		    sum_total();
+		});
+		/*//   选择时间
+	    $("#pickTime").on('click', function(event) {
+	        event.stopPropagation();
+	        $("#pickTime").blur();
+	        pickuptime.init(0, function(data) {
+	            var b = data.split(" ");
+	            var datesss = new Date();
+	            var year = datesss.getFullYear(); // 2018 
+	            var month = b[0].split("月")[0];
+	            if (month < 10) {
+	                month = "0" + month;
+	            }
+	            var day = b[0].split("月")[1].split("日")[0];
+	            if (day < 10) {
+	                day = "0" + day;
+	            }
+	            var hours = b[3].split(":")[0];
+	            var minutes = b[3].split(":")[1];
+	            var ShipDates = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + "00";
+	            $("#ShipDate").val(ShipDates);
+	            $("#pickTime").val(data);
+	        });
+	    });*/
+	});
+    </script>
+    
+    <script type="text/javascript">
+    	var page_type = 0;
+function GetUrlParam(paraName) {
+　　　　var url = document.location.toString();
+　　　　var arrObj = url.split("?");
+　　　　if (arrObj.length > 1) {
+　　　　　　var arrPara = arrObj[1].split("&");
+　　　　　　var arr;
+　　　　　　for (var i = 0; i < arrPara.length; i++) {
+　　　　　　　　arr = arrPara[i].split("=");
+　　　　　　　　if (arr != null && arr[0] == paraName) {
+　　　　　　　　　　return arr[1];
+　　　　　　　　}
+　　　　　　}
+　　　　　　return "";
+　　　　}
+　　　　else {
+　　　　　　return "";
+　　　　}
+}
+
+function addrToBack(){
+	$("#app-addr").css("display","none");
+}
+
+page_type = GetUrlParam("pagetype");
+
+var vm = new Vue({
+    el: '#app-addr',
+    data: {
+      viewShow:false,
+      editShow:false,
+      addressList:[],
+      AddressId:'',
+      Mobile:'',
+      Address:'',
+      addressdetail:'',
+      Consignee:'',
+      IsDefault:true,
+      Provinceid:'',
+      Cityid:'',
+      Countyid:'',
+      Townid:'',
+              ////////////////////////
+      curIndex: 0,
+		Province: [],
+		City: [],
+		County: [],
+		Town: [],
+		curProvince: "",
+		curProvinceName: "",
+		curCity: "",
+		curCityName: '',
+		curCounty: "",
+		curCountyName: '',
+		curTown: "",
+		initProvince: "",
+		initCity: "",
+		initCounty: "",
+		initTown: "",
+		curTownName: '',
+		isInit: true,
+		Addr: "",
+		Address: ""
+    },
+    watch: {
+    	Mobile: function(val,oldval) {
+			this.Mobile = val.replace(/[^\d]/g,"");
+			if(this.Mobile.length>11){
+				this.Mobile = oldval;
+			}
+		},
+    },
+    methods:{
+    	clearData:function(){
+    		 var _this=this;
+             _this.AddressId='';
+	 		 _this.Mobile='';
+			 _this.Addr='';
+			 _this.addressdetail=''
+			 _this.Consignee='';
+			 _this.IsDefault=true;
+			 _this.curProvince='';
+			 _this.curCity='';
+			 _this.curCounty='';
+			 _this.curTown='';
+			 _this.curProvinceName='';
+			 _this.curCityName='';
+			 _this.curCountyName='';
+			 _this.curTownName='';
+			 _this.initProvince='';
+			 _this.initCity='';
+			 _this.initCounty='';
+			 _this.initTown=''
+    	},
+    	addRess:function(num){
+    		if(num==0){
+    			$(".adr-addrlist").css("display","none");
+    		}else{
+    			$(".adr-addrlist").css("display","block");
+    		}
+    		var _this=this;
+    		_this.viewShow=!_this.viewShow;
+    		_this.clearData();
+			_this.City=[]
+            _this.getProvinceTab();
+    	},
+    	editaddRess:function(item){
+    		if(item){
+    			$(".adr-addrlist").css("display","none");
+    		}else{
+    			$(".adr-addrlist").css("display","block");
+    		}
+    		var _this=this;
+    		_this.editShow=!_this.editShow;
+    		if(_this.editShow){
+    			if(item){
+    				if(item.IsDefault==1){
+		    				_this.IsDefault=true;
+		    		}else{
+		    				_this.IsDefault=false;
+		    		}
+    				var Address=item.Address;
+    				var Addr=Address.split('~')[0];
+    			     _this.AddressId=item.AddressId;
+					 _this.Mobile=item.Mobile;
+					 _this.Addr=Addr;
+					 _this.addressdetail=Address.split('~')[1]
+					 _this.Consignee=item.Consignee;
+					 _this.curProvince=item.Province;
+					 _this.curCity=item.City;
+					 _this.curCounty=item.County;
+					 _this.curTown=item.Town;
+					 _this.curProvinceName=Addr.split('-')[0];
+					 _this.curCityName=Addr.split('-')[1];
+					 _this.curCountyName=Addr.split('-')[2];
+					 _this.curTownName=Addr.split('-')[3];
+    		    }
+    		}else{
+    			      _this.clearData();
+    		}
+    	},
+    	getList:function(){
+    		var _this=this;
+    		$.ajax({
+				type: "get",
+				url: "/m/order/address?userid="+"@WorkContext.Uid",
+				async: true,
+				dataType: "json",
+				success: function(rel) {
+					if(rel.Code==1){
+						_this.addressList=rel.Data;
+						if(_this.addressList.length==0){
+							_this.addressList = [];
+						}
+					}else{
+						 _this.addressList = [];
+						 _this.clearData();
+					}
+				}
+			});
+    	},
+    	saveForm:function(num,item){//保存编辑 1.编辑  2.保存 3.设置默认
+    		
+    		var _this=this;
+    		var IsDefault;
+    		var dataForm = {};
+    		if(num==3){//设置默认
+    			if(_this.IsDefault){
+	    			IsDefault=1
+	    		}else{
+	    			IsDefault=0
+	    		}
+    			dataForm={
+    				AddressId: item.AddressId,
+					Mobile: item.Mobile,
+					Address: item.Address,
+					Consignee: item.Consignee,
+					IsDefault: IsDefault,
+					Province: item.Province,
+					City:item.City,
+					County: item.County,
+					Town: item.Town,
+    		    }
+    		}else{//编辑保存
+	    			var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+	    		if(_this.Consignee==''){
+	    			$.toptips('姓名不能为空');
+	    			return false;
+	    		}else if(_this.Mobile==''){
+	    			$.toptips('手机号不能为空');
+	    			return false;
+	    		}else if(!myreg.test(_this.Mobile)){
+	    			$.toptips('手机号格式不正确');
+	    			return false;
+	    		}else if(_this.Addr==''){
+	    			$.toptips('请选择地址');
+	    			return false;
+	    		}else if(_this.addressdetail==''){
+	    			$.toptips('详细地址不能为空')
+	    			return false;
+	    		}
+	    		if(_this.IsDefault){
+	    			IsDefault=1
+	    		}else{
+	    			IsDefault=0
+	    		}
+    			dataForm={
+    				AddressId: _this.AddressId,
+					Mobile: _this.Mobile,
+					Address: _this.Addr+'~'+_this.addressdetail,
+					Consignee: _this.Consignee,
+					IsDefault: IsDefault,
+					Province: _this.curProvince,
+					City: _this.curCity,
+					County: _this.curCounty,
+					Town: _this.curTown,
+    		    }
+    		}
+    		$.ajax({
+				type: "POST",
+				url: "/m/order/AddressSave",
+				async: true,
+				data:dataForm,
+				dataType: "json",
+				success: function(rel) {
+					if(rel.Code==1){
+						_this.getList();
+						if(num==1){
+							_this.editaddRess();
+						}else if(num==2){
+							_this.addRess();
+						}
+						$(".adr-addrlist").css("display","block");
+					}else{
+					}
+				}
+			});
+    	},
+    	deleteitem:function(AddressId){
+    		var _this=this;
+    		    /*$.confirm("您确定要删除吗?", "确认删除?", function() {
+					//  删除地址						
+						$.post('/m/order/AddressDelete', {
+							'AddressId': AddressId
+						}, function(data) {
+							_this.getList();
+						}, 'JSON');
+				 });*/
+				layer.confirm('您确定要删除吗?', {
+				  btn: ['确定','取消'] //按钮
+				}, function(){
+					layer.closeAll();
+				    $.post('/m/order/AddressDelete', {
+						'AddressId': AddressId
+					}, function(data) {
+						_this.getList();
+					}, 'JSON');
+				}, function(){
+				  
+				}); 
+			  	/*if(confirm("确定删除吗？")){
+			  		$.post('/m/order/AddressDelete', {
+						'AddressId': AddressId
+					}, function(data) {
+						_this.getList();
+					}, 'JSON');
+			  	}*/
+    	},
+    	chosedefault:function(item){//选择默认地址
+    		var _this=this;
+    		_this.Isdefault=!_this.Isdefault;
+    		_this.saveForm(3,item);
+    	},
+    	initAddr:function() {
+			var _this = this;
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetCityList?Province="+_this.initProvince,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.City = rel.data;
+					}
+				}
+			});
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetCountyList?City="+_this.initCity,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.County = rel.data;
+					}
+				}
+			});
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetTownList?County="+_this.initCounty,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.Town = rel.data;
+					}
+				}
+			});
+		},
+		showAddr: function (){
+			//$("#app-addr").click();
+			$(".shade-box").css("display","block");
+			$(".shade-box").css("z-index","111111113");
+		},
+		clearAddr: function() {
+			var _this = this;
+			_this.curCity = 0;
+			_this.curCityName = "";
+			_this.curCounty = 0;
+			_this.curCountyName = "";
+			_this.curTown = 0;
+			_this.curTownName = "";
+		},
+		getProvince: function() {
+			var _this = this;
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetProvinceList",
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.Province = rel.data;
+					}
+				}
+			});
+		},
+		getAddrName: function(id,type) {
+			var _this = this;
+			$.ajax({
+				type:"get",
+				url:"/Api/Tool/GetRegionInfo?Regionid="+id,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						if(type==0){
+							_this.curProvinceName = rel.data.regionname
+						}else if(type==1){
+							_this.curCityName = rel.data.regionname
+						}else if(type==2){
+							_this.curCountyName = rel.data.regionname
+						}else if(type==3){
+							_this.curTownName = rel.data.regionname
+						}
+						_this.Addr = _this.curProvinceName+'-'+_this.curCityName+'-'+_this.curCountyName+'-'+_this.curTownName;
+						console.log(_this.Addr);
+					}
+				}
+			});
+		},
+		getProvinceTab: function(regionid,regionname) {
+			$(".addr-box").animate({"margin-left":0},100);
+			this.curIndex = 0;
+		},
+		getCityTab: function(regionid,regionname) {
+			$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+			this.curIndex = 1;
+		},
+		getCountyTab: function(regionid,regionname) {
+			$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+			this.curIndex = 2;
+		},
+		getTownTab: function(regionid,regionname) {
+			$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+			this.curIndex = 3;
+		},
+		getCity: function(regionid,regionname) {
+			var _this = this;
+			_this.isInit = false;
+			_this.curProvince = regionid;
+			_this.curProvinceName = regionname;
+			_this.curCity = 0;
+			_this.curCityName = "";
+			_this.curCounty = 0;
+			_this.curCountyName = "";
+			_this.curTown = 0;
+			_this.curTownName = "";
+			_this.curIndex = 0;
+			//$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetCityList?Province="+regionid,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.City = rel.data;
+					}
+				}
+			});
+		},
+		getCounty: function(regionid,regionname) {
+			var _this = this;
+			_this.curCity = regionid;
+			_this.curCityName = regionname;
+			_this.curCounty = 0;
+			_this.curCountyName = "";
+			_this.curTown = 0;
+			_this.curTownName = "";
+			var index = $(".cur-li").index();
+			if(_this.curIndex<index){
+				$(".addr-box").animate({"margin-left":0},100);
+			}else{
+				$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+			}
+			_this.curIndex = 1;
+			
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetCountyList?City="+regionid,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.County = rel.data;
+					}
+				}
+			});
+		},
+		getTown: function(regionid,regionname) {
+			var _this = this;
+			_this.curCounty = regionid;
+			_this.curCountyName = regionname;
+			_this.curTown = 0;
+			_this.curTownName = "";
+			var index = $(".cur-li").index();
+			if(_this.curIndex<index){
+				$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+			}else{
+				$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+			}
+			_this.curIndex = 2;
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetTownList?County="+regionid,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.Town = rel.data;
+					}
+				}
+			});
+		},
+		selTown: function(regionid,regionname) {
+			var _this = this;
+			_this.curTown = regionid;
+			_this.curTownName = regionname;
+			_this.curIndex = 3;
+			_this.Addr = _this.curProvinceName+'-'+_this.curCityName+'-'+_this.curCountyName+'-'+_this.curTownName;
+			$(".shade-box").css("display","none");
+			$("#addr").val("");
+			_this.Address = "";
+			$('#Longitude').text("");
+			$('#Latitude').text("");
+		},
+		selectaddr: function(item) {
+			reloadData(item);
+		}
+    },
+    mounted:function(){
+    	var _this=this;
+    	_this.getList();
+    },
+    created: function () {
+		this.getProvince();
+		this.initAddr();
+		this.getAddrName(this.curProvince,0);
+		this.getAddrName(this.curCity,1);
+		this.getAddrName(this.curCounty,2);
+		this.getAddrName(this.curTown,3);
+	},
+ })
+    </script>
+<script type="text/javascript">
+	function pikerTime(){
+		var curTimeIndex = 0;
+		var MyDate = new Date();
+		var curTime = new Date(formatTime(MyDate)).getTime();
+		curTime = curTime.toString();
+		curTime = curTime.substring(0,8);
+		curTime = curTime+"00000";
+		curTime = parseInt(curTime);
+		curTime = curTime-28800000;
+		var basetime = 86400000;
+		var zeroTime = new Date(curTime).getTime();//当天00:00:00
+		var MyDate2 = new Date(zeroTime+basetime);
+		var MyDate3 = new Date(zeroTime+basetime*2);
+		var MyDate4 = new Date(zeroTime+basetime*3);
+		var MyDate5 = new Date(zeroTime+basetime*4);
+		var MyDate6 = new Date(zeroTime+basetime*5);
+		var MyDate7 = new Date(zeroTime+basetime*6);
+		var pikerDay = [];
+		var curDayStr = formatTime(MyDate);
+		pikerDay = [formatTime(MyDate),formatTime(MyDate2),formatTime(MyDate3),formatTime(MyDate4),formatTime(MyDate5),formatTime(MyDate6),formatTime(MyDate7)];
+		function formatTime(MyDate){
+			var curYear = MyDate.getFullYear();
+			var curMon = MyDate.getMonth();
+			var curDay = MyDate.getDate();
+			curMon = Number(curMon)+1;
+			if(curMon<=9){
+				curMon = "0"+curMon;
+			}
+			if(Number(curDay)<=9){
+				curDay = "0"+curDay;
+			}
+			var dayStr = curYear+"-"+curMon+"-"+curDay;
+			return dayStr;
+		}
+		var vmPiker = new Vue({
+			el: "#piker-time-vue",
+			data:{
+				pikerDay: pikerDay,
+				pikerTime: ["07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00","24:00"],
+				dayIndex: 0,
+				timeIndex: 0,
+				curIndex: 0,
+				shiptime: ""
+			},
+			created: function() {
+				
+			},
+			methods: {
+				clickPikerDay: function(item,index){
+					item = item+" 00:00:00";
+					this.dayIndex = index;
+					if(parseInt(new Date(item).getTime()) == zeroTime){
+						
+						var thisTime = new Date().getTime();
+						thisTime = parseInt(thisTime);
+						var diffTime = thisTime-zeroTime;
+						diffTime = parseInt(diffTime/1000);
+						var curHour = parseInt(diffTime/3600);
+						curHour = curHour+":00";
+						var curIndex = $.inArray(curHour,this.pikerTime);
+						if(curIndex<=0){
+							curIndex = 0;
+						}
+						if(this.timeIndex<=curIndex){
+							this.timeIndex=0;
+						}
+						this.curIndex = curIndex;
+						
+					}else{
+						this.curIndex = 0;
+					}
+				},
+				clickPikerTime: function(item,index){
+					this.timeIndex = index;
+				},
+				confirmPiker: function() {
+					this.shiptime = this.pikerDay[this.dayIndex]+" "+this.pikerTime[this.timeIndex]+":00";
+					if(this.timeIndex<=0){
+						YDUI.dialog.alert("未选择时间");
+						return false;
+					}
+					$("#pickTime").val(this.shiptime);
+					$("#ShipDate").val(this.shiptime);
+					$("#piker-time-vue").css("display","none");
+					$(".mask-shade").hide();
+				}
+			}
+			
+		});
+		if(curTime == zeroTime){
+			var thisTime = new Date().getTime();
+			thisTime = parseInt(thisTime);
+			var diffTime = thisTime-zeroTime;
+			diffTime = parseInt(diffTime/1000);
+			var curHour = parseInt(diffTime/3600);
+			curHour = curHour+":00";
+			var curIndex = $.inArray(curHour,vmPiker.pikerTime);
+			if(curIndex<=0){
+				curIndex = 0;
+			}
+			vmPiker.curIndex = curIndex;
+		}
+		
+		
+		//新的选择时间
+	    $("#pickTime").on("focus",function(){
+	    	$(".mask-shade").show();
+	    	$(".shade-piker").css("display","block");
+	    });
+		$(".mask-shade").on("click",function(){
+			$(".mask-shade").css("display","none");
+			$(".shade-piker").css("display","none");
+		});
+	}
+	pikerTime();
+</script>
+</body>
+</html>

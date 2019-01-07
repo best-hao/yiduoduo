@@ -1,0 +1,147 @@
+@charset "UTF-8";
+
+.weui-flex-item.center {
+    color: #fff;
+    font-size: 0.32rem;
+    text-align: center;
+    line-height: 2;
+}
+
+.wallet-info{
+	padding: 0.2rem;
+	position: relative;
+	z-index: 2;
+	color: #fff;
+}
+
+.wallet-info a{
+	color: #fff67f;
+}
+
+.account-detail {
+	position: relative;
+}
+
+.account-detail:after{
+	content: '';
+    width: 7px;
+    height: 7px;
+    border-top: 1px solid #fff67f;
+    border-right: 1px solid #fff67f;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: absolute;
+    top: 5px;
+    right: -11px;
+}
+
+.account-recharge {
+	margin-right: 0.3rem;
+}
+
+.account-money{
+	font-size: 0.3rem;
+}
+
+.wallet-icon,
+.wallet-info-up,
+.wallet-info-down{
+	text-align: center;
+	float: left;
+}
+
+.wallet-info-up{
+	margin: 0 1.3rem 0 0.2rem;
+}
+
+.wallet-info-down{
+	float: right;
+	text-align: right;
+	padding-right: 0.4rem;
+	line-height: 2;
+}
+
+@media screen and (max-width: 320px) {
+    .wallet-info-down{
+		line-height: 1.8;
+	}
+}
+.wallet-icon .icon{
+	font-size: 1rem;
+    float: left;
+    margin: -0.5rem 0 0 0.2rem;
+}
+
+.account{
+	position: relative;
+}
+
+.account .icon{
+	font-size: 0.3rem;
+	vertical-align: middle;
+	margin-left: 0.1rem;
+	color: #fff67f;
+	cursor: pointer;
+}
+
+.record-content{
+	background-color: #fff;
+	padding: 0 0.2rem;
+}
+
+.record-list{
+	border-bottom: 1px solid #eee;
+	line-height: 1rem;
+	height: 1rem;
+}
+
+.record-list:last-child{
+	border-bottom: 0;
+}
+
+.record-list .link{
+	-webkit-display: flex;
+	display: flex;
+	padding: 0 0.2rem;
+	color: #787878;
+	font-size: 0.3rem;
+}
+
+.record-list .link .title{
+	-webkit-flex: 5;
+	flex: 5;
+}
+
+.record-list .link .icon{
+	vertical-align: middle;
+    margin-right: 0.1rem;
+    color: #0096E3;
+}
+
+.record-list .link .icon-42{
+	color: #ED8888;
+}
+
+.record-list .link .icon-43{
+	color: #4CAF50;
+}
+
+.record-list .link .detail{
+	text-align: center;
+	position: relative;
+	-webkit-flex: 1;
+	flex: 1;
+}
+
+.record-list .link .detail:after{
+	content: '';
+    width: 7px;
+    height: 7px;
+    border-top: 1px solid #cdcdcd;
+    border-right: 1px solid #cdcdcd;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: absolute;
+    right: 0;
+    top: 43%;
+}

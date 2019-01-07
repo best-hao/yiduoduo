@@ -1,0 +1,97 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>会员中心-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+   <link rel="stylesheet" type="text/css" href="/Css/Mobile/s_init.css" />
+   	<style type="text/css">
+			.content {
+				background: #FFFFFF;
+			}
+			body{
+				background: #FFFFFF;
+			}
+			.she_zhu{
+				margin-top: 1rem;
+				padding-left: 0.6rem;
+				font-size: 0.84rem;
+				color: #666666;
+			}
+			.she_a{
+				color: #10AEFF;
+				text-decoration: underline;
+			}	
+		</style>
+</head>
+<body>
+<header>
+			<i class="iconfont back" onclick="history.back()">&#xe647;</i>
+			<h3>今日销售额</h3>
+
+		</header>
+		<div class="content">
+			<div id="canvasDiv">
+
+			</div>
+			<p class="she_zhu">注: 目前所显示数据是您旗下所有店铺统计到的、具体请在绩效管控查看。 请 <a href="" class="she_a">点击这里</a></p>
+		</div>
+<script src="/Js/Mobile/jquery.min.js"></script>
+	<script src="/Js/Mobile/ichart.latest.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		
+		
+			$(function() {
+				var data = [{
+						name: '今日销售额',
+						value: 35.75,
+						color: '#a5c2d5'
+					},
+					{
+						name: '昨日销售额',
+						value: 29.84,
+						color: '#cbab4f'
+					},
+
+				];
+
+				new iChart.Column2D({
+					render: 'canvasDiv',
+					data: data,
+					title: '今日销售额与昨日销售额的比较，数据截止当前时间，单位 ￥',
+					showpercent: true,
+					decimalsnum: 2,
+					width: screen.availWidth,
+					height: 300,
+					coordinate: {
+						background_color: '#fefefe',
+						scale: [{
+							position: 'left',
+							start_scale: 0,
+							end_scale: 40,
+							scale_space: 8,
+							listeners: {
+								parseText: function(t, x, y) {
+									return {
+										text: t
+									}
+								}
+							}
+						}]
+					}
+				}).draw();
+			});
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,358 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>线下现金交易</title>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/icon.css"/>
+		<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		
+		<style type="text/css">
+			.warp{display: none;}
+			body{background: #f6f6f6;width: 7.5rem;margin: 0 auto;}
+			a.apply:active{color: #fff;}
+			.weui-header{background: #fff;color: #666;font-size: 0.28rem;font-family: "微软雅黑";}
+			.weui-header a{color: #666;}
+			.weui-header .weui-header-left a{color: #666;}
+			.weui-header .weui-header-title, .weui-header h1{color: #666;}
+			.main{font-size: 0.24rem;font-family: "微软雅黑";color: #666;}
+			.weui_cells:after, .weui_cells:before{border: none;height: 0;}
+			.weui_cells{background: transparent;}
+			.weui_cells .weui_cell{padding: 0 0.2rem;height: 0.7rem;line-height: 0.7rem;margin-bottom: 0.4rem;}
+			.weui_cells .weui_cell_bd.weui_cell_primary{background: #fff;width: 5.1rem;padding: 0 0.2rem;}
+			.weui_label{width: 1.3rem;font-size: 0.24rem}
+			.weui_input{font-size: 0.24rem;height: 0.7rem;line-height: 0.7rem;}
+			
+			.weui_cell:before{border: none;height: 0;}
+			.weui_cell:after{border: none;height: 0;}
+			.btn{width: 7.1rem;margin: 0 auto;height: 0.7rem;line-height: 0.7rem;color: #fff;background: #E02E24;border-radius: 5px;text-align: center;}
+			
+			
+			.top-box{background: #fff;padding: 0.2rem;height: 1.9rem;}
+			.lt{width: 1.5rem;height: 1.5rem;margin-right: 0.2rem;}
+			.lt img{width: 1.5rem;height: 1.5rem;}
+			.txt-box{width: 5.4rem;line-height: 0.5rem;position: relative;height: 1.5rem;}
+			.txt-box h3{line-height: 0.5rem;position: absolute;top: 0;left: 0;width: 5.4rem;}
+			.bottom{position: absolute;bottom: 0;left: 0;width: 5.4rem;}
+			.change-diss{padding: 0.1rem 0.2rem;border-radius: 0.2rem;background: #E02E24;color: #fff;}
+			
+			.detail{margin-top: 0.2rem;background: #fff;}
+			.weui_input{line-height: 0.7rem;}
+			.infos{margin-top: 0.2rem;background: #fff;padding: 0 0.2rem;}
+			.infos .weui-flex{height: 0.7rem;line-height: 0.7rem;}
+			
+			.paytype{margin-top:0.2rem; padding: 0.2rem;background: #fff;}
+			.paytype .weui_cell{line-height: 0.5rem;height: 1rem;font-size: 0.24rem;}
+			.chose_payment{margin-top: 0.2rem;}
+			.chose_list{background:#fff;padding:0 12px;box-sizing:border-box}
+			.chose_list .weui-flex{align-items:center;padding:6px 0;border-bottom:1px solid #E8E8E8}
+			.chose_list .weui-flex:last-child{border-bottom:none}
+			.chose_list .weui-flex .weui-flex-item span{font-size:14px;color:#8C8C8C}
+			.now_payment{background:#fff;width:100%;text-align:center;margin-top:10px;padding:15px 0}
+			.now_payment button{border:0;outline:0;width:80%;height:35px;line-height:35px;text-align:center;border-radius:35px;background:#E02E24;color:#fff;font-size:16px;margin:0 auto}
+			.weui_cell{padding:4px 15px}
+			.red-money{color:#E02E24;font-weight:600}
+			.disabled{background:#f2f2f2;color:#999}
+			.weui_cell_primary span{color: #666;font-size: 0.24rem;}
+			.weui_dialog_hd{padding: 0;}
+			.joinpay_thumb{padding: 0 0.2rem;}
+			.joinpay_thumb .icon{font-size: 0.6rem;}
+		</style>
+	</head>
+	<body>
+		<div class="warp">
+			<div id="money-vue">
+				<div class="weui-header"> 
+		    		<div class="weui-header-left"> <a href="javascript:history.back()" class="icon icon-109"></a>  </div>
+					<h1 class="weui-header-title">线下现金交易</h1>
+		    		<div class="weui-header-right">收款记录</div> 
+		        </div>
+		        <div class="main">
+		        	<div class="top-box">
+		        		<div class="left lt">
+		        			<img :src="'https://img.huadong518.com'+shopInfo.Logo"/>
+		        		</div>
+		        		<div class="right txt-box">
+		        			<h3>{{shopInfo.ShopName}}</h3>
+		        			<div class="bottom">
+		        				<div class="weui-flex">
+		        					<div class="weui-flex-item tleft">{{profits}}折</div>
+		        					<div class="weui-flex-item tright"><a class="change-diss" :href="'/m/shop/setprofits?shopid='+shopId">修改折扣</a></div>
+		        				</div>
+		        			</div>
+		        		</div>
+		        	</div>
+		        	<div class="detail">
+		        		<div class="weui_cells weui_cells_form">
+				            <div class="weui_cell">
+				                <div class="weui_cell_hd"><label class="weui_label" style="width: 2.2rem;">消费者注册手机号:</label></div>
+				                <div class="weui_cell_bd weui_cell_primary">
+				                    <input class="weui_input tright" v-on:blur="getShopId()" v-model="mobile" type="number" maxlength="11" placeholder="请输入消费者注册手机号"/>
+				                </div>
+				            </div>
+				            <div class="weui_cell">
+				                <div class="weui_cell_hd"><label class="weui_label" style="width: 1.5rem;">消费者昵称:</label></div>
+				                <div class="weui_cell_bd weui_cell_primary tright">
+				                    <span>{{username}}</span>
+				                </div>
+				            </div>
+				            <div class="weui_cell">
+				                <div class="weui_cell_hd"><label class="weui_label" style="width: 2.4rem;">实际消费金额（元）:</label></div>
+				                <div class="weui_cell_bd weui_cell_primary">
+				                    <input class="weui_input tright" type="text" id="money" v-model="money" placeholder="请输入金额"/>
+				                </div>
+				            </div>
+				            <div class="weui_cell">
+				                <div class="weui_cell_hd"><label class="weui_label" style="width: 2rem;">消费者获得积分:</label></div>
+				                <div class="weui_cell_bd weui_cell_primary tright">
+				                    <span>{{score = Number(money*(profits/10)*6).toFixed(2)}}</span>
+				                </div>
+				            </div>
+				            <div class="weui_cell">
+				                <div class="weui_cell_hd"><label class="weui_label" style="width: 0.8rem;">备注:</label></div>
+				                <div class="weui_cell_bd weui_cell_primary">
+				                    <input class="weui_input tright" type="text" placeholder="填写备注"/>
+				                </div>
+				            </div>
+		            	</div>
+		        	</div>
+		        	<div class="infos">
+		        		<div class="weui-flex">
+		        			<div class="weui-flex-item tleft">需让利金额：</div>
+		        			<div class="weui-flex-item tright">{{dissMoney = Number(money*(profits/10)).toFixed(2)}}</div>
+		        		</div>
+		        		<div class="weui-flex">
+		        			<div class="weui-flex-item tleft">获得销售（积分）：</div>
+		        			<div class="weui-flex-item tright">{{shopScore = Number(money*(profits/10)*3).toFixed(2)}}</div>
+		        		</div>
+		        	</div>
+		        	<div class="chose_payment">
+						<div class="chose_list">
+							<div class="weui-flex">
+								<div class="joinpay_thumb">
+									<i class="icon icon-11"></i>
+								</div>
+								<div class="weui-flex-item">
+									<p>支付宝</p>
+									<span>红包抵现，方便快捷</span>
+								</div>
+								<div class="sw_toggle">
+									<div class="sw_right">
+				                    	<input class="weui_switch" name="radio" data-id="2" type="radio" checked/>
+				                	</div>
+								</div>
+							</div>
+						
+							@if (Yitao.Core.WebHelper.IsWeiXin())
+		        			{
+								<div class="weui-flex">
+									<div class="joinpay_thumb">
+										<i class="icon icon-14"></i>
+									</div>
+									<div class="weui-flex-item">
+										<p>微信支付</p>
+										<span>红包抵现，方便快捷</span>
+									</div>
+									<div class="sw_toggle">
+										<div class="sw_right">
+					                    	<input class="weui_switch" name="radio" data-id="3" type="radio"  />
+					                	</div>
+									</div>
+								</div>
+							}
+						</div>
+					</div>
+					<div class="now_payment">
+						<button id="payNow">立即支付</button>
+					</div>
+		        </div>
+			</div>
+		</div>
+				
+        
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script>
+	        var pay = {};
+			pay.payType = 2;
+	        // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
+	        document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+	        	$("#payNow").on("click",function() {
+	        		if(pay.payType==3){
+		        		$.ajax({
+			        		type:"post",
+			        		url:"joinpay",
+			        		async:true,
+			        		data:{payType:3,payMoney:pay.money},
+			        		dataType:"json",
+			        		success:function(rst) {
+			        			if(rst.Code==1){
+			        				//公众号支付
+						            WeixinJSBridge.invoke('getBrandWCPayRequest', {
+						                "appId": rst.appId,
+						                "timeStamp": rst.timeStamp,
+						                "nonceStr": rst.nonceStr,
+						                "package": rst.package,
+						                "signType": "MD5",
+						                "paySign": rst.paySign
+						            }, function (res) {
+						                if (res.err_msg == "get_brand_wcpay_request:ok") {
+						                    window.location.href = "/m/settlement/payresult";
+						                } else {
+						                	if (res.err_msg == "get_brand_wcpay_request:cancel") {
+						                		$.alert("用户取消支付",  function () {
+							                        // 支付失败刷新当前页
+							                        window.location.reload();
+							                    });
+						                	}
+						                	if (res.err_msg == "get_brand_wcpay_request:fail") {
+						                		$.alert("支付失败",  function () {
+							                        // 支付失败刷新当前页
+							                        window.location.reload();
+							                    });
+						                	}
+						                    
+						                }
+						                // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+						                //因此微信团队建议，当收到ok返回时，向商户后台询问是否收到交易成功的通知，若收到通知，前端展示交易成功的界面；若此时未收到通知，商户后台主动调用查询订单接口，查询订单的当前状态，并反馈给前端展示相应的界面。
+						            });
+						            WeixinJSBridge.log('yo~ ready.');
+			        			}else{
+			        				$.toast(rst.Message);
+			        			}
+			        			
+			        		}
+			        	});
+	        		}
+	        		
+	        	});
+	        }, false);
+	        
+	        
+	        var vm = new Vue({
+	        	el: "#money-vue",
+	        	data: {
+	        		shopId: '@ViewData["ShopId"]',
+	        		username: "",
+	        		shopInfo: [],
+	        		profits: 0,
+	        		money: "",
+	        		score: 0,
+	        		dissMoney: 0,
+	        		shopScore: 0,
+	        		userid: 0,
+	        		mobile: ""
+	        		
+	        	},
+	        	created: function(){
+	        		this.getShopInfo();
+	        	},
+	        	methods: {
+	        		getShopId: function() { //获取商品详情
+		                var _this = this;
+		                $.ajax({
+		                    type: "get",
+		                    url: '/Api/Seller/GetAdminSellerUser?Mobile=' + _this.mobile,
+		                    async: true,
+		                    success: function(rel) {
+		                        console.log(rel)
+		                       _this.username = rel.data.username;
+		                       _this.userid = rel.data.userid;
+		                       
+		                    }
+		                });
+		            },
+	        		getShopInfo: function() {
+	        			var _this = this;
+	        			$.ajax({
+			    			type:"post",
+			    			url:"/m/Shop/detail?t="+Math.random(),
+			    			data:{
+			    				shopid: '@ViewData["ShopId"]'
+			    			},
+			    			async:true,
+			    			success: function(rel){
+			    				console.log(rel);
+			    				var data=JSON.parse(rel).Data;
+			    				_this.shopInfo=data;
+			    				_this.profits = Number(data.Profits/10);
+			    			}
+			    		});
+	        		}
+	        		/*,
+	        		calculateScore: function() {
+	        			this.score = Number(this.money*(this.profits/10)).toFixed(2);
+	        			this.dissMoney = Number(this.money*(this.profits/10)).toFixed(2);
+	        			this.shopScore = Number(this.money*(this.profits/10)*3).toFixed(2);
+	        		}*/
+	        	}
+	        });
+	        
+	        $(function(){
+	        	$(".warp").css("display","block");
+	            $('.weui_switch').on("click",function(){
+	        		$('.weui_switch').prop("checked", false);
+	        		$(this).prop('checked',true)
+	        	});
+	    		pay.payNow = function(){
+	    			$(".weui_switch").each(function(){
+	    				if($(this).prop("checked")){
+	    					pay.payType = $(this).data("id");
+	    				}
+	    			});
+	    			if(pay.payType==2){
+	    				window.location.href = "/m/settlement/JoinAlipay?payType=2&payMoney="+pay.money;
+	    			}
+	    		}
+	        	$("#payNow").on("click", function(){
+	        		var money = $("#money").val();
+	        		if(money<=0){
+	        			$.alert("金额不正确");
+	        			return false;
+	        		}
+	        		pay.money = money;
+	        		pay.payNow();
+	        	});
+	            
+	            $("#money").on("input propertychange",function(){
+        			var num = $(this).val();
+        			
+        			if(isNaN(num)){
+        				if(isNaN(parseFloat(num))){
+        					$(this).val("");
+        					vm.money = "";
+        				}else{
+        					if(num!=""){
+        						$(this).val(parseFloat(num));
+        						vm.money = parseFloat(num);
+        					}
+        				}
+        			}else{
+        				if(parseFloat(num)==num.toString()){
+        					if(num.toString().indexOf(".")>-1){
+	        					if(num.toString().split(".")[1].length>2){
+	        						num = num.toString().substring(0,num.toString().split(".")[0].length+3)
+	        					}
+	        					$(this).val(num);
+	        					vm.money = num;
+        					}
+	    				}else{
+							if(num!=""){
+        						$(this).val(parseFloat(num));
+        						vm.money = parseFloat(num);
+        					}
+	    				}
+        			}
+        		});
+	            
+	            
+	            
+	        });
+		</script>
+        
+        
+        
+	</body>
+</html>

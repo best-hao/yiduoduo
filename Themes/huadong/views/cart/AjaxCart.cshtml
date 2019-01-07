@@ -1,0 +1,98 @@
+﻿@model Yitao.Web.Mobile.Models.CartModel
+@{
+    Layout = null;
+}
+@if (Model != null && (Model.CartInfo.CartProductList.Count > 0 || Model.CartInfo.CartSuitList.Count > 0 || Model.CartInfo.CartFullSendList.Count > 0 || Model.CartInfo.CartFullCutList.Count > 0))
+{
+    <div class="cart_seller_wrap" id="seller_123456789" data-seller="123456789" data-s_seller_id="123456789" data-id="123456789__0">
+        <div class="cart_seller_title_wrapper">
+            <div class="cart_seller_title rel">
+                <mark class="cart_seller_mask abs @if (Model.CartInfo.SelectedAll) {<text>cart_seller_mask_already</text>}" data-seller="123456789"><span>&nbsp;</span></mark>
+                <a class="block over_hidden" href="@Url.Action("index", "home", new RouteValueDictionary { { "userid", 123456789 } })">
+                    <span class="ellipsis block icon-right"><em>@WorkContext.ShopConfig.ShopName</em></span>
+                </a>
+            </div>
+            <a href="javascript:void(0);" data-shopname="@WorkContext.ShopConfig.ShopName" data-seller="123456789" class="coupons-selector hide"><span>领券</span></a>
+        </div>
+        <ul class="cart_ul">
+            @foreach (Yitao.Core.CartGoodItemInfo info in Model.CartInfo.CartProductList)
+            {
+                <li class="cart_li rel" data-item-id="@info.itemNO" data-item-price="@info.SalePrice.ToString("0.00")" data-current-num="@info.Quantity">
+                    @if (info.Fail != "1")
+                    {
+                        <mark class="cart_mask abs @(info.IsCheck == "1" ? "already_mask" : "")"><span>&nbsp;</span></mark>
+                    }
+
+                    <a href="/m/catalog/GoodsDetail?id=@info.ProductId" class="cart_img abs">
+                        <img src="/upload/product/show/thumb70_70/@info.ImgUrl" width="60" height="60" />
+                    </a>
+                    <a href="/m/catalog/GoodsDetail?id=@info.ProductId" class="cart_tle over_hidden">@info.ProductName</a>
+                    <p class="cart_cls over_hidden ellipsis">@info.SkuSpec</p>
+                    <div class="control_count">
+                        <div class="left"><span class="i_pri">¥@info.SalePrice.ToString("0.00")</span></div>
+                        <div class="control_num right c_txt bold">
+                            <a class="control_num_sub block"><span>–</span></a>
+                            <input type="tel" class="item_num  c_txt block " value="@info.Quantity" data-itemNO="@info.itemNO" data-stock="@info.Stock">
+                            <a class="control_num_add block"><span>+</span></a>
+                        </div>
+                    </div>
+                    <div class="less-stock "><span class="right">仅剩@{@info.Stock}件</span></div>
+                </li>
+            }
+            @foreach (Yitao.Core.CartFullCutInfo cutInfo in Model.CartInfo.CartFullCutList)
+            {
+                <div class="actbox">
+                    <div class="left">
+                        <span class="hl-green">满减</span>
+                        @if (cutInfo.IsEnough)
+                        {
+                            @Html.Raw("已参加" + cutInfo.FullCutPromotionInfo.ActivityTitle);
+                        }
+                        else
+                        {
+                            @Html.Raw(cutInfo.FullCutPromotionInfo.ActivityTitle);
+                        }
+                    </div>
+                    <div class="right"><em>小计：￥@{@Html.Raw((cutInfo.ProductAmount-cutInfo.CutMoney).ToString("0.00"));}</em></div>
+                    <div class="clr"></div>
+                </div>
+                foreach (Yitao.Core.CartGoodItemInfo info in cutInfo.FullCutCartProductList)
+                {
+                    <li class="cart_li rel" data-item-id="@info.itemNO" data-item-price="@info.SalePrice.ToString("0.00")" data-current-num="@info.Quantity">
+                        @if (info.Fail != "1")
+                        {
+                            <mark class="cart_mask abs @(info.IsCheck == "1" ? "already_mask" : "")"><span>&nbsp;</span></mark>
+                        }
+
+                        <a href="/m/catalog/GoodsDetail?id=@info.ProductId" class="cart_img abs">
+                            <img src="/upload/product/show/thumb70_70/@info.ImgUrl" width="60" height="60" />
+                        </a>
+                        <a href="/m/catalog/GoodsDetail?id=@info.ProductId" class="cart_tle over_hidden">@info.ProductName</a>
+                        <p class="cart_cls over_hidden ellipsis">@info.SkuSpec</p>
+                        <div class="control_count">
+                            <div class="left"><span class="i_pri">¥@info.SalePrice.ToString("0.00")</span></div>
+                            <div class="control_num right c_txt bold">
+                                <a class="control_num_sub block"><span>–</span></a>
+                                <input type="tel" class="item_num  c_txt block " value="@info.Quantity" data-itemNO="@info.itemNO" data-stock="@info.Stock">
+                                <a class="control_num_add block"><span>+</span></a>
+                            </div>
+                        </div>
+                        <div class="less-stock @if (info.Stock > 10) { <text>hide</text> }"><span class="right">仅剩@{@info.Stock}件</span></div>
+                    </li>
+                }
+
+            }
+        </ul>
+        <div class="cart_fix_footer wrap">
+            <div class="cart_fix_footer_wrap margin_auto wrap">
+                <div class="cart_fix_footer_inner rel">
+                    <a class="do_buy btnok right @if(Model.SelectedTotalCount==0){<text>checkout-disable</text>}">去结算(<em class="cash_count">@Model.SelectedTotalCount</em>)</a>
+<div class="mycart_money right">
+                        <div class="sum-total">总计(不含运费) :&nbsp;<span class="money_count i_pri">￥@Model.OrderAmount.ToString()</span></div> 
+                        <div class="no-express">总额:¥@Model.ProductAmount.ToString("0.00") &nbsp; 立减:¥@Model.FullCut.ToString("0.00")</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

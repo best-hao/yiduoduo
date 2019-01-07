@@ -1,0 +1,251 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta content="telephone=no" name="format-detection">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<title>排行榜</title>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css?v=0.15"/>
+		<script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/swipe.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/loading.css"/>
+		<style type="text/css">
+			.ell-1{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+			.ell-2{overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+			.color{color: #ff4800;}
+			.bg{background: #ff4800;}
+			.gary{color: #999;}
+			.common-header{position: relative; background: #fff;height: 0.8rem;line-height: 0.8rem;margin-bottom: 0.06rem; -moz-box-shadow:0px 2px 10px #d9d9d9; -webkit-box-shadow:0px 2px 10px #d9d9d9; box-shadow:0px 2px 10px #d9d9d9;}
+			.common-header .title{text-align: center;padding: 0 1rem;color: #ff4800;font-size: 0.36rem;}
+			.common-header .header-back{position: absolute;top: 0;left: 0;width: .6rem;text-align: center;}
+			.common-header .header-menu{position: absolute;top: 0;right: 0;width: .6rem;text-align: center;}
+			.shade{display: none; position: fixed;width: 7.5rem;height: 100%; top: 0;left: 50%;margin-left: -3.75rem;background: rgba(0,0,0,0.7);z-index: 100;}
+			.shade-mask{position: absolute;width: 100%;height: 100%; top: 0;left: 0;z-index: 101;}
+			.shade-content{position: absolute;bottom: 0;left: 0;height: 8rem;background: #fff;z-index: 102;}
+			.weui_dialog_hd{padding: 0;}
+			.weui_toast{padding: 0 15px;font-size: 0.32rem;}
+
+			li{list-style: none;}
+			.xsg-detail{width: 7.5rem;font-size: 12px;margin: 0 auto;color: #333;font-family: "微软雅黑";}
+			.main{margin-bottom: 55px;}
+			.mark{padding: 2px 3px;background: #ff4800;color: #fff;font-size: 0.24rem;font-weight: bold;border-radius: 5px;}
+			.score{color: #999;font-size: 12px;}
+			.shop-sales{font-size: 0.24rem;color: #999;}
+			.detail img{max-width: 100% !important;height: auto !important;}
+			.section{padding: 0.2rem 0.2rem 0 0.2rem;background: #faf4f4;}
+			.fb{font-size: 0.32rem;}
+			.icon {
+	          /* 通过设置 font-size 来改变图标大小 */
+	          width: 1em; height: 1em;
+	          /* 图标和文字相邻时，垂直对齐 */
+	          vertical-align: -0.15em;
+	          /* 通过设置 color 来改变 SVG 的颜色/fill */
+	          fill: currentColor;
+	          /* path 和 stroke 溢出 viewBox 部分在 IE 下会显示
+	             normalize.css 中也包含这行 */
+	          overflow: hidden;
+	        }
+	        .main li{position: relative;margin-bottom: 0.1rem;}
+	        .weui_cells{margin-top: 0;}
+	        .weui_cells:after, .weui_cells:before{border: 0;height: 0;}
+	        .shop-box{padding-left: 0.6rem;background: #fff;}
+	        .num-mark-box{position: absolute;top: -0.16rem;left: 0.1rem;}
+	        .mark-span{position: relative;}
+	        .num-mark{color: #ff4800;font-size: 0.52rem;}
+	        .shop-title{width: 3.7rem;}
+	        .mark-num{position: absolute;color: #fff;top: 0.18rem;left: -1px;width: 0.52rem;height: 0.52rem;z-index: 10;text-align: center;}
+	        .fav{font-size: 0.24rem;border: 1px solid #999;padding: 0.06rem 0.15rem;border-radius: 15px;color: #999;}
+	        .fav .iconfont{margin-right: 0.1rem;}
+	        .fav.select{color: #ff4800;border-color: #ff4800;}
+	        .product-box{background: #fff;padding: 0 0.05rem;}
+	        .product-box img{width: 1.5rem;display: block;margin: 0 auto;-moz-box-shadow:1px 0px 10px #d9d9d9; -webkit-box-shadow:1px 0px 10px #d9d9d9; box-shadow:1px 0px 10px #d9d9d9;}
+	        .product-box a{display: block;padding: 0.2rem 0.1rem;}
+	        .footer-bar{text-align: center;position: fixed;width: 7.5rem;height: 0.8rem;line-height: 0.8rem;background: #fff;bottom: 0;left: 50%;margin-left: -3.75rem;font-size: 0.32rem;color: #666;}
+	        .footer-bar a{color: #666;}
+	        .footer-bar .cur{color: #fff;background: #ff4800;}
+	        .footer-bar .icon{font-size: 0.4rem;}
+	        .weui_cell a{color: #666;}
+		</style>
+		
+	</head>
+	<body>
+		<div class="curtain hide">
+			<div class="loader Rotation"></div>
+			<div class="loadTit"><icon class='icon iconfont'>&#xe649;</icon></div>
+		</div>
+		<div class="xsg-detail" id="top">
+			<div class="common-header"> 
+				<div class="header-back" onclick="goToBack()"><span class="icon iconfont">&#xe60e;</span></div>
+			    <div class="title ell-1">排行榜</div> 
+			    <!--<div class="header-menu"><span class="icon iconfont">&#xe620;</span></div>-->
+		    </div>
+		    <div class="main">
+				<ul>
+					<li class="shop-li" v-for="(item, index) of list" :key="index">
+						<div class="num-mark-box">
+							<div class="mark-span">
+								<span class="icon iconfont num-mark">&#xe77e;</span>
+								<div class="mark-num">{{index+1}}</div>
+							</div>
+						</div>
+						<div class="shop-box">
+							<div class="weui_cells">         
+					            <div class="weui_cell">
+					                <div class="weui_cell_hd">
+					                	<a :href="'/m/shop/detail?id='+item.shopinfo.shopid">
+					                		<img :src="'@(WorkContext.ShopConfig.ImageCDN)'+item.shopinfo.logo+'?w=100&h=100'" alt="" style="width:40px;margin-right:5px;display:block">
+					                	</a>
+					                </div>
+					                <div class="weui_cell_bd weui_cell_primary">
+					                	<a :href="'/m/shop/detail?id='+item.shopinfo.shopid">
+					                		<p class="shop-title ell-1">{{item.shopinfo.shopname}}</p>
+					                		<p class="shop-sales">成交{{item.salecountsum}}笔</p>
+					                	</a>
+					                </div>
+					                <div class="weui_cell_ft">
+					                	<span class="fav" v-on:click="favGoods(item, index)" v-if="Number(item.isfavorite)==0"><span class="icon iconfont">&#xe617;</span>关注</span>
+					                	<span class="fav select" v-on:click="favGoods(item, index)" v-else-if="Number(item.isfavorite)==1"><span class="icon iconfont">&#xe618;</span>关注</span>
+					                </div>
+					            </div>
+					        </div>
+						</div>
+						<div class="product-box">
+							<ul>
+								<li>
+									<div class="weui-flex" >
+										<div class="weui-flex-item" v-for="(itemLi, indexLi) of item.productlist">
+											<a :href="'/m/product/detail?id='+itemLi.productid">
+												<img v-if="itemLi.picurl==''" src="/Images/Mobile/statistic/nopicture.jpg"/>
+												<img v-else :src="'@(WorkContext.ShopConfig.ImageCDN)'+itemLi.picurl+'?w=100&h=100'"/>
+											</a>
+										</div>
+										<div class="weui-flex-item" v-show="item.productlist.length==1 || item.productlist.length==2 || item.productlist.length==3">
+											
+										</div>
+										<div class="weui-flex-item" v-show="item.productlist.length==1 || item.productlist.length==2">
+											
+										</div>
+										<div class="weui-flex-item" v-show="item.productlist.length==1">
+											
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</li>
+					
+					
+					
+				</ul>
+		    </div>
+			<div class="footer-bar">
+				<div class="weui-flex">
+					<a href="/m/statistic/ProductTop?IsApp=@WorkContext.IsApp" class="weui-flex-item">
+						<span class="icon iconfont">&#xe672;</span>
+						<span>热卖榜</span>
+					</a>
+					<a href="/m/statistic/shoptop?IsApp=@WorkContext.IsApp" class="weui-flex-item cur">
+						<span class="icon iconfont">&#xe66d;</span>
+						<span>店铺榜</span>
+					</a>
+				</div>
+			</div>
+		</div>
+		
+		<script src="/Js/Mobile/vue.js"></script>
+		<script type="text/javascript">
+			var IsApp = "@WorkContext.IsApp";
+			$('.curtain').removeClass("hide");
+			var isWeixin = "@WebHelper.IsWeiXin()";
+			var SkuId = [];
+			var SkuName = [];
+			//返回交互
+			function goToBack() {
+				if(IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+		                window.js.goBack();
+					}
+				}else{
+					window.location.href="/m/home/index";
+				}
+			}
+			
+			var vm = new Vue({
+				el: "#top",
+				data:{
+					list: []
+				},
+				created: function() {
+					this.getData();
+				},
+				methods: {
+					getData: function() {
+						var _this=this;
+    					$.ajax({
+							type: "get",
+							url: '/Api/Statistic/ShopTop?UserId=@(@WorkContext.Uid)',
+							async: true,
+							dataType: "json",
+							success: function(rel) {
+								$('.curtain').addClass("hide");
+								if(rel.code==1){
+									_this.list = rel.data;
+								}
+							}
+						});
+					},
+					favGoods: function(item,index) {
+						var _this=this;
+    					$.ajax({
+							type: "get",
+							url: "/Api/Shop/SetFavoriteShop?UserId="+'@WorkContext.Uid'+'&ShopId='+item.shopinfo.shopid,
+							async: true,
+							dataType: "json",
+							success: function(rel) {
+								if(rel.code==1){
+									
+									if(Number(item.isfavorite)==1){
+										$(".shop-li").eq(index).find(".fav").removeClass("select");
+										$(".shop-li").eq(index).find(".fav .iconfont").html("&#xe617;");
+										$.toast('取消收藏');	
+										item.isfavorite = 0;
+									}else if(Number(item.isfavorite)==0){
+										$(".shop-li").eq(index).find(".fav").addClass("select");
+										$(".shop-li").eq(index).find(".fav .iconfont").html("&#xe618;");
+										$.toast('收藏成功');
+										item.isfavorite = 1;
+									}
+								}else{
+									$.toast("登录后收藏店铺", "cancel");
+									$.confirm("去登录后收藏店铺", "您还未登录", function() {
+							            var url;
+										if(isWeixin=="False"){
+											url = '/m/account/login?returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/statistic/shoptop?IsApp=@{@WorkContext.IsApp}';
+										}else{
+											url = '/m/user/bind&returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/statistic/shoptop?IsApp=@{@WorkContext.IsApp}';
+										}
+										window.location.href = url;
+							        }, function() {
+							            //取消操作
+							        });
+	                            	return false;
+								}
+							}
+						});
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

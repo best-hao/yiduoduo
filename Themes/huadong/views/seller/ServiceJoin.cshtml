@@ -1,0 +1,268 @@
+﻿@{
+    Layout = null;
+}
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+	    <meta content="telephone=no" name="format-detection">
+	    <meta name="apple-touch-fullscreen" content="yes">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <title>服务中心-@(WorkContext.SellerInfo.SellerName)</title>
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/weui.css" />
+	    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/weui2.css" />
+	    <script src="/Mobile/Themes/huadong/static/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/Themes/huadong/static/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/Themes/huadong/static/weui/picker.js"></script>
+		<script src="/Mobile/Themes/huadong/static/weui/picker-city.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<style type="text/css">
+			body{background: #fff;width: 7.5rem;margin: 0 auto;}
+			.apply-area-box{font-size: 0.24rem;margin-top: 0.6rem;}
+			a.apply:active{color: #fff;}
+			.weui-header{background: #fff;color: #666;font-size: 0.28rem;font-family: "微软雅黑";border-bottom: 1px solid #f2f2f2;}
+			.weui-header a{color: #666;}
+			.weui-header .weui-header-left a{color: #666;}
+			.weui-header .weui-header-title, .weui-header h1{color: #666;}
+			.weui-picker-modal{background: #fff;height: 208px;}
+			.weui-picker-modal .toolbar-inner{height: 35.2px;}
+			.weui-picker-modal .picker-modal-inner{height: 172.8px;}
+			.applay-detail{font-size: 0.24rem;margin-top: 0.6rem;}
+			.title{height: 0.7rem;line-height: 0.7rem;padding: 0 0.4rem;font-size: 0.32rem;font-weight: 600;}
+			.weui_cell:after,.weui_cell:before{border: 0;height: 0;}
+			.weui_cell{padding: 0 0.56rem;height: 0.8rem;line-height: 0.8rem;}
+			.weui_label{color: #666;width: 1rem;}
+			.weui_cell_primary{position: relative;}
+			.weui_cell_primary:after{position: absolute;bottom: 0;left: 0;height: 1px;width: 5.2rem;background: #f2f2f2;content: "";}
+			.weui_input{width: 100%;height: 0.8rem;line-height: 0.8rem;text-align: center;border: 0;outline: none;}
+			.text-box{width: 6.8rem;margin: 0 auto;height: 3rem;margin: 0.2rem auto;}
+			textarea{width: 6.34rem;display: block;outline: none;border-color: #f2f2f2;height: 3rem;padding: 0.2rem;}
+			.text-num{text-align: right;color: #f00;}
+			.confirm{width: 6.8rem;margin: 1.2rem auto 0.8rem auto; height: 0.9rem;line-height: 0.9rem;text-align: center;color: #fff;background: #E02E24;font-size: 0.4rem;border-radius: 0.5rem}
+			.input-shade-parent{position: relative;}
+			.input-shade{width: 100%;height: 0.8rem;line-height: 0.8rem;position: absolute;top: 0;left: 0;z-index: 10;}
+			
+			.weui_mask_transparent *{font-size: 0.32rem;}
+			.weui_toast{font-size: 0.32rem;padding: 0;width: 2.6rem;height: 2.4rem;padding: 0 0.2rem 0.4rem 0.2rem;}
+			.weui_dialog_hd{padding: 0;}
+		</style>
+	</head>
+	<body>
+		<div id="apply-code">
+			<div class="weui-header"> 
+	    		<div class="weui-header-left"> <a href="javascript:;" onclick="goToBack()" class="icon icon-109"></a>  </div>
+				<h1 class="weui-header-title">申请服务中心</h1>
+	    		<div class="weui-header-right"></div> 
+	        </div>
+			<div class="apply-area-box">
+				<div class="title">申请区域</div>
+				<div class="weui_cell">
+	                <div class="weui_cell_hd"><label for="" class="weui_label">选择省:</label></div>
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <!--<input class="weui_input" type="text" v-model="curProvince" id='prov'/>-->
+	                    <select name="" class="weui_select"  v-on:change="initCity()" v-model="curProvinceId">
+	                    	<option value="">选择省</option>
+	                    	<option v-for="(item, index) of provinceList" :value="item.regionid" v-text="item.regionname"></option>
+	                    </select>
+	                </div>
+	            </div>
+	            <div class="weui_cell">
+	                <div class="weui_cell_hd"><label for="" class="weui_label">选择市:</label></div>
+	                <div class="weui_cell_bd weui_cell_primary input-shade-parent input-city">
+	                    <!--<input class="weui_input" type="text"  id='city'/>
+	                    <div class="input-shade" v-show="curProvinceId==0" v-on:click="clickCity()"></div>-->
+	                    <select name="" class="weui_select" v-on:change="initCounty()" v-model="curCityId">
+	                    	<option value="">选择市</option>
+	                    	<option v-for="(item, index) of cityList" :value="item.regionid" v-text="item.regionname"></option>
+	                    </select>
+	                </div>
+	            </div> 
+	            <div class="weui_cell">
+	                <div class="weui_cell_hd"><label for="" class="weui_label">选择区:</label></div>
+	                <div class="weui_cell_bd weui_cell_primary input-shade-parent input-county">
+	                    <!--<input class="weui_input" type="text" id='county'/>-->
+	                    <select name="" class="weui_select"  v-model="curCountyId">
+	                    	<option value="">选择区</option>
+	                    	<option v-for="(item, index) of countyList" :value="item.regionid" v-text="item.regionname"></option>
+	                    </select>
+	                </div>
+	            </div> 
+			</div>
+			<div class="applay-detail">
+				<div class="title">申请意愿</div>
+				<div class="text-box">
+					<textarea name="" v-model="description" v-on:input="textChange()" placeholder="简单描述一下您的申请意愿吧" maxlength="50"></textarea>
+					<div class="text-num">
+						已输入<span v-text="length"></span>字 / 最多50字
+					</div>
+				</div>
+			</div>
+			<div class="btn confirm" v-on:click="confirm()">确定申请</div>
+		</div>
+		
+		<script type="text/javascript">
+			
+			var IsApp = "@WorkContext.IsApp";
+			function goToBack() {
+				if(IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+						window.js.goBack();
+					}
+				}else{
+					window.history.back();
+				}
+					
+			}
+			var vm = new Vue({
+				el: "#apply-code",
+				data: {
+					userId: "@WorkContext.Uid",
+					curProvinceId: "",
+					curCityId: "",
+					curCountyId: "",
+					description: "",
+					length: 0,
+					provinceList: [],
+					cityList: [],
+					countyList: []
+				},
+				created: function() {
+					this.initProvince();
+					this.initCity();
+				},
+				methods: {
+					
+					
+					initProvince: function() {
+						var _this = this;
+		    			$.ajax({
+		    				type:"get",
+		    				url:"/Api/User/GetProvinceList",
+		    				async:true,
+		    				dataType:"json",
+		    				success: function(rel) {
+		    					if(rel.code==1){
+		    						_this.provinceList = rel.data;
+		    					}
+		    				}
+		    			});
+					},
+					initCity: function() {
+						
+						var _this = this;
+						_this.curCityId = "";
+						_this.curCountyId = "";
+						$.ajax({
+							type:"get",
+							url:"/Api/User/GetCityList?Province="+_this.curProvinceId,
+							async:true,
+							dataType:"json",
+							success: function(rel) {
+								if(rel.code==1){
+									_this.cityList = rel.data;
+								}
+							}
+						});
+					},
+					initCounty: function() {
+						var _this = this;
+						console.log(_this.curCityId);
+						if(_this.curCityId){
+							$.ajax({
+								type:"get",
+								url:"/Api/User/GetCountyList?City="+_this.curCityId,
+								async:true,
+								dataType:"json",
+								success: function(rel) {
+									if(rel.code==1){
+										_this.countyList = rel.data;
+									}
+								}
+							});
+						}
+					},
+					
+					confirm: function() {
+						var _this = this;
+						if(!_this.curProvinceId){
+							$.toast("省必选","cancel");
+							return false;
+						}
+						if(_this.description==""){
+							$.toast("意愿未填写","cancel");
+							return false;
+						}
+						/*$.alert("后续功能开发中，可以先浏览服务中心页面",function(){
+							window.location.href = "/m/seller/service";
+						});*/
+						$.ajax({
+							type: "post",
+							url: "/Api/Seller/AgentJoin",
+							async: true,
+							data: {UserId: _this.userId, ApplyContent: _this.description, Province:_this.curProvinceId, City: _this.curCityId, County: _this.curCountyId},
+							success: function(rel) {
+								if(rel.code==1){
+									$.alert("申请成功",function(){
+										window.location.href = "/m/usercenter/home";
+									});
+								}else{
+									$.alert(rel.message);
+								}
+							}
+						});
+					},
+					textChange: function() {
+						this.length = this.description.length;
+					}
+				}
+			});
+			$(function(){
+				/*$("#prov").picker({
+			        title: "请选择省",
+			        toolbarCloseText:'确定',
+			        cols: [
+			          {
+			            textAlign: 'center',
+			            values: vm.provinceId,
+			            displayValues: vm.provinceName,
+			          }
+			        ],
+			        onChange: function(data){
+			        	vm.curProvince = data.displayValue;
+			        	vm.curProvinceId = data.value[0];
+			        	$(".input-shade-parent.input-city").html('<input class="weui_input" type="text"  id="city"/>');
+			        	vm.initCity();
+			        }
+			        
+			    });*/
+			    
+			    
+			    /*$("#county").picker({
+			        title: "请选择区",
+			        toolbarCloseText:'确定',
+			        cols: [
+			          {
+			            textAlign: 'center',
+			            values: vm.countyId,
+			            displayValues: vm.countyName,
+			          }
+			        ],
+			        onChange: function(data){
+			        	vm.curCounty = data.displayValue;
+			        	vm.curCountyId = data.value[0];
+			        }
+			    });*/
+			})
+		</script>
+	</body>
+</html>
+

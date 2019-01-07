@@ -1,0 +1,156 @@
+﻿<div class="viewport">
+    <style>
+        .weui_mask{
+            z-index: 50;
+        }
+        .weui-custom-pop .weui_input{
+            border: 1px solid #e1e1e1;
+            font-size: 0.9rem;
+            line-height: 2.8rem;
+            height: 2rem;
+        }
+        .weui-custom-ft a{
+            color: #EF655E;
+        }
+         .weui-custom-ft a:first-child{
+             color: #04be02;
+         }
+         .weui-custom-pop{
+             top: 40%;
+         }
+         .weui-dialog-visible{
+             z-index: 55;
+         }
+         .getCode{
+             position: absolute;
+    right: 1rem;
+    top: 0;
+    font-size: 0.8rem;
+    line-height: 1rem;
+    padding: 0.48rem 0.8rem;
+    background: #04be02;
+    color: #fff;
+    border-radius: 2px 4px 2px 2px;
+         }
+         .disableds{
+                 background: #e2e2e2 !important;
+    color: #666 !important;
+         }
+         .weui-custom-bd{
+             position: relative;
+         }
+    </style>
+<div class="weui_mask weui_mask_visible"></div>
+         <div class="weui-custom-pop weui-dialog-visible">
+        <div class="close" onclick="hidemark()"><i class="icon icon-95 f25" onclick="goHome()"></i></div>
+     	<div class="weui-custom-hd">手机验证</div>
+     	<div class="weui-custom-bd">
+     		<input type="tel" class="weui_input" id="my_phone" placeholder="手机号">
+     		
+     	</div>
+     		<div class="weui-custom-bd">
+     	<input type="text" class="weui_input" id="my_password" placeholder="验证码">
+         <div class="getCode" onclick="getCodes(this)">发送验证码</div>
+     	</div>
+     	<div class="weui-custom-ft">
+     		<a href="javascript:hidemark();">取消</a>
+     		<a href="javascript:bang();">确定</a>
+     	</div>
+     </div>
+<script>
+    function goHome(){
+        window.location.href ="/m/";
+    };
+    
+  var bangding = false;
+  function hidemark(){
+       $("body .viewport").css({
+           "display":"none"
+       });
+  };
+  function bang(){
+      var phone = $("#my_phone").val();
+      var password = $("#my_password").val();
+        if(IsTel(phone)){
+             $.ajax({
+                    type: "post",
+                    url: "/m/tool/BindUser",
+                    async: true,
+                    data: { phone: phone, code: password },
+                    dataType: "json",
+                   success: function (rel) {
+                            console.log(rel);
+                            if(rel.Code == 1){
+                                // 验证通过
+                                bangding = true;
+                                $("body .viewport").css({
+                                    "display":"none"
+                                });
+                            }else{
+                                // 验证不通过
+                                 $.toast(rel.Message);
+                            }
+                        }
+                    });
+        }else{
+            $.toast("手机号错误");
+        };
+            
+  };
+   //手机验证函数
+    function IsTel(Tel) {
+        var re = new RegExp(/^1(3|4|5|7|8)\d{9}$/);
+        var retu = Tel.match(re);
+        if (retu) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+ //  60秒倒計時
+var ints ;
+ function getCodes(_this){
+     if($(_this).hasClass("disableds")){
+         
+
+
+     }else{
+
+         var phone = $("#my_phone").val();
+         if(IsTel(phone)){
+             $.ajax({
+                    type: "post",
+                    url: "/m/tool/SendCode",
+                    async: false,
+                    data: { phone: phone },
+                    dataType: "json",
+                    success: function (rel) {
+                    }
+                });
+                ints = setInterval("ClearTime()", 1000);
+               $(_this).addClass("disableds");
+         }else{
+             $.toast("手机号有误");
+         };
+          
+     };
+     
+ };
+//  倒计时
+var time = 60;
+function ClearTime() {
+	if(time == 1) {
+		$(".getCode").text("已过期,点击刷新");	
+		clearInterval(ints);
+        $(".getCode").removeClass("disableds");
+        time = 60;
+       
+	} else {
+		time--;
+		$(".getCode").text(time+ "秒后重新获取");
+		
+	};
+};
+//	clearInterval(ints)
+</script>
+</div>

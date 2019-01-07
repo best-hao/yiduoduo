@@ -1,0 +1,290 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <title>商品详情-@(WorkContext.SellerInfo.SellerName)</title>
+    <link rel="stylesheet"  href="/Css/Mobile/shop/seller.css" /> 
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+   <!-- <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weuix.min.css" />-->
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/icon.css" />
+   <link rel="stylesheet" type="text/css" href="/Css/Mobile/swiper.min.css" />
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>   
+    <script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+      <script src="/Mobile/Themes/huadong/static/weui/swiper.min.js" type="text/javascript" charset="utf-8"></script> 
+    <script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>  
+   <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=rSyNW0D8ZGFaYkuIiKv5jxeal4SU3vLW"></script>
+   <link rel="stylesheet" type="text/css" href="/Css/Mobile/home.css" />
+   <style>
+   	.storecur1{
+   		top:0
+   	}
+   </style>
+</head>
+<body >
+<div id="app" style='display: none;'>
+    @{
+        Yitao.Core.SellerInfo sellerInfo = ViewData["SellerInfo"] as Yitao.Core.SellerInfo;
+    }
+		<div v-if='isShow' v-cloak style='width:7.5rem;margin:0 auto;margin-bottom:50px;'>
+		<header>
+			<div class="bg-white weui-header "> 
+		  		<div class="weui-header-left"> <a class="icon icon-109 fl333" onclick="goToBack()"></a>  </div>
+                <h1 class="weui-header-title fl333" style='color:#333'>{{sellerDetail.ShopName}}</h1>
+		    	<!--<div class="weui-header-right"><a class="icon icon-49 fl333" id="del"></a> <a class="icon icon-41 fl333" id="del"></a></div>--> 
+	    	</div>  
+		</header>
+		 <div class="swiper-container" style='background: #fff;margin-top:0.92rem;height:4.8rem;' v-if='bannerList.length>0'>
+	         <div class="swiper-wrapper">
+	             <div class="swiper-slide" style='height:4.8rem' v-for='(item,index) in bannerList'><img :src="'@(WorkContext.ShopConfig.ImageCDN)'+item.imgurl+'?w=750&mode=max'" alt=""></div>
+	         </div>
+             <div class="swiper-pagination"></div>
+        </div>
+        <div class="swiper-container" style='background: #fff;' v-else>
+	         <div class="swiper-wrapper">
+	             <div class="swiper-slide" style='height:4.8rem'><img src="/Images/Mobile/noimg.jpg" alt=""></div>
+	             <!--<div class="swiper-slide"><img src="http://m.huadong518.com/uploads/supperimg/20180616/534e411d64b7c5b9e027c7afe16fedf2.jpg" alt=""></div>-->
+	         </div>
+	         <div class="swiper-pagination"></div>
+        </div>
+        <!--内容-->
+        <div style='background: #fff;'>        	
+        	<div class="storename">
+				<div>{{sellerDetail.ShopName}}<br />
+					<div class="seller-star">
+						<span class="starBg">
+						  <span class="star" style="width: 100%;" v-if='sellerDetail.StarNum==0'></span>
+						  <span class="star" v-bind:style="{width:sellerDetail.StarCount*20+'%'}" v-else></span>
+						</span>
+						<span class="ml10 black9" v-if='sellerDetail.StarNum==0'>5.0分</span> 
+						<span class="ml10 black9" v-else v-text='Number(sellerDetail.StarCount).toFixed(1)+"分"'></span> 
+					</div>
+					
+				</div>
+				<div class="storecur1">
+					<span>让利</span>
+					<span>{{sellerDetail.Profits}}%</span>
+				</div>
+			</div>
+			<!--地址-->
+			<div class='selleraddr'>
+				<div><icon class='icon icon-68'></icon>{{sellerDetail.Address}}</div>
+				<input type="hidden" name="phone" id="phone"  v-model='sellerDetail.Mobile'/>
+                <div v-on:click="callPhone(sellerDetail.Mobile)"><a href="javascript:;"><icon class='icon icon-104'></icon></a></div>
+                <!--<div v-on:click="callPhonev(sellerDetail.Mobile)"><a href="javascript:;"><icon class='icon icon-104'></icon></a></div>-->
+			</div>
+			<div class='sellertime'>
+				<div><icon class='icon icon-50'></icon>营业时间:{{sellerDetail.WorkTimeStart}}-{{sellerDetail.WorkTimeEnd}}</div>
+				<div><a href='javascript:;' v-on:click='maidanbtn()' class='btn'>买单</a></div>
+			</div>
+			<div class='sellerhome' v-on:click='toIndex()'>
+				<div><icon class='icon icon-29'></icon>商户：@(sellerInfo.SellerName)</div>
+				<div>
+				    <a class='btn' href="javascript:;"></a>
+					<icon class='icon icon-108'></icon>
+				</div>
+			</div>
+			<div class='sellerpeo'>
+				已有<span>{{sellerDetail.StarNum}}</span>人光临本店
+			</div>
+			<div class="seller_star_box">
+				<span class="ml10 black9">总体评分：</span>
+				<span class="starBg">
+					<span class="star" style="width: 100%;" v-if='sellerDetail.StarNum==0'></span>
+					<span class="star" v-bind:style="{width:sellerDetail.StarCount*20+'%'}" v-else></span>
+				</span>
+				<span class="ml10 black9" v-if='sellerDetail.StarNum==0'>5.0分</span> 
+				<span class="ml10 black9" v-else v-text='Number(sellerDetail.StarCount).toFixed(1)+"分"'></span> 
+				
+			</div>
+			<div class="seller_introduction">
+				<div class='intrtitle'>商家简介：</div>
+				<div class='intrcon'>{{sellerDetail.Description}}</div>				
+			</div>
+        </div>
+        <div class='sellerfooter'>
+        	<!--<div><icon class='icon icon-65'></icon>1赞</div>-->
+        	<div v-on:click='clickapi()' style='width:7.5rem'>
+        		<icon class='icon icon-103'></icon> 去这里</div>
+        </div>
+       
+     </div>
+     </div>
+
+<script>
+	var IsApp = "@WorkContext.IsApp";
+	function goToBack() {
+		var _this = this;
+		if(IsApp==1){
+			if(navigator.userAgent.indexOf("iPhone")>0){
+				gobacklastpage();
+			}
+			if(navigator.userAgent.indexOf("Android")>0){
+				window.js.goBack();
+			}
+		}else{
+			window.history.back();
+		}
+	}
+//     function callPhone(){
+//				var _this = this;
+//				var phone=$('#phone').val(); 
+//				if(IsApp==1){
+//					if(navigator.userAgent.indexOf("iPhone")>0){
+//		                callPhone(vm.sellerDetail.Mobile.toString())
+//					}
+//					if(navigator.userAgent.indexOf("Android")>0){
+//						window.js.callPhone(phone)
+//					}
+//				}else{
+//					window.location.href='tel://'+phone;
+//				}
+//	}
+	
+	$.showLoading();
+     var vm = new Vue({
+     	el: '#app',
+     	data:{
+     		sellerDetail:{},//商铺基本详情
+     		id:'@ViewData["ShopId"]',
+     		isShow:false,
+     		bannerList:[],//店铺相册
+     		IsApp :"@WorkContext.IsApp",
+     	},
+     	methods:{
+     		callPhone:function(phone){
+				var _this = this;
+				if(_this.IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+		                callPhone(Number(phone));
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+						window.js.callPhone(phone)
+					}
+				}else{
+					window.location.href='tel://'+phone;
+				}
+	        },
+     		toIndex:function(){
+     			window.location.href='/m/shop/index?shopid='+this.id+'&IsApp='+this.IsApp
+     		},
+     		maidanbtn:function(){
+     			var _this=this;
+     			var device = "@WebHelper.IsWeiXin()"; 
+        		if(device=="False"){
+        			
+//      			$.alert(@WorkContext.IsApp);
+//      			return false;
+        			if(@ViewData["IsApp"]==1){
+        				if(navigator.userAgent.indexOf("iPhone")>0){
+        					goToPurchaseOrderWithShopid(_this.id, _this.sellerDetail.Logo, _this.sellerDetail.Profits, _this.sellerDetail.ShopName);
+			   			}
+			   			else if(navigator.userAgent.indexOf("Android")>0){
+			   				window.js.payOffLineOrder(_this.id, _this.sellerDetail.Logo, _this.sellerDetail.Profits, _this.sellerDetail.ShopName);
+			   			}
+			   			
+        			}else{
+			   				var url="/m/settlement/shoppay?shopid="+_this.id;
+	        				window.location.href=url;
+			   		}
+        			
+        		}else{
+        			var url="/m/settlement/shoppay?shopid="+_this.id;
+        			window.location.href=url;
+        		}
+     		},
+     		getdata:function(){//获取商品详情
+     			var _this=this;
+     			 $.ajax({
+		    			type:"post",
+		    			url:"/m/Shop/detail?v="+Math.random(),
+		    			data:{
+		    				shopid:_this.id
+		    			},
+		    			async:true,
+		    			success: function(rel){
+		    				console.log(JSON.parse(rel));
+		    				var data=JSON.parse(rel).Data;		    				
+		    				data.starscore=(data.Star1*50+data.Star2*25+data.Star3*15+data.Star4*5+data.Star5*5)/data.StarNum;
+		    				_this.sellerDetail=data;
+		    				console.log(_this.sellerDetail)
+		    			}
+		    		});
+     		},
+     		initslider:function(){
+     			
+     		},
+     		getbanner:function(){
+     			var _this=this;
+     			 $.ajax({
+		    			type:"get",
+		    			url:"/Api/Tool/GetPics?v="+Math.random()+"&ItemType=10&ItemId="+_this.id,		    			
+		    			async:true,
+		    			success: function(rel){
+		    				console.log(rel.data);
+		    				_this.bannerList=rel.data;
+		    				   
+		    			}
+		    		});
+     		},
+     		clickapi:function(){//去哪里
+ 			var _this=this;
+ 			var data=_this.sellerDetail;
+ 			if(_this.IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+		                openThreeMap(data.Latitude,data.Longitude,data.Address);
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+	       			    window.js.openThreeMap(data.Latitude,data.Longitude,data.Address);
+					}
+				}else{
+					var url='http://api.map.baidu.com/geocoder?location='+data.Latitude+','+data.Longitude+'&coord_type=gcj02&output=html&src='+data.Address;
+	       			window.location.href=url;
+			    }
+ 			
+            
+     		},
+     	},
+     	mounted:function(){
+     		var _this=this;
+     		_this.getdata();
+     		_this.getbanner();
+     		
+     	},
+     	created:function(){
+	    	var _this=this;
+	    	_this.isShow=true;
+       },
+     })
+       $(function(){
+       	   setTimeout(function(){
+				$.hideLoading();
+				$('#app').css('display','block')
+			},100);
+			setTimeout(function(){
+				       var mySwiper = new Swiper('.swiper-container',
+		                    {
+		                           speed:2000,//播放速度
+		                           autoHeight:true,
+		                           loop:true,//是否循环播放
+		                           setWrapperSize:true,
+		                           autoplay: 
+		                           {
+		                             delay: 5000,
+		                             disableOnInteraction: false,
+		                          },
+		                           pagination:  '.swiper-pagination',//分页
+		                           effect : 'slide',//动画效果
+		                      });
+			},3000);
+		});
+
+	</script>
+	</body>
+</html>

@@ -1,0 +1,370 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	    <meta name="format-detection" content="telephone=no">
+	    <meta name="apple-mobile-web-app-capable" content="yes" />
+	    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+	    <meta http-equiv="Pragma" content="no-cache" />
+	    <meta http-equiv="Cache-Control" content="no-cache" />
+	    <meta http-equiv="Expires" content="0" />
+	    <title>分享奖-@{@WorkContext.SellerInfo.SellerName}</title>
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+		<link rel="stylesheet" href="/Css/Mobile/guide.css">
+		<script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.SjId,.SjName{display:block;height:14px;font-size:12px;color:#666;text-align:center;overflow:hidden;text-overflow:ellipsis;line-height:14px}
+			.weui_grid:before{border-right:0}
+			.weui_cell_ft{position:relative;top:2px;font-size:.7rem;color:#999}
+			.gd_item{background:#FFF;display:inline-block;position:relative;width:100%;margin:.3rem 0}
+			.content{background:0 0}
+			#Order_List1 *{font-size: 12px;}
+			#Order_List2 *{font-size: 12px;}
+			
+			.gd_left{width:30%;height:8rem;float:left;text-align:center;position:relative}
+			.gd_left img{position:absolute;top:0;right:0;bottom:0;left:0;margin:auto;border:1px solid #e1e1e1}
+			.gd_right{width:70%;height:8rem;float:left;padding:.8rem}
+			.re_p1,.re_p2,.re_p3{line-height:2rem;font-size:.9rem;color:#666;white-space:nowrap;overflow:hidden;width:100%;text-overflow:ellipsis}
+			.re_num{float:right;position:relative;top:2px}
+			.re_num:before{content:"X";font-size:.6rem;padding-right:.2rem}
+			.re_p3 .re_tag{color:#F13030;font-size:1.2rem;font-weight:700}
+			.re_p3 .re_tag:before{content:"￥";font-size:.9rem;font-weight:inherit!important}
+			.no_more{text-align:center;padding:15% 0}
+			.tab-panel-item{background:#fff}
+			.dingdan{font-size:.8rem;color:#666}
+			.gd_item:after{content:"";position:absolute;bottom:-9%;left:30%;right:0;height:1px;width:100%;border-bottom:1px solid #e1e1e1}
+			#Order_List0,#Order_List1,#Order_List2{position:fixed;top:2.6rem;bottom:0;left:0;right:0;min-width:320px;max-width:640px;margin:0 auto;z-index:33;background:#FFF}
+			#Order_List0{display:none}
+			#Order_List1{display:none}
+			#Order_List2{display:none}
+			#Order_List3{display:none}
+			#Order_List4{display:none}
+			.order_content{position:absolute;top:0;bottom:3.2rem;overflow-y:scroll;overflow-x:hidden;left:0;right:0}
+			.weui_cell_ft:before{content:""}
+			.weui_cell_ft:after{border:0}
+			.weui_cell{padding:10px 4px 10px 8px;position:relative;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-align:center;-webkit-align-items:center;align-items:center}
+			.userId::before{content:"[";color:#999}
+			.userId{padding:0 .6rem}
+			.userId::after{content:"]";color:#999}
+			.loading{height: 50px;line-height: 50px;}
+			.weui_cells_title{margin: 0;}
+			.weui-loadmore{margin: 0 auto;height: 45px; line-height: 45px;}
+			.order-sn{height: 30px;line-height: 30px;padding: 0 10px;}
+			.order-info{height: 30px;line-height: 30px;padding: 0 10px;}
+			#Order_List2 .order_content li {border-bottom: 1px solid #f2f2f2;}
+		</style> 
+	</head>
+	<body>
+		<header>
+			<i class="iconfont back"></i>
+			<h3>分享奖</h3>
+		</header>
+		<div class="content">
+			<div class="weui_grids">
+				<a href="javascript:;" class="weui_grid js_grid" style="width:100%">
+					<div class="weui_grid_icon num2">
+						<span class="">@ViewData["Bonus"]</span>元
+					</div>            
+					<p class="weui_grid_label">
+						获得收益额
+					</p>
+				</a>     
+			</div>
+			<!--订单明细 -->
+			<div class="weui_grids shekun">
+				<a href="javascript:;" class="weui_grid js_grid yifafang" data-index="0">
+					<div class="weui_grid_icon">
+						<span>@ViewData["SendBonus"]</span>
+					</div>
+					<p class="weui_grid_label">
+						已发放
+					</p>
+				</a>
+				<a href="javascript:;" class="weui_grid js_grid weifafang" data-index="1">
+					<div class="weui_grid_icon">
+						<span>@ViewData["UnSendBonus"]</span>
+					</div>
+					<p class="weui_grid_label">
+						未发放
+					</p>
+				</a>
+				<a href="javascript:;" class="weui_grid js_grid yongjin" data-index="2">
+					<div class="weui_grid_icon">
+						<span>@ViewData["Orders"]</span>
+					</div>
+					<p class="weui_grid_label">
+						佣金订单
+					</p>
+				</a>
+				<a href="javascript:;" class="weui_grid js_grid order">
+					<div class="weui_grid_icon">
+						<span>@ViewData["OrderDetails"]</span>
+					</div>
+					<p class="weui_grid_label">
+						佣金商品
+					</p>
+				</a>
+			</div>
+
+		</div>
+	    <div class="footer">
+	    	<div class="weui_tabbar" style="padding-top: 0.1rem;"></div>
+	    </div>
+		
+		<div id="Order_List1">
+			<div class="order_content">
+				<ul class="Order_list_ul1"></ul>
+				<div class="loading">
+					<div class="weui_cells_title hide tcenter" id="more">
+						<div class="weui-loadmore">
+				            <i class="weui-loading"></i>
+				            <span class="weui-loadmore-tips">正在加载</span>
+				        </div>
+					</div>
+				</div>
+			</div>	
+		</div>
+		<div id="Order_List2">
+			<div class="order_content">
+				
+				<ul class="Order_list_ul1 Order_list_ul2">
+					
+				</ul>	
+				<div class="loading">
+					<div class="weui_cells_title hide tcenter" id="more">
+						<div class="weui-loadmore">
+				            <i class="weui-loading"></i>
+				            <span class="weui-loadmore-tips">正在加载</span>
+				        </div>
+					</div>
+				</div>
+			</div>	
+		</div>
+		<script id="loadmore" type="text/html">
+			<div class="weui-loadmore">
+	            <i class="weui-loading"></i>
+	            <span class="weui-loadmore-tips">正在加载</span>
+	        </div>
+		</script>
+		
+		<script id="tpl-product" type="text/html">
+			<% for(var i in Data) { %>
+			<li class="gd_item">
+				<div class="gd_content">
+					<div class="gd_left">
+						<img src="@(WorkContext.ShopConfig.ImageCDN)<%=Data[i].ProductImgUrl%>?w=100&h=100">
+					</div>
+					<div class="gd_right">
+						<p class="re_p1"><%=Data[i].ProductName%></p>
+						<p class="re_p2"><%=Data[i].SkuSpec%><span class="re_num"><%=Data[i].Quantity%></span></p>
+						<p class="re_p3">价格<span class="re_tag"><%=Data[i].SalePrice%></span></p>
+					</div>
+				</div>
+			</li>
+			<% } %>
+		</script>
+		<script id="tpl-send" type="text/html">
+			<% for(var i in Data) { %>
+			<li>
+				<div class="order-sn">
+					订单号：<span style="color: #666;"><%=Data[i].OrderSN%></span>
+					<span style="float: right;">分享奖：<span style="color: #f00;"><%=Data[i].Bonus%></span></span>
+				</div>
+				<div class="order-info">
+		            <span>订单ID：<span style="color: #666;"><%=Data[i].OrderId%></span></span>
+		            <span style="margin-left: 15px;">
+		            	<% if(Send_type==0 || Send_type==2) { %>
+			        		下单时间：<span style="color: #999;"><%=Data[i].AddTime.substring(0,Data[i].SendTime.length-4).replace("T"," ")%></span>
+			        	<% }else if(Send_type==1){ %>
+			        		发放时间：<span style="color: #999;"><%=Data[i].SendTime.substring(0,Data[i].SendTime.length-4).replace("T"," ")%></span>
+			        	<% } %>
+		           </span>
+				</div>
+			</li>
+			<% } %>
+		</script>
+		<script id="tpl-footer" type="text/html">
+			<% for(var i in Data) { %>
+			<a href="<%=Data[i].MenuUrl%>" class="weui_tabbar_item">
+			    <div class="weui_tabbar_icon">
+			        <img src="<%=Data[i].MenuPic%>?w=50&h=50" style="display: block; width: 1.6rem; height: 1.6rem; margin: 0px auto;">
+			    </div>
+			    <p class="weui_tabbar_label" style="margin: 0px;"><%=Data[i].MenuName%></p>
+			</a>
+			<% } %>
+		</script>
+		<script type="text/javascript">
+			var index = 0 ;
+			var product_page = 1;
+			var pagesize = 20;
+			var send_page = [1,1,1];
+			function getFooter() {
+				$.ajax({
+	                type: "get",
+	                url: "/m/tool/navbar",
+	                async: true,
+	                success: function (rel) {
+	                    var data = JSON.parse(rel);
+	                    if (data.Code == 1) {
+	                        var id = 'tpl-footer';
+							var tplx = document.getElementById(id).innerHTML;
+							var desc1 = tpl(tplx, data);
+	                        $('.footer .weui_tabbar').html(desc1);
+	                    }
+	                }     
+	            });
+			}
+			
+			function getProductLists() {
+				$.ajax({
+					type:"post",
+					url:"LeaderProduct",
+					async:true,
+					data:{page:product_page,size:pagesize,sort:2},
+					dataType:"json",
+					beforeSend: function() {
+						var load_html = $("#loadmore").html();
+						$("#Order_List1 #more").html(load_html);
+						$("#Order_List1 #more").show();
+					},
+					success:function(rel){
+						if(rel.Code==1){
+							$("#Order_List1 #more").hide();
+							var id = 'tpl-product';
+							var tplx = document.getElementById(id).innerHTML;
+							var desc1 = tpl(tplx, rel);
+	                        $($("#Order_List1").find(".Order_list_ul1")).append(desc1);
+							$("#Order_List1").show();
+	                        product_page++;
+						}else{
+							
+								$("#Order_List1 #more").html("没有更多数据了");
+								return false;
+							
+						}
+					}
+				});
+			}
+			function sendLists(index,send_type) {
+				$.ajax({
+					type:"post",
+					url:"ShareBonus",
+					async:true,
+					data:{page:send_page[index],size:pagesize,sort:send_type},
+					dataType:"json",
+					beforeSend: function() {
+						var load_html = $("#loadmore").html();
+						$("#Order_List2 #more").html(load_html);
+						$("#Order_List2 #more").show();
+					},
+					success:function(rel){
+						if(rel.Code==1){
+							$("#Order_List2 #more").hide();
+							
+							rel.Send_type = send_type;
+							var id = 'tpl-send';
+							var tplx = document.getElementById(id).innerHTML;
+							var desc1 = tpl(tplx, rel);
+							$("#Order_List2 .Order_list_ul2").append(desc1);
+	                        send_page[index]++;
+						}else{
+							
+								$("#Order_List2 #more").html("没有更多数据了");
+								return false;
+							
+						}
+					}
+				});
+			}
+			$(function(){
+				getFooter();
+				$(".num2 span").text(Number($(".yifafang span").text().trim()) + Number($(".weifafang span").text().trim()));
+				if($(".SjId").text() == null || $(".SjId").text() == undefined || $(".SjId").text() == ""){
+					$(".SjName").css({
+						"line-height":"28px",
+						"height":'28px'
+					});
+				}
+				$(".back").on("click",function(){
+					if($("#Order_List1").css("display") == "none" && $("#Order_List2").css("display") == "none"){
+						history.back();
+					}
+					if($("#Order_List1").css("display") != "none"){
+						$("#Order_List1").hide();
+					}
+					if($("#Order_List2").css("display") != "none"){
+						$("#Order_List2").hide();
+					}
+					
+				});
+				
+				//已发放
+				$(".yifafang").on("click",function(){
+					$("#Order_List2 .Order_list_ul2").html("");
+					$("#Order_List2").show();
+					send_page = [1,1,1];
+					index = $(this).attr("data-index");
+					sendLists(index,1);
+				});
+				//未发放
+				$(".weifafang").on("click",function(){
+					$("#Order_List2 .Order_list_ul2").html("");
+					$("#Order_List2").show();
+					send_page = [1,1,1];
+					index = $(this).attr("data-index");
+					sendLists(index,2);
+				});
+				//佣金订单
+				$(".yongjin").on("click",function(){
+					$("#Order_List2 .Order_list_ul2").html("");
+					$("#Order_List2").show();
+					send_page = [1,1,1];
+					index = $(this).attr("data-index");
+					sendLists(2,0);
+				});
+				//佣金商品
+				$(".order").on("click",function(){
+					$("#Order_List1").show();
+					getProductLists();
+				});
+				
+				
+				
+				//佣金商品上滑加载更多
+				$("#Order_List1 .order_content").scroll(function() {
+					var scrollTop = $(this).scrollTop();
+					var scrollHeight = $("#Order_List1 .order_content .Order_list_ul1").height();
+					var windowHeight = $(this).height();
+					if (scrollTop + windowHeight == scrollHeight+50) {
+						getProductLists();
+					}
+				});
+				//已发放，未发放，佣金订单上滑加载更多
+				$("#Order_List2 .order_content").scroll(function() {
+					var scrollTop = $(this).scrollTop();
+				var scrollHeight = $("#Order_List2 .order_content .Order_list_ul1").height();
+				var windowHeight = $(this).height();
+					var sumtop = scrollTop+windowHeight;
+					console.log("scrollTop: "+scrollTop);
+					console.log("scrollHeight: "+scrollHeight);
+					console.log("windowHeight: "+windowHeight);
+					console.log("和: "+sumtop);
+					
+					if (scrollTop + windowHeight == scrollHeight+50) {
+						if(index==0){
+							sendLists(index,1);
+						}else if(index==1){
+							sendLists(index,2);
+						}else if(index==2){
+							sendLists(index,0);
+						}
+					}
+				});
+				
+			});
+	    </script>
+	</body>
+</html>

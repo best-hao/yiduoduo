@@ -1,0 +1,344 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>店员人效分析</title>
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/weui.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/weui2.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/portrait.css" />
+		<script src="/Js/Mobile/boss/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.back-FA8C42 {
+				background: #FA8C42 !important;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<header>
+		<div id="s_back"></div>
+			<div class="weui-header">
+				<div class="weui-header-left">
+					<a class="icon icon-109 f-white" onclick="history.back()"></a>
+				</div>
+				<h1 class="weui-header-title">会员分析</h1>
+				<div class="weui-header-right">
+
+				</div>
+			</div>
+		</header>
+		<div class="content">
+			<!--<div class="con_tab">
+				<ul>
+
+				</ul>
+			</div>-->
+			<div class="user_num">
+				<span>
+					85225
+				</span>
+				<span>
+				会员总数</span>
+			</div>
+			<div class="consumption_1">
+				<div class="consumption">
+					<h3 class="title">会员生理分析</h3>
+					<br />
+					<h3 class="title_smail">妈妈生理轴</h3>
+					<!--<ul class="ul_style">
+						<li>
+							备孕
+							<span class="back-00b6ff"></span>
+						</li>
+						<li>
+							孕期
+							<span class="back-fc4d47"></span>
+						</li>
+						<li>
+							产后 0 - 6 个月
+							<span class="back-FA8C42"></span>
+						</li>
+					</ul>-->
+					<div id="main0" style="height: 400px;"></div>
+
+					<h3 class="title_smail">宝宝月龄分布</h3>
+					<ul class="ul_style1">
+						<!--<li>
+							新生儿
+							<span class="back-a292ff"></span>
+						</li>
+						<li>
+							1-6个月
+							<span class="back-ffdc45"></span>
+						</li>
+						<li>
+							6-12个月
+							<span class="back-00b8ec"></span>
+						</li>
+						<li>
+							1-2岁
+							<span class="back-ff6842"></span>
+						</li>
+						<li>
+							2-3岁
+							<span class="back-afb2b3"></span>
+						</li>
+						<li>
+							3-6岁
+							<span class="back-ff83e8"></span>
+						</li>
+						<li>
+							6岁+
+							<span class="back-ff567d"></span>
+						</li>-->
+
+					</ul>
+					<div id="main1" style="height: 400px;"></div>
+					<h3 class="title_smail">宝宝月龄分布占比</h3>
+					<div id="main2" style="height: 440px;"></div>
+
+				</div>
+
+			</div>
+
+		</div>
+		<script src="/Js/Mobile/boss/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var myChart0 = echarts.init(document.getElementById('main0'));
+			var colors = ['#2FB0FE', '#F54041', '#FA8C42'];
+			// 指定图表的配置项和数据
+			var option = {
+				title: {
+					text: '',
+
+				},
+				color: colors,
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						type: 'shadow'
+					}
+				},
+				legend: {
+					data: ['备孕', '孕期', "产后 0 - 6 个月"]
+				},
+				grid: {
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					containLabel: true
+				},
+				xAxis: {
+					type: 'value',
+					boundaryGap: [0, 0.01]
+				},
+				yAxis: {
+					type: 'category',
+					data: ['']
+				},
+				series: [{
+						name: '备孕',
+						type: 'bar',
+						data: [18203]
+					},
+					{
+						name: '孕期',
+						type: 'bar',
+						data: [19325]
+					},
+					{
+						name: '产后 0 - 6 个月',
+						type: 'bar',
+						data: [19325]
+					}
+				]
+			};
+
+			// 使用刚指定的配置项和数据显示图表。
+			myChart0.setOption(option);
+		</script>
+		<script type="text/javascript">
+			var myChart1 = echarts.init(document.getElementById('main1'));
+
+			var colors = ['#a292ff', '#ffdc45', '#00b8ec', '#ff6842', '#afb2b3', '#ff83e8', '#ff567d'];
+			// 指定图表的配置项和数据
+			var option = {
+				title: {
+					text: '',
+
+				},
+				color: colors,
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						type: 'shadow'
+					}
+				},
+				legend: {
+					data: ['新生儿', '1-6个月', '6-12个月', '1-2岁', '2-3岁', '3-6岁', '6岁+']
+				},
+
+				grid: {
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					containLabel: true
+				},
+				xAxis: {
+					type: 'value',
+					boundaryGap: [0, 0.01]
+				},
+				yAxis: {
+					type: 'category',
+					data: ['']
+				},
+				series: [{
+						name: '新生儿',
+						type: 'bar',
+						data: [1803]
+					},
+					{
+						name: '1-6个月',
+						type: 'bar',
+						data: [1325]
+					},
+					{
+						name: '6-12个月',
+						type: 'bar',
+						data: [9325]
+					},
+					{
+						name: '1-2岁',
+						type: 'bar',
+						data: [325]
+					},
+					{
+						name: '2-3岁',
+						type: 'bar',
+						data: [1935]
+					},
+					{
+						name: '3-6岁',
+						type: 'bar',
+						data: [325]
+					},
+					{
+						name: '6岁+',
+						type: 'bar',
+						data: [195]
+					}
+
+				]
+			};
+
+			// 使用刚指定的配置项和数据显示图表。
+			myChart1.setOption(option);
+		</script>
+		<script type="text/javascript">
+			var myChart2 = echarts.init(document.getElementById('main2'));
+
+			var colors = ['#a292ff', '#ffdc45', '#00b8ec', '#ff6842', '#afb2b3', '#ff83e8', '#ff567d'];
+			// 指定图表的配置项和数据
+			var option = {
+//				title: {
+//					text: '某站点用户访问来源',
+//					subtext: '纯属虚构',
+//					x: 'center'
+//				},
+				color:colors,
+				tooltip: {
+					trigger: 'item',
+					formatter: "{a} <br/>{b} : {c} ({d}%)"
+				},
+				legend: {
+					orient: 'vertical',
+					left: 'left',
+					data: ['新生儿', '1-6个月', '6-12个月', '1-2岁', '2-3岁', '3-6岁', '6岁+']
+				},
+				series: [{
+					name: '访问来源',
+					type: 'pie',
+					radius: '55%',
+					center: ['50%', '60%'],
+					data: [{
+							value: 335,
+							name: '新生儿'
+						},
+						{
+							value: 310,
+							name: '1-6个月'
+						},
+						{
+							value: 234,
+							name: '6-12个月'
+						},
+						{
+							value: 135,
+							name: '1-2岁'
+						},
+						{
+							value: 1548,
+							name: '2-3岁'
+						},
+						{
+							value: 1548,
+							name: '3-6岁'
+						}
+						,
+						{
+							value: 1548,
+							name: '6岁+'
+						}
+					],
+					itemStyle: {
+						emphasis: {
+							shadowBlur: 10,
+							shadowOffsetX: 0,
+							shadowColor: 'rgba(0, 0, 0, 0.5)'
+						}
+					}
+				}]
+			};
+
+			// 使用刚指定的配置项和数据显示图表。
+			myChart2.setOption(option);
+		</script>
+			<script type="text/javascript">
+			window.onscroll = function() {
+				//变量t是滚动条滚动时，距离顶部的距离
+				var t = document.documentElement.scrollTop || document.body.scrollTop;
+
+				//当滚动到距离顶部200px时，返回顶部的锚点显示
+				if(t >= 400) {
+				
+					$("#s_back").css({
+						"background": "rgba(250,137,130,1)"
+					})
+				} else { //恢复正常
+					// #FA8982
+					// background: rgba(250,137,130,0);
+					var  option = (t / 400);
+					$("#s_back").css({
+						"background": "rgba(250,137,130,"+option+")"
+					})
+
+				}
+			}
+		</script>
+
+
+	</body>
+
+</html>

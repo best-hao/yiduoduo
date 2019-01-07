@@ -1,0 +1,931 @@
+﻿@model Yitao.Web.Mobile.Models.ShipAddressListModel
+@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>选择地址-@{@WorkContext.ShopConfig.SiteTitle}</title>
+    <meta content="@WorkContext.ShopConfig.SEODescription" name="description">
+    <meta content="@WorkContext.ShopConfig.SEOKeyword" name="keywords">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css" />
+    <!--<link rel="stylesheet" type="text/css" href="/Css/mobile/mapnoicon.css" />-->
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=nT6ySqHzG1p7QMRpZ1k9rMAT0weeSERr"></script>
+	<script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	
+<style type="text/css">
+.back{position:absolute;top:0;left:0;display:inline-block;padding:0 .6rem;line-height:3rem;color:#323232}
+header{position:fixed;z-index:11;top:0;left:0;right:0;min-width:320px;max-width:640px;margin:0 auto;height:3rem;box-shadow:1px 2px 3px #E1E1E1;background:#FFF}
+header h3{font-weight:inherit;text-align:center;line-height:3rem;font-size:1rem}
+.tentent{padding-top:2.6rem}
+.list_con,.list_item{display:inline-block;width:100%;position:relative}
+.list_item{background:#FFF;margin-top:.6rem;padding:.6rem}
+.list_head{line-height:2.6rem}
+.list_head .Myhome{white-space:nowrap;font-size:1rem;color:#323232;position:relative}
+.name{padding-right:.6rem}
+.phone{position:relative;padding-left:.6rem}
+.list_body p{font-size:.9rem;color:#666}
+.Isdefault{display:inline-block;float:left}
+.weui_cell_ft{display:inline-block;font-size:.84rem}
+.weui_switch{height:32px;position:relative;top:5px}
+.editsa{display:inline-block;float:right;padding:.4rem;color:#323232}
+.weui_switch:before{height:30px!important}
+.weui_switch:after{height:30px!important}
+.Iselit{margin-right:.6rem}
+.checked_img{width:16px;position:relative;top:4px;left:5px}
+.Isdefault{font-size:.84rem;color:#666;padding:.6rem}
+.list_down{display:inline-block;width:100%}
+#addRess{position:fixed;z-index:33;bottom:15%;background:#F13030;color:#FFF;font-size:1rem;text-align:center;height:2.2rem;line-height:2.2rem;border-radius:4px;width:92%;left:0;right:0;margin:auto}
+#addRess:active{background:#F17F7F}
+#select_add{position:fixed;z-index:200;top:0;left:0;right:0;bottom:0;width:100%;height:100%;overflow:hidden;background:#FFF}
+#select_edt{position:fixed;z-index:200;top:0;left:0;right:0;bottom:0;width:100%;height:100%;overflow:hidden;background:#FFF}
+.select_add_ab{position:absolute;width:100%;height:100%;overflow:hidden}
+.select_add_re{display:inline-block;width:100%;height:100%;overflow:scroll}
+.m-navbar{height:3rem;position:relative;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;background-color:rgba(255,255,255,.98)}
+.navbar-item:first-child{width:3rem;min-width:3rem;position:absolute;z-index:20;color:#5C5C5C;left:0;top:0}
+.navbar-item:first-child{-webkit-box-ordinal-group:2;-webkit-order:1;-ms-flex-order:1;order:1;margin-right:-25%}
+.navbar-item{height:3rem;min-width:25%;-webkit-box-flex:0;-webkit-flex:0 0 25%;-ms-flex:0 0 25%;flex:0 0 25%;padding:0 .2rem;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center;font-size:.94rem;white-space:nowrap;overflow:hidden;color:#5C5C5C}
+.icon{display:inline-block;width:.5rem;height:.5rem;background-repeat:no-repeat;background-position:0 0;background-size:3.5rem auto;vertical-align:middle}
+.icon.back{background-position:-2.4rem -.48rem;width:.4rem}
+.navbar-center{-webkit-box-ordinal-group:3;-webkit-order:2;-ms-flex-order:2;order:2;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center;height:3rem;width:50%;margin-left:25%}
+.navbar-center .navbar-title{text-align:center;width:100%;white-space:nowrap;overflow:hidden;display:block;text-overflow:ellipsis;font-size:1rem;color:#323232}
+.m-navbar:after{content:'';position:absolute;z-index:2;bottom:0;left:0;width:100%;height:1px;border-bottom:1px solid #B2B2B2;-webkit-transform:scaleY(.5);transform:scaleY(.5);-webkit-transform-origin:0 100%;transform-origin:0 100%}
+.m-cell{background:#fff;margin-bottom:0;border-bottom:0;position:relative}
+.cell-item{background:#fff;min-height:3rem;padding:0 .6rem}
+.cell-item{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:inline-block;position:relative;padding-left:.6rem;overflow:hidden;width:100%;margin-top:-6px}
+.cell-left{color:#333;font-size:.94rem;white-space:nowrap;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center}
+.cell-left{font-size:1rem;color:#323232;width:25%;display:inline-block;line-height:3rem;text-align:left;float:left;position:relative}
+.cell-right{color:#525252;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:end;-webkit-justify-content:flex-end;-ms-flex-pack:end;justify-content:flex-end}
+.cell-right{padding-right:.6rem}
+.cell-right{min-height:3rem}
+.select_add_re .cell-right{display:inline-block;text-align:left;position:relative;font-size:1rem;float:left;width:75%}
+.select_add_re .cell-right{text-align:right}
+.cell_input,.selcet_chioce{display:block;width:100%;height:2rem;line-height:2rem;position:absolute;top:50%;left:0;border:0;color:#323232;font-size:.94rem;text-indent:5px;margin-top:-.9rem}
+.cell-item:not(:last-child):after{margin-left:2rem;content:'';position:absolute;z-index:0;bottom:0;left:0;width:100%;height:1px;border-bottom:1px solid #D9D9D9;-webkit-transform:scaleY(.5);transform:scaleY(.5);-webkit-transform-origin:0 100%;transform-origin:0 100%}
+textarea{outline:0;border-radius:0;-webkit-appearance:none;-moz-appearance:none;overflow:auto;resize:none;font:100% tahoma,\5b8b\4f53,arial}
+.cell_textarea{line-height:3rem;color:#323232;width:75%;font-size:1rem;border-radius:3px;display:inline-block;float:left;border:0;position:absolute;right:0;text-align:left;text-indent:.6rem}
+.searchResultPanel{z-index:9999;position:absolute}
+.cell-item:not(:last-child):after{margin-left:.6rem;content:'';position:absolute;z-index:0;bottom:0;left:0;width:100%;height:1px;border-bottom:1px solid #D9D9D9;-webkit-transform:scaleY(.5);transform:scaleY(.5);-webkit-transform-origin:0 100%;transform-origin:0 100%;z-index:555}
+.moren{text-align:right;color:#888;position:absolute;right:2rem;top:4px}
+.weui_switch:after,.weui_switch:before{content:" ";position:absolute;top:0;left:0;height:28px;border-radius:15px;-webkit-transition:-webkit-transform .3s}
+.weui_switch:after,.weui_switch:before{content:" ";position:absolute;top:0;left:0;height:28px;border-radius:15px;-webkit-transition:-webkit-transform .3s}
+.addMap,.hideBtn{display:block;border:0;border-radius:4px;line-height:2.4rem;color:#fff;font-size:1rem;margin:0 auto;position:fixed;bottom:1rem;left:0;right:0;width:96%;background:#ff4800;text-align:center;z-index:444}
+#add_back i{line-height:3rem;padding:0 .6rem}
+.cell-item:first-child{margin-top:0}
+.cell-left:after{content:":";position:absolute;right:0;z-index:5}
+.total-text{line-height:3rem}
+#select_add{display:none}
+.m-cityselect.brouce-in{-webkit-transform:translate(0,0);transform:translate(0,0)}
+.m-cityselect{border-top:1px solid #e1e1e1}
+.m-cityselect{position:fixed;bottom:0;left:0;width:100%;height:75%;z-index:1000;background-color:#fff;-webkit-transform:translate(0,100%);transform:translate(0,100%);-webkit-transition:-webkit-transform .3s;transition:-webkit-transform .3s;transition:transform .3s;transition:transform .3s,-webkit-transform .3s}
+.cityselect-header{position:absolute;top:0;left:0;width:100%;z-index:1}
+.cityselect-title{width:100%;font-size:.94rem;text-align:center;height:45px;line-height:45px;position:relative}
+.cityselect-title:after{content:'';position:absolute;z-index:0;bottom:0;left:0;width:100%;height:1px;border-bottom:1px solid #B2B2B2;-webkit-transform:scaleY(.5);transform:scaleY(.5);-webkit-transform-origin:0 100%;transform-origin:0 100%}
+.cityselect-nav{width:100%;padding-left:.2rem;overflow:hidden;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}
+.cityselect-nav>a{font-size:.86rem;color:#222;display:block;height:40px;line-height:46px;padding:0 .6rem;position:relative;margin-right:.6rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40%}
+.cityselect-nav>a.crt{color:#F23030}
+.cityselect-nav>a.crt:after{content:'';width:100%;height:2px;background-color:#F23030;position:absolute;bottom:0;left:0;z-index:2}
+.cityselect-header:after{content:'';position:absolute;z-index:0;bottom:0;left:0;width:100%;height:1px;border-bottom:1px solid #D9D9D9;-webkit-transform:scaleY(.5);transform:scaleY(.5);-webkit-transform-origin:0 100%;transform-origin:0 100%}
+.cityselect-content{height:100%;padding-top:85px;width:100%;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}
+.cityselect-content.cityselect-move-animate{-webkit-transition:-webkit-transform .3s;transition:-webkit-transform .3s;transition:transform .3s;transition:transform .3s,-webkit-transform .3s}
+.cityselect-content.cityselect-prev{-webkit-transform:translate(0,0);transform:translate(0,0)}
+.cityselect-content>.cityselect-item{display:block;height:inherit;width:50%;-webkit-box-flex:0;-webkit-flex:0 0 50%;-ms-flex:0 0 50%;flex:0 0 50%;overflow-y:auto;-webkit-overflow-scrolling:touch;background-color:#FFF}
+.cityselect-item-box{width:100%;height:inherit;display:block;padding:0 .4rem}
+.cityselect-nav>a.crt{color:#F23030}
+.cityselect-item-box>a{color:#333;font-size:.86rem;height:40px;line-height:18px;overflow:hidden;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center;width:100%;position:relative;z-index:1}
+.cityselect-item-box>a:before{content:'';position:absolute;z-index:0;bottom:0;left:0;width:100%;height:1px;border-bottom:1px solid #D9D9D9;-webkit-transform:scaleY(.5);transform:scaleY(.5);-webkit-transform-origin:0 100%;transform-origin:0 100%}
+.cityselect-item-box>a.crt:after{content:"";position:absolute;bottom:0;left:0;width:20%;height:2px;border-bottom:2px solid #f13030}
+.cityselect-item-box>a.crt{color:#f13030}
+.cityselect-item-box>a span{-webkit-box-flex:1;-webkit-flex:1;-ms-flex:1;flex:1;display:block}
+.cityselect-content>.cityselect-item:nth-child(2n){background-color:#F5F5F5}
+.cityselect-content.cityselect-next{-webkit-transform:translate(-50%,0);transform:translate(-50%,0)}
+.mask-black{background-color:rgba(0,0,0,.4);position:fixed;z-index:500;bottom:0;right:0;left:0;top:0;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center}
+.brouce-out{-webkit-transform:translate(0,100%);transform:translate(0,100%)}
+.cityselect-end{-webkit-transform:translate(-100%,0);transform:translate(-100%,0)}
+.weui_mask{z-index:99}
+.weui_dialog,.weui_toast{z-index:9999}
+
+#app-addr{width:7.5rem;margin:0 auto;height: 100%;}
+#addRess{position:relative;margin-top:30px;bottom:0}
+#l-map{width:1px;height:1px}
+#allmap{width:1px;height:1px}
+.searchResultPanel{z-index:9999;position:absolute}
+#tangram-suggestion--TANGRAM__1m-main{position:absolute;z-index:9999}
+.tangram-suggestion-main{position:absolute;z-index:9999}
+#select_add{display:block}
+.name{padding-right:.28rem}
+.phone{position:relative;padding-left:.28rem}
+header h3{font-weight:inherit;text-align:center;line-height:.9rem;font-size:.28rem}
+.addr-box ul li{font-size:.28rem}
+.list_down{display:block}
+.show-addr li{font-size:.28rem}
+.addr-shade .title{font-size:.28rem}
+.list_head{line-height:.9rem}
+.editsa{display:inline-block;float:right;padding:0;color:#323232}
+.back{position:absolute;top:0;left:0;display:inline-block;padding:0 .28rem;line-height:.9rem;color:#323232}
+.list_item{background:#FFF;margin-top:.18rem;padding:.28rem .28rem 0 .28rem}
+.tentent{padding-top:.9rem}
+.navbar-center .navbar-title{text-align:center;width:100%;white-space:nowrap;overflow:hidden;display:block;text-overflow:ellipsis;font-size:.28rem;color:#323232}
+.m-navbar{height:.9rem;position:relative;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;background-color:rgba(255,255,255,.98)}
+.navbar-item:first-child{width:3rem;min-width:3rem;position:absolute;z-index:20;color:#5C5C5C;left:0;top:0}
+.navbar-center{height:.9rem;width:50%;margin-left:25%}
+.item{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;position:relative;padding-left:.28rem;overflow:hidden;width:100%;margin-top:-6px}
+.left{font-size:.28rem;color:#323232;width:25%;display:inline-block;line-height:.9rem;text-align:left;float:left;position:relative}
+.select_add_re .right{font-size:.28rem}
+#add_back i{line-height:.9rem;padding:0 .28rem}
+.item{background:#fff;min-height:1.2rem;padding:0 .28rem}
+.total-text{line-height:.9rem;font-size:.28rem}
+.navbar-item:first-child{width:3rem;min-width:3rem;min-height:.9rem;position:absolute;z-index:20;color:#5C5C5C;left:0;top:0}
+.navbar-item{height:.9rem}
+.addMap,.hideBtn{display:block;border:0;border-radius:4px;line-height:.8rem;color:#fff;font-size:.28rem;margin:0 auto;position:fixed;bottom:.28rem;left:0;right:0;width:96%;background:#ff4800;text-align:center;z-index:444}
+.right{min-height:.9rem;padding-right:.28rem}
+.item:not(:last-child):after{margin-left:.28rem}
+.selcet_chioce,.weui_input{height:.6rem;line-height:.6rem;font-size:.28rem;top:90%}
+.moren{text-align:right;color:#888;position:absolute;right:1rem;top:-16px}
+.item:not(:last-child):after{bottom:.2rem}
+.weui_toast{width:3rem;min-height:3rem;left:31%;top:35%;margin-left:0}
+header{position:fixed;z-index:11;top:0;left:0;right:0;min-width:320px;max-width:640px;margin:0 auto;height:.9rem;line-height:.9rem;box-shadow:1px 2px 3px #E1E1E1;background:#FFF}
+.list_head .Myhome{white-space:nowrap;font-size:.28rem;color:#323232;position:relative}
+.list_body p{font-size:.28rem;color:#666}
+.Iselit{margin-right:.1rem;font-size:.28rem}
+.Isdefault{font-size:.28rem;color:#666;padding:.2rem 0}
+#addRess{z-index:33;bottom:15%;background:#F13030;color:#FFF;font-size:.28rem;text-align:center;height:1rem;line-height:1rem;border-radius:4px;width:92%;left:0;right:0;margin:auto}
+.weui_toast_content{font-size:.28rem}
+body{overflow-x: hidden;width: 7.5rem;overflow-x: hidden;margin: 0 auto;font-size: 0.24rem;}
+.fl{float:left}
+.fr{float:right}
+.inputbox{width: 7.1rem;height: 0.7rem;line-height: 0.7rem;padding: 0 0.2rem;font-size: 0.28rem;margin: 0.2rem auto;}
+.weui-input{height: 0.7rem;line-height: 0.7rem;border: 0;outline: 0;width: 4.6rem;}
+#edit{font-size: 0.28rem;width: 7.5rem;overflow-x: hidden;}
+/*.shade-box{position: fixed;z-index: 222;bottom: -100%;left: 50%;background: rgba(0,0,0,0.5);width: 7.5rem;height: 100%;overflow: hidden;margin-left: -3.75rem;z-index:111111111}*/
+.shade-box{position: fixed;display: none; top: 0;left: 50%;background: rgba(0,0,0,0.5);width: 7.5rem;height: 100%;overflow: hidden;margin-left: -3.75rem;z-index:111111111}
+.addr-shade{position: absolute;z-index: 10;bottom: 0;left: 0;background: #fff;width: 8rem;height: 7.44rem;z-index:111111112}
+.addr-box{width: 15rem;}
+.addr-box .province{width: 3.75rem;height: 6rem;overflow-y: auto;position: relative;}
+.addr-box .province:after{position: absolute;right: 0;width: 1px;top: 0;background: #f2f2f2;content: "";}
+.addr-box .city{width: 3.75rem;height: 6rem;overflow-y: auto;}
+.addr-box .county{width: 3.75rem;height: 6rem;overflow-y: auto;}
+.addr-box .town{width: 3.75rem;height: 6rem;overflow-y: auto;}
+.addr-box ul li{padding: 0 0.2rem;/*line-height: 0.6rem;*/height: 0.6rem;}
+.curProvince{color: #f00;}
+li{list-style: none;}
+.curCity{color: #f00;}
+.curCounty{color: #f00;}
+.curTown{color: #f00;}
+.show-addr{height: 0.7rem;line-height: 0.7rem;padding: 0 0.2rem;}
+.show-addr{border-bottom: 1px solid #f2f2f2;}
+.show-addr li{line-height: 0.7rem;float: left;text-align: left;padding: 0 0.2rem;}
+.addr-shade .title{text-align: center;height: 0.7rem;line-height: 0.7rem;border-bottom: 1px solid #f2f2f2;}
+.cur-li{position: relative;color: #f00;}
+.cur-li:after{position: absolute;bottom: 0;content: "";left: 0;height: 2px; background: #fd4c60;width: 100%;}
+.weui-picker-modal .picker-items-col:eq(2){display: none !important;}
+.weui_dialog_hd{padding: 0;}
+.addr-box ul{padding-bottom: 1rem;}
+.icon{background-image:none}
+#add-addRess{background: #ff4800;height: 0.9rem;line-height: 0.9rem;color: #fff;border-radius: 5px;width: 7.1rem;margin: 0 auto;text-align: center;font-size: 0.32rem;margin-top: 0.4rem;}
+#app-addr .list_item{background:#FFF;box-sizing: content-box;width: 6.94rem;}
+.show-addr li{display: inline-block;line-height: 0.8rem;float: none!important;text-align: left;padding: 0 0.2rem;}
+.addr-box ul li {padding: 0 0.2rem;/* line-height: 0.6rem; */height: 0.6rem; overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+</style>
+</head>
+<body>
+	<div id="app-addr" style='display:none'>
+	    <header>
+			<i class=" back icon iconfont" onclick="goToBack()">&#xe60e;</i>
+			<h3>地址管理</h3>
+		</header>
+		<!-- 地址列表 -->
+		<div class="adr-addrlist">
+			<div class="tentent">
+				<ul class="list_con">
+				    <li class="list_item" v-for='(item,index) in addressList' :key='index'>
+				    	<div class="list_head" v-on:click="selectaddr(item)">
+				    		<p class="Myhome">
+				    			<span class="name">{{item.Consignee}}</span>
+				    			<span class="phone">{{item.Mobile}}</span>
+				    		</p>
+				    	</div>
+				    	<div class="list_body" v-on:click="selectaddr(item)">
+				    		<p>{{item.Address}}</p>
+				    	</div>
+				    	<div class="list_down">
+				    		<span class="Isdefault"  v-on:click='chosedefault(item)'>
+				    			默认地址 <span class='icon iconfont' v-if='item.IsDefault==0' >&#xe648;</span>
+				    			       <span class='icon iconfont' v-if='item.IsDefault==1' >&#xe61b;</span>
+				    		</span>
+				    		<div class="editsa">
+				    			<span class="Iselit" v-on:click='editaddRess(item)'>
+				    				<i class="icon iconfont">&#xe61d;</i>编辑
+				    			</span>
+				    			<span class="IsRemove"  v-on:click='deleteitem(item.AddressId)'>
+					    			<span class="Iselit">
+					    				<i class="icon icon-26"></i>删除
+					    			</span>
+				    			</span>
+				    		</div>
+				    	</div>
+				    	
+				    </li>
+				</ul>
+	
+			</div>
+			<div id="add-addRess" v-on:click='addRess(0)'>
+				添加地址
+			</div>
+		</div>
+		<!--//  添加地址表单-->
+		<div class="" id="select_add" v-show='viewShow'>
+			<div class="select_add_ab">
+				<div class="select_add_re">
+
+					<div class="m-navbar"   v-on:click='addRess(1)'>
+						<span class="navbar-item select_back" id="add_back"><i class="iconfont">&#xe60e;</i></span>
+						<div class="navbar-center">
+							<span class="navbar-title">地址添加</span>
+						</div>
+					</div>
+					<div class="formbox">
+						<div class="inputbox">
+							<div class="fl">收货人姓名</div>
+							<div class="fr">
+								<input type="text" placeholder="收货人姓名" name="" value="" class="weui-input" id="Consignee_Name" v-model='Consignee'>
+							</div>
+						</div>
+						<div class="inputbox">
+							<div class="fl">联系方式</div>
+							<div class="fr">
+								<input type="tel" placeholder="联系方式" name="" maxlength="11" value="" class="weui-input" id="Consignee_Phone" v-model='Mobile'>
+							</div>
+						</div>
+						<!--  选择地址  dom 样式之后再做修改 -->
+						<div class="inputbox">
+							<div class="fl">选择省市</div>
+							<div class="fr">
+								<input name="" class="weui-input" type="text"  readonly="readonly" id="selectAddr" v-on:click="showAddr()" placeholder="请选择省市区镇" v-model="Addr">
+				                <input type="hidden" name="Province" id="Province" v-model="curProvince" />
+				                <input type="hidden" name="City" id="City" v-model="curCity" />
+				                <input type="hidden" name="County" id="County" v-model="curCounty" />
+				                <input type="hidden" name="Town" id="Town" v-model="curTown" />
+							</div>
+						</div>
+						
+						<div class="inputbox">
+							<div class="fl">详细地址</div>
+							<div class="fr">
+								<input type="text" class="weui-input" name="" id="Consignee_Map" value="" placeholder="详细地址" v-model='addressdetail'>
+								<div id="searchResultPanel" style="border1px solid #C0C0C0;width：150px;height:auto; display:none;" class="searchResultPanel"></div>
+							</div>
+						</div>
+						<div class="inputbox">
+							<div class="fl"><span class="total-text">设置默认地址</span></div>
+							<div class="fr">
+								<input class="weui_switch" type="checkbox" id="morenMap"  v-model='IsDefault'>
+							</div>
+						</div>
+						<div class="hideBtn" v-on:click='saveForm(2)'>保存</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		<!--编辑地址-->
+		<div class="" id="select_edt" v-show='editShow'>
+			<div class="select_add_ab">
+				<div class="select_add_re">
+
+					<div class="m-navbar"   v-on:click='editaddRess()'>
+						<span class="navbar-item select_back" id="add_back"><i class="iconfont">&#xe60e;</i></span>
+						<div class="navbar-center">
+							<span class="navbar-title">地址编辑</span>
+						</div>
+					</div>
+					<div class="formbox">
+						<div class="inputbox">
+							<div class="fl">收货人姓名</div>
+							<div class="fr">
+								<input type="text" placeholder="收货人姓名" name="" value="" class="weui-input" id="Consignee_Name" v-model='Consignee'>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="inputbox">
+							<div class="fl">联系方式</div>
+							<div class="fr">
+								<input type="tel" placeholder="联系方式" maxlength="11" name="" value="" class="weui-input" id="Consignee_Phone" v-model='Mobile'>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<!--  选择地址  dom 样式之后再做修改 -->
+						<div class="inputbox">
+							<div class="fl">选择省市</div>
+							<div class="fr">
+								<input name="" class="weui-input" type="text"  readonly="readonly" id="selectAddr" v-on:click="showAddr()" placeholder="请选择省市区镇" v-model="Addr">
+				                <input type="hidden" name="Province" id="Province" v-model="curProvince" />
+				                <input type="hidden" name="City" id="City" v-model="curCity" />
+				                <input type="hidden" name="County" id="County" v-model="curCounty" />
+				                <input type="hidden" name="Town" id="Town" v-model="curTown" />
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						
+						<div class="inputbox">
+							<div class="fl">详细地址</div>
+							<div class="fr">
+								<input type="text" class="weui-input" name="" id="Consignee_Map" value="" placeholder="详细地址" v-model='addressdetail'>
+								<div id="searchResultPanel" style="border1px solid #C0C0C0;width：150px;height:auto; display:none;" class="searchResultPanel"></div>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="inputbox">
+							<div class="fl"><span class="total-text">设置默认地址</span></div>
+							<div class="fr">
+								<input class="weui_switch" type="checkbox" id="morenMap"  v-model='IsDefault'>
+							</div>
+						</div>
+						<div class="hideBtn" v-on:click='saveForm(1)'>保存</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		<!--end-->
+		<!--四联动-->
+	<div class="shade-box" style='touch-action: pan-x;'>
+		    <div class="addr-shade" style='touch-action: pan-x;'>
+		    	<div class="title">
+		    		所在地区
+		    	</div>
+		    	<div class="show-addr" style='width:7.5rem;padding:0;height:0.8rem;touch-action: pan-x;'>
+		    		<ul style='display:block;width:7.5rem;overflow-x:auto;height:0.8rem;white-space: nowrap;touch-action: pan-x;'>
+		    			<li class="prov-li" 
+		    				:class="{'cur-li':curIndex==0}"
+		    				v-on:click="getProvinceTab(initProvince,curProvinceName)"
+		    				>{{curProvinceName}}</li>
+		    			<li class="city-li" 
+		    				:class="{'cur-li':curIndex==1}"
+		    				v-on:click="getCityTab(initCity,curCityName)"
+		    				>{{curCityName}}</li>
+		    			<li class="county-li" 
+		    				:class="{'cur-li':curIndex==2}"
+		    				v-on:click="getCountyTab(initCounty,curCountyName)"
+		    				>{{curCountyName}}</li>
+		    			<li class="town-li" 
+		    				:class="{'cur-li':curIndex==3}"
+		    				v-on:click="getTownTab(initTown,curTownName)"
+		    				>{{curTownName}}</li>
+		    		</ul>
+		    	</div>
+				<div class="addr-box">
+					<div class="province left">
+						<ul>
+							<li v-for="(item, index) of Province" 
+								:key="item.regionid" 
+								v-on:click="getCity(item.regionid,item.regionname)"
+								:class="{'curProvince':curProvince==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+					<div class="city left">
+						<ul v-if="City.length>0">
+							<li v-for="(item, index) of City" 
+								:key="item.regionid" 
+								v-on:click="getCounty(item.regionid,item.regionname)"
+								:class="{'curCity':curCity==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+					<div class="county left">
+						<ul v-if="County.length>0">
+							<li v-for="(item, index) of County" 
+								:key="item.regionid" 
+								v-on:click="getTown(item.regionid,item.regionname)"
+								:class="{'curCounty':curCounty==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+					<div class="town left">
+						<ul v-if="Town.length>0">
+							<li v-for="(item, index) of Town" 
+								:key="item.regionid" 
+								v-on:click="selTown(item.regionid,item.regionname)"
+								:class="{'curTown':curTown==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+				</div>
+		    	
+		    </div>
+	    </div>
+		<!--end-->
+			<div id="l-map"></div>
+			<div id="allmap"></div>
+	</div>
+		
+		<!--<script src="/Mobile/weui/linkage.js" type="text/javascript" charset="utf-8"></script>-->
+<script type="text/javascript">
+$.showLoading();
+var IsApp = "@WorkContext.IsApp";
+var uid = "@WorkContext.Uid";
+//alert(uid);
+function goToBack() {
+	var _this = this;
+	if(IsApp==1){
+		if(navigator.userAgent.indexOf("iPhone")>0){
+			gobacklastpage();
+		}
+		if(navigator.userAgent.indexOf("Android")>0){
+	window.js.goBack();
+}
+	}else{
+		if(page_type==1){
+			window.parent.closeLayer();
+		}else{
+			window.history.back();
+		}
+	}
+		
+}
+var page_type = 0;
+function GetUrlParam(paraName) {
+　　　　var url = document.location.toString();
+　　　　var arrObj = url.split("?");
+　　　　if (arrObj.length > 1) {
+　　　　　　var arrPara = arrObj[1].split("&");
+　　　　　　var arr;
+　　　　　　for (var i = 0; i < arrPara.length; i++) {
+　　　　　　　　arr = arrPara[i].split("=");
+　　　　　　　　if (arr != null && arr[0] == paraName) {
+　　　　　　　　　　return arr[1];
+　　　　　　　　}
+　　　　　　}
+　　　　　　return "";
+　　　　}
+　　　　else {
+　　　　　　return "";
+　　　　}
+}
+page_type = GetUrlParam("pagetype");
+
+var vm = new Vue({
+    el: '#app-addr',
+    data: {
+      viewShow:false,
+      editShow:false,
+      addressList:[],
+      AddressId:'',
+      Mobile:'',
+      Address:'',
+      addressdetail:'',
+      Consignee:'',
+      IsDefault:true,
+      Provinceid:'',
+      Cityid:'',
+      Countyid:'',
+      Townid:'',
+              ////////////////////////
+      curIndex: 0,
+		Province: [],
+		City: [],
+		County: [],
+		Town: [],
+		curProvince: "",
+		curProvinceName: "",
+		curCity: "",
+		curCityName: '',
+		curCounty: "",
+		curCountyName: '',
+		curTown: "",
+		initProvince: "",
+		initCity: "",
+		initCounty: "",
+		initTown: "",
+		curTownName: '',
+		isInit: true,
+		Addr: "",
+		Address: ""
+    },
+    watch: {
+    	Mobile: function(val,oldval) {
+			this.Mobile = val.replace(/[^\d]/g,"");
+			if(this.Mobile.length>11){
+				this.Mobile = oldval;
+			}
+		},
+    },
+    methods:{
+    	clearData:function(){
+    		 var _this=this;
+             _this.AddressId='';
+	 		 _this.Mobile='';
+			 _this.Addr='';
+			 _this.addressdetail=''
+			 _this.Consignee='';
+			 _this.IsDefault=true;
+			 _this.curProvince='';
+			 _this.curCity='';
+			 _this.curCounty='';
+			 _this.curTown='';
+			 _this.curProvinceName='';
+			 _this.curCityName='';
+			 _this.curCountyName='';
+			 _this.curTownName='';
+			 _this.initProvince='';
+			 _this.initCity='';
+			 _this.initCounty='';
+			 _this.initTown=''
+    	},
+    	addRess:function(num){
+    		if(num==0){
+    			$(".adr-addrlist").css("display","none");
+    		}else{
+    			$(".adr-addrlist").css("display","block");
+    		}
+    		var _this=this;
+    		_this.viewShow=!_this.viewShow;
+    		_this.clearData();
+			_this.City=[]
+            _this.getProvinceTab();
+    	},
+    	editaddRess:function(item){
+    		if(item){
+    			$(".adr-addrlist").css("display","none");
+    		}else{
+    			$(".adr-addrlist").css("display","block");
+    		}
+    		var _this=this;
+    		_this.editShow=!_this.editShow;
+    		if(_this.editShow){
+    			if(item){
+    				if(item.IsDefault==1){
+		    				_this.IsDefault=true;
+		    		}else{
+		    				_this.IsDefault=false;
+		    		}
+    				var Address=item.Address;
+    				var Addr=Address.split('~')[0];
+    			     _this.AddressId=item.AddressId;
+					 _this.Mobile=item.Mobile;
+					 _this.Addr=Addr;
+					 _this.addressdetail=Address.split('~')[1]
+					 _this.Consignee=item.Consignee;
+					 _this.curProvince=item.Province;
+					 _this.curCity=item.City;
+					 _this.curCounty=item.County;
+					 _this.curTown=item.Town;
+					 _this.curProvinceName=Addr.split('-')[0];
+					 _this.curCityName=Addr.split('-')[1];
+					 _this.curCountyName=Addr.split('-')[2];
+					 _this.curTownName=Addr.split('-')[3];
+    		    }
+    		}else{
+    			      _this.clearData();
+    		}
+    	},
+    	getList:function(){
+    		var _this=this;
+    		$.ajax({
+				type: "get",
+				url: "/m/order/address?userid="+"@WorkContext.Uid",
+				async: true,
+				dataType: "json",
+				success: function(rel) {
+					//alert(JSON.stringify(rel.Data));
+					if(rel.Code==1){
+						_this.addressList=rel.Data;
+						if(_this.addressList.length==0){
+							_this.addressList = [];
+						}
+					}else{
+						 _this.addressList = [];
+						 _this.clearData();
+					}
+					$.hideLoading();
+					$('#app-addr').css('display','block');
+				}
+			});
+    	},
+    	saveForm:function(num,item){//保存编辑 1.编辑  2.保存 3.设置默认
+    		
+    		var _this=this;
+    		var IsDefault;
+    		var dataForm = {};
+    		if(num==3){//设置默认
+    			if(_this.IsDefault){
+	    			IsDefault=1
+	    		}else{
+	    			IsDefault=0
+	    		}
+    			dataForm={
+    				AddressId: item.AddressId,
+					Mobile: item.Mobile,
+					Address: item.Address,
+					Consignee: item.Consignee,
+					IsDefault: IsDefault,
+					Province: item.Province,
+					City:item.City,
+					County: item.County,
+					Town: item.Town,
+    		    }
+    		}else{//编辑保存
+	    			var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+	    		if(_this.Consignee==''){
+	    			$.toptips('姓名不能为空');
+	    			return false;
+	    		}else if(_this.Mobile==''){
+	    			$.toptips('手机号不能为空');
+	    			return false;
+	    		}else if(!myreg.test(_this.Mobile)){
+	    			$.toptips('手机号格式不正确');
+	    			return false;
+	    		}else if(_this.Addr==''){
+	    			$.toptips('请选择地址');
+	    			return false;
+	    		}else if(_this.addressdetail==''){
+	    			$.toptips('详细地址不能为空')
+	    			return false;
+	    		}
+	    		if(_this.IsDefault){
+	    			IsDefault=1
+	    		}else{
+	    			IsDefault=0
+	    		}
+    			dataForm={
+    				AddressId: _this.AddressId,
+					Mobile: _this.Mobile,
+					Address: _this.Addr+'~'+_this.addressdetail,
+					Consignee: _this.Consignee,
+					IsDefault: IsDefault,
+					Province: _this.curProvince,
+					City: _this.curCity,
+					County: _this.curCounty,
+					Town: _this.curTown,
+    		    }
+    		}
+    		$.ajax({
+				type: "POST",
+				url: "/m/order/AddressSave",
+				async: true,
+				data:dataForm,
+				dataType: "json",
+				success: function(rel) {
+					if(rel.Code==1){
+						_this.getList();
+						if(num==1){
+							_this.editaddRess();
+						}else if(num==2){
+							_this.addRess();
+						}
+						$(".adr-addrlist").css("display","block");
+					}else{
+					}
+				}
+			});
+    	},
+    	deleteitem:function(AddressId){
+    		var _this=this;
+    		    $.confirm("您确定要删除吗?", "确认删除?", function() {
+					//  删除地址						
+						$.post('/m/order/AddressDelete', {
+							'AddressId': AddressId
+						}, function(data) {
+							_this.getList();
+						}, 'JSON');
+				 });
+    	},
+    	chosedefault:function(item){//选择默认地址
+    		var _this=this;
+    		_this.Isdefault=!_this.Isdefault;
+    		_this.saveForm(3,item);
+    	},
+    	initAddr:function() {
+			var _this = this;
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetCityList?Province="+_this.initProvince,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.City = rel.data;
+					}
+				}
+			});
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetCountyList?City="+_this.initCity,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.County = rel.data;
+					}
+				}
+			});
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetTownList?County="+_this.initCounty,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.Town = rel.data;
+					}
+				}
+			});
+		},
+		showAddr: function (){
+			$("#app-addr").click();
+			setTimeout(function(){
+				$(".shade-box").css("display","block");
+				$(".shade-box").css("z-index","111111113");
+			},20);
+		},
+		clearAddr: function() {
+			var _this = this;
+			_this.curCity = 0;
+			_this.curCityName = "";
+			_this.curCounty = 0;
+			_this.curCountyName = "";
+			_this.curTown = 0;
+			_this.curTownName = "";
+		},
+		getProvince: function() {
+			var _this = this;
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetProvinceList",
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.Province = rel.data;
+					}
+				}
+			});
+		},
+		getAddrName: function(id,type) {
+			var _this = this;
+			$.ajax({
+				type:"get",
+				url:"/Api/Tool/GetRegionInfo?Regionid="+id,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						if(type==0){
+							_this.curProvinceName = rel.data.regionname
+						}else if(type==1){
+							_this.curCityName = rel.data.regionname
+						}else if(type==2){
+							_this.curCountyName = rel.data.regionname
+						}else if(type==3){
+							_this.curTownName = rel.data.regionname
+						}
+						_this.Addr = _this.curProvinceName+'-'+_this.curCityName+'-'+_this.curCountyName+'-'+_this.curTownName;
+						console.log(_this.Addr);
+					}
+				}
+			});
+		},
+		getProvinceTab: function(regionid,regionname) {
+			$(".addr-box").animate({"margin-left":0},100);
+			this.curIndex = 0;
+		},
+		getCityTab: function(regionid,regionname) {
+			$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+			this.curIndex = 1;
+		},
+		getCountyTab: function(regionid,regionname) {
+			$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+			this.curIndex = 2;
+		},
+		getTownTab: function(regionid,regionname) {
+			$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+			this.curIndex = 3;
+		},
+		getCity: function(regionid,regionname) {
+			var _this = this;
+			_this.isInit = false;
+			_this.curProvince = regionid;
+			_this.curProvinceName = regionname;
+			_this.curCity = 0;
+			_this.curCityName = "";
+			_this.curCounty = 0;
+			_this.curCountyName = "";
+			_this.curTown = 0;
+			_this.curTownName = "";
+			_this.curIndex = 0;
+			//$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetCityList?Province="+regionid,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.City = rel.data;
+					}
+				}
+			});
+		},
+		getCounty: function(regionid,regionname) {
+			var _this = this;
+			_this.curCity = regionid;
+			_this.curCityName = regionname;
+			_this.curCounty = 0;
+			_this.curCountyName = "";
+			_this.curTown = 0;
+			_this.curTownName = "";
+			var index = $(".cur-li").index();
+			if(_this.curIndex<index){
+				$(".addr-box").animate({"margin-left":0},100);
+			}else{
+				$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+			}
+			_this.curIndex = 1;
+			
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetCountyList?City="+regionid,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.County = rel.data;
+					}
+				}
+			});
+		},
+		getTown: function(regionid,regionname) {
+			var _this = this;
+			_this.curCounty = regionid;
+			_this.curCountyName = regionname;
+			_this.curTown = 0;
+			_this.curTownName = "";
+			var index = $(".cur-li").index();
+			if(_this.curIndex<index){
+				$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+			}else{
+				$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+			}
+			_this.curIndex = 2;
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetTownList?County="+regionid,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.Town = rel.data;
+					}
+				}
+			});
+		},
+		selTown: function(regionid,regionname) {
+			var _this = this;
+			_this.curTown = regionid;
+			_this.curTownName = regionname;
+			_this.curIndex = 3;
+			_this.Addr = _this.curProvinceName+'-'+_this.curCityName+'-'+_this.curCountyName+'-'+_this.curTownName;
+			$(".shade-box").css("display","none");
+			$("#addr").val("");
+			_this.Address = "";
+			$('#Longitude').text("");
+			$('#Latitude').text("");
+		},
+		selectaddr: function(item) {
+			window.parent.reloadData(item);
+		}
+    },
+    mounted:function(){
+    },
+    created: function () {
+		this.getProvince();
+		this.initAddr();
+		this.getAddrName(this.curProvince,0);
+		this.getAddrName(this.curCity,1);
+		this.getAddrName(this.curCounty,2);
+		this.getAddrName(this.curTown,3);
+		var _this=this;
+		_this.getList();
+	},
+ })
+</script>  
+</body>
+</html>

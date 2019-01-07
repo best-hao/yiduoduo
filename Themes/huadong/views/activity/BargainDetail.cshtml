@@ -1,0 +1,1179 @@
+﻿@model Yitao.Core.BargainInfo
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>砍价帮</title>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css"/>
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/bargain.css" />
+		<script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/swipe.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/icon/iconfont.js"></script>
+		<style type="text/css">
+			.icon {
+				/* 通过设置 font-size 来改变图标大小 */
+				width: 1em; height: 1em;
+				/* 图标和文字相邻时，垂直对齐 */
+				vertical-align: -0.15em;
+				/* 通过设置 color 来改变 SVG 的颜色/fill */
+				fill: currentColor;
+				/* path 和 stroke 溢出 viewBox 部分在 IE 下会显示
+				 normalize.css 中也包含这行 */
+				overflow: hidden;
+            }
+           	.header-back .icon, .header-menu .icon{ width: 0.6rem; height: 100%; }
+			.ell-1{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+			.ell-2{overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+			.color{color: #ff4800;}
+			.bg{background: #ff4800;}
+			.gary{color: #999;}
+			.common-header{position: relative; background: #fff;height: 0.8rem;line-height: 0.8rem;margin-bottom: 0.06rem; -moz-box-shadow:0px 2px 10px #d9d9d9; -webkit-box-shadow:0px 2px 10px #d9d9d9; box-shadow:0px 2px 10px #d9d9d9;}
+			.common-header .header-back{position: absolute;top: 0;left: 0;width: .6rem;text-align: center;}
+			.common-header .header-menu{position: absolute;top: 0;right: 0;width: .6rem;text-align: center;}
+			.weui_dialog_hd{padding: 0;}
+			.weui_toast{padding: 0 15px;font-size: 0.32rem;}
+			.xsg-detail{width: 7.5rem;font-size: 12px;margin: 0 auto;color: #333;font-family: "微软雅黑";display: none;}
+			.main{margin-bottom: 55px;}
+			.slide{height: 7.5rem;width: 7.5rem; max-height: 100%;}
+			.goods-infos{background: #fff;padding: 0.2rem;position: relative;}
+			.goods-infos .title{font-size: 0.3rem;line-height: 0.36rem;width: 7.1rem;}
+			.goods-infos .price-box{height: 0.5rem;line-height: 0.5rem;}
+			.price{color: #ff4800;font-weight: 700; font-size: .36rem;}
+			.sales-count{font-size: 0.36rem;}
+			.mark{padding: 2px 3px;background: #ff4800;color: #fff;font-size: 0.24rem;font-weight: bold;border-radius: 5px;}
+			.score{color: #999;font-size: 12px;}
+			.goods-infos .price-box .right{color: #999;}
+			.share-box{width: 0.6rem;position: absolute;right: 0;bottom: 8px;width: 0.6rem;text-align: center;}
+			.share-box .icon-box{height: 17px;}
+			.share-box .share-txt{height: 19px;}
+			.spec-show-box{position: relative;height: 0.7rem;line-height: 0.7rem;padding: 0 0.2rem;background: #fff;margin-top: 0.1rem;}
+			.spec-show-box .icon-box{width: 0.6rem;position: absolute;right: 0;top: 0;text-align: center;}
+			.spec-show-box .spec-info{padding-right: 0.6rem;}
+			.goods-detail{background: #fff;margin-top: 0.1rem;}
+			.goods-detail .title{height: 0.7rem;line-height: 0.7rem;padding: 0 0.2rem;text-align: center;}
+			.footer-bar{text-align: center; height: 48px;background: #fff;position: fixed;bottom: 0;width: 7.5rem;left: 50%;margin-left: -3.75rem;-moz-box-shadow:0px 2px 10px #d9d9d9; -webkit-box-shadow:0px 2px 10px #d9d9d9; box-shadow:0px 2px 10px #d9d9d9;}
+			.footer-left{line-height: 48px;}
+			.footer-left a{display:block;color: #333;text-align: center;font-size: 0.32rem;}
+			.footer-right{line-height: 48px;color: #fff;font-size: 0.32rem;}
+			.footer-left .icon{color: #999;font-size: 20px;}
+			.footer-left .icon-box{height: 25px;line-height: 25px;}
+			.footer-right .join-cart{background: #FEBF14;}
+			.footer-right .buy-now{background: #FF4800;}
+			.detail img{max-width: 100% !important;height: auto !important;}
+			.section{padding: 0.2rem 0.2rem 0 0.2rem;background: #faf4f4;}
+			.fb{font-size: 0.32rem;}
+			.wx-share{width:7.5rem;height:100%;position:fixed;left:50%;margin-left:-3.75rem;right:0;top:0;background-color:rgba(0,0,0,.7);z-index:100;display:none}
+			.wx-share .share-img{width:5rem;height:6rem;background:url(/Mobile/Themes/huadong/static/images/share.png);background-size:5rem 6rem;background-position:center;float:right;margin:.5rem .5rem 0 0}
+			.wx-share .share-tips{width:100%;text-align:center;line-height:2rem;color:#fff;font-size:0.6rem;float:left;margin-top:0.6rem}
+            .address-con:last-child:before{content: "添加新收货地址";position: absolute;left: 0.3rem;top: 0.45rem;}
+             	.show-addr li{
+    		display: inline-block;
+    		line-height: 0.8rem;
+		    float: none!important;
+		    text-align: left;
+		    padding: 0 0.2rem;
+    	}
+    	.addr-box ul li {
+    padding: 0 0.2rem;
+    /* line-height: 0.6rem; */
+    height: 0.6rem;
+     overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap
+}
+		</style>
+		<script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    	<script>
+	    	//alert(wxobj);
+	        wx.config({
+	            debug: false, /* 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。*/
+	            appId: '@ViewData["AppId"]', /* 必填，公众号的唯一标识*/
+	            timestamp: '@ViewData["Timestamp"]', /* 必填，生成签名的时间戳*/
+	            nonceStr: '@ViewData["NonceStr"]', /* 必填，生成签名的随机串*/
+	            signature: '@ViewData["Signature"]',/* 必填，签名*/
+	            jsApiList: [
+	                    'checkJsApi',
+	                    'onMenuShareTimeline',
+	                    'onMenuShareAppMessage',
+	                    'onMenuShareQQ',
+	                    'onMenuShareWeibo',
+	                    'hideMenuItems',
+	                    'showMenuItems',
+	                    'hideAllNonBaseMenuItem',
+	                    'showAllNonBaseMenuItem',
+	                    'translateVoice',
+	                    'startRecord',
+	                    'stopRecord',
+	                    'onRecordEnd',
+	                    'playVoice',
+	                    'pauseVoice',
+	                    'stopVoice',
+	                    'uploadVoice',
+	                    'downloadVoice',
+	                    'chooseImage',
+	                    'previewImage',
+	                    'uploadImage',
+	                    'downloadImage',
+	                    'getNetworkType',
+	                    'openLocation',
+	                    'getLocation',
+	                    'hideOptionMenu',
+	                    'showOptionMenu',
+	                    'closeWindow',
+	                    'scanQRCode',
+	                    'chooseWXPay',
+	                    'openProductSpecificView',
+	                    'addCard',
+	                    'chooseCard',
+	                    'openCard'
+	            ]
+	        });
+
+	        wx.error(function (res) {
+	            /*alert(res);*/
+	            /*console.log(res);*/
+	            /*alert('验证失败');*/
+	        });
+
+	        wx.ready(function () {
+	        	$(function(){
+	        		//var link = window.location.href+'&LeaderUid='+'@WorkContext.Uid';
+	        		if('@WorkContext.Uid'<1){
+	        			var link='https://'+window.location.host+'/m/account/Login?LeaderUid='+'@WorkContext.Uid';
+	        		}else{
+	        			var link = window.location.href+'&LeaderUid='+'@WorkContext.Uid';
+	        		}
+		            var Logo = '@WorkContext.SellerInfo.Logo';
+		            var imgUrl = '';
+		            imgUrl = $("#slide li:last-child").find("img").attr("src");
+		            var desc = "放心砍价，砍成必发货";
+	                /*转发到朋友圈*/
+	                wx.onMenuShareTimeline({
+	                    title: '@Model.ProductName',
+	                    link: link,
+	                    imgUrl: imgUrl,
+	                    success: function () {
+	                        /*alert('转发成功！');*/
+	                    },
+	                    cancel: function () {
+	                        /*alert('转发失败！');*/
+	                    }
+	                });
+
+	                wx.onMenuShareAppMessage({
+	                    title: '@Model.ProductName',
+	                    desc: desc,
+	                    link: link,
+	                    imgUrl: imgUrl,
+	                    type: 'link',
+	                    dataUrl: '',
+	                    success: function () {
+	                        /*alert('转发成功！');*/
+	                    },
+	                    cancel: function () {
+	                       /* alert('转发失败！');*/
+	                    }
+	                });
+	        	});
+            });
+   	 	</script>
+	</head>
+	<body>
+		<div class="xsg-detail" id="bargain-detail">
+			<div class="common-header"> 
+				<div class="header-back" onclick="goToBack()"><span class="icon iconfont">&#xe60e;</span></div>
+			    <div class="title ell-1">砍价帮</div> 
+			    <div class="header-menu" onclick="share()"><span class="icon iconfont">&#xe620;</span></div>
+		    </div>
+		    <div class="main">
+		    	<div class="slide" id="slide">
+				    <ul>
+				        <li v-if="info.bargaininfo">
+				            <a href="#">
+				                <img :src="'@(WorkContext.ShopConfig.ImageCDN)/'+info.bargaininfo.shareimg"/>
+				            </a>
+				        </li>
+				        <li v-if="info.picsinfo.length>0" v-for="(item, index) of info.picsinfo">
+				            <a href="#">
+				                <img :src="'@(WorkContext.ShopConfig.ImageCDN)/'+item.imgurl"/>
+				            </a>
+				        </li>
+				    </ul>
+				    <div class="dot">
+				        <span></span>
+				        <span v-if="info.picsinfo.length>0"  v-for="(item, index) of info.picsinfo"></span>
+				    </div>
+				</div>
+				<div class="goods-infos">
+					<div class="price-box">
+						<div class="left ell-2">
+							<span class="price">底价¥{{info.bargaininfo.limitprice}}</span>
+							<span class="score">原价¥{{info.productitem.saleprice}}</span>
+						</div>
+						<div class="right">
+							<span class="color sales-count">{{info.bargaininfo.salecount}}人</span>已底价购买
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					<div class="title ell-2">{{info.bargaininfo.productname}}</div>
+				</div>
+				<div class="section">
+					<div class="text-line">
+						<svg class="icon" aria-hidden="true">
+	                        <use xlink:href="#icon-dao"></use>
+	                    </svg>
+						<span class="color fb">底价购买</span>
+						<span>放心砍价，砍成必发货</span>
+					</div>
+					<!--div class="text-line">
+						<div class="weui-flex">
+							<div class="weui-flex-item">
+								<span  class="icon iconfont color">&#xe652;</span>
+								<span>全场包邮</span>
+							</div>
+							<div class="weui-flex-item">
+								<span class="icon iconfont color">&#xe66f;</span>
+								<span>48小时发货</span>
+							</div>
+							<div class="weui-flex-item">
+								<span class="icon iconfont color">&#xe657;</span>
+								<span>保险担当</span>
+							</div>
+						</div>
+					</div-->
+				</div>
+				<div class="goods-detail">
+					<div class="title">图文详情</div>
+					<div class="detail" v-html="info.productitem.description"></div>
+				</div>
+		    </div>
+			<div class="footer-bar">
+				<div class="weui-flex">
+					<div class="weui-flex-item footer-left">
+						<a :href="'/m/product/detail?id='+info.bargaininfo.productid+'&IsApp=@WorkContext.IsApp'">原价购买</a>
+					</div>
+					<div class="weui-flex-item footer-right">
+						<div class="weui-flex">
+							<div class="weui-flex-item buy-now" v-on:click="openShade(info.bargaininfo.itemid)">
+								发起砍价
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="shade" v-show="shadeok">
+				<div class="shade-mask" v-on:click="closeShade()"></div>
+				<div class="shade-content">
+					<div v-show="attrContent" v-bind:class="[specContent ? 'shade-spec-active' : '','shade-spec']" >
+						<div class="header-box">
+							<div class="img-box" v-if="activityPic !=''">
+	                            <img v-bind:src="'@WorkContext.ShopConfig.ImageCDN'+activityPic" alt="" />
+							</div>
+							<div class="img-box" v-else>
+	                            <img src="/Images/wutu.png" alt="" />
+							</div>
+							<div class="txt-box">
+								<div class="price color">¥<span class="price activity-price">{{activityPrice}}</span></div>
+								<div class="spec-selected ell-2">已选：<span class="spec-txt spec-name">{{skuName}}</span></div>
+							</div>
+							<div class="close" v-on:click="closeShade()"><span class="icon iconfont">&#xe62d;</span></div>
+						</div>
+						<div class="spec-box">
+		                	<div class="spec-list" v-for="(item,index) of listproductspecinfo">
+		                		<div class="spec-item">{{item.specname}}</div>
+								<div class="spec-item-val">
+									<a href="javascript:;" ref="specValue" v-for="(itemone,indexone) of listproductspecvalueinfo" class="spec-val" v-bind:data-productid="itemone.productid" v-bind:data-productid="itemone.productid" v-bind:data-specvalue="itemone.specvalue" v-bind:data-specvalueid="itemone.specvalueid" v-if="item.specid == itemone.specid">{{itemone.specvalue}}</a>
+								</div>
+							</div>
+						</div>
+						<div class="confirm-spec bg" v-on:click="confirmSpec()">确定</div>
+					</div>
+					<div v-bind:class="[addressContent ? 'shade-spec-active' : '','shade-spec']"  style='height:5.8rem;overflow-y: scroll;'>
+						<div class="address-title">选择收货地址 <span class="icon iconfont" v-on:click="closeShade()">&#xe62d;</span></div>
+						<div class="address-con" v-for='(item,index) in AddressList' :key='index'  >
+							<a href="javascript:;"  v-on:click="sureAddress(item)">
+								<div class="address-up">{{item.Consignee}}: {{item.Mobile}}</div>
+								<div class="address-down">{{item.Address}}</div>
+							</a>
+						</div>
+						<div class="address-con" v-on:click="addressAdd()" style='height:100%;'>
+							<!--<a href="javascript:;"  >
+								<div>添加新收获地址</div>
+							</a>-->
+						</div>
+					</div> 
+				</div>
+			</div>
+			<div class="wx-share" onclick="closeShare()">
+		        <div class="share-img"></div>
+		        <p class="share-tips">点击右上角分享</p>
+		    </div>
+			<!--form id="goods_form" action="/m/Order/BargainOrder" method="post">
+		        <input type="hidden" name="ProductId" id="ProductId" :value="info.bargaininfo.productid" />
+		        <input type="hidden" name="SkuId" id="SkuId" :value="info.productitem.skuid" />
+		        <input type="hidden" name="Quantity" id="Quantity" value="1" />
+		        <input type="hidden" name="IsApp" value="@WorkContext.IsApp">
+		    </form-->
+		    <div class="" id="select_add" v-show='viewShow'>
+			<div class="select_add_ab">
+				<div class="select_add_re">
+
+					<div class="m-navbar"   v-on:click='addressAdd()'>
+						<span class="navbar-item select_back" id="add_back"><i class="iconfont">&#xe60e;</i></span>
+						<div class="navbar-center">
+							<span class="navbar-title">地址添加</span>
+						</div>
+					</div>
+					<div class="formbox">
+						<div class="inputbox">
+							<div class="fl">收货人姓名</div>
+							<div class="fr">
+								<input type="text" placeholder="收货人姓名" name="" value="" class="weui-input" id="Consignee_Name" v-model='Consignee'>
+							</div>
+						</div>
+						<div class="inputbox">
+							<div class="fl">联系方式</div>
+							<div class="fr">
+								<input type="tel" placeholder="联系方式" name="" maxlength="11" value="" class="weui-input" id="Consignee_Phone" v-model='Mobile'>
+							</div>
+						</div>
+						<!--  选择地址  dom 样式之后再做修改 -->
+						<div class="inputbox">
+							<div class="fl">选择省市</div>
+							<div class="fr">
+								<input name="" class="weui-input" type="text"  readonly="readonly" id="selectAddr" v-on:click="showAddr()" placeholder="请选择省市区镇" v-model="Addr">
+				                <input type="hidden" name="Province" id="Province" v-model="curProvince" />
+				                <input type="hidden" name="City" id="City" v-model="curCity" />
+				                <input type="hidden" name="County" id="County" v-model="curCounty" />
+				                <input type="hidden" name="Town" id="Town" v-model="curTown" />
+							</div>
+						</div>
+						
+						<div class="inputbox">
+							<div class="fl">详细地址</div>
+							<div class="fr">
+								<input type="text" class="weui-input" name="" id="Consignee_Map" value="" placeholder="详细地址" v-model='addressdetail'>
+								<div id="searchResultPanel" style="border1px solid #C0C0C0;width：150px;height:auto; display:none;" class="searchResultPanel"></div>
+							</div>
+						</div>
+						<div class="inputbox">
+							<div class="fl"><span class="total-text">设置默认地址</span></div>
+							<div class="fr">
+								<input class="weui_switch" type="checkbox" id="morenMap"  v-model='IsDefault'>
+							</div>
+						</div>
+						<div class="hideBtn" v-on:click='saveForm(2)'>保存</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<!--四联动-->
+		<div class="shade-box" style='touch-action: pan-x;'>
+		    <div class="addr-shade" style='touch-action: pan-x;'>
+		    	<div class="title">
+		    		所在地区
+		    	</div>
+		    	<div class="show-addr" style='width:7.5rem;padding:0;height:0.8rem;touch-action: pan-x;'>
+		    		<ul style='display:block;width:7.5rem;overflow-x:auto;height:0.8rem;white-space: nowrap;touch-action: pan-x;'>
+		    			<li class="prov-li" 
+		    				:class="{'cur-li':curIndex==0}"
+		    				v-on:click="getProvinceTab(initProvince,curProvinceName)"
+		    				>{{curProvinceName}}</li>
+		    			<li class="city-li" 
+		    				:class="{'cur-li':curIndex==1}"
+		    				v-on:click="getCityTab(initCity,curCityName)"
+		    				>{{curCityName}}</li>
+		    			<li class="county-li" 
+		    				:class="{'cur-li':curIndex==2}"
+		    				v-on:click="getCountyTab(initCounty,curCountyName)"
+		    				>{{curCountyName}}</li>
+		    			<li class="town-li" 
+		    				:class="{'cur-li':curIndex==3}"
+		    				v-on:click="getTownTab(initTown,curTownName)"
+		    				>{{curTownName}}</li>
+		    		</ul>
+		    	</div>
+				<div class="addr-box">
+					<div class="province left">
+						<ul>
+							<li v-for="(item, index) of Province" 
+								:key="item.regionid" 
+								v-on:click="getCity(item.regionid,item.regionname)"
+								:class="{'curProvince':curProvince==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+					<div class="city left">
+						<ul v-if="City.length>0">
+							<li v-for="(item, index) of City" 
+								:key="item.regionid" 
+								v-on:click="getCounty(item.regionid,item.regionname)"
+								:class="{'curCity':curCity==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+					<div class="county left">
+						<ul v-if="County.length>0">
+							<li v-for="(item, index) of County" 
+								:key="item.regionid" 
+								v-on:click="getTown(item.regionid,item.regionname)"
+								:class="{'curCounty':curCounty==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+					<div class="town left">
+						<ul v-if="Town.length>0">
+							<li v-for="(item, index) of Town" 
+								:key="item.regionid" 
+								v-on:click="selTown(item.regionid,item.regionname)"
+								:class="{'curTown':curTown==item.regionid}"
+								:data-id="item.regionid"
+								>{{item.regionname}}</li>
+						</ul>
+					</div>
+				</div>
+		    	
+		    </div>
+	    </div>
+		</div>
+		
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script type="text/javascript">
+			$.showLoading();
+			var SkuId = [];
+			var SkuName = [];
+			var IsApp = "@WorkContext.IsApp";
+			var weixin = "@WebHelper.IsWeiXin()";
+			//返回交互
+			function goToBack() {
+				if(IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+		                window.js.goBack();
+					}
+				}else{
+					window.history.back();
+				}
+			}
+			
+			var vm = new Vue({
+				el: "#bargain-detail",
+				data:{
+					shadeok: false,
+					attrContent: true,
+					addressContent: false, //地址栏展示条件
+					specContent: true,    //属性框展示条件
+					info: [],
+					listproductspecinfo:[], //商品属性名
+					listproductspecvalueinfo:[], //商品属性值
+					itemId: 0,
+					productId: 0,
+					skuId: 0,
+					activityType: 11,  //砍价活动类型
+					skuName:"",
+					activityPrice: 0,
+					AddressList:[],
+					activityPic: "",
+					shopuserid:0,
+					Uid: "@WorkContext.Uid",
+					userId:'@WorkContext.Uid',
+					IsApp: "@WorkContext.IsApp",
+		///////////////////////地址添加、、、、、、、、、///////////
+					AddressId:'',
+			        Mobile:'',
+			        Address:'',
+			        addressdetail:'',
+			        Consignee:'',
+			        IsDefault:true,
+			        Provinceid:'',
+			        Cityid:'',
+			       Countyid:'',
+			       Townid:'',
+		//	      四级联动
+				    curIndex: 0,
+					Province: [],
+					City: [],
+					County: [],
+					Town: [],
+					curProvince: "",
+					curProvinceName: "",
+					curCity: "",
+					curCityName: '',
+					curCounty: "",
+					curCountyName: '',
+					curTown: "",
+					initProvince: "",
+					initCity: "",
+					initCounty: "",
+					initTown: "",
+					curTownName: '',
+					isInit: true,
+					Addr: "",
+					Address: "",
+					viewShow:false,
+				},
+				created: function() {
+					var that = this;
+					that.getInfo();
+					that.getAddressList();
+					this.getProvince();
+					this.initAddr();
+					this.getAddrName(this.curProvince,0);
+					this.getAddrName(this.curCity,1);
+					this.getAddrName(this.curCounty,2);
+					this.getAddrName(this.curTown,3);
+				},
+				methods: {
+					//			四级联动
+			initAddr:function() {
+			var _this = this;
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetCityList?Province="+_this.initProvince,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.City = rel.data;
+					}
+				}
+			});
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetCountyList?City="+_this.initCity,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.County = rel.data;
+					}
+				}
+			});
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetTownList?County="+_this.initCounty,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.Town = rel.data;
+					}
+				}
+			});
+		},
+		showAddr: function (){
+			$("#app-addr").click();
+			setTimeout(function(){
+				$(".shade-box").css("display","block");
+				$(".shade-box").css("z-index","111111113");
+			},20);
+		},
+		
+		getProvince: function() {
+			var _this = this;
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetProvinceList",
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						_this.Province = rel.data;
+					}
+				}
+			});
+		},
+		getAddrName: function(id,type) {
+			var _this = this;
+			$.ajax({
+				type:"get",
+				url:"/Api/Tool/GetRegionInfo?Regionid="+id,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						if(type==0){
+							_this.curProvinceName = rel.data.regionname
+						}else if(type==1){
+							_this.curCityName = rel.data.regionname
+						}else if(type==2){
+							_this.curCountyName = rel.data.regionname
+						}else if(type==3){
+							_this.curTownName = rel.data.regionname
+						}
+						_this.Addr = _this.curProvinceName+'-'+_this.curCityName+'-'+_this.curCountyName+'-'+_this.curTownName;
+						console.log(_this.Addr);
+					}
+				}
+			});
+		},
+		getProvinceTab: function(regionid,regionname) {
+			$(".addr-box").animate({"margin-left":0},100);
+			this.curIndex = 0;
+		},
+		getCityTab: function(regionid,regionname) {
+			$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+			this.curIndex = 1;
+		},
+		getCountyTab: function(regionid,regionname) {
+			$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+			this.curIndex = 2;
+		},
+		getTownTab: function(regionid,regionname) {
+			$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+			this.curIndex = 3;
+		},
+		getCity: function(regionid,regionname) {
+			var _this = this;
+			_this.isInit = false;
+			_this.curProvince = regionid;
+			_this.curProvinceName = regionname;
+			_this.curCity = 0;
+			_this.curCityName = "";
+			_this.curCounty = 0;
+			_this.curCountyName = "";
+			_this.curTown = 0;
+			_this.curTownName = "";
+			_this.curIndex = 0;
+			//$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetCityList?Province="+regionid,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						if(rel.data.length==0){
+							$(".shade-box").css("display","none");
+							_this.Addr = _this.curProvinceName
+						}else{
+							_this.City = rel.data;
+						}
+					}
+				}
+			});
+		},
+		getCounty: function(regionid,regionname) {
+			var _this = this;
+			_this.curCity = regionid;
+			_this.curCityName = regionname;
+			_this.curCounty = 0;
+			_this.curCountyName = "";
+			_this.curTown = 0;
+			_this.curTownName = "";
+			var index = $(".cur-li").index();
+			if(_this.curIndex<index){
+				$(".addr-box").animate({"margin-left":0},100);
+			}else{
+				$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+			}
+			_this.curIndex = 1;
+			
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetCountyList?City="+regionid,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						if(rel.data.length==0){
+							$(".shade-box").css("display","none");
+							_this.Addr = _this.curProvinceName+'-'+_this.curCityName
+						}else{
+							_this.County = rel.data;
+						}
+					
+					}
+				}
+			});
+		},
+		getTown: function(regionid,regionname) {
+			var _this = this;
+			_this.curCounty = regionid;
+			_this.curCountyName = regionname;
+			_this.curTown = 0;
+			_this.curTownName = "";
+			var index = $(".cur-li").index();
+			if(_this.curIndex<index){
+				$(".addr-box").animate({"margin-left":"-3.75rem"},100);
+			}else{
+				$(".addr-box").animate({"margin-left":"-7.5rem"},100);
+			}
+			_this.curIndex = 2;
+			$.ajax({
+				type:"get",
+				url:"/Api/User/GetTownList?County="+regionid,
+				async:true,
+				dataType:"json",
+				success: function(rel) {
+					if(rel.code==1){
+						if(rel.data.length==0){
+							$(".shade-box").css("display","none");
+							_this.Addr = _this.curProvinceName+'-'+_this.curCityName+'-'+_this.curCountyName
+						}else{
+							_this.Town = rel.data;
+						}
+						
+					}
+				}
+			});
+		},
+		selTown: function(regionid,regionname) {
+			var _this = this;
+			_this.curTown = regionid;
+			_this.curTownName = regionname;
+			_this.curIndex = 3;
+			_this.Addr = _this.curProvinceName+'-'+_this.curCityName+'-'+_this.curCountyName+'-'+_this.curTownName;
+			$(".shade-box").css("display","none");
+			$("#addr").val("");
+			_this.Address = "";
+			$('#Longitude').text("");
+			$('#Latitude').text("");
+		},
+		selectaddr: function(item) {
+			window.parent.reloadData(item);
+		},
+		    //、、、、、、、、//////////////
+			clearData:function(){
+    		 var _this=this;
+             _this.AddressId='';
+	 		 _this.Mobile='';
+			 _this.Addr='';
+			 _this.addressdetail=''
+			 _this.Consignee='';
+			 _this.IsDefault=true;
+			 _this.curProvince='';
+			 _this.City=[];
+			 _this.County=[];
+			 _this.Town=[];
+			 _this.curCity='';
+			 _this.curCounty='';
+			 _this.curTown='';
+			 _this.curProvinceName='';
+			 _this.curCityName='';
+			 _this.curCountyName='';
+			 _this.curTownName='';
+			 _this.initProvince='';
+			 _this.initCity='';
+			 _this.initCounty='';
+			 _this.initTown='';
+			  this.getAddrName(this.curProvince,0);
+			  this.getAddrName(this.curCity,1);
+			  this.getAddrName(this.curCounty,2);
+			  this.getAddrName(this.curTown,3);
+			  $(".addr-box").animate({"margin-left":"0rem"},100);
+			this.curIndex = 0;
+    	},
+			addressAdd:function(){
+				var _this=this;
+				_this.viewShow=!_this.viewShow;
+				 _this.clearData();
+			},
+			saveForm:function(num,item){//保存编辑 1.编辑  2.保存 3.设置默认
+    		
+    		var _this=this;
+    		var IsDefault;
+    		var dataForm = {};
+    		if(num==3){//设置默认
+    			if(_this.IsDefault){
+	    			IsDefault=1
+	    		}else{
+	    			IsDefault=0
+	    		}
+    			dataForm={
+    				AddressId: item.AddressId,
+					Mobile: item.Mobile,
+					Address: item.Address,
+					Consignee: item.Consignee,
+					IsDefault: IsDefault,
+					Province: item.Province,
+					City:item.City,
+					County: item.County,
+					Town: item.Town,
+    		    }
+    		}else{//编辑保存
+	    			var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+	    		if(_this.Consignee==''){
+	    			$.toptips('姓名不能为空');
+	    			return false;
+	    		}else if(_this.Mobile==''){
+	    			$.toptips('手机号不能为空');
+	    			return false;
+	    		}else if(!myreg.test(_this.Mobile)){
+	    			$.toptips('手机号格式不正确');
+	    			return false;
+	    		}else if(_this.Addr==''){
+	    			$.toptips('请选择地址');
+	    			return false;
+	    		}else if(_this.addressdetail==''){
+	    			$.toptips('详细地址不能为空')
+	    			return false;
+	    		}
+	    		if(_this.IsDefault){
+	    			IsDefault=1
+	    		}else{
+	    			IsDefault=0
+	    		}
+    			dataForm={
+    				AddressId: _this.AddressId,
+					Mobile: _this.Mobile,
+					Address: _this.Addr+'~'+_this.addressdetail,
+					Consignee: _this.Consignee,
+					IsDefault: IsDefault,
+					Province: _this.curProvince,
+					City: _this.curCity,
+					County: _this.curCounty,
+					Town: _this.curTown,
+    		    }
+    		}
+    		$.ajax({
+				type: "POST",
+				url: "/m/order/AddressSave",
+				async: true,
+				data:dataForm,
+				dataType: "json",
+				success: function(rel) {
+					if(rel.Code==1){
+						if(num==1){
+						}else if(num==2){
+//							_this.addRess();
+                        _this.viewShow=false;
+                        _this.getAddressList();
+                        _this.clearData();
+						}
+						$(".adr-addrlist").css("display","block");
+					}else{
+					}
+				}
+			});
+    	},
+					//////添加地址end///////
+					getInfo: function() {
+						var that = this;
+						$.ajax({
+							type:"get",
+							url:"/Api/Activity/BargainDetail?Id="+"@Model.ItemId",
+							async:false,
+							dataType:"json",
+							success: function(rel) {
+								if(rel.code==1){
+									that.info = rel.data;
+									that.getShopInfo(rel.data.productitem.productid);
+									//console.log(that.info);
+								}
+							}
+						});
+					},
+					openShade: function (itemId) {
+						var that = this;
+						that.shadeok = !that.shadeok;
+						//判断用户是否登录
+						if(Number(that.Uid)>0){
+							//$("#goods_form").submit();
+							$.ajax({
+								type:"get",
+								url:"/Api/Activity/BargainDetail?v="+Math.random()+"&Id="+itemId,
+								async:true,
+								dataType:"json",
+								success: function(rel) {
+									if(rel.code==1){
+										var arrInfo = [];
+										that.listproductspecinfo = rel.data.listproductspecinfo;
+										that.listproductspecvalueinfo = rel.data.listproductspecvalueinfo;
+										that.productId = rel.data.bargaininfo.productid;
+										that.itemId = itemId;
+										arrInfo.push(rel.data.productitem);
+										arrInfo.forEach(function(element, index){
+											that.skuId = element.skuid;  //给全局skuId赋值
+											that.activityPic = element.picurl; //给activityPic赋图片路径
+											// 判断该商品是否存在规格
+											if(element.specstatus == 0){
+												that.skuName = element.skuname;
+												that.activityPrice = element.saleprice;
+
+											}else{
+												// 存在规格时调用 getMoney函数
+												getMoney(element.specprops, that.skuId);
+											}
+
+										});
+									}
+								}
+							});
+						}else{
+							if(Number(IsApp==1)){
+								if(navigator.userAgent.indexOf("iPhone")>0){
+									gotologinvc();
+								}
+								if(navigator.userAgent.indexOf("Android")>0){
+									window.js.goLogin();
+								}
+							}else{
+								if(weixin=="False"){
+									var url = window.location.href;
+									window.location.href = '/m/account/login?returnUrl='+url;
+								}else{
+									var url = window.location.href;
+									window.location.href = '/m/user/bind?returnUrl='+url;
+								}
+							}
+						}
+					},
+					closeShade: function() {
+						var that = this;
+						that.specContent=true;
+						that.addressContent=false;
+						that.shadeok = !that.shadeok;
+						clearSpec(); //关闭弹框时清除所选规格
+					},
+					confirmSpec: function(){
+						var that = this;
+							that.addressContent = !that.addressContent;
+							that.specContent = !that.specContent;
+					},
+					sureAddress:function(item) {
+						var that = this;
+						//这里需要调此商品设定的快递运费
+				        $.confirm('"'+item.Consignee+","+item.Mobile+','+item.Address+'"', "请确认您的收货地址", function() {
+
+				        	that.addOrder(item.AddressId,that.itemId,that.skuId)
+
+				        }, function() {
+				          //取消操作
+				          that.closeShade()
+				        	$.toast("取消!", "cancel");
+				        });
+				    },
+				    getAddressList:function(){
+		    		 var that=this;
+			    		$.ajax({
+							type: "get",
+							url: "/m/order/address?userid="+"@WorkContext.Uid",
+							async: true,
+							dataType: "json",
+							success: function(rel) {
+								console.log(rel)
+								if(rel.Code==1){
+									that.AddressList=rel.Data
+								}else{
+
+								}
+							}
+						});
+		    	    },
+		    	    addOrder:function(addressid,itemid,skuid){//创建临时订单
+		    	    	var that=this;
+		    	    	var dataList={
+		    	    		addressid:addressid,
+		    	    		itemid:itemid,
+		    	    		skuid:skuid,
+		    	    		userid:that.userId
+		    	    	}
+		    	    	$.ajax({
+							type: "post",
+							url: "/Api/Activity/OrderBargainAdd",
+							async: true,
+							dataType: "json",
+							data:dataList,
+							success: function(rel) {
+								console.log(rel)
+								if(rel.code==1){
+									$.toast(rel.message);
+									var orderid = rel.data;
+									//that.bargain(that.userId,rel.data,that.userId)
+									//window.location.href="/m/activity/BargainStatus?OrderId="+orderid+"&IsApp="+that.IsApp;
+									if(that.IsApp==1){
+					                	if(navigator.userAgent.indexOf("iPhone")>0){
+											bargainCommodity(orderid.toString());
+										}
+					                	if(navigator.userAgent.indexOf("Android")>0){
+											window.js.bargainCommodity(orderid.toString());
+										}
+				                	}else{
+				                	   window.location.href="/m/activity/BargainStatus?IsApp="+that.IsApp+'&orderid='+rel.data;
+				                    }
+								}else{
+									$.toast(rel.message, "cancel");
+								}
+							}
+						});
+		    	    },
+    	    		bargain:function(userid,orderid,bargainuid){//好友砍价
+		    	    	var that=this;
+		    	    	var dataList={
+		    	    		orderid:orderid,
+		    	    		userid:userid,
+		    	    		BargainUserId:bargainuid
+		    	    	}
+		    	    	$.ajax({
+							type: "post",
+							url: "/Api/Activity/Bargain",
+							async: true,
+							dataType: "json",
+							data:dataList,
+							success: function(rel) {
+								console.log(rel)
+								if(rel.code==1){
+									$.toast(rel.message);
+							        if(that.IsApp==1){
+					                	if(navigator.userAgent.indexOf("iPhone")>0){
+//											settleShoppingCart(datas.OrderId);
+										}
+					                	if(navigator.userAgent.indexOf("Android")>0){
+											window.js.bargainCommodity(orderid.toString());
+										}
+				                	}else{
+				                		window.location.href="/m/activity/BargainStatus?IsApp="+that.IsApp+'&orderid='+orderid;
+				                    }
+									
+								}else{
+									$.toast(rel.message);
+								}
+							}
+						});
+		    	    },
+		    	    getShopInfo: function(productid){//获取商户userid
+						var that = this;
+						$.ajax({
+			    			type:"get",
+			    			url:"/Api/User/GetSaleUidByProductId?ProductId="+productid,
+			    			async:true,
+			    			success: function(rel){
+			    				console.log(rel);
+			    				if(rel.code==1){
+			    					that.shopuserid=rel.data;
+			    				}
+			    			}
+			    		});
+				   },
+				}
+			});
+			$(function(){
+				setTimeout(function(){
+					$('#slide').swipeSlide({
+						autoSwipe:true,//自动切换默认是
+						speed:3000,//速度默认4000
+						continuousScroll:true,//默认否
+						transitionType:'cubic-bezier(0.22, 0.69, 0.72, 0.88)',//过渡动画linear/ease/ease-in/ease-out/ease-in-out/cubic-bezier
+						lazyLoad:true,//懒加载默认否
+						firstCallback : function(i,sum,me){
+				            me.find('.dot').children().first().addClass('cur');
+				        },
+				        callback : function(i,sum,me){
+				            me.find('.dot').children().eq(i).addClass('cur').siblings().removeClass('cur');
+				        }
+					});
+					
+				},2000);
+                setTimeout(function(){
+                	$.hideLoading();
+					$(".xsg-detail").css("display","block");
+                },200)
+				//选择商品规格同时调用规格价格
+		    	$(document).on("click", ".spec-val",function(){
+		    		$(this).addClass("cur-spec").siblings().removeClass("cur-spec");
+					SkuName = [];
+					SpecPropsList = [];
+					$(".cur-spec").each(function(i, v){
+						var name = $(this).text();
+						var specProps = $(this).data("specvalueid");
+						SkuName.push(name);
+						SpecPropsList.push(specProps);
+					});
+					var SkuNameStr = SkuName.join(",");
+					var specPropsStr = SpecPropsList.join(",");
+					$(".spec-name").text(SkuNameStr);
+					getMoney(specPropsStr,vm.skuId);
+					//console.log(vm.skuId+"........"+specPropsStr);
+		    	});
+			});
+			//分享交互
+			function share(){
+				if(IsApp==1){
+					var type = 2;
+					var title = '@Model.ProductName';
+					var url = '@(Request.Url.Scheme)://'+'@(WorkContext.ShopConfig.SiteUrl)'+'/m/activity/BargainDetail?id=@Model.ItemId'+'&LeaderUid='+vm.shopuserid;
+		            var Logo = '@WorkContext.SellerInfo.Logo';
+		            var imageUrl = $("#slide li:last-child").find("img").attr("src");
+		            var describe = "放心砍价，砍成必发货";
+		            var text="";
+		            var json = {
+		            	type: type,
+		            	title: title,
+		            	imageUrl: imageUrl,
+		            	describe: describe,
+		            	url: url,
+		            	LeaderUid: '@WorkContext.Uid',
+		            	text: ""
+		            }
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						shareWithTypes(type,title,imageUrl,describe,url,text);
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+						window.js.shareWithTypes(JSON.stringify(json));
+					}
+				}else{
+					$(".wx-share").css("display","block");
+				}
+			}
+			//关闭分享
+			function closeShare() {
+				$(".wx-share").css("display","none");
+			}
+
+			//获取规格价格
+			function getMoney(specPropsStr,skuId) {
+				$.ajax({
+					type: "post",
+					url: "/m/product/getactivityskuinfo",
+					async:true,
+					data: {
+		                SkuId:skuId,
+		                ProductId:vm.productId,
+		                ItemId:vm.itemId,
+		                SpecProps:specPropsStr,
+		                ActivityType:vm.activityType,
+					},
+					dataType: 'json',
+					success: function(rel) {
+						if(rel.Code == 1) {
+							vm.activityPrice = rel.Data.ActivityPrice;
+		                    vm.skuName = rel.Data.SkuName;
+		                    vm.skuId = rel.Data.SkuId;
+							var specPropsArr = specPropsStr.split(",");  //specPropsStr分割成字符串数组
+							specPropsArr.forEach(function(el,index){    //循环specPropsArr与.spec-val比配筛选初始规格
+								$(".spec-val").each(function() {
+									if(Number($(this).data("specvalueid")) == Number(el)){
+										$(this).addClass("cur-spec");
+									}
+								});
+							});
+						}
+					}
+				});
+			}
+
+			//关闭弹框时清除所选规格
+			function clearSpec(){
+				$(".spec-val").each(function() {
+					if($(this).hasClass("cur-spec")){
+						$(this).removeClass("cur-spec");
+					}
+				});
+			}
+		</script>
+	</body>
+</html>

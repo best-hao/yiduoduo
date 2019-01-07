@@ -1,0 +1,914 @@
+@model Yitao.Core.OrderInfo
+@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+        <meta content="telephone=no" name="format-detection">
+        <meta name="apple-touch-fullscreen" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <title>订单详情-@{@WorkContext.SellerInfo.SellerName}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="stylesheet" type="text/css" href="/Css/Mobile/product/weui.css" />
+        <link rel="stylesheet" type="text/css" href="/Css/Mobile/product/weui2.css" />
+        <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/font/common.css" />
+        <link rel="stylesheet" type="text/css" href="/Css/Mobile/order/details.css?v=0.3" />
+        <script src="/Js/Mobile/jquery-2.1.4.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/Js/Mobile/zepto.min.js"></script>
+        <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script> 
+        <script src="/Js/Mobile/barcode.min.js"></script>
+        <script src="/Js/Mobile/qrcode.min.js"></script>
+        <style type="text/css">
+
+            .he_mask{
+                position: fixed;
+                /*top: 2.2rem;*/
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.6);
+                text-align: center;
+                overflow: hidden;
+                z-index: 999;
+                min-width: 320px;
+                max-width: 640px;
+                margin: 0 auto;
+                display: none;
+            }
+            .hemask_con{
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                text-align: center;
+                min-width: 320px;
+                max-width: 640px;
+                margin: 0 auto;
+            }
+            .tiao{
+                display: inline-block;
+                width: 86%;
+                height: 80%;
+                position: absolute;
+                top: 10%;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                margin: 0 auto;
+                background: #fff;
+                padding: 10px;
+                border-radius: 14px;
+                border: 4px solid #F1CE28;
+            }
+            #imgcode{
+                margin: 0 auto;
+                margin-top: 6%;
+            }
+            #qrCode img{
+                margin: 0 auto;
+                width: 60%;
+                margin-top: 7%;
+            }
+            .tiao h3{
+                font-weight: inherit;
+                position: relative;
+                top: 0.4rem;
+                font-size: 0.8rem;
+            }
+            .close-qrcode {
+    		    width: 25px;
+    		    height: 25px;
+    		    line-height: 25px;
+    		    position: absolute;
+    		    right: -7px;
+    		    top: -33px;
+    		    border: 1px solid #fff;
+    		    border-radius: 50%;
+    		    color: #fff;
+    		    font-size: 20px;
+    		    z-index: 1001;
+    		}
+    		.warpper{margin-bottom: 1rem;}
+    		.div_line{ overflow: hidden; }
+    	</style>
+    </head>
+    <body>
+    	<div class="warpper">
+    		<header>
+	            <input type="hidden" value="@Model.ShipId" class="ShipId">
+	            <a href="javascript:;" class="back" onclick="goToBack()">
+	                <i class="icon icon-109"></i>
+	            </a>
+	            <h3 class="title">
+	                订单详情
+	            </h3>
+	        </header>
+	
+	        <!--  状态a-->
+	        <div class="state">
+	            <h3>
+	                <i class="iconfont">
+	                    &#xe7b1;
+	                </i>
+	                <span class="state_title">
+	                    @switch (Model.OrderStatus)
+	                    {
+	                        case 1:
+	                            if (Model.Source == 1)
+	                            {
+	                                @:已确认
+	                            }
+	                            else
+	                            {
+	                                if (Model.ShipStatus == 0 && Model.ShipMode == 1)
+	                                {
+	                                    @:待发货
+	                                }
+	                                else if (Model.ShipStatus == 4 && Model.ShipMode == 2)
+	                                {
+	                                    @:待核销
+	                                }
+	                                else if (Model.ShipStatus == 0 && Model.ShipMode == 4)
+	                                {
+	                                    @:待配送
+	                                }
+	                                else if (Model.ShipStatus == 1 && Model.ShipMode == 1)
+	                                {
+	                                    @:待收货
+	                                }
+	                                else
+	                                {
+	                                    @:未知状态
+	                                }
+	                            }
+	                            break;
+	                        case 2:
+	                            @:部分退货
+	                            break;
+	                        case 3:
+	                            @:整单退货
+	                            break;
+	                        case 4:
+	                            @:挂单
+	                            break;
+	                        case 5:
+	                            @:退货单
+	                            break;
+	                        case 6:
+	                            @:无效单
+	                            break;
+	                        case 7:
+	                            @:已取消
+	                            break;
+	                        case 8:
+	                            @:已完成
+	                            break;
+	                        case 0:
+	                            @:未支付
+	                            break;
+	                        default:
+	                            @:待确认
+	                            break;
+	                    }
+	                </span>
+	            </h3>
+	        </div>
+	
+	        <!--end-->
+	       
+	        <!--  地址 -->
+	        <!--div class="map">
+	
+	            <div class="map_heda">
+	
+	                <p class="map_title">
+	                
+	                    <p class="user_name"> 用户名：
+	                        @Model.Consignee
+	                    </p>
+	                    <p class="user_phone">电话：
+	                        @Model.Mobile
+	                    </p>
+	                </p>
+	
+	            </div>
+	            @if(@Model.Address == ""){
+	                
+	             }else{
+	                       
+	            <div class="map_dateil">
+	                <p class="md_xiang">
+	                    @Model.Address
+	                   
+	                </p>
+	
+	            </div>
+	            }
+	            
+	
+	        </div-->
+	        <!--end-->
+	        <h3 class="SProductId" data-orderId="@Model.OrderId" ></h3>
+	        <!-- 内容 -->
+	        @{
+	            List<Yitao.Core.OrderDetailInfo> OrderDetailInfoList = (List<Yitao.Core.OrderDetailInfo>)ViewData["OrderDetailList"];
+	        }
+	        @if(OrderDetailInfoList.Count > 0){
+	            <div class="list_items_con">
+	                @foreach (Yitao.Core.OrderDetailInfo info in ViewData["OrderDetailList"] as List<Yitao.Core.OrderDetailInfo>)
+	                {
+	                    <div class="list-item" onclick="zaici(this)">
+	                        <div class="list-img">
+	                            <img @if (string.IsNullOrEmpty(info.ProductImgUrl)) { 
+	                            			@: src="@(WorkContext.ShopConfig.ImageCDN)@{@info.ProductImgUrl}?w=100&h=100"
+	                                 } else { @: src="@(WorkContext.ShopConfig.ImageCDN)@{@info.ProductImgUrl}?w=100&h=100"
+	                                 }>
+	                        </div>
+	                        <div class="list-mes">
+	                            <h3 class="list-title SProductId" data-orderId = "@info.OrderId"  data-ItemId = "@info.ActivityItemId"  data-ProductId = "@info.ProductId" >@info.ProductName</h3>
+	                            <div class="list-mes-item">
+	                                <span>@info.SkuSpec </span>
+	                            </div> 
+	
+	                            <div class="list-mes_right">
+	                                <div class="price">¥<span class="list_price"> @info.SalePrice </span></div>
+	                                <div class="number">x<span class="list_number"> @info.Quantity </span></div>
+	                            </div>
+	
+	                        </div>
+	                    </div>
+	                }
+	            </div>
+	        }
+	        <!--end-->
+	        <!-- 订单编号 -->
+	        <div class="serial">
+	
+	            <ul>
+	
+	                <li class="ser_tr">
+	                	<div class="div_line">
+		                    <div class="div_left">订单状态: </div>
+		                    <div class="div_right">
+		                    @switch (Model.OrderStatus)
+		                    {
+		                        case 1:
+		                            if (Model.Source == 1)
+		                            {
+		                                @:已确认
+		                            }
+		                            else
+		                            {
+		                            	
+		                            	
+		                            	
+		                            	if (Model.ShipStatus == 0)
+		                                {
+		                                    @:待发货
+		                                }
+		                                else if (Model.ShipStatus == 1)
+		                                {
+		                                    if (Model.ShipMode == 1)
+			                                {
+			                                    @:待收货
+			                                }
+			                                else if (Model.ShipMode == 2)
+			                                {
+			                                	@:待核销
+			                                }
+		                                }
+		                                else if (Model.ShipStatus == 2)
+		                                {
+		                                    @:待确认
+		                                }
+		                                else if (Model.ShipStatus == 4 && Model.ShipMode == 2)
+		                                {
+		                                    @:待核销
+		                                }
+		                                
+		                            	
+		                                @*if (Model.ShipStatus == 0 && Model.ShipMode == 1)
+		                                {
+		                                    @:待发货
+		                                }
+		                                else if (Model.ShipStatus == 4 && Model.ShipMode == 2)
+		                                {
+		                                    @:待核销
+		                                }
+		                                else if (Model.ShipStatus == 0 && Model.ShipMode == 4)
+		                                {
+		                                    @:待配送
+		                                }
+		                                else if (Model.ShipStatus == 1 && Model.ShipMode == 1)
+		                                {
+		                                    @:待收货
+		                                }
+		                                else
+		                                {
+		                                    @:未知状态
+		                                }*@
+		                            }
+		                            break;
+		                        case 2:
+		                            @:部分退货
+		                            break;
+		                        case 3:
+		                            @:整单退货
+		                            break;
+		                        case 4:
+		                            @:挂单
+		                            break;
+		                        case 5:
+		                            @:退货单
+		                            break;
+		                        case 6:
+		                            @:无效单
+		                            break;
+		                        case 7:
+		                            @:已取消
+		                            break;
+		                        case 8:
+		                            @:已完成
+		                            break;
+		                        case 0:
+		                            @:未支付
+		                            break;
+		                        default:
+		                            if (Model.ShipStatus == 0)
+	                                {
+	                                    @:待发货
+	                                }
+	                                else if (Model.ShipStatus == 1)
+	                                {
+	                                    if (Model.ShipMode == 1)
+		                                {
+		                                    @:待收货
+		                                }
+		                                else if (Model.ShipMode == 2)
+		                                {
+		                                	@:待核销
+		                                }
+	                                }
+	                                else if (Model.ShipStatus == 2)
+	                                {
+	                                    @:待确认
+	                                }
+	                                else if (Model.ShipStatus == 4 && Model.ShipMode == 2)
+	                                {
+	                                    @:待核销
+	                                }
+		                            break;
+		                    }
+		                    </div>
+		                </div>
+		                
+		                <div class="div_line">
+		                    <div class="div_left">订单单号:</div>
+		                    <div class="div_right">@Model.OrderSN</div>
+		                </div>
+		                <div class="div_line">
+		                    <div class="div_left">下单时间:</div>
+		                    <div class="div_right"> @Model.AddTime.ToString("yyyy-MM-dd HH:mm")</div>
+		                </div>
+		                <div class="div_line">
+		                    <div class="div_left">订单类型:</div>
+		                    <div class="div_right" id="OrderType">
+		                    @switch (Model.OrderType)
+		                    {
+		                        case 1:
+		                        @:普通订单
+		                         break;
+		                        case 2:
+		                        @:礼品兑换
+		                         break;
+		                        case 3:
+		                        @:限时购
+		                         break;
+		                        case 4:
+		                        @:拼团购
+		                         break;
+		                        case 5:
+		                        @:团购
+		                         break;
+		                        case 6:
+		                        @:砍价购
+		                         break;
+		                        case 7:
+		                        @:特惠专享
+		                         break;
+		                        case 10:
+                                @:积分购
+                                break;
+		
+		                    }
+	                        </div>
+	                    </div>
+	                    <div class="div_line">
+		                    <div class="div_left">订单来源:</div>
+		                    <div class="div_right"> 
+		                           @switch (Model.Source)
+		                    {
+		                        case 1:
+		                         @:PCpos
+		                            break;
+		                        case 2:
+		                         @:手机
+		                         break;
+		                          case 3:
+		                         @:微信
+		                         break;
+		                          case 4:
+		                         @:手机浏览器
+		                         break;
+		                          case 5:
+		                         @:电脑端
+		                         break;
+		                    }
+		                    </div>
+		                </div>
+	                    @if(Model.Memo != ""){
+	                    <div class="div_line">
+		                    <div class="div_left">订单备注:</div>
+		                    <div class="div_right">@Model.Memo</div>
+		                </div>
+	                    }
+	                    <div class="div_line">
+		                    <div class="div_left">配送方式:</div>
+		                    <div class="div_right">
+		                    @switch (Model.ShipMode)
+		                    {
+		                        case 1:
+		                         @:快递
+		                            break;
+		                        case 2:
+		                         @:自提
+		                         break;
+		                          case 4:
+		                         @:配送
+		                         break;
+		                    }
+		                    </div>
+	                    </div>
+	                    @if(Model.ShipFee != 0){
+	                    <div class="div_line">
+		                    <div class="div_left">配送费用:</div>
+		                    <div class="div_right peisongfeiyong">@Model.ShipFee</div>
+		                </div>
+	                    }
+	                </li>
+	    			
+	                @if(Model.ShipMode==1){
+	                	<li class="ser_tr people-infos" id="kd-info">
+		                	<div class="div_line">
+			                    <div class="div_left">收货人:</div>
+			                    <div class="div_right">@Model.Consignee</div>
+			                </div>
+			                <div class="div_line">
+			                    <div class="div_left">收货电话:</div>
+			                    <div class="div_right">@Model.Mobile</div>
+			                </div>
+			                <div class="div_line">
+			                    <div class="div_left">收货地址:</div>
+			                    <div class="div_right">@Model.Address</div>
+			                </div>
+		                </li>
+	                }
+	                @if(Model.ShipMode==2){
+	                	<li class="ser_tr people-infos" id="zt-info">
+		                    @if(Model.ShopName != ""){
+		                    <div class="div_line">
+			                    <div class="div_left">自提门店:</div>
+			                    <div class="div_right">@Model.ShopName</div>
+			                </div>
+		                    }
+		                    <div class="div_line">
+			                    <div class="div_left">自提时间:</div>
+			                    <div class="div_right">@Model.ShipTime.ToString("yyyy-MM-dd HH:mm")</div>
+			                </div>
+		                </li>
+	                }
+	                
+	    			@if(Model.PayStatus==1){
+	    	            <li class="ser_tr ser_one">
+		    	            <div class="div_line">
+		                        <div class="div_left">支付方式:</div>
+		                        <div class="div_right">
+		    	                @switch (Model.PayMode)
+		    	                {
+		    	                    case 1:
+		    	                     @:线下支付
+		    	                        break;
+		    	                    case 2:
+		    	                     @:在线支付
+		    	                     break;
+		    	                      case 3:
+		    	                     @:货到付款
+		    	                     break;
+		    	                } 
+		    	                </div>
+		    	            </div>
+		    	            <div class="div_line">
+		    	                <div class="div_left">支付时间:</div>
+		    	                <div class="div_right">@Model.PayTime</div>
+		    	            </div>
+	    	                @if(Model.PaySN != ""){
+	    	                <div class="div_line">
+		    	                <div class="div_left">支付凭据:</div>
+		    	                <div class="div_right">@Model.PaySN</div>
+		    	            </div>
+	    	                }
+	
+	    	                @if(Model.PayFee > 0){
+	    	                <div class="div_line">
+		                  		<div class="div_left">支付费用:</div>
+		    	                <div class="div_right">@Model.PayFee</div>
+		    	            </div>
+	    	                }
+	
+	    	                @if(Model.OrderAmount > 0){
+	    	                <div class="div_line">
+		    	                <div class="div_left">付款金额:</div>
+		    	                <div class="div_right">@Model.OrderAmount</div>
+		    	            </div>
+	    	                }
+	
+	    	                @if(Model.SurplusMoney > 0){
+	    	                <div class="div_line">
+		    	                <div class="div_left">红包支付:</div>
+		    	                <div class="div_right">@Model.SurplusMoney</div>
+		    	            </div>
+	    	                }
+	
+	    	                <!--<div class="div_left">金额合计:</div>
+	    	                <div class="div_right">@Model.ProductAmount</div>-->
+	    	            </li>
+	    	            <li class="ser_tr ser_one">
+	    	                @if(Model.PayCreditCount > 0 ){
+	    	                <div class="div_line">
+		    	                <div class="div_left">使用积分:</div>
+		    	                <div class="div_right">@Model.PayCreditCount</div>
+		    	            </div>
+		    	            <div class="div_line">
+		    	                <div class="div_left">积分兑现:</div>
+		    	                <div class="div_right">@Model.PayCreditMoney</div>
+		    	            </div>
+	    	                }
+	    	            </li>
+	    			}
+	            </ul>
+	        </div>
+	
+	        <!-- end-->
+	        <!-- 商品总价 -->
+	        @if(Model.PayStatus==1){
+	        <div class="money" style="margin-bottom: 2rem;">
+		        <div class="div_line">
+		            <div class="div_left">商品总额</div>
+		            <div class="div_right jiaqian">@Model.ProductAmount</div>
+		        </div>
+	            @if(Model.ShipFee != 0){
+	            <div class="div_line">
+		            <div class="div_left">运费</div>
+		            <div class="div_right"><span>+</span>@Model.ShipFee</div>
+		        </div>
+	            }
+	            @if(Model.PayCreditCount > 0 ){
+	            <div class="div_line">
+		            <div class="div_left">积分兑现:</div>
+		            <div class="div_right"><span>-</span>@Model.PayCreditMoney</div>
+		        </div>
+	            }
+	            @if(Model.CouponMoney > 0 ){
+	            <div class="div_line">
+		            <div class="div_left">优惠券抵扣:</div>
+		            <div class="div_right"><span>-</span>@Model.CouponMoney</div>
+		        </div>
+	            }
+	            @if(Model.SurplusMoney > 0){
+	            <div class="div_line">
+		            <div class="div_left">红包支付:</div>
+		            <div class="div_right"><span>-</span>@Model.SurplusMoney</div>
+		        </div>
+	            }
+	            <div class="payment">
+	                <span>实付款：</span> <span class="pay_span">@Model.OrderAmount</span>
+	            </div>
+	        </div>
+	    	}
+	    	<div style="height: 1rem;"></div>
+	        <!-- 订单操作 -->
+	        <div class="operation">
+	
+	            <ul>
+	               @switch (Model.OrderStatus)
+	                    {
+	                        case 1:
+	                            if (Model.Source == 1)
+	                            {
+	    			               <li><a href="javascript:;" onclick ="goPingjia(this)">去评价</a></li>
+	                               <!--<li><a href="javascript:;" onclick ="kefu(this)">联系客服</a></li>-->
+	    			               <!--<li><a href="javascript:;" onclick="zaici(this)">再次购买</a></li>--> 
+	                            }
+	                            else
+	                            {
+	                                if (Model.ShipStatus == 0 && Model.ShipMode == 1)
+	                                {
+	                                    <!--<li><a href="javascript:;" onclick ="kefu(this)">联系客服</a></li>
+	                    				<li><a href="javascript:;" onclick="zaici(this)">再次购买</a></li>-->
+	                                }
+	                                else if (Model.ShipStatus == 4 && Model.ShipMode == 2)
+	                                {
+	                                    <li><a href="javascript:;" onclick ="hexiao(this)">核销订单</a></li>
+	    				                <li><a href="javascript:;" onclick ="shouhuo(this)">确认收货</a></li>
+	    				                <!--<li><a href="javascript:;" onclick ="kefu(this)">联系客服</a></li>
+	    				                <li><a href="javascript:;" onclick="zaici(this)">再次购买</a></li>-->
+	                                }
+	                                else if (Model.ShipMode == 4 && (Model.ShipStatus == 0 || Model.ShipStatus == 5))
+	                                {
+	                                    <li><a href="javascript:;" onclick = "peisong(this)">确认收货</a></li>
+	                                    <!--<li><a href="javascript:;" onclick ="kefu(this)">联系客服</a></li>
+	                    				<li><a href="javascript:;" onclick="zaici(this)">再次购买</a></li>-->
+	                                }
+	                                else if (Model.ShipStatus == 1 && Model.ShipMode == 1)
+	                                {
+	                                    <li><a href="javascript:;" onclick = "shouhuo(this)">确认收货</a></li>
+	                                    <li><a href="/m/order/express">查看物流</a></li>
+	                                    <!--<li><a href="javascript:;" onclick ="kefu(this)">联系客服</a></li>
+	                    				<li><a href="javascript:;" onclick="zaici(this)">再次购买</a></li>-->
+	                                }
+	                                else
+	                                {
+	                                    <!--<li><a href="javascript:;" onclick ="kefu(this)">联系客服</a></li>
+	    			               		<li><a href="javascript:;" onclick="zaici(this)">再次购买</a></li> -->
+	                                }
+	                            }
+	                        break;
+	                        default:
+	                			<!--<li><a href="javascript:;" onclick ="kefu(this)">联系客服</a></li>
+	    	               		<li><a href="javascript:;" onclick="zaici(this)">再次购买</a></li>-->
+	    	               	break;
+	                    }
+	            </ul>
+	        </div>
+	        <!--end-->
+	
+	
+	        <!--end-->
+	        <!--  核销条形码 -->
+	        <div class="he_mask">
+	            <div class="hemask_con">
+	                <div class="tiao">
+	                	<div class="close-qrcode">×</div>
+	                    <h3>收银机核销码</h3>
+	                    <div id="imgcode"></div>
+	                    <h3>导购员核销码</h3>
+	                    <div class="Code_con">
+	                    <div id="qrCode"></div>
+	                </div>
+	            </div>
+	        </div>
+        <!-- end -->
+    	</div>
+	        
+
+        <script>
+        	var IsApp = "@WorkContext.IsApp";
+        	function goToBack() {
+				var _this = this;
+	    		if(IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+						window.js.goBack();
+					}
+				}else{
+					window.history.back();
+				}
+					
+			}
+            var orderId = "@Model.OrderSN";
+            function initImage() {
+            	$("#imgcode").barcode(orderId, "code128", {
+            		output: 'css', //渲染方式 css/bmp/svg/canvas
+            		//bgColor: '#ff0000', //条码背景颜色
+            		color: '#000000', //条码颜色
+            		barWidth: 1.5, //单条条码宽度
+            		barHeight: "90", //单体条码高度
+            		// moduleSize: 5,   //条码大小
+            		// posX: 10,        //条码坐标X
+            		// posY: 5,         //条码坐标Y
+            		addQuietZone: false //是否添加空白区（内边距）
+            	});
+            };
+
+            function initCode() {
+            	$($("#qrCode").find("img")).remove();
+                var href =window.document.location.href;
+            	new QRCode(document.getElementById("qrCode"), "https://"+href.split(".0xa")[0].split("https://")[1]+".0xa.com/m/usercenter/CheckOrder?orderid="+$(".SProductId").attr("data-orderid") );
+            };
+
+            // function getAddress(){
+            // 	$.ajax({
+            // 		type:"post",
+            // 		url:"/m/Product/GetAddress",
+            // 		async:true,
+            // 		data:{AddressId:"@Model.ShipId"},
+            // 		dataType:"json",
+            // 		success:function(rel){
+            //             console.log(rel);
+            // 			if(rel.Code==1){
+            // 				$("#kd-info .div_right").eq(0).text(rel.Data.Consignee);
+            // 				$("#kd-info .div_right").eq(1).text(rel.Data.Mobile);
+            // 				$("#kd-info .div_right").eq(2).text(rel.Data.Address);
+            // 			}
+            // 		}
+            // 	});
+            // }
+
+            // $.get('Address', {}, function (data) {
+            //     var dete=(data);
+            //     for(var i=0; i<dete.Data.length; i++){
+            //         console.log(dete.Data[i].AddressId);
+            //         console.log($(".ShipId").val() == dete.Data[i].AddressId);
+            //         if($(".ShipId").val() == dete.Data[i].AddressId){
+            //             var s_address = dete.Data[i].Address;
+            //             var html ='';
+            //             /*
+            //             html +='<div class="div_left">详细地址</div><div class="div_right">'+s_address+'</div>';
+            //             $($(".ser_tr")[0]).append(html);
+            //             */
+            //         }
+            //     }
+            // }, 'JSON');
+
+            $(document).ready(function () {
+                if ($(".list-img img").attr("src") == "" || $(".list-img img").attr("src") == undefined) {
+                    $(".list-img img").attr("src", "/Images/wutu.png");
+                    $(".list-img img").css({
+                        "display": "block"
+                    });
+                }
+            });
+
+            $(function(){
+            	var way = "@Model.ShipMode";
+            	if(way==1){
+            		$("#kd-info").show();
+            		//getAddress();
+            	}else if(way==2){
+            		$("#zt-info").show();
+                    $("#kd-info").hide();
+            	}else if(way==4){
+            		$("#ps-info").show();
+                     $("#kd-info").hide();
+            		//getPsAddr();
+            	}
+               /* var zhuangtai = $(".state_title").text().trim();
+                if(zhuangtai == "待发货"){
+                    var html = '';
+                    html += '<li><a href="javascript:;" onclick =kefu(this)>联系客服</a></li>';
+                    html += '<li><a href="javascript:;" onclick="zaici(this)">再次购买</a></li>';
+                    $(".operation ul").append(html);
+                }
+                if(zhuangtai == "已发货"){
+                    var html = '';
+                    html += '<li><a href="javascript:;" onclick = "shouhuo(this)">确认收货</a></li><li><a href="javascript:;" onclick =kefu(this)>联系客服</a></li>';
+                    html += '<li><a href="javascript:;" onclick="zaici(this)">再次购买</a></li>';
+                    $(".operation ul").append(html);
+                }
+                if(zhuangtai == "确认收货"){
+                    var html = '';
+                    html += '<li><a href="javascript:;" onclick =goPingjia(this)>去评价</a></li><li><a href="javascript:;" onclick =kefu(this)>联系客服</a></li>';
+                    html += '<li><a href="javascript:;" onclick="zaici(this)">再次购买</a></li>';
+                    $(".operation ul").append(html);
+                }
+                if(zhuangtai == "配送中"){
+                    var html = '';
+                    html += '<li><a href="javascript:;" onclick = "shouhuo(this)">确认收货</a></li><li><a href="javascript:;" onclick =kefu(this)>联系客服</a></li>';
+                    html += '<li><a href="javascript:;" onclick="zaici(this)">再次购买</a></li>';
+                    $(".operation ul").append(html);
+                }
+                if(zhuangtai == "待自提"){
+                    var html = '';
+                     html += '<li><a href="javascript:;" onclick =hexiao(this)>核销订单</a></li>';
+                     html +='<li><a href="javascript:;" onclick = "shouhuo(this)">确认收货</a></li>';
+                    html += '<li><a href="javascript:;" onclick =kefu(this)>联系客服</a></li>';
+                    html += '<li><a href="javascript:;" onclick="zaici(this)">再次购买</a></li>';
+                    $(".operation ul").append(html);
+
+                }
+                if(zhuangtai == "店家(配送)"){
+                    var html = '';
+                    html += '<li><a href="javascript:;" onclick = "peisong(this)">确认收货</a></li><li><a href="javascript:;" onclick =kefu(this)>联系客服</a></li>';
+                    html += '<li><a href="javascript:;" onclick="zaici(this)">再次购买</a></li>';
+                    $(".operation ul").append(html);
+                }*/
+            });
+            // 完成配送
+            function peisong(_this){
+
+            };
+            //  核销订单
+            function hexiao(_this){
+                initImage();
+                initCode();
+                $(".he_mask").show();
+                clearInterval(ints);
+            };
+            $(".hemask_con").on("click",function(){
+                $(".he_mask").hide();
+            });
+            //  倒计时
+            var time = 3;
+            var ints = setInterval("ClearTime()", 1000);
+            function ClearTime() {
+                if(time == 1) {
+                    clearInterval(ints);
+                    time = 3;
+                    //  进行ajax 随时准备进入状态页
+                } else {
+                    time--;
+                }
+            };
+
+            // 确认收货
+            function shouhuo(_this){
+                $.confirm("为了您的财产安全，请收到货之后再确认收货", "@WorkContext.SellerInfo.SellerName", function() {
+                    $.ajax({
+        				type: "post",
+        				url: "/m/order/Confirm",
+        				data: {
+                            OrderId:$(".SProductId").attr("data-orderid")
+        				},
+        				dataType: 'json',
+        				success: function(rel) {
+                            var data=(rel);
+                            if(data.Code == 1){
+                            $.toast("操作成功");
+                            location.reload();  
+                        }else{
+                            $.toast("操作失败", "forbidden");
+                        }
+        				}
+        			});
+                  }, function() {
+                //取消操作
+                });
+            };
+            // 去评价
+            function goPingjia(_this){
+                window.location.href = "/m/order/Comment?id="+$(".SProductId").attr("data-orderid");
+            };
+            // 联系客服
+            function kefu(_this){
+              window.location.href = "/m/home/service";
+            };
+            // 再次购买
+            function zaici(_this){
+                    if($("#OrderType").text().trim() =="普通订单"){
+                        var url = "/m/product/detail?id=";
+                        window.location.href = url + $(_this).find(".SProductId").attr("data-productid")+"&IsApp="+IsApp;
+                    }
+                    if($("#OrderType").text().trim() =="礼品兑换"){
+                        var url = "/m/activity/giftDetail?id=";
+                        window.location.href = url + $(_this).find(".SProductId").attr("data-itemid")+"&IsApp="+IsApp;
+                    }
+                    if($("#OrderType").text().trim() =="限时购"){
+                        var url = "/m/activity/CountDownDetail?id=";
+                        window.location.href = url + $(_this).find(".SProductId").attr("data-itemid")+"&IsApp="+IsApp;
+                    }
+                    if($("#OrderType").text().trim() =="拼团购"){
+
+                    }
+                    if($("#OrderType").text().trim() =="团购"){
+
+                    }
+                    if($("#OrderType").text().trim() =="砍价购"){
+
+                    }
+                    if($("#OrderType").text().trim() =="特惠专享"){
+                        var url = "/m/activity/FirstBuyDetail?id=";
+                        window.location.href = url + $(_this).find(".SProductId").attr("data-itemid") +"&IsApp="+IsApp;
+                    }
+                    if($("#OrderType").text().trim() =="积分购"){
+                        var url = "/m/activity/ScoreBuyDetail?id=";
+                        window.location.href = url + $(_this).find(".SProductId").attr("data-itemid") +"&IsApp="+IsApp;
+                    }
+
+            };
+            $(function(){
+                for(var i =0; i <$(".list_number").length; i++){
+                    $($(".list_number")[i]).text(Number($($(".list_number")[i]).text()).toFixed(0));
+                }
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,331 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>优惠券-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+	<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    <script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <style>
+        *{margin: 0;padding: 0;border: 0;}
+		body{background: #f2f2f2;width: 7.5rem;margin: 0 auto;font-size: 0.32rem;}
+		ul,li{list-style: none;}
+		.fl{float:left}
+		.fr{float:right}
+		.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
+		a{text-decoration: none;}
+		a:active{background: #94e6f5;color: #fff !important;}
+		.header{background: #fff;height: 0.8rem;line-height: 0.8rem;font-size: 0.32rem;padding: 0 .2rem;position: fixed;width: 7.1rem;top: 0;left: 50%;margin-left:-3.75rem;background: #fff;z-index: 2;}
+		.back{font-size: 0.6rem;color: #999;display: block;width: 0.8rem;height: 0.8rem;line-height: 0.8rem;}
+		.header .title{width: 5.5rem;text-align: center;}
+		
+		.coupon-lists{margin-bottom: 1.2rem;margin-top: 1rem;font-size: 0.24rem;}
+		.coupon-lists li{padding: 0.2rem;margin-bottom: 0.2rem;}
+		.coupon-lists .bg-box{width: 7.1rem;height: 1.8933rem; background: url(/Images/Mobile/coupon-bg.png) no-repeat;background-size: 100% 100%;border-radius: 0 5px 5px 0;}
+		.coupon-lists .bg-box .left{width: 1.8933rem;height: 1.8933rem;}
+		.coupon-lists .bg-box .right{width: 5.2066rem;height: 1.8933rem;overflow: hidden;}
+		.coupon-lists .left .infos{height: 1rem;color: #fff;margin: 0.4466rem auto;text-align: center;}
+		.left .money{height: 0.6rem;line-height: 0.6rem;font-size: 0.4rem;}
+		.left .role{height: 0.4rem;line-height: 0.4rem;font-size: 0.28rem;}
+		.right-box{position: relative;padding: 0 .2rem;height: 1.8933rem;}
+		.right-box div{height: 0.62rem;line-height: 0.62rem}
+		.right-box .role{position: absolute;width: 1.8rem;height: 0.46rem; line-height: 0.46rem;top: 0.2rem;right: -0.46rem;    letter-spacing: 2px;text-align: center;background: #fe0c19;color: #fff;transform:rotate(45deg);-ms-transform:rotate(45deg);-moz-transform:rotate(45deg);-webkit-transform:rotate(45deg);-o-transform:rotate(45deg)}
+		.right-box .getCoupon{display: block; position: absolute;width: 1.3rem;height: 0.46rem; line-height: 0.46rem;bottom: 5px;right: 5px;text-align: center;border: 1px solid #fe0c19;color: #fe0c19;border-radius: 5px;}
+		.right-box .title{font-size: 0.30rem;color: #555;}
+		.start{color: #999;font-size: 0.24rem;}
+		.end{color: #999;font-size: 0.24rem;}
+		.loading{height: 1rem;line-height: 1rem;}
+		.weui_cells_title{margin: 0;}
+		.weui-loadmore{margin: 0 auto;height: 0.9rem; line-height: 0.9rem;}
+    </style>
+    <script>
+    	var wxobj = {
+    		appId: '@ViewData["AppId"]', /* 必填，公众号的唯一标识*/
+            timestamp: '@ViewData["Timestamp"]', /* 必填，生成签名的时间戳*/
+            nonceStr: '@ViewData["NonceStr"]', /* 必填，生成签名的随机串*/
+            signature: '@ViewData["Signature"]'/* 必填，签名*/
+    	}
+    	wxobj = JSON.stringify(wxobj);
+    	//alert(wxobj);
+        wx.config({
+            debug: false, /* 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。*/
+            appId: '@ViewData["AppId"]', /* 必填，公众号的唯一标识*/
+            timestamp: '@ViewData["Timestamp"]', /* 必填，生成签名的时间戳*/
+            nonceStr: '@ViewData["NonceStr"]', /* 必填，生成签名的随机串*/
+            signature: '@ViewData["Signature"]',/* 必填，签名*/
+            jsApiList: [
+                    'checkJsApi',
+                    'onMenuShareTimeline',
+                    'onMenuShareAppMessage',
+                    'onMenuShareQQ',
+                    'onMenuShareWeibo',
+                    'hideMenuItems',
+                    'showMenuItems',
+                    'hideAllNonBaseMenuItem',
+                    'showAllNonBaseMenuItem',
+                    'translateVoice',
+                    'startRecord',
+                    'stopRecord',
+                    'onRecordEnd',
+                    'playVoice',
+                    'pauseVoice',
+                    'stopVoice',
+                    'uploadVoice',
+                    'downloadVoice',
+                    'chooseImage',
+                    'previewImage',
+                    'uploadImage',
+                    'downloadImage',
+                    'getNetworkType',
+                    'openLocation',
+                    'getLocation',
+                    'hideOptionMenu',
+                    'showOptionMenu',
+                    'closeWindow',
+                    'scanQRCode',
+                    'chooseWXPay',
+                    'openProductSpecificView',
+                    'addCard',
+                    'chooseCard',
+                    'openCard'
+            ]
+        });
+
+        wx.error(function (res) {
+            /*alert(res);*/
+            /*console.log(res);*/
+            /*alert('验证失败');*/
+        });
+
+        wx.ready(function () {
+            var link = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m';
+            var Logo = '@WorkContext.SellerInfo.Logo';
+            var imgUrl = '';
+            if (Logo.length == 0) {
+                imgUrl = "@(WorkContext.ShopConfig.ImageCDN)/upload/public/1805/05/9410ab49b6a04fd2ba0bb5e9c28828c2.png?w=100";
+            }
+            else {
+                imgUrl = "@(WorkContext.ShopConfig.ImageCDN)@{@WorkContext.SellerInfo.Logo}?w=100&h=100";
+            }
+                /*转发到朋友圈*/
+                wx.onMenuShareTimeline({
+                    title: '快来领取优惠券吧',
+                    link: link,
+                    imgUrl: imgUrl,
+                    success: function () {
+                        /*alert('转发成功！');*/
+                    },
+                    cancel: function () {
+                        /*alert('转发失败！');*/
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: '快来领取优惠券吧',
+                    desc: '手快有，手慢无，更多优惠等你来！',
+                    link: link,
+                    imgUrl: imgUrl,
+                    type: 'link',
+                    dataUrl: '',
+                    success: function () {
+                        /*alert('转发成功！');*/
+                    },
+                    cancel: function () {
+                       /* alert('转发失败！');*/
+                    }
+                });
+            });
+            var sellerid = "@WorkContext.SellerInfo.SellerId";
+    </script>
+</head>
+
+<body>
+    
+    <div class="header">
+		<a href="javascript:;" onclick="history.back()" class="back fl">‹</a>
+		<div class="title fl">领券中心</div>
+		<div class="clearfix"></div>
+	</div>
+	<div class="coupon-lists">
+		<ul>
+			
+		</ul>
+		<div class="loading">
+			<div class="weui_cells_title hide tcenter" id="more">
+				<div class="weui-loadmore">
+		            <i class="weui-loading"></i>
+		            <span class="weui-loadmore-tips">正在加载</span>
+		        </div>
+			</div>
+		</div>
+	</div>
+	<script id="loadmore" type="text/html">
+		<div class="weui-loadmore">
+            <i class="weui-loading"></i>
+            <span class="weui-loadmore-tips">正在加载</span>
+        </div>
+	</script>
+    <script id="tpl-coupon" type="text/html">
+    	<% for(var i in Data) { %>
+    	<% if( new Date(Data[i].EndTime.substring(0,16).replace("T"," ")).getTime() < parseInt(new Date().getTime()) ) { %><% } %>
+    	<li>
+			<div class="bg-box">
+				<div class="left fl">
+					<div class="infos">
+						<div class="money">¥<%=Data[i].Money%></div>
+						<% if(Data[i].AmountMode==1) { %>
+							<div class="role">满<%=Data[i].AmountLower%>元可用</div>
+						<% } else { %>
+							<div class="role">无金额限制</div>
+						<% } %>
+					</div>
+				</div>
+				<div class="right fr">
+					<div class="right-box">
+						<div class="title"><%=Data[i].Title%></div>
+						<div class="start">开始：<%=Data[i].StartTime.substring(0,16).replace("T"," ")%></div>
+						<div class="end">结束：<%=Data[i].EndTime.substring(0,16).replace("T"," ")%></div>
+						<% if(Data[i].UseMode==0) { %>
+							<div class="role">全店通用</div>
+						<% } else if(Data[i].UseMode==1) { %>
+							<div class="role">指定分类</div>
+						<% } else if(Data[i].UseMode==2) { %>
+							<div class="role">指定品牌</div>
+						<% } else if(Data[i].UseMode==3) { %>
+							<div class="role">指定商品</div>
+						<% } %>
+						
+						<a href="javascript:;" onclick='getCoupon(<%=Data[i].CouponId%>,<%=Data[i].GetMode%>,<%=Data[i].PayScore%>)' class="getCoupon">立即领取</a>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</li>
+		
+		<% } %>
+    </script>
+    
+   
+    
+   
+    <script type="text/javascript">
+        var sort = '@ViewData["sort"]',
+            search = '@ViewData["search"]',
+            page = '@ViewData["page"]',
+            size = 50;
+        page = Number(page);
+        var Uid = "@WorkContext.UserInfo.UserId";
+        function couponLists() {
+        	$.ajax({
+        		type:"post",
+        		url:"/m/activity/coupon",
+        		async:true,
+        		data:{page:page,size:size,search:search,sort:sort},
+        		dataType:"json",
+        		beforeSend: function() {
+					var load_html = $("#loadmore").html();
+					$("#more").html(load_html);
+					$("#more").show();
+				},
+        		success:function(rel){
+        			console.log(rel);
+        			if(rel.Code==1){
+        				$("#more").html("加载完毕");
+            			var id = 'tpl-coupon';
+						var tplx = document.getElementById(id).innerHTML;
+						var desc1 = tpl(tplx, rel);
+						$(".coupon-lists ul").append(desc1);
+						page++;
+        			}else{
+        				$("#more").html("没有更多数据了");
+        			}
+        		}
+        	});
+        }
+        /*领取优惠券*/
+		function getCoupon(CouponId,GetMode,PayScore) {
+			if(parseInt(Uid)<1 || Uid==""){
+				var url = window.location.href;
+				window.location.href = '/m/user/Bind?returnUrl='+url;
+			}else{
+				if(GetMode==1){
+					$.confirm("您确定要用来@(@WorkContext.SellerInfo.ScoreName)领取优惠券吗?", "确认?", function() {
+			        	$.ajax({
+							type:"post",
+							url:"/m/activity/GetCoupon",
+							async:true,
+							data:{Id:CouponId},
+							dataType:"json",
+							success:function(rel) {
+								if(rel.Code==1){
+									if(GetMode==1){
+										$.toast("领取成功,本次扣减"+PayScore+"@WorkContext.SellerInfo.ScoreName");
+									}else{
+										$.toast("领取成功");
+									}
+								}else{
+									$.toast(rel.Message,"cancel");
+								}
+							}
+						});
+			        }, function() {
+			        	//取消操作
+			        });
+				}else{
+					$.ajax({
+						type:"post",
+						url:"/m/activity/GetCoupon",
+						async:true,
+						data:{Id:CouponId},
+						dataType:"json",
+						success:function(rel) {
+							if(rel.Code==1){
+								if(GetMode==1){
+									$.toast("领取成功,本次扣减"+PayScore+"@WorkContext.SellerInfo.ScoreName");
+								}else{
+									$.toast("领取成功");
+								}
+							}else{
+								$.toast(rel.Message,"cancel");
+							}
+						}
+					});
+				}
+				
+				
+				
+				
+				
+				
+				
+			}
+		}
+        $(function(){
+        	couponLists();
+        	$(window).scroll(function () {
+        	    var scrollTop = $(this).scrollTop();
+        	    var scrollHeight = $(document).height();
+        	    var windowHeight = $(this).height();
+        	    if (scrollTop + windowHeight == scrollHeight) {
+                    couponLists();
+        	    }
+        	});
+        })
+        
+        
+    </script>
+</body>
+
+</html>

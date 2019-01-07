@@ -1,0 +1,327 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta content="telephone=no" name="format-detection">
+	    <meta name="apple-touch-fullscreen" content="yes">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css"/>
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css"/>
+    	<link rel="stylesheet" href="/Css/Mobile/coupon.css?v=0.2">
+    	<script src="/Js/Mobile/jquery-2.1.4.js" type="text/javascript" charset="utf-8"></script>
+
+    	<script src="/Js/Mobile/jsBarcode.all.min.js"></script>
+    	<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    	<title>我的优惠券-@{@WorkContext.SellerInfo.SellerName}</title>
+    	
+    	<style type="text/css">
+    		.coupon{font-size: 0.24rem;background: #f2f2f2;}
+			.coupon li{padding: 0;}
+			.coupon .bg-box{width: 7.1rem;height: 1.8933rem; background: url(/Images/Mobile/coupon-bg.png) no-repeat;background-size: 100% 100%;border-radius: 0 5px 5px 0;}
+			.coupon .bg-box .left{width: 1.8933rem;height: 1.8933rem;}
+			.coupon .bg-box .right{width: 5.2066rem;height: 1.8933rem;overflow: hidden;}
+			.coupon .left .infos{height: 1rem;color: #fff;margin: 0.4466rem auto;text-align: center;}
+			.coupon .left .money{height: 0.6rem;line-height: 0.6rem;font-size: 0.4rem;}
+			.coupon .left .role{height: 0.4rem;line-height: 0.4rem;font-size: 0.28rem;}
+			.coupon .right-box{position: relative;padding: 0 .2rem;height: 1.8933rem;}
+			.coupon .right-box div{line-height: 0.47rem}
+			.coupon .right-box .role{position: absolute;width: 1.8rem;height: 0.46rem; line-height: 0.46rem;top: 0.2rem;right: -0.46rem;    letter-spacing: 2px;text-align: center;background: #fe0c19;color: #fff;transform:rotate(45deg);-ms-transform:rotate(45deg);-moz-transform:rotate(45deg);-webkit-transform:rotate(45deg);-o-transform:rotate(45deg)}
+			.coupon .right-box .getCoupon{display: block; position: absolute;width: 1.3rem;height: 0.46rem; line-height: 0.46rem;bottom: 5px;right: 5px;text-align: center;border: 1px solid #fe0c19;color: #fe0c19;border-radius: 5px;}
+			.coupon .right-box .title{font-size: 0.30rem;color: #555;}
+			.coupon .start{color: #999;font-size: 0.24rem;}
+			.coupon .end{color: #999;font-size: 0.24rem;}
+			.coupon .intro{color: #999;font-size: 0.24rem;width: 3.4rem;}
+    	</style>
+	</head>
+	<body>
+		<div class="bg-orange weui-header "> 
+  			<div class="weui-header-left" onclick="goToBack()"> <a class="icon icon-109 f-white"></a>  </div>
+    		<h1 class="weui-header-title">我的优惠券</h1>
+    		<div class="weui-header-right"></div> 
+    	</div> 
+		<div class="navbox weui-flex">
+			<div class="weui-flex-item nav-item cur-nav-item">
+				未使用
+			</div>
+			<div class="weui-flex-item nav-item">
+				已使用
+			</div>
+			<div class="weui-flex-item nav-item">
+				已过期
+			</div>
+		</div>
+		<div class="content">
+			<div class="coupon un-use show">
+				<ul>
+					
+				</ul>
+			</div>
+			<div class="coupon used">
+				<ul>
+					
+				</ul>
+			</div>
+			<div class="coupon timeout">
+				<ul>
+					
+				</ul>
+			</div>
+			<div class="loading">
+				<div class="weui_cells_title hide tcenter" id="more">
+					<div class="weui-loadmore">
+			            <i class="weui-loading"></i>
+			            <span class="weui-loadmore-tips">正在加载</span>
+			        </div>
+				</div>
+			</div>
+		</div>
+		<!--<a href="/m/activity/coupon" class="get-coupon-center">
+			去领券中心
+		</a>-->
+		
+		<div class="shade">
+			<div class="hexiao-coupon">
+				<div class="close-qrcode">×</div>
+				<div class="title">核销优惠券</div>
+				<img id="imgcode">
+			</div>
+		</div>
+		
+		<script id="loadmore" type="text/html">
+			<div class="weui-loadmore">
+	            <i class="weui-loading"></i>
+	            <span class="weui-loadmore-tips">正在加载</span>
+	        </div>
+		</script>
+		<script id="tpl0" type="text/html">
+		<% for(var i in Data) {   %>
+			<li>
+			    <div class="bg-box">
+			        <div class="left fl">
+			            <div class="infos">
+			                <div class="money">¥<%=Data[i].Money%></div>
+			                <% if(Data[i].AmountMode==0) { %>
+								<div class="role">无金额限制</div>
+							<% }else if(Data[i].AmountMode==1) { %>
+								<div class="role">满<%=Data[i].AmountLower%>元可用</div>
+							<% } %>
+			                
+			            </div>
+			        </div>
+			        <div class="right fr">
+			            <div class="right-box">
+			                <div class="title"><%=Data[i].Title%></div>
+			                <div class="start">仅剩<%=Math.ceil((new Date(Data[i].EndTime).getTime() - new Date().getTime())/(24 * 60 * 60 * 1000))%>天</div>
+			                <div class="intro"><%=Data[i].Description%></div>
+			                <% if(Data[i].UseMode==0) { %>
+							<div class="role">全店通用</div> 
+							<% }else if(Data[i].UseMode==1) { %>
+							<div class="role">指定分类</div> 
+							<% }else if(Data[i].UseMode==2) { %>
+							<div class="role">指定品牌</div> 
+							<% }else if(Data[i].UseMode==3) { %>
+							<div class="role">指定商品</div> 
+							<% } %>
+			                <a href="javascript:;" onclick="initImage(<%=Data[i].CouponSN%>)" class="getCoupon">立即使用</a>
+			            </div>
+			        </div>
+			        <div class="clearfix"></div>
+			    </div>
+			</li>
+        <% } %>
+		</script>
+		<script id="tpl1" type="text/html">
+		<% for(var i in Data) {   %>
+			<li>
+				<div class="coupon-box">
+					<div class="fl left">
+						<p>¥<span class="money"><%=Data[i].Money%></span></p>
+						<p>现金券</p>
+					</div>
+					<div class="fl right">
+						<div class="fl right-left">
+							<p class="title"><%=Data[i].Title%></p>
+							<% if(Data[i].UseMode==0) { %>
+							<p class="type">全店通用</p>
+							<% }else if(Data[i].UseMode==1) { %>
+							<p class="type">指定分类</p>
+							<% }else if(Data[i].UseMode==2) { %>
+							<p class="type">指定品牌</p>
+							<% }else if(Data[i].UseMode==3) { %>
+							<p class="type">指定商品</p>
+							<% } %>
+							<p><%=Data[i].StartTime.substring(0,10)%>-<%=Data[i].EndTime.substring(0,10)%></p>
+						</div>
+						<div class="fl right-right">
+							<div class="tips-box">
+								<div class="tips">已使用</div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</li>
+        <% } %>
+		</script>
+		<script id="tpl2" type="text/html">
+		<% for(var i in Data) {   %>
+			<li>
+				<div class="coupon-box">
+					<div class="fl left">
+						<p>¥<span class="money"><%=Data[i].Money%></span></p>
+						<p>现金券</p>
+					</div>
+					<div class="fl right">
+						<div class="fl right-left">
+							<p class="title"><%=Data[i].Title%></p>
+							<% if(Data[i].UseMode==0) { %>
+							<p class="type">全店通用</p>
+							<% }else if(Data[i].UseMode==1) { %>
+							<p class="type">指定分类</p>
+							<% }else if(Data[i].UseMode==2) { %>
+							<p class="type">指定品牌</p>
+							<% }else if(Data[i].UseMode==3) { %>
+							<p class="type">指定商品</p>
+							<% } %>
+							<p><%=Data[i].StartTime.substring(0,10)%>-<%=Data[i].EndTime.substring(0,10)%></p>
+						</div>
+						<div class="fl right-right">
+							<div class="tips-box">
+								<div class="tips">已过期</div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</li>
+        <% } %>
+		</script>
+		<script type="text/javascript">
+			
+			//js模板引擎
+			var tpl = function (a, d) {
+			    var c = function (l) {
+			        var j, h = [],
+			            g = [];
+			        for (j in l) {
+			            h.push(j);
+			            g.push(l[j])
+			        }
+			        return (new Function(h, c.$)).apply(l, g)
+			    };
+			    if (!c.$) {
+			        var f = a.split("<%");
+			        c.$ = "var $=''";
+			        for (var b = 0; b < f.length; b++) {
+			            var e = f[b].split("%>");
+			            if (b != 0) {
+			                c.$ += "=" == e[0].charAt(0) ? "+(" + e[0].substr(1) + ")" : ";" + e[0].replace(/\r\n/g, "") + "$=$"
+			            }
+			            c.$ += "+'" + e[e.length - 1].replace(/\'/g, "\\'").replace(/\r\n/g, "\\n").replace(/\n/g, "\\n").replace(/\r/g, "\\n") + "'"
+			        }
+			        c.$ += ";return $;"
+			    }
+			    return d ? c(d) : c
+			};
+			
+			var IsApp = "@WorkContext.IsApp";
+			function goToBack() {
+				var _this = this;
+	    		if(IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+						window.js.goBack();
+					}
+				}else{
+					window.history.back();
+				}
+					
+			}
+			
+			
+			function initImage(CouponSN) {
+				JsBarcode("#imgcode", CouponSN, {format:"code128"});
+				$(".shade").show();
+			};
+			var page = new Array();
+			page = [1,1,1];
+			var index = 0;
+			function ajaxpage(page,index) {
+				$.ajax({
+					type: "post",
+					url: 'mycoupons',
+					data: {page:page[index],size:10,type:index},
+					dataType: "json",
+					beforeSend: function() {
+						var load_html = $("#loadmore").html();
+						$("#more").html(load_html);
+						$("#more").show();
+					},
+					success: function(rs) {
+						if(rs.Code==1){
+							setTimeout(function(){
+								$("#more").hide();
+								var id = 'tpl'+index;
+								var tplx = document.getElementById(id).innerHTML;
+								var desc1 = tpl(tplx, rs);
+								$(".show ul").append(desc1);
+								page[index] = page[index]+1;
+							},500);
+						}else{
+							setTimeout(function(){
+								$("#more").html("没有更多数据了");
+								return false;
+								
+							},1000);
+						}
+					},
+					timeout: 15000
+				});
+			}
+			$(window).scroll(function() {
+				var scrollTop = $(this).scrollTop();
+				var scrollHeight = $(document).height();
+				var windowHeight = $(this).height();
+				if (scrollTop + windowHeight == scrollHeight) {
+					ajaxpage(page,index);
+				}
+			});
+			$(function(){
+				$(".navbox").on("click", ".nav-item", function() {
+					$("#more").hide();
+					index = $(this).index();
+					$(".nav-item").removeClass("cur-nav-item");
+					$(this).addClass("cur-nav-item");
+					$(".coupon").removeClass("show");
+					$(".coupon").eq(index).addClass("show");
+					ajaxpage(page,index);
+				});
+				$(document).on("click",".show-hide",function(){
+					$(this).parents('li').find(".intro-box").toggle();
+				});
+				$(".navbox .nav-item").eq(0).click();
+				$(".shade").on("click",function(){
+					$(".shade").hide();
+					window.location.reload();
+				});
+				$(".close-qrcode").on("click",function(){
+					$(".shade").hide();
+					window.location.reload();
+				});
+				$(".shade .hexiao-coupon").on("click",function(e){
+					e.stopPropagation();
+				});
+			});
+		</script>
+	</body>
+</html>

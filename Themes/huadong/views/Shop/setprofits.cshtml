@@ -1,0 +1,286 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>修改让利折扣</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/weui3.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/icon.css" />
+   <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>  
+   <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    <script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <!--<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>-->
+      <!--<script src="/Mobile/Themes/huadong/static/weui/swiper.min.js" type="text/javascript" charset="utf-8"></script>--> 
+    <script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script> 
+    <style>
+        body{
+            background:#F7F7F7;
+        }
+        .zk_top{
+            height:2.8rem;
+            background:#ff4800;
+            color:#fff;
+            /* margin-top:40px; */
+            padding-top:0.72rem;
+            padding-left:0.4rem;
+            box-sizing: border-box;
+        }
+        .company_name{
+            font-size:0.34rem;
+            margin-bottom:0.3rem;
+        }
+        .company_zk{
+            font-size:0.28rem;
+        }
+        .company_zk span{
+            font-size:0.32rem;
+        }
+        .zk_progress{
+            background:#fff;
+            padding:0.2rem 0 0.1rem 0;
+        }
+        .zk_progress .weui-slider-inner {
+            height: 0.34rem !important;
+            background-color: #DED4CC;
+            border-radius: 0.34rem;
+        }
+        .zk_progress .weui-slider-track {
+            height: 0.34rem !important;
+            background-color: #ff4800;
+            border-radius: 0.34rem;
+        }
+        .zk_progress .zk_show{
+            font-size:0.32rem;
+            color:#828282;
+            padding:0.2rem 0.46rem;
+        }
+        .zk_progress .zk_show span{
+            width:1.26rem;
+            height:23px;
+            display: inline-block;
+            background:#E6E6E6;
+            color:#000;
+            text-align: center;
+            margin:0 10px;
+            border-radius: 23px;
+        }
+        .zk_progress .weui-slider{
+            padding:8px 18px;
+        }
+        .zk_num{
+            padding:0 0.28rem;
+            color:#C0C0C0;
+            font-size:0.28rem;
+        }
+        .zk_num span:last-child{
+            float:right;  
+        }
+        .zk_title{
+            font-size:0.32rem;
+            padding:0.4rem;
+            color:#868686;
+        }
+        .zk_des{
+            padding:0 0.4rem;
+            font-size:0.32rem;
+            color:#B0B0B0;
+        }
+        .zk_btn{
+            position:absolute;
+            bottom:0.4rem;
+            width:7.5rem;
+            text-align: center;
+        }
+        .zk_btn span{
+            width:85%;
+            display: block;
+            height:0.88rem;
+            line-height: 0.88rem;
+            font-size:0.36rem;
+            background:#ff4800;
+            text-align: center;
+            border-radius: 0.88rem;
+            color:#fff;
+            margin:0 auto;
+            
+        }
+        #app{
+    	width:7.5rem;
+    	margin:0 auto;
+    	    height: 100%;
+    background: #fff;
+    }
+    .weui_toast {
+	width:3rem;
+	min-height:3rem;
+    left: 31%;
+    top: 35%;
+    margin-left: 0;
+}
+.weui_dialog_hd {
+  padding:0;
+}
+.weui_toast_content {
+    margin: 0 0 15px;
+    font-size: 0.32rem;
+}
+#sliderTrack{min-width:0.02rem}
+    </style>
+</head>
+<body>
+	<div id="app">
+	<header>
+        <div class="bg-white weui-header "> 
+            <div class="weui-header-left"> <a class="icon icon-109 fl333" onclick="history.back()"></a>  </div>
+            <h1 class="weui-header-title fl333" style='color:#333'>修改让利</h1>
+            <div class="weui-header-right"><a class="icon "></a></div> 
+        </div>  
+    </header>
+    <div class="zk_top">
+        <p class="company_name" >{{sellerDetail.ShopName}}</p>
+        <p class="company_zk"><i class="icon icon-10"></i>当前让利<span class='rangli'>{{sellerDetail.Profits}}</span>%</p>
+    </div>
+    <div class="zk_progress">
+        <p class="zk_show">手动设置让利<span id="sliderValue" class="weui-slider-box-value">{{sellerDetail.Profits}}</span>%</p>
+        <div class="weui-slider-box">
+            <div class="weui-slider">
+                <div id="sliderInner" class="weui-slider-inner">
+                    <div id="sliderTrack" v-bind:style="{width:sellerDetail.Profits+'%'}" class="weui-slider-track"></div>
+                    <div id="sliderHandler" v-bind:style="{left:sellerDetail.Profits+'%'}" class="weui-slider-handler"></div>
+                </div>
+            </div>
+        </div>
+        <p class="zk_num"><span>1%</span><span>100%</span></p>
+    </div>
+    <div class="zk_explanation">
+        <p class="zk_title">折扣说明</p>
+        <div class="zk_des">
+            设置好让利以后，消费者扫码完成支付后，可获得相应的积分。例：商家设置让利为50%，消费扫描商家二维码，支付100元后，消费者获得100*50%*5倍 = 250积分，商家获得100*50%*2倍 = 100积分。
+        </div>
+    </div>
+    <div class="zk_btn">
+        <span>确定修改折扣为<b id="zk_modify">{{Profits}}</b>%</span>
+    </div>
+
+</div>
+    <script>
+        
+  $(function(){
+        var $sliderTrack = $('#sliderTrack'),
+            $sliderHandler = $('#sliderHandler'),
+            $sliderValue = $('#sliderValue');
+            $zk_modify = $("#zk_modify");
+        var totalLen = $('#sliderInner').width(),
+            startLeft = 0,
+            startX = 0;
+
+        $sliderHandler
+            .on('touchstart', function (e) {
+                startLeft = parseInt($sliderHandler.css('left')) * totalLen / 100;
+                startX = e.changedTouches[0].clientX;
+            })
+            .on('touchmove', function(e){
+                var dist = startLeft + e.changedTouches[0].clientX - startX,
+                    percent;
+                dist = dist < 0 ? 0 : dist > totalLen ? totalLen : dist;
+                percent = parseInt(dist / totalLen * 100);
+                if(percent<1){
+                	percent=1;
+                }
+                $sliderTrack.css('width', percent + '%');
+                $sliderHandler.css('left', percent + '%');
+        	    var sval=percent
+//      	    if(sval.toString().split('.')[1]==undefined){
+//      	    	sval=sval+'.0'
+//      	    }else{
+//      	    	sval=sval
+//      	    }
+                $sliderValue.text(sval);
+                $zk_modify.text(sval);
+                $('.rangli').text(sval)
+                e.preventDefault();
+            }) ;
+              var profits=$("#sliderValue").text()*10+'%'
+     function getProfits(){
+     			var _this=this;
+     			 $.ajax({
+		    			type:"post",
+		    			url:"/Api/Shop/SetProfits",
+		    			data:{
+		    				shopid:window.location.href.split('=')[1],
+		    				Profits:$("#sliderValue").text()
+		    			},
+		    			async:true,
+		    			success: function(rel){
+		    				console.log(rel)
+		    				$.toast("保存成功");
+		    			}
+		    		});
+     	}
+    $('.zk_btn').on('click',function(){
+         getProfits()
+     })
+	  
+	  });    
+       var vm = new Vue({
+     	el: '#app',
+     	data:{
+     	 mobile:'@WorkContext.UserInfo.Mobile',
+     	 shopid:window.location.href.split('=')[1],
+     	 sellerDetail:{},
+     	 Profits:0,
+     	},
+     	methods:{
+
+     		getdata:function(){//获取商品详情
+     			var _this=this;
+     			 $.ajax({
+		    			type:"post",
+		    			url:"/m/Shop/detail",
+		    			data:{
+		    				shopid:_this.shopid
+		    			},
+		    			async:true,
+		    			success: function(rel){
+		    				console.log(JSON.parse(rel));
+		    				var data=JSON.parse(rel).Data
+		    				_this.sellerDetail=data;
+		    				_this.Profits=data.Profits
+//		    				if((data.Profits/10).toString().split('.')[1]==undefined){
+//		    					var a=data.Profits/10+'.0'
+//		    				  _this.Profits=a
+//		    				}else{
+//		    					_this.Profits=data.Profits/10
+//		    				}	
+		    				
+		    				
+		    				console.log(_this.Profits)
+		    			}
+		    		});
+     		},
+     		
+     		
+     	},
+     	mounted:function(){
+     		var _this=this;
+ 			_this.getdata();
+     		console.log(_this.Profits)
+     	},
+     	created:function(){
+	    	
+       },
+     })
+    </script>
+</body>
+</html>

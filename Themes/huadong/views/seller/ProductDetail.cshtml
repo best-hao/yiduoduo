@@ -1,0 +1,150 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta content="telephone=no" name="format-detection">
+	    <meta name="apple-touch-fullscreen" content="yes">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>商品管理详情-@(WorkContext.SellerInfo.SellerName)</title>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+		<link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/font/common.css" />
+		<link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/seller/productManage/product.css" />
+		<script type="text/javascript" charset="utf-8" src="/Mobile/weui/zepto.min.js"></script>
+		<script type="text/javascript" charset="utf-8" src="/Js/vue/dist/vue.min.js"></script>
+		<script type="text/javascript" charset="utf-8" src="/Mobile/weui/ydui.flexible.js" ></script>
+		<script type="text/javascript" charset="utf-8" src="/Js/Mobile/swipe.js"></script>
+		
+	</head>
+	<body>
+		<div id="app">
+			<div class="slide" id="slide2">
+			    <ul>
+			        <li>
+		                <img :src="'@(WorkContext.ShopConfig.ImageCDN)'+productInfo.picurl" alt="" />
+			        </li>
+			    </ul>
+			    <!--div class="dot">
+			        <span></span>
+			        <span></span>
+			    </div-->
+			</div>
+			<div class="product-info">
+				<div class="product-name-content">
+					<div class="product-name">{{productInfo.productname}}</div>
+					<div class="product-sales">销量: {{productInfo.salecount}} 库存 {{productInfo.stock}}</div>
+				</div>
+				<div class="product-attr-content">
+					<div v-for="(item,index) of productspecinfolist" :key="index">
+						<div class="product-attr-title">{{item.specname}}</div>
+						<div class="product-attr-list">
+							<div class="product-attr" v-for="(arr,index) of specvalueinfolist" :key="index" v-if="arr.specid == item.specid">{{arr.specvalue}}</div>
+						</div>
+					</div>
+				</div>
+				<div class="product-stock-content">
+					<div class="product-stock">
+						<h3 class="product-stock-title">库存价格信息</h3>
+						<div class="product-stock-list">
+							<div class="weui_cell">
+				                <div class="weui_cell_bd weui_cell_primary">
+				                    <p>市场价（元）</p>
+				                </div>
+				                <div class="weui_cell_ft">{{productInfo.marketprice}}</div>
+				            </div>
+				            <div class="weui_cell">
+				                <div class="weui_cell_bd weui_cell_primary">
+				                    <p>售价（元）</p>
+				                </div>
+				                <div class="weui_cell_ft">{{productInfo.saleprice}}</div>
+				            </div>
+				            <div class="weui_cell">
+				                <div class="weui_cell_bd weui_cell_primary">
+				                    <p>成本价（元）</p>
+				                </div>
+				                <div class="weui_cell_ft">{{productInfo.purcprice}}</div>
+				            </div>
+				            <!--div class="weui_cell stock-used">
+				                <div class="weui_cell_bd weui_cell_primary">
+				                    <p>可订货库存</p>
+				                </div>
+				                <div class="weui_cell_ft">100</div>
+				            </div>
+				            <div class="weui_cell">
+				                <div class="weui_cell_bd weui_cell_primary">
+				                    <p>仓库实际库存</p>
+				                </div>
+				                <div class="weui_cell_ft">150</div>
+				            </div-->
+				        </div>
+			        </div>
+				</div>
+			</div>
+			<div class="mall-view">
+				<a v-bind:href="'/m/product/detail?id='+productId+'&IsApp='+IsApp">商城预览</a>
+			</div>
+		</div>
+	</body>
+	
+	<script>
+		var url = window.location.href;
+	    //商户id
+	    var SellerId = url.split("SellerId=")[1];
+		var vm = new Vue({
+			el: "#app",
+			data:{
+				IsApp: '@WorkContext.IsApp',
+				productId: "@ViewData["ProductId"]",
+				productInfo:{},
+				productspecinfolist:[],
+				specvalueinfolist:[],
+			},
+			methods:{
+				getShopProductInfo: function() {
+					var that = this;
+					var productId = that.productId;
+					$.ajax({
+						type:'get',
+						url: '/Api/Product/ProductDetail?v='+Math.random()+'&SellerId='+SellerId+'&Id='+productId,
+						dataType: 'json',
+						async:true,
+						success: function(res){
+							//console.log(res);
+							if (res.code == 1) {
+								that.productInfo = res.data.productitem;
+								that.productspecinfolist = res.data.productspecinfolist;
+								that.specvalueinfolist = res.data.specvalueinfolist;
+							}
+						}
+					});
+				}
+			},
+			mounted: function(){
+				var that = this;
+				that.getShopProductInfo();
+			}
+		})
+	</script>
+	<script>
+		$(function(){
+			$('#slide2').swipeSlide({
+			autoSwipe:true,//自动切换默认是
+			speed:3000,//速度默认4000
+			continuousScroll:false,//默认否
+			transitionType:'cubic-bezier(0.22, 0.69, 0.72, 0.88)',//过渡动画linear/ease/ease-in/ease-out/ease-in-out/cubic-bezier
+			lazyLoad:false,//懒加载默认否
+			firstCallback : function(i,sum,me){
+            me.find('.dot').children().first().addClass('cur');
+		        },
+		        callback : function(i,sum,me){
+		            me.find('.dot').children().eq(i).addClass('cur').siblings().removeClass('cur');
+		        }
+			});
+		});
+	</script>
+</html>

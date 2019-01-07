@@ -1,0 +1,687 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/font/common.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/usercenter/myscore/score.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/usercenter/red-packet/red_packet_detail.css"/>
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weuix.min.css"/>
+	<script type="text/javascript" charset="utf-8" src="/Mobile/Themes/huadong/static/weui/zepto.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="/Mobile/Themes/huadong/static/weui/lrz.min.js"></script>
+	<script src="/Mobile/Themes/huadong/static/weui/picker.js"></script>
+	<script src="/Mobile/Themes/huadong/static/weui/picker-city.js"></script>
+	<script src="/Mobile/Themes/huadong/static/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>    
+    <script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script> 
+    <script type="text/javascript" charset="utf-8" src="/Js/Mobile/updown.js"></script>
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/loading.css"/>
+    <title>我的营收-@(WorkContext.SellerInfo.SellerName)</title>
+    <style>
+    	body{
+    		height:auto!important;
+    	}
+    	.ysdetail{
+    		position:absolute;
+    		top:0;
+    		background: #fff;
+    		z-index: 11;
+    		width:7.5rem;
+    		margin:0 auto;
+    	}
+    	.top-data {
+		    position: fixed;
+		    top: 46px;
+		    width: 7.5rem;
+		    left: 50%;
+		    margin-left: -3.75rem;
+		    z-index: 3;
+		    background: #f2f2f2;
+		}
+		.header-ys {
+		    position: fixed;
+		    width: 7.5rem;
+		    height: 46px;
+		    top: 0;
+		    left: 50%;
+		    margin-left: -3.75rem;
+		    background: #fff;
+		    z-index: 3;
+		}
+		.header-ys .weui-header-title{
+			color:#333;
+		}
+		.addcard-box{
+			position:fixed;
+			top:0;
+			width:7.5rem;
+			margin:0 auto;
+			height:100%;
+			background: #eee;
+			margin-top:0.92rem;
+		}
+		.add-btn{
+			width:90%;
+			margin:0 auto;
+			/*padding:0.6rem 0;*/
+			padding-bottom:0.4rem;
+			border-radius: 0.2rem;
+			background: linear-gradient(to top, #7b6fed, #b891fc);
+			text-align: center;
+		}
+		.addcard-box ul{
+			padding-top:0.1rem;
+		}
+		.addcard-box li{
+			/*margin-top:0.4rem;*/
+		}
+		.add-btn icon{display:block;font-size: 1.2rem;color:#fff;}
+		.add-btn p{
+			font-size: 0.28rem;
+			color:#fff;
+			line-height: 0.6rem;
+		}
+		#packet{
+			/*overflow:scroll!important;*/
+		}
+		.mt46{
+			/*position:fixed;*/
+			top:0;
+			height:100%;
+			width:7.5rem;
+			margin:0 auto;	
+			background: #fff;
+			padding-top:0.92rem;
+			padding-bottom:0.4rem;
+		}
+		.weui_cell{
+			padding-top:0.3rem;
+			padding-bottom:0.3rem;
+			font-size: 0.28rem;
+			}
+		.blank{
+			width:7.5rem;
+			margin:0 auto;
+			height:0.2rem;
+			background: #eee;
+		}
+		.weui-picker-overlay, .weui-picker-container{
+			position: fixed;
+		    bottom: 0;
+		    left: 0;
+		    right: 0;
+		    height: 0;
+		    width: 7.5rem;
+		    z-index:111 ;
+		    margin: 0 auto;
+		}
+		.weui_cell:before {
+		    content: " ";
+		    position: absolute;
+		    left: 0;
+		    top: 0;
+		    width: 100%;
+		    height: 1px;
+		    border-top: 1px solid #d9d9d9;
+		    color: #d9d9d9;
+		    -webkit-transform-origin: 0 0;
+		    transform-origin: 0 0;
+		    -webkit-transform: scaleY(.5);
+		    transform: scaleY(.5);
+		    left: 15px;
+		}
+		.weui-picker-modal .toolbar-inner{
+			height:1rem;
+		}
+		.weui-picker-modal{
+			 height: 5rem;
+		}
+		.weui-picker-modal .picker-modal-inner{
+		    height: 3.456rem;
+		}
+		.weui-picker-modal .picker-item{
+			text-align:center;
+		}
+		.savebtn {
+			display:block;
+		    font-size: 0.28rem;
+		    outline: none;
+		    border: 0;
+		    width: 85%;
+		    border-radius: 0.4rem;
+		    height: 0.8rem;
+		    background: #E02E24;
+		    color: #fff;
+		    margin: 0 auto;
+		}
+		.weui_mask {
+		    background: rgba(0,0,0,.6);
+		     z-index: 100!important;
+		}
+		.weui_toptips{
+			max-width:7.5rem;
+		}
+		.weui_cell_none:before{
+			border-top: 0;
+		}
+	</style>
+</head>
+<body class="myscore-page">
+	<div id="app" style='display: none;'>
+		    <div class="myscore-page-head">
+		        <div class="myscore-title">
+		            <div class="back-prev-page" onclick="goToBack()"></div>
+		            <div class="page-name">我的营收</div>
+		            <div class="transaction-record">
+		                <a href="/m/seller/payInFlow?IsApp=@(WorkContext.IsApp)" class="record-btn">营收明细</a>
+		            </div>
+		        </div>
+		        <!--我的积分额度-->
+		        <div class="myscore-content">
+		            <div class="myscore-text">营收余额</div>
+		            <div class="myscore-number">¥@WorkContext.UserInfo.UserMoney</div>
+		        </div>
+		    </div>
+		    <!--奖励明细-->
+		    <div class="myscore-content-info myscore-content-info-flex">
+		        <!--我的积分类型-->
+		        <div class="myscore-content-type">
+		            <div class="myscore-total">
+		                <div class="myscore-type">累计营收额</div>
+		                <div class="myscore-type-number" v-if="sellerData.sumsellerin!=0" v-text='"¥"+calc(Number(sellerData.sumsellerin),"+",0,2)'></div>
+		                <div class="myscore-type-number" v-else>¥0</div>
+		                
+		            </div>
+		            <div class="myscore-used">
+		                <div class="myscore-type">累计提取营收额</div>
+		                <div class="myscore-type-number" v-if="sellerData.sumsellerout.length!=0" v-text='"¥"+calc(Number(sellerData.sumsellerout),"+",0,2)'></div>
+		                <div class="myscore-type-number" v-else>¥0</div>
+		            </div>
+		            <!--<div class="weui_cell">
+	    				<div class="weui_cell_hd">
+	    					<label class="weui_label">开户行：</label>
+	    				</div>
+	    				<div class="weui_cell_hd weui_cell_primary">
+	    					<input name="openbank"  id='text2' type="text" placeholder="请输入公司名称" class="weui_input">
+	    				</div>
+	    			</div>-->
+		        </div>
+		        <!--div class="myscore-list" v-on:click='clickTq()'>
+		            <a href="javascript:;">
+		            	<div class="weui_grid_icon">
+	                		<span class="icon icon-43"></span>
+	            		</div>
+	            		提现记录
+	            	</a>
+		        </div-->
+		        <div class="myscore-list">
+		            <a href="/m/seller/payInFlow" class="allow">
+                		<span class="icon icon-43"></span>营收明细
+	            	</a>
+		        </div>
+		    </div>
+		    <!--营收明细-->
+		    <div class="ysdetail" v-show='tqShow'>
+		    	
+				<div class="wapper">
+					<div id="packet">
+						<div class="header-ys">
+							<div class="weui-header bg-white">
+								<div class="weui-header-left">
+									<a href="javascript:;" v-on:click='clickTq()' class="icon icon-109 f-black"></a>
+								</div>
+								<h1 class="weui-header-title">提取营收</h1>
+								<div class="weui-header-right" >
+									<a class="icon icon-83 f-black"></a>
+								</div>
+							</div>
+						</div>
+					    <div class='addcard-box' style='height:100%;'>
+					    	 <ul>
+					    	 	<li class='' >
+					    	 		<div class='add-btn' v-on:click='cardclick()'>
+					    	 			<icon class='icon icon-36'></icon>
+					    	 			<p>添加对公卡</p>
+					    	 			<p>一键绑定对公卡，享受最快捷的服务</p>
+					    	 		</div>
+					    	 	</li>
+					    	 </ul>
+					    </div>
+					</div>
+					
+				</div>
+		    </div>
+		    <!--银行卡信息-->
+		    <div class="ysdetail" v-show='formShow'>
+		    	<div class="wapper">
+		    		<div id="packet">
+		    			<div class="header-ys">
+		    				<div class="weui-header bg-white">
+								<div class="weui-header-left">
+									<a href="javascript:;" v-on:click='cardclick()' class="icon icon-109 f-black"></a>
+								</div>
+								<h1 class="weui-header-title">添加银行卡</h1>
+								<div class="weui-header-right">
+									<a class="icon icon-83 f-black"></a>
+								</div>
+							</div>
+		    			</div>
+		    			<form id="form" method="post">
+			    			<div class="weui_cells weui_cells_form mt46">
+			    				<div class="blank"></div>
+				    			<div class="weui_cell weui_cell_none">
+				    				<div class="weui_cell_hd">
+				    					<label class="weui_label">名称：</label>
+				    				</div>
+				    				<div class="weui_cell_bd">
+				    					<input name="ShopName" type="text" placeholder="请输入公司名称" class="weui_input" />
+				    				</div>
+				    			</div>
+				    			<div class="weui_cell">
+				    				<div class="weui_cell_hd">
+				    					<label class="weui_label">税号：</label>
+				    				</div>
+				    				<div class="weui_cell_bd">
+				    					<input name="Duty" type="number" placeholder="15-20(企业报销时必填)" class="weui_input" />
+				    				</div>
+				    			</div>
+				    			<div class="weui_cell">
+				    				<div class="weui_cell_hd">
+				    					<label class="weui_label">开户行：</label>
+				    				</div>
+				    				<div class="weui_cell_bd weui_cell_primary">
+				    					<input name="openbank" id="openbank" type="text" placeholder="请选择开户行" class="weui_input" />
+				    				</div>
+				    			</div>
+				    			<div class="weui_cell">
+				    				<div class="weui_cell_hd">
+				    					<label class="weui_label">开户省市：</label>
+				    				</div>
+				    				<div class="weui_cell_bd weui_cell_primary">
+				    					<input name="city" id="city" type="text" placeholder="请选择开户地区" class="weui_input" />
+				    				</div>
+				    			</div>
+				    			<div class="blank"></div>
+				    			<div class="weui_cell weui_cell_none">
+				    				<div class="weui_cell_hd">
+				    					<label class="weui_label">开户支行：</label>
+				    				</div>
+				    				<div class="weui_cell_bd weui_cell_primary">
+				    					<input name="subbranch" type="text" placeholder="请输入开户支行" class="weui_input" />
+				    				</div>
+				    			</div>
+				    			<div class="weui_cell">
+				    				<div class="weui_cell_hd">
+				    					<label class="weui_label">银行账户：</label>
+				    				</div>
+				    				<div class="weui_cell_bd weui_cell_primary">
+				    					<input name="bankAccount" type="number" placeholder="请输入银行账户" class="weui_input" />
+				    				</div>
+				    			</div>
+				    			<div class="weui_cell">
+				    				<div class="weui_cell_hd">
+				    					<label class="weui_label">手机号码：</label>
+				    				</div>
+				    				<div class="weui_cell_bd weui_cell_primary">
+				    					<input name="mobile" type="tel"  maxlength="11" placeholder="请输入手机号码" class="weui_input" />
+				    				</div>
+				    			</div>
+				    			<div class="weui_cell">
+				    				<div class="weui_cell_hd">
+				    					<label class="weui_label">单位地址：</label>
+				    				</div>
+				    				<div class="weui_cell_bd weui_cell_primary">
+				    					<input name="address" type="text" placeholder="请输入单位地址" class="weui_input" />
+				    				</div>
+				    			</div>
+			    			 	<div class="weui_cell">
+				    			 	<div class="weui_cell_bd">
+				    			 		<div class="weui_uploader">
+				    			 			<div class="weui_uploader_hd">
+				    			 				<div class="weui_cell_bd weui_cell_primary">开户许可证</div>
+				    			 				<div class="weui_cell_ft"></div>
+				    			 			</div>
+				    			 			<div class="weui_uploader_bd">
+				    			 				<ul class="weui_uploader_files" id='img2x'></ul>
+				    			 				<div class="weui_uploader_input_wrp">
+				    			 					<input class="weui_uploader_input" type="file" accept="image/jpg,image/jpeg,image/png,image/gif"  data-index='0' id='indexurl'/>
+				    			 					<input type="hidden" id='images'/>
+				    			 				</div>
+				    			 			</div>
+				    			 		</div>
+				    			 	</div>
+				    			 </div>
+				    			 <div class="weui_btn_area">
+							        <a id="formSubmitBtn" href="javascript:;" class="weui_btn weui_btn_primary">申请开通</a>
+							    </div>
+			    		    </div>
+			    		</form>
+		    		</div>
+		    	</div>
+		    </div>
+    </div>
+    <div class="curtain hide">
+			<div class="loader Rotation"></div>
+			<div class="loadTit">
+				<icon class='icon iconfont'>&#xe649;</icon>
+			</div>
+</div>
+</body>
+<script type="text/javascript">   
+		
+		
+	var IsApp = "@WorkContext.IsApp";
+	function goToBack() {
+		var _this = this;
+		if(IsApp==1){
+			if(navigator.userAgent.indexOf("iPhone")>0){
+				gobacklastpage();
+			}
+			if(navigator.userAgent.indexOf("Android")>0){
+				window.js.goBack();
+			}
+		}else{
+			window.history.back();
+		}
+			
+	}
+//	$.showLoading();
+$('.curtain').removeClass("hide")
+   var vm = new Vue({
+			el: '#app',
+			data: {
+				isShow: false,
+				formShow:false,
+				yshow:false,//营收明细显示隐藏 
+				tqShow:false,//提取营收显示隐藏
+				UserId:"@WorkContext.Uid",
+				sellerData:{sumsellerin:0,sumsellerout:0}
+			},
+			methods: {
+				cardclick:function(){
+					var _this=this;
+					_this.formShow=!_this.formShow;
+				},
+				clickMx:function(){
+					var _this=this;
+					_this.yshow=!_this.yshow;
+				},
+				clickTq:function(){
+					var _this=this;
+					_this.tqShow=!_this.tqShow;
+				},
+				getData:function(){
+					var _this = this;
+	                $.ajax({
+	                    type: "get",
+	                    url: '/Api/Statistic/SellerCardFlow?UserId=' + _this.UserId,
+	                    async: true,
+	                    success: function(rel) {
+	                        console.log(rel)
+	                        if(rel.code==1){
+	                        	_this.sellerData=rel.data
+	                        }else{
+	                        	
+	                        }
+	                    }
+	                });
+				},
+				tofixed:function(str){//保留小数点2位
+						var arr=str.toString().split('.');
+						//console.log(str);
+							if(arr[1]!=undefined){
+								if(arr[1].substring(0,3).substring(1,2)!=0){//第二位不为零
+									var a=arr[0]+'.'+arr[1].substring(0,2)
+								}else{
+									var a=arr[0]+'.'+arr[1].substring(0,1)
+								}
+							     
+						}else{
+							a=str
+						}
+					return a;
+				},
+				calc:function(arg1, op, arg2,dot) {
+			        var ra = 1, rb = 1, m;
+			        try {
+			            ra = arg1.toString().split('.')[1].length;
+			        } catch (e) {
+			        }
+			        try {
+			            rb = arg2.toString().split('.')[1].length;
+			        } catch (e) {
+			        }
+			        m = Math.pow(10, Math.max(ra, rb));
+			
+			        switch (op) {
+			            case '+':
+			            case '-':
+			                arg1 = Math.round(arg1 * m);
+			                arg2 = Math.round(arg2 * m);
+			                break;
+			            case '*':
+			                ra = Math.pow(10, ra);
+			                rb = Math.pow(10, rb);
+			                m = ra * rb;
+			                arg1 = Math.round(arg1 * ra);
+			                arg2 = Math.round(arg2 * rb);
+			                break;
+			            case '/':
+			                arg1 = Math.round(arg1 * m);
+			                arg2 = Math.round(arg2 * m);
+			                m = 1;
+			                break;
+			        }
+			        try {
+			            var result = eval('(' + '(' + arg1 + ')' + op + '(' + arg2 + ')' + ')/' + m);
+			        } catch (e) {
+			        }
+			        if(result.toString().indexOf(".")!=-1){
+			        	var strarr = result.toString().split(".");
+			        	if(strarr[1].length>dot){
+			        		result = strarr[0]+"."+strarr[1].substring(0,dot);
+			        	}
+			        }
+			        return result;
+			    }
+			}
+		});
+		$(function() {
+			vm.getData();
+			setTimeout(function(){
+//				$.hideLoading();
+$('.curtain').addClass("hide")
+				$('#app').css('display','block')
+			},100);
+			$(".wapper").css("display","block");
+			
+                $("#openbank").picker({
+			        title: "你喜欢的国家",
+			        toolbarCloseText:'确定',
+			        cols: [
+			          {
+			            textAlign: 'center',
+			            values: ['新西兰','美国','日本'],
+			          }
+			        ]
+			      });
+			      $("#city").cityPicker({
+			        title: "选择省市",
+			        showDistrict: false
+                  }); 
+//                    图片上传
+      $(".weui_uploader_input").on("click",function() {
+	    		uplodImg();
+	    	});
+
+
+      function uplodImg() {
+	      	//单图压缩上传
+    		var f = document.getElementById('indexurl');
+			f.onchange = function() {
+			    lrz(this.files[0], {
+			        width: 640,
+			        fieldName: "file"
+			    }).then(function(rst) {
+			        var xhr = new XMLHttpRequest();
+			        xhr.open('POST', '../Tool/Upload?operation=uploaduseravatar');
+			        xhr.onload = function(datas) {
+			            if (xhr.status === 200) {
+                            var obj = eval('(' + xhr.responseText + ')');
+                            console.log(obj);
+                            var delImg = "delImg";
+			                $('#img2x').html('<li id="'+delImg+'" class="del_inmg weui_uploader_file weui_uploader_status" style="background-image:url(@(WorkContext.ShopConfig.ImageCDN)' + obj.url + ')"><div class="weui_uploader_status_content"><i class="weui_icon_cancel"></i></div></li>');
+			                $('#images').val(obj.url);
+			                $(".weui_uploader_input_wrp").hide();
+			            } else {
+			            }
+			        };
+			        xhr.onerror = function() {
+			        };
+			        xhr.upload.onprogress = function(e) {
+			            var percentComplete = ((e.loaded / e.total) || 0) * 100;
+			        };
+
+			        xhr.send(rst.formData);
+			        return rst;
+			    }).catch (function(err) {
+			        alert(err);
+			    }).always(function() {
+			    });
+			};
+	    }
+      	$(document).on("click",".del_inmg",function(){
+        	$.confirm('您确定要删除吗?', '确认删除?', function() {
+				$('#delImg').remove();
+				$("#indexurl").val("");
+				$(".weui_uploader_input_wrp").show()
+			},
+			function() {
+				$.alert('取消操作', 'cancel');
+			});
+    	});
+	});
+
+	$(document).on("click" , "#formSubmitBtn", function(){
+		var shopName = $("input[name='ShopName']"),
+			duty = $("input[name='Duty']"),
+			openbank = $("input[name='openbank']"),
+			city = $("input[name='city']"),
+			subbranch = $("input[name='subbranch']"),
+			bankAccount = $("input[name='bankAccount']"),
+			mobile = $("input[name='mobile']"),
+			address = $("input[name='address']"),
+			file = $("input[type='file']");
+			if (shopName.length != 0) {
+				if(shopName.val() == ""){
+					$.toptips("请输入公司名称");
+					return false;
+				}else{
+					var reg=/[^\u4e00-\u9fa5]/;
+		            if(reg.test(shopName.val())){
+		            	$.toptips("公司名称格式不合法");
+		            	return false;
+		            }
+				}
+			}
+			if(duty.length != 0){
+				if(duty.val() == ""){
+					$.toptips("请输入公司税号");
+					return false;
+				}else{
+		            if(duty.val().length < 15 || duty.val().length > 20){
+		            	$.toptips("公司税号格式不合法");
+		            	return false;
+		            }
+				}
+			}
+			if(openbank.length != 0){
+				if(openbank.val() == ""){
+					$.toptips("请选择开户行");
+					return false;
+				}
+			}
+			if(city.length != 0){
+				if(city.val() == ""){
+					$.toptips("请选择开户地区");
+					return false;
+				}
+			}
+			if(subbranch.length != 0){
+				if(subbranch.val() == ""){
+					$.toptips("请输入开户支行");
+					return false;
+				}else{
+					var reg=/[^\u4e00-\u9fa5]/;
+		            if(reg.test(subbranch.val())){
+		            	$.toptips("开户支行格式不合法");
+		            	return false;
+		            }
+				}
+			}
+			if(bankAccount.length != 0){
+				if(bankAccount.val() == ""){
+					$.toptips("请输入银行账户");
+					return false;
+				}
+			}
+			if(mobile.length != 0){
+				if(mobile.val() == ""){
+					$.toptips("请输入手机号码");
+					return false;
+				}else{
+					var reg=/^1[34578]\d{9}$/;
+		            if(!reg.test(mobile.val())){
+		            	$.toptips("手机号码不合法");
+		            	return false;
+		            }
+				}
+			}
+			if(address.length != 0){
+				if(address.val() == ""){
+					$.toptips("请输入单位地址");
+					return false;
+				}
+			}
+			if(file.length != 0){
+				if(file.val() == ""){
+					$.toptips("请上传开户许可证");
+					return false;
+				}
+			}
+			$.ajax({
+				type: "post",
+				url: "/",
+				dataType: "json",
+				async: true,
+				data:{
+					shopName: shopName.val(),
+					duty: duty.val(),
+					openbank: openbank.val(),
+					city: city.val(),
+					subbranch: subbranch.val(),
+					bankAccount: bankAccount.val(),
+					mobile: mobile.val(),
+					address: address.val(),
+					file: file.val(),
+				},
+				success: function(res){
+					console.log(res);
+				},
+				error: function(res){
+					alert("ajax error");
+				}
+			});
+    });
+
+</script>
+
+</html>

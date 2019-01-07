@@ -1,0 +1,96 @@
+﻿@model Yitao.Core.ArticleInfo
+@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>详情-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weuix.min.css" />
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/lazyimg.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css">
+			.weui-weixin-img{
+				text-align: center;
+				margin-top: 0.8rem;
+			}
+	</style>
+</head>
+
+<body>
+	<div class="bg-orange weui-header "> 
+    <div class="weui-header-left" onclick="goToBack()"> <a class="icon icon-109 f-white"></a>  </div>
+    <h1 class="weui-header-title">@Model.Title</h1>
+    <div class="weui-header-right"><a class="icon icon-22 f-white"></a></div> 
+    </div> 
+    <div class="weui-weixin">
+        <div class="weui-weixin-ui">
+            <!--页面开始-->
+            <div class="weui-weixin-page">
+                <h2 class="weui-weixin-title">@Model.Title</h2>
+                <div class="weui-weixin-info">
+                    <!--meta-->
+                    <em class="weui-weixin-em">@Model.AddTime.ToString("yyyy-MM-dd")</em>
+                    <em class="weui-weixin-em">@Model.Author</em>
+                    <a class="weui-weixin-a weui-weixin-nickname" href="javascript:void(0);">@Model.Source</a>
+                </div>
+                <!--meta结束-->
+                @if (Model.Outline.ToString() != "")
+                {
+                    <p class="weui-weixin-content f16">@Model.Outline</p>
+                }
+                @if (Model.Thumbnail.ToString() != "")
+                {
+                    <div class="weui-weixin-img">
+                        <!--图片开始-->
+                        <img src="@(WorkContext.ShopConfig.ImageCDN)@{@Model.Thumbnail}?w=600">
+                    </div>
+                }
+                <!--图片结束-->
+                <div class="weui-weixin-content">
+                    @Model.Description
+                </div>
+                <!--内容结束-->
+
+                <div class="weui-weixin-tools">
+                    <!--工具条-->
+                    <div class="weui-weixin-read">阅读<span id="readnum">@Model.Click</span> </div>
+                </div>
+                <!--工具条结束-->
+
+            </div>
+            <!--页面结束-->
+
+        </div>
+    </div>
+
+
+	<script type="text/javascript">
+		var IsApp = "@WorkContext.IsApp";
+		function goToBack() {
+			var _this = this;
+    		if(IsApp==1){
+				if(navigator.userAgent.indexOf("iPhone")>0){
+					gobacklastpage();
+				}
+				if(navigator.userAgent.indexOf("Android")>0){
+						window.js.goBack();
+					}
+			}else{
+				window.history.back();
+			}
+				
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,132 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>团购列表-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css"/>
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css"/>
+	<link rel="stylesheet" href="/Css/Mobile/spin.css">
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+  		<header>
+			<i class="iconfont back" onclick="history.back()">&#xe647;</i>
+			<h3>拼团</h3>
+			<i class="iconfont" id="huan">
+				&#xe609;
+			</i>
+		</header>
+		<div class="content heng">
+
+			<ul class="list_con">
+				
+			
+
+
+			
+
+			</ul>
+
+		</div>
+		<div id="more" style="text-align:center">	</div>
+		<script>
+
+			$.alert("系统升级中......");
+							var sort = '@ViewData["sort"]',
+						//	search = '@ViewData["search"]',
+							page = '@ViewData["page"]',
+							size = '@ViewData["size"]';
+
+				var maxpage = 5;
+				function getPay(_this){
+		
+				var id = $($(_this).parents("li")).attr("data-ProductId");
+				window.location.href = '/m/product/detail?id='+id;
+				};
+				$(function(){
+				//	getGoods();
+				});
+				function getGoods(){
+				$.post('/m/activity/Group ',{
+									sort:sort,
+								//	search:search,
+									page:page,
+									size:size  
+
+					},
+					
+					function(data) {
+						var datas = JSON.parse(data);
+						var dete = datas.Data;
+						console.log(dete);
+					if(dete != 0){
+					
+					
+						var html ='';
+						var img_url = "@(WorkContext.ShopConfig.ImageCDN)";
+						var chicun = '?w=200&h=200';
+						for(var i = 0; i< dete.length; i++){
+							if(dete[i].Thumb == ""){
+								dete[i].Thumb = '/Images/wutu.png';
+								chicun = '';
+								img_url='';
+							}else{
+								 img_url = "@(WorkContext.ShopConfig.ImageCDN)";
+								 chicun = '?w=200&h=200';
+							};
+							html += '<li class="list_item"><img class="goods_src" src="'+img_url+dete[i].Thumb+chicun+'"><p class="list_title">';
+							html += dete[i].ProductName+'</p><p class="list_tag"><span class="list_s1">'+dete[i].ActivityPrice+'</span><span class="list_s2">';
+							html +=dete[i].SaleCount+'</span><span class="list_s3"><a href="/m/activity/groupdetail?id='+dete[i].ItemId+'">去拼单<i class="iconfont"></i></a></span></p></li>';
+		
+						}   
+						$(".list_con").append(html);
+						page++;
+					}else{
+						page = maxpage;
+					}
+				}, 'JSON');
+		}
+		$(window).scroll(
+  	  function() {
+        var scrollTop = $(this).scrollTop();
+        var scrollHeight = $(document).height();
+        var windowHeight = $(this).height();
+        if (scrollTop + windowHeight == scrollHeight) {
+           if(page<=maxpage) {
+           	getGoods();
+           	page++;
+           	 if(page==maxpage){
+			$("#more").html("没有更多数据了");
+			return false;	
+			};
+  			};
+        };
+
+    });
+
+	$("#huan").on("click",function(){
+		if($(".content").hasClass("heng")){
+			$(".content").removeClass("heng");
+		}else{
+			$(".content").addClass("heng");
+		};
+	});
+		
+		</script>	
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,668 @@
+﻿@model Yitao.Web.Mobile.Models.ReviewOrderModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>评价晒单-@{@WorkContext.SellerInfo.SellerName}</title>
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" href="/Css/mobile/weui.css" />
+    <link rel="stylesheet" href="/Css/mobile/weui2.css" />
+    
+     <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+    
+     <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css" />
+     
+<style>
+.tishixinxi{font-size:0.24rem;color: #999;width:1.4rem;text-align: center;}
+body {min-width: 320px;max-width: 640px;overflow-x: hidden;}
+textarea{font-size: 16px !important;}
+.scontent{margin-top: 1rem;}
+body .scontent:first-child{ margin-top: 0;}
+#contents{min-width: 320px;max-width: 640px;width: 100%;overflow-x: hidden;background: #fff;}
+::-webkit-scrollbar {width: 1px;float: right;}
+::-webkit-scrollbar:horizontal {height: 0em;}
+*,
+*:before,
+*:after {box-sizing: border-box;outline: none;}
+ul li {list-style: none;}
+a {color: #323232;}
+body {width: 7.5rem;margin: 0 auto;font-family: "微软雅黑", "microsoft yahei";background: #F0F2F5;color: #323232;line-height:0;}
+.weui-header .weui-header-left,
+.weui-header .weui-header-right {position: absolute;top: 14px;display: block;font-size: 16px;line-height: 21px;color: #323232;}
+.weui-header .weui-header-title,
+.weui-header h1 {margin: 0 88px;margin-left: 100px;line-height: 40px;text-align: center;height: 40px;font-size: 16px;font-weight: 400;width: auto;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;color: #323232;}
+.weui-header .weui-header-left,
+.weui-header .weui-header-right {position: absolute;top: 14px;display: block;font-size: 15px;line-height: 20px;color: #F13030;}
+.weui-header {box-shadow: 1px 0px 3px #E1E1E1;z-index: 3;}
+.weui_img_cell {max-width: 0.8rem;margin-left: 0rem;margin-top: 0rem;}
+.weui_cell_hd {display: inline-block;float: left;}
+.weui_cell {display: inline-block;width: 100%;position: relative;}
+.weui_cell_bd1 {float: left;display: inline-block;justify-content: center;display: flex;justify-content: space-between;}
+.weui_cell_bd1 p {text-indent:0.24rem;color: #323232;line-height: 0.8rem;font-size: 0.28rem;}
+.weui-rater-1 a{font-size: 0.38rem;color:#ff4800;margin: 0 0.08rem;}
+.weui-rater-1 a.checked {color: #F13030 !important;cursor: not-allowed;}
+.weui_cells {padding: 0.2rem 0;}
+.weui_btn_warn:not(.weui_btn_disabled):active {color: hsla(0, 0%, 100%, .4);background-color: #FFFFFF;}
+.weui_btn_warn {background-color: #FFFFFF;}
+.weui-header{position: fixed;top: 0;left: 0;right: 0;width: 100%;min-width: 320px;max-width: 640px;margin: 0 auto;z-index: 33;box-shadow: 1px 2px 3px #e1e1e1;}
+.weui_cells {margin: 0;padding: 0;}
+.weui_cells:before {content: " ";position: absolute;left: 0;width: 0;height: 1px;color: #d9d9d9;-webkit-transform: scaleY(.5);transform: scaleY(.5);}
+.weui_cells_form,.weui_textarea {background: #fff;}
+.weui_textarea {display: block;border: 0;resize: none;width: 100%;color: inherit;font-size: 0.6em;line-height: inherit;outline: 0;font: "microsoft yahei", "微软雅黑";}
+.weui_uploader_input_wrp {float: left;position: relative;margin-right: 0.1rem;margin-bottom: 0.1rem;width: 1.6rem;height: 1.6rem;border: 1px dashed #d9d9d9;margin-left: 0.1rem;}
+.wrp_contant{display: inline-block;width: 100%;padding-left: 0.3rem;padding-top:0.2rem;}
+/* start  */
+.start {background: #FFFFFF;}
+.start_head {padding: 0px 0.1rem;}
+.start_title {line-height:0.8rem;font-size: 0.28rem;}
+.start_title i {font-size: 0.48rem;margin-right: 0.1rem;position: relative;top: 1px;color: #666666;}
+.start_title span {font-size:0.28rem;color: #848689;margin-left: 0.1rem;float:  right;margin-right: 0.2rem;}
+.startc_right {text-align: left;}
+.page-hd {padding: 0px;text-align: right; position: relative;top: 0.28rem;display: flex!important;}
+.weui-rater {text-align: left;display: flex;line-height: normal;}
+.page-hd {padding: 0px;text-align: left;padding-left: 0.2rem;}
+.startc_left {line-height: 0.6rem;white-space: nowrap;padding-left: 0.2rem;font-size:0.28rem;white-space: nowrap;position:relative;top:0;color:#999;}
+.start_content,
+.start_content ul,
+.start_content ul li {display: inline-block;width: 100%;position: relative;}
+.start_content {padding: 0px 0rem;}
+.start{position: relative;}
+/*.start:before{content: "";display: inline-block;width: 100%;height: 0rem;top: 0;left: 0;right: 0;}*/
+.start_content ul{padding-top: 0.1rem;padding-bottom: 0.1rem;}
+.dflex{display: flex;justify-content: flex-start;}
+.scontentli{border-top: 1px solid #F0F2F5;border-bottom: 10px solid #F0F2F5;padding-bottom: 0.2rem;}
+.scontentul{padding-top:0.92rem;}
+.hide{display:none}
+.show{display:block}
+.weui_dialog_bd{line-height:1.2rem;padding-top:0.2rem;padding:0;}
+.textinp{line-height:0.78rem ;}
+.kanyid {width:7.1rem;margin:0 auto;height: 0.8rem;line-height: 0.8rem;text-align: center;font-size: 0.36rem;background: #FF4800;position:relative;top:0.4rem;border-radius: 0.2rem;cursor: pointer;color: #fff;}
+.Anonymous{display: flex;justify-content: space-between;width:7.1rem;margin:0 auto;margin-top:0.4rem;margin-bottom:0.2rem}
+.Anonymous-left{font-size: 0.24rem;display: flex;justify-content: flex-start;}
+.Anonymous-right{font-size: 0.24rem;color:#999;}
+.Anonymouscolor{color:#FF4800}
+.mous{margin-left: 0.2rem}
+.weui_dialog_hd {padding: 0.6em 0 .5em;}
+.isreviewpt{ overflow: hidden; text-overflow:ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;font-size: 0.28rem;}
+#app{display: none;}
+.weui_toast{width:2.56rem;min-height:2.56rem;margin-left: -1.28em;}
+.weui_toast p{padding-top:0.3rem;font-size: 0.28rem!important;}
+.weui_icon_toast:before{font-size: 0.8rem;}
+#app{margin-bottom: 1rem;}
+</style>
+</head>
+<body>
+	<div id="app">
+    <div id="contents">
+    	<form id="shekun"  method="post">
+  	<!--  头部-->
+		<div class="weui_btn_warn weui-header ">
+			<div class="weui-header-left">
+				<a class="icon iconfont" onclick="history.back()">&#xe60e;</a>
+			</div>
+			<h1 class="weui-header-title">发表评论</h1>
+			<div class="weui-header-right" v-if='isreview==0' v-on:click='submitdataFn()'>发布</div>
+			<div class="weui-header-right" v-else v-on:click='AppendCommentFn()'>发布</div>
+			
+		</div>
+		<!-- 商品评分 -->
+		<div class='scontentul'>
+			
+		
+		<div class='scontentli' v-for='(item,productindex) in productList' :key='productindex'>
+				<div class="weui_cells scontent"  >
+					<div class="weui_cell dflex" >
+						<div class="weui_cell_bd1" style='line-height: 0!important;'>
+							<div class="weui_cell_hd">
+							<img :src="'@(WorkContext.ShopConfig.ImageCDN)/'+item.productimgurl+'?w=40&h=40'" class="weui_img_cell" />    
+						</div>
+							<p v-if='isreview==0'>描述相符</p>
+							<div v-else class='isreviewpt' style='line-height:0.4rem;padding-left:0.2rem;'>{{item.productname}}</div>
+							<div class="page-hd" style="padding-left: 0;line-height: 0.9rem;top:-0.1rem" v-if='isreview==0'>
+								<div class="weui-rater-1" style='display: inline-block;'>
+									<a v-for="(star,index) in item.stars"  class="weui-rater-box  iconfont" v-on:click="rating(index,productindex)" :key='index'> 
+										<span class="weui-rater-inner" v-if='star.active'>&#xe60f;</span>
+										<span class="weui-rater-inner" v-else>&#xe61e;</span> 
+									</a>
+		                            <input type="hidden" name = "Star1" class ="Star">
+								</div>
+							</div>
+							<div class="tishixinxi textinp" v-text='starBynum(item.starNum)' v-if='isreview==0'></div>
+						</div>
+					</div>
+				</div>
+				<!--end-->
+				<div class="weui_cells weui_cells_form">
+		            <div class="weui_cell">
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <textarea  :id="'textarea'+productindex" class="weui_textarea" placeholder="说说你的使用心得，分享给其他想买的朋友吧" name = "Comment" rows="5" maxlength="500" v-model='item.dec'></textarea>
+		                    <!--<div class="weui_textarea_counter"><span id="count">0</span>/<span id="count_max">500</span></div>-->
+		                </div>
+		            </div>
+		        </div>
+		        <div class="wrp_contant">
+		        	<div class="weui_uploader_bd">
+		                <ul class="weui_uploader_files img2x" :id="'imgx'+productindex">
+		                </ul>
+		                 <div class="weui_uploader_input_wrp" :id="'tpbox'+productindex">
+		                    <input class="weui_uploader_input tupian" :id="'tupian'+productindex" v-on:click='uplodImg(productindex)' type="file" accept="image/jpg,image/jpeg,image/png,image/gif"  multiple>
+		                </div>
+		             </div>
+		             
+		        </div>
+		        <!--匿名-->
+		            <div class='Anonymous' v-if='isreview==0'>
+		        	<div class='Anonymous-left' v-on:click='Anonymous(item)'>
+		        	 <span class='iconfont Anonymouscolor' v-if='item.isdefault' v-model='item.dec'>&#xe677;</span>
+		        	 <span class='iconfont Anonymouscolor'  v-else v-model='item.dec'>&#xe67a;</span>
+		        	 <span class='mous'>匿名</span>
+		           </div>
+		           <div class='Anonymous-right'>
+		        	 您写的评价会以匿名形式展现
+		           </div>
+		        </div>
+       </div>
+       </div>
+		<!--end-->
+		<!-- 物流服務評價 -->
+		<div class="start" v-if='isreview==0'>
+			<div class="start_head">
+				<p class="start_title"><i class="iconfont">&#xe613;</i>店铺评分</p>
+			</div>
+			<div class="start_content">
+				<ul>
+					<li style='display: flex;justify-content: flex-start;'>
+						<div class="startc_left">
+							物流服务
+						</div>
+						<div class="startc_right">
+							<div class="page-hd" >
+								<div class="weui-rater-1" style='display: flex;'>
+									<a v-for="(star,index) in starslogistics" class="weui-rater-box  iconfont" v-on:click="ratinglogistics(index)"> 
+										<span class="weui-rater-inner" v-if='star.logisticsactive'>&#xe60f;</span>
+										<span class="weui-rater-inner" v-else>&#xe61e;</span> 
+									</a>
+		                            <input type="hidden" name = "Star1" class ="Star">
+								</div>
+								<span class="tishixinxi" v-text='starBynum(timeNum)'></span>
+							</div>
+						</div>
+					</li>
+					<li style='display: flex;justify-content: flex-start;'>
+						<div class="startc_left">
+							卖家服务
+						</div>
+						<div class="startc_right">
+							<div class="page-hd" >
+								<div class="weui-rater-1" style='display: flex;'>
+									<a v-for="(star,index) in starsShop" class="weui-rater-box  iconfont" v-on:click="ratingshop(index)"> 
+										<span class="weui-rater-inner" v-if='star.active'>&#xe60f;</span>
+										<span class="weui-rater-inner" v-else>&#xe61e;</span> 
+									</a>
+                                    <input type="hidden" name = "Star3" class ="Star">
+								</div>
+								<span class="tishixinxi" v-text='starBynum(ServiceNum)'></span>
+							</div>
+						</div>
+					</li>
+				</ul>
+
+			</div>
+		
+		</div>
+		<!--end-->
+</form>
+</div>
+  <div class='kanyid' v-if='isreview==0' v-on:click='submitdataFn()'>发布</div>
+  <div class='kanyid' v-else v-on:click='AppendCommentFn()'>发布</div>
+</div>
+<!--<script src="/Js/Mobile/jquery-2.1.4.js" type="text/javascript" charset="utf-8"></script>-->
+<script src="/Js/Mobile/lrz.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+	 	$.showLoading();
+	var vm = new Vue({
+		     	el: '#app',
+		     	data:{
+		     		userid:"@WorkContext.Uid",
+		     		orderid:'@ViewData["OrderId"]',
+		     		productList:[],
+                    starslogistics: [{
+                            logisticsactive: true
+                        }, {
+                            logisticsactive: true
+                        }, {
+                             logisticsactive: true
+                        },{
+                             logisticsactive: true
+                        }, {
+                             logisticsactive: true
+                        }
+                    ],
+                    starsShop: [{
+                            active: true
+                        }, {
+                            active: true
+                        }, {
+                             active: true
+                        },{
+                            active: true
+                        },{
+                            active: true
+                        }
+                    ],
+                    timeNum: 5,
+                    ServiceNum: 5,
+                    isreview:0,
+		     	},
+		     	methods:{
+		     		Anonymous:function(item){
+		     			item.isdefault=!item.isdefault
+		     		},
+		     		getByteLen:function(val) {//计算字符长度
+			            var len = 0;
+			            for (var i = 0; i < val.length; i++) {
+			                var a = val.charAt(i);
+			                if (a.match(/[^\x00-\xff]/ig) != null) {
+			                    len += 2;
+			                }
+			                else {
+			                    len += 1;
+			                }
+			            }
+			            return len;
+                    },
+		     		submitdataFn:function(){
+		     			var _this=this;
+		     			var memo=[];
+		     			var pics=[];
+		     			var goodscore=[];
+		     			var productid=[];
+		     			var productList=_this.productList;
+		     			var isanonymous=[];
+		     			for(var i=0;i<productList.length;i++){
+		     				goodscore.push(productList[i].starNum);
+		     				productid.push(productList[i].productid);	
+		     				if(productList[i].dec==''){
+		     					memo.push('好评！');
+		     				}else{
+		     					console.log(_this.getByteLen($("#textarea"+i).val().replace(/\s+/g,"")))
+//		     					console.log($e("textarea"+i).value.length)
+		     					if(productList[i].dec.indexOf("|") != -1){
+		     						$.alert('输入框不能出现“｜”');
+		     						return false;
+		     					}else if(_this.getByteLen($("#textarea"+i).val().replace(/\s+/g,""))>500){
+		     						$.alert('不能超过500个字符');
+		     						return false;
+		     					}else{
+		     						memo.push(productList[i].dec+'|');
+		     					}
+		     				}
+		     				pics.push(productList[i].pics);
+		     				if(productList[i].isdefault==true){
+		     					isanonymous.push(1);
+		     				}else{
+		     					isanonymous.push(0);
+		     				}
+		     			}
+		     			//	productid去重
+                        
+                        //   评论的拼接处理
+		     			if(String(memo).indexOf("好评！") != -1){
+		     				memo=String(memo).replace(/\好评！/g,'好评！|')
+		     			}
+		     			memo=String(memo).replace(/\|,/g,'|')
+		     			memo=memo.substring(0, memo.length - 1);
+		     			//上传图片的拼接处理
+                       var arr=[]
+	     			   for(var a=0;a<pics.length;a++){
+	     			   	 arr.push(pics[a].join(",").replace(/,/g,'|'));
+	     			   };
+		     		   pics=arr;
+		     			var dataList={
+		     				UserId:"@WorkContext.Uid",
+		     		        OrderId:'@ViewData["OrderId"]',
+		     		        Memos:String(memo),
+		     		        Pics:String(pics),
+		     		        TimeScore:_this.timeNum,
+		     		        ServiceScore:_this.ServiceNum,
+		     				GoodsScores:String(goodscore),
+		     				IsAnonymous:String(isanonymous),
+		     				ProductIds:String(productid),
+		     				v:Math.random()
+		     			}
+		     			$.ajax({
+			                type: "post",
+			                url: "/Api/Product/CommentAdd",//发布
+			                async: true,
+			                data:dataList,
+			                success: function (rel) {
+								console.log(rel)
+								if(rel.code==1){
+									window.location.href='/m/order/list?way_type=4';
+								}else{
+									$.alert(rel.message);
+								}
+			                }
+			            });
+		     		},
+		     		AppendCommentFn:function(){
+		     			var _this=this;
+		     			if(_this.isreview==2){
+		     				$.alert('您已经追评过了',function(){
+		     					window.location.href='/m/order/list?way_type=0';
+		     				});
+		     			}else{
+		     			var memo=[];
+		     			var pics=[];
+		     			var productid=[];
+		     			var productList=_this.productList;
+		     			for(var i=0;i<productList.length;i++){
+		     				productid.push(productList[i].productid);	
+		     				if(productList[i].dec==''){
+		     					memo.push('好评！');
+		     				}else{
+		     					
+		     					if(productList[i].dec.indexOf("|") != -1){
+		     						$.alert('输入框不能出现“｜”');
+		     						return false;
+		     					}else if(_this.getByteLen($("#textarea"+i).val().replace(/\s+/g,""))>500){
+		     						$.alert('不能超过500个字符');
+		     						return false;
+		     					}else{
+		     						memo.push(productList[i].dec+'|');
+		     					}
+		     					
+		     				}
+		     					pics.push(productList[i].pics);
+		     			}
+                      //productid去重
+//                       productid=_this.distinct(productid);
+                      //   评论的拼接处理
+                        if(String(memo).indexOf("好评！") != -1){
+		     				memo=String(memo).replace(/\好评！/g,'好评！|')
+		     			}
+		     			memo=String(memo).replace(/\|,/g,'|')
+		     			memo=memo.substring(0, memo.length - 1);
+                      //上传图片的拼接处理
+                       var arr=[]
+	     			   for(var a=0;a<pics.length;a++){
+	     			   	 arr.push(pics[a].join(",").replace(/,/g,'|'));
+	     			   };
+		     		   pics=arr;
+		     			var dataList={
+		     				UserId:"@WorkContext.Uid",
+		     		        OrderId:'@ViewData["OrderId"]',
+		     		        Memos:String(memo),
+		     		        Pics:String(pics),
+		     		        ProductIds:String(productid),
+		     		        v:Math.random()
+		     			}
+		     			$.ajax({//追加评价
+			                type: "post",
+			                url: "/Api/Product/AppendCommentReviewAdd",//发布
+			                async: true,
+			                data:dataList,
+			                success: function (rel) {
+								console.log(rel)
+								if(rel.code==1){
+									window.location.href='/m/order/list?way_type=0';
+								}else{
+									$.alert(rel.message)
+								}
+			                }
+			            });
+			           }
+		     		},
+		     		distinct:function(arrList){
+		     			var arr = arrList,
+						    result = [],
+						    i,
+						    j,
+						    len = arr.length;
+					 for(i = 0; i < len; i++){
+					  for(j = i + 1; j < len; j++){
+					   if(arr[i] === arr[j]){
+					    j = ++i;
+					   }
+					  }
+					  result.push(arr[i]);
+					 }
+					 return result;
+		     		},
+		     		dataFn:function(){
+		     			var _this=this;
+		     			$.ajax({
+			                type: "get",
+			                url: "/Api/Order/GetOrderDetail?keyword="+_this.orderid+'&v='+Math.random(),//产品详情
+			                async: true,
+			                success: function (rel) {
+								var data=rel.data;
+								for(var i=0;i<data.length;i++){
+									data[i].stars=[{active: true},{active: true}, {active: true},{active: true}, {active: true}];
+									data[i].starNum=5;
+									data[i].dec='';
+									data[i].pics=[];
+									data[i].isdefault=false;
+								}
+								_this.isreviewFn();
+								$.hideLoading();
+								$('#app').css('display','block')
+								_this.productList=data;
+			                }
+			            });
+		     		},
+		     		isreviewFn:function(){//是否追平
+		     			var _this=this;
+		     			$.ajax({
+			                type: "get",
+			                url: "/Api/Order/GetOrderByOrderId?orderid="+_this.orderid+'&v='+Math.random(),
+			                async: true,
+			                success: function (rel) {
+								console.log(rel)
+								_this.isreview=rel.data.isreview;
+			                }
+			            });
+		     		},
+		     		 //评分
+                    rating: function(index,a) {
+                    	var data=this.productList[a];
+                        var total = data.stars.length; //星星总数
+                        var idx = index + 1; //这代表选的第idx颗星-也代表应该显示的星星数量
+                        if(data.starNum == 0) {  //进入if说明页面为初始状态
+                            data.starNum = idx;
+                            for(var i = 0; i < idx; i++) {
+                                data.stars[i].active = true;
+                            }
+                        } else {
+                            if(idx == data.starNum) {//如果再次点击当前选中的星级-仅取消掉当前星级，保留之前的。
+                                for(var i = index+1; i < total; i++) {
+                                    data.stars[i].active = false;
+                                }
+                            }
+                            if(idx < data.starNum) {//如果小于当前最高星级，则直接保留当前星级
+                                for(var i = idx; i < data.starNum; i++) {
+                                    data.stars[i].active = false;
+                                }
+                            }
+                            if(idx > data.starNum) {//如果大于当前星级，则直接选到该星级
+                                for(var i = 0; i < idx; i++) {
+                                    data.stars[i].active = true;
+                                }
+                            }
+                            var count = 0; //计数器-统计当前有几颗星
+                            for(var i = 0; i < total; i++) {
+                                if(data.stars[i].active) {
+                                    count++;
+                                }
+                            }
+                            data.starNum = count;
+                        }
+                    },
+                     //物流
+                    ratinglogistics: function(index) {
+                        var total = this.starslogistics.length; 
+                        var idx = index + 1; 
+                          console.log(this.timeNum)
+                        if(this.timeNum == 0) {
+                            this.timeNum = 1;
+                            for(var i = 0; i < 1; i++) {
+                                this.starslogistics[i].logisticsactive = true;
+                            }
+                        } else {
+                            if(idx == this.timeNum) {
+                                for(var i = index+1; i < total; i++) {
+                                    this.starslogistics[i].logisticsactive = false;
+                                }
+                            }
+                            if(idx < this.timeNum) {
+                                for(var i = idx; i < this.timeNum; i++) {
+                                    this.starslogistics[i].logisticsactive = false;
+                                }
+                            }
+                            if(idx > this.timeNum) {
+                                for(var i = 0; i < idx; i++) {
+                                    this.starslogistics[i].logisticsactive = true;
+                                }
+                            }
+                            var count = 0; //计数器-统计当前有几颗星
+                            for(var i = 0; i < total; i++) {
+                                if(this.starslogistics[i].logisticsactive) {
+                                    count++;
+                                }
+                            }
+                            this.timeNum = count;
+                        }
+                    },
+                     //卖家评分
+                    ratingshop: function(index) {
+                        var total = this.starsShop.length; //星星总数
+                        var idx = index + 1; //这代表选的第idx颗星-也代表应该显示的星星数量
+                        if(this.ServiceNum == 0) {
+                            this.ServiceNum = idx;
+                            for(var i = 0; i < idx; i++) {
+                                this.starsShop[i].active = true;
+                            }
+                        } else {
+                            if(idx == this.ServiceNum) {
+                                for(var i = index+1; i < total; i++) {
+                                    this.starsShop[i].active = false;
+                                }
+                            }
+                            if(idx < this.ServiceNum) {
+                                for(var i = idx; i < this.ServiceNum; i++) {
+                                    this.starsShop[i].active = false;
+                                }
+                            }
+                            if(idx > this.ServiceNum) {
+                                for(var i = 0; i < idx; i++) {
+                                    this.starsShop[i].active = true;
+                                }
+                            }
+                            var count = 0; //计数器-统计当前有几颗星
+                            for(var i = 0; i < total; i++) {
+                                if(this.starsShop[i].active) {
+                                    count++;
+                                }
+                            }
+                            this.ServiceNum = count;
+                        }
+                    },
+                    starBynum: function(num) {
+					var _this = this;
+					switch(num)
+					{
+					    case 1:
+                            return "非常差";
+                            break;
+					   case 2:
+                            return "差";
+                            break;
+                       case 3:
+                            return "一般";
+                            break;
+                       case 4:
+                            return "好";
+                            break;
+                       case 5:
+                            return "非常好";
+                            break;
+					    default:
+					}
+				},
+				deleteImg:function(index,i){
+					var _this=this;
+					console.log(index)
+					_this.productList[index].pics[i]="";
+				},
+				uplodImg:function(index){
+					var _this=this;
+					//多图上传
+						var f2 = document.querySelector("#tupian"+index);
+						f2.onchange = function (e) {
+						var files = e.target.files;
+						var len = files.length;
+						var n=-1;
+						for (var i=0; i < len; i++) {
+						    lrz(files[i],{width:640,fieldName:"file1"}).then(function (rst) {
+						            var xhr = new XMLHttpRequest();
+						             xhr.open('POST', '../Tool/Upload?operation=uploaduseravatar');
+						            xhr.onload = function () {
+						                if (xhr.status === 200) {
+						                var obj = eval('(' + xhr.responseText + ')');
+						                console.log($("#imgx"+index).find('li').length)
+								               if($("#imgx"+index).find('li').length>3){
+													$.toast('最多上传4张图片');
+													$("#tpbox"+index).addClass('hide');
+												    return false;
+												}else {
+													if($("#imgx"+index).find('li').length==3){
+														$.toast('最多上传4张图片');
+														$("#tpbox"+index).addClass('hide');
+													}
+											n++;
+						                    $("#imgx"+index).append('<li  data-i='+n+' onclick="var delimg=$(this);$.confirm(\'您确定要删除吗?\', \'确认删除?\', function() {vm.productList['+index+'].pics.splice('+n+',1);delimg.parent().siblings(\'.weui_uploader_input_wrp\').removeClass(\'hide\');delimg.remove();},function(){$.toast(\'取消操作\', \'cancel\');});" class="weui_uploader_file weui_uploader_status" style="background-image:url(@(WorkContext.ShopConfig.ImageCDN)'+obj.url+'?w=40&h=40)"><div class="weui_uploader_status_content"><i class="weui_icon_cancel"></i></div></li>');
+						                   $("#file2"+index).append('<input value="'+obj.url+'"  type="hidden"  name="files" />');
+						                   _this.productList[index].pics.push(obj.url);
+						                  }
+						                } else {
+						                    // 处理其他情况
+						                }
+						            };
+						            // 添加参数
+						            rst.formData.append('size', rst.fileLen);
+						            rst.formData.append('base64', rst.base64);
+						            // 触发上传
+						            xhr.send(rst.formData);
+						            return rst;
+						        })
+						        .catch(function (err) {
+						        })
+						        .always(function () {// 不管是成功失败，这里都会执行
+						        });
+						
+						}//for end
+						}
+				  },
+				  
+		     },
+		     
+		    })
+	$(function(){
+		vm.dataFn();
+		
+	})
+</script>
+
+</body>
+</html>

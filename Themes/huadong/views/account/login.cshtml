@@ -1,0 +1,953 @@
+﻿@model Yitao.Web.Mobile.Models.LoginModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta content="telephone=no" name="format-detection">
+	    <meta name="apple-touch-fullscreen" content="yes">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>用户登录</title>
+		<link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/weui.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/weui2.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/weui/style/icon.css"/>
+		<script src="/Mobile/Themes/huadong/static/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/Themes/huadong/static/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			*{margin: 0;border: 0;padding: 0;}
+			body{font-family: "微软雅黑";font-size: 0.24rem;width: 7.5rem;margin: 0 auto;background: #fff;}
+			.warp-box{display: none;}
+			.fl{float: left;}
+			.fr{float: right;}
+			.clearfix:after{content:"";display:block;height:0;clear:both;visibility:hidden}
+			.home{height: 100%;z-index: 1;}
+			.back{width: 1rem;text-align: left;color: #999;line-height: 0.7rem;height: 0.7rem;margin-left: 0.2rem;}
+			.logo{}
+			.logo img{display: block;width: 3rem;margin: 0.8rem auto 0.2rem auto;}
+			.main{height: 2.1rem;margin: 0.3rem;}
+			.form-box{height: 2.1rem;display: none;}
+			.form-user{display: block;}
+			.input-box{height: 0.7rem;position: relative;}
+			.input-box *{display: inline-block;}
+			.input-box:after{position: absolute;content: "";bottom: 0;left: 0; width: 100%;height: 1px;background: #f2f2f2;}
+			.no-border:after{height: 0;}
+			.input-box .left{width: 6rem;}
+			.input-box .right{width: 0.9rem;height: 0.7rem;line-height: 0.7rem;text-align: center;}
+			.input{height: 0.7rem;line-height: 0.7rem;width: 100%;outline: none;}
+			.form-phone .left{width: 4.5rem;}
+			.form-phone .right{width: 2.4rem;}
+			.form-phone .right img{width: 2rem;height: 0.5rem;margin: 0.1rem auto;}
+			.label{text-align: center;color: #999;}
+			.form-phone .label img{width: 2rem;height: 0.6rem;}
+			.send-code{width: 2rem;height: 0.5rem;margin: 0.08rem auto;color: #ff4800;border: 1px solid #ff4800;border-radius: 5px;line-height: 0.5rem;}
+			
+			.tips{font-size: 0.24rem;color: #f00;text-align: center;height: 0.38rem;}
+			.btn{background:#ff4800;height: .8rem;line-height: .8rem;width: 6.9rem;margin: 0.4rem auto; color: #fff;border-radius: 0.5rem;text-align: center;border: 0 solid #ff4800;font-size: 0.36rem;-moz-box-shadow:1px 1px 10px #7e4393; -webkit-box-shadow:1px 1px 10px #7e4393; box-shadow:1px 1px 10px #ff4800;}
+			.confirm-login{}
+			.tab-login{background: #fff;color: #ff4800;}
+			.register-txt{width: 6.9rem;height: 0.4rem;line-height: 0.4rem; margin: 0 auto;}
+			.register-txt .left{color: #ff4800;font-size: 0.24rem;}
+			.register-txt .right{color: #ff4800;font-size: 0.24rem;}
+			.title-hr{width: 6.9rem;position: relative;text-align: center;color: #999;height: 0.6rem;line-height: 0.6rem;z-index: 1;margin: 0.2rem auto 0 auto;}
+			.title-hr:before{position: absolute;content: "";top: 0.3rem;left: 0;z-index:3;width: 2.5rem;height: 1px;background: #ccc;}
+			.title-hr:after{position: absolute;content: "";top: 0.3rem;right: 0;z-index:3;width: 2.5rem;height: 1px;background: #ccc;}
+			
+			.login-fast{width: 6.9rem;padding: 0.1rem 0;margin: 0 auto;}
+			.link{width: 2.4rem;margin: 0 auto;text-align: center;}
+			.link span{display: inline-block;}
+			.link a.icon{font-size: 0.6rem;padding: 0 0.15rem;color: #555;}
+			.icon-tips {
+			    display: inline-block;
+			    width: 0.24rem;
+			    height: 0.24rem;
+			    line-height: 0.24rem;
+			    border: 1px solid #f00;
+			    border-radius: 50%;
+			    margin-right: 2px;
+			}
+			
+			
+			#register{position: fixed;width: 7.5rem;height: 100%;top: 100%;left: 50%;margin-left: -3.75rem;background: #fff;z-index: 5;display: none;}
+			#setPassword{position: fixed;width: 7.5rem;height: 100%;left: 100%;top:0;margin-left: 0;background: #fff;z-index: 5;}
+			.password-back{height: 0.7rem;line-height: 0.7rem;}
+			.password-back .icon{margin-left: 0.2rem;}
+			.password-back .txt{text-align: center;width: 6.4rem;margin: 0 auto;}
+		</style>
+	</head>
+	<body>
+		<div class="warp-box">
+			<div class="home" id="login">
+				<a href="javascript:history.back()" class="back"><span class="icon icon-109"></span></a>
+				<div class="logo">
+					<img src="/Mobile/Themes/huadong/static/login/small-logo.png"/>
+				</div>
+				<div class="main" style="height: 3.3rem;">
+					<!--账号密码登录-->
+					<div class="form-box form-user">
+						<div class="input-box no-border">
+							
+						</div>
+						<div class="input-box">
+							<input class="input" type="number" maxlength="11" name="user" id="user"  value="" onkeyup="return( /[^\u4e00-\u9fa5a-zA-Z0-9\w]/g.test(String.fromCharCode(event.keyCode)))"  oninput="if(value.length>11)value=value.slice(0,11)" placeholder="请输入账号"/>
+						</div>
+						<div class="input-box">
+							<div class="left">
+								<input class="input small-input" type="password" name="password" id="password" maxlength="18" value="" oninput="if(value.length>18)value=value.slice(0,18)" placeholder="请输入6到18位密码"/>
+							</div>
+							<div class="right" onclick="showPassword(0)">
+								<span class="label"><span class="icon icon-64"></span></span>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+					<!--手机号登录-->
+					<div id="codeLogin" class="form-box form-phone" style="height: 3.3rem;">
+						<div class="input-box">
+							<input class="input" type="number" maxlength="11" name="phone" id="phone" value="" onkeyup="return( /[^\u4e00-\u9fa5a-zA-Z0-9\w]/g.test(String.fromCharCode(event.keyCode)))"  oninput="if(value.length>11)value=value.slice(0,11)" placeholder="请输入手机号"/>
+						</div>
+						<div class="input-box">
+							<div class="left">
+								<input class="input small-input" type="number" maxlength="4" name="imgcode" id="imgcode" value="" onkeyup="return( /[^\u4e00-\u9fa5a-zA-Z0-9\w]/g.test(String.fromCharCode(event.keyCode)))"  oninput="if(value.length>4)value=value.slice(0,4)" placeholder="请输入图片上的数字"/>
+							</div>
+							<div class="right">
+								<img class="code-img" onclick="getImgCode(0)" src=""/>
+							</div>
+						</div>
+						<div class="input-box">
+							<div class="left">
+								<input class="input " type="number" maxlength="6" name="code" id="code" value="" onkeyup="return( /[^\u4e00-\u9fa5a-zA-Z0-9\w]/g.test(String.fromCharCode(event.keyCode)))"  oninput="if(value.length>6)value=value.slice(0,6)" placeholder="请输入短信验证码"/>
+							</div>
+							<div class="right">
+								<div class="send-code" onclick="ConfirmImgCode(0)">发送验证码</div>
+							</div>
+						</div>
+						<div class="input-box">
+							<div class="left" style="height: 0.7rem;line-height: 0.7rem;">
+								
+									<span class="span-leaderuid">@ViewData["LeaderUid"]</span>
+								
+									<input class="input LeaderUid" type="number"  name="LeaderUid"  value=""  placeholder="请输入推荐人ID"/>
+								
+							</div>
+							<div class="right">
+								<div class="">推荐人ID(可选)</div>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+					
+				</div>
+				<!--<div class="tips"><span class="icon-tips">!</span>秦商未来不会以任何理由要求您转账汇款</div>-->
+				<div class="btn confirm-login" onclick="login()">登录</div>
+				<div class="btn tab-login" onclick="tabLogin()">验证码登录</div>
+				<div class="register-txt">
+					<a class="left" onclick="registerShow()">还没有账号？快速注册</a>
+					<a class="right" onclick="setPassword()">忘记密码!</a>
+					<div class="clearfix"></div>
+				</div>
+				<!--<div class="title-hr">第三方账号登录</div>
+				<div class="login-fast">
+					<div class="link">
+						<a href="" class="icon icon-14"></a>
+						<a href="" class="icon icon-13"></a>
+					</div>
+				</div>-->
+			</div>
+			<!--注册-->
+			<div id="register">
+				<div class="back" onclick="registerBack()"><span class="icon icon-109"></span></div>
+				<div class="logo">
+					<img src="/Mobile/Themes/huadong/static/login/small-logo.png">
+				</div>
+				<div class="main" style="height: 4.5rem;">
+					<div class="form-box form-phone" style="display: block;height: 4.5rem;">
+						<div class="input-box">
+							<input class="input" type="number" maxlength="11" name="phone" id="reg-phone"  value="" onkeyup="return( /[^\u4e00-\u9fa5a-zA-Z0-9\w]/g.test(String.fromCharCode(event.keyCode)))"  oninput="if(value.length>11)value=value.slice(0,11)" placeholder="请输入手机号"/>
+						</div>
+						<div class="input-box">
+							<div class="left">
+								<input class="input small-input" type="number" maxlength="4" name="imgcode" id="reg-imgcode"  value="" onkeyup="return( /[^\u4e00-\u9fa5a-zA-Z0-9\w]/g.test(String.fromCharCode(event.keyCode)))"  oninput="if(value.length>4)value=value.slice(0,4)" placeholder="请输入图片上的数字"/>
+							</div>
+							<div class="right">
+								<img class="code-img" onclick="getImgCode(1)" src=""/>
+							</div>
+						</div>
+						<div class="input-box">
+							<div class="left">
+								<input class="input " type="number" maxlength="6" name="code" id="reg-code"  value="" onkeyup="return( /[^\u4e00-\u9fa5a-zA-Z0-9\w]/g.test(String.fromCharCode(event.keyCode)))"  oninput="if(value.length>6)value=value.slice(0,6)" placeholder="请输入短信验证码"/>
+							</div>
+							<div class="right">
+								<div class="send-code" onclick="ConfirmImgCode(1)">发送验证码</div>
+							</div>
+						</div>
+						<div class="input-box">
+							<div class="left">
+								<input class="input small-input" type="password" name="password" id="reg-password"  value="" maxlength="18"  oninput="if(value.length>18)value=value.slice(0,18)" placeholder="请输入6到18位密码"/>
+							</div>
+							<div class="right" style="text-align: right;"  onclick="showPassword(1)">
+								<span class="label"><span class="icon icon-64"></span></span>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="input-box">
+							<div class="left" style="height: 0.7rem;line-height: 0.7rem;">
+								
+									<span class="span-leaderuid">@ViewData["LeaderUid"]</span>
+								
+									<input class="input LeaderUid" type="number"  name="LeaderUid"  value=""  placeholder="请输入推荐人ID"/>
+								
+							</div>
+							<div class="right">
+								<div class="">推荐人ID(可选)</div>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+					
+				</div>
+				<div class="btn confirm-login" onclick="confirmRegister()">注册</div>
+				<div class="register-txt">
+					<a class="left" onclick="registerBack()">已有账号？立即登录</a>
+				</div>
+			</div>
+			<!--忘记密码-->
+			<div id="setPassword">
+				<div class="password-back" onclick="passwordBack()">
+					<span class="left icon icon-109"></span>
+					<div class="left txt">重置密码</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="main" style="height: 2.8rem;">
+					<div class="form-box form-phone" style="display: block;height: 2.8rem;">
+						<div class="input-box">
+							<input class="input" type="number" maxlength="11" name="phone"  id="pas-phone" value="" onkeyup="return( /[^\u4e00-\u9fa5a-zA-Z0-9\w]/g.test(String.fromCharCode(event.keyCode)))"  oninput="if(value.length>11)value=value.slice(0,11)" placeholder="请输入手机号"/>
+						</div>
+						<div class="input-box">
+							<div class="left">
+								<input class="input small-input" type="number" maxlength="4" name="imgcode" id="pas-imgcode"  value="" onkeyup="return( /[^\u4e00-\u9fa5a-zA-Z0-9\w]/g.test(String.fromCharCode(event.keyCode)))"  oninput="if(value.length>4)value=value.slice(0,4)" placeholder="请输入图片上的数字"/>
+							</div>
+							<div class="right">
+								<img class="code-img" onclick="getImgCode(2)" src=""/>
+							</div>
+						</div>
+						<div class="input-box">
+							<div class="left">
+								<input class="input " type="number" maxlength="6" name="code" id="pas-code"  value="" onkeyup="return( /[^\u4e00-\u9fa5a-zA-Z0-9\w]/g.test(String.fromCharCode(event.keyCode)))"  oninput="if(value.length>6)value=value.slice(0,6)" placeholder="请输入短信验证码"/>
+							</div>
+							<div class="right">
+								<div class="send-code" onclick="ConfirmImgCode(2)">发送验证码</div>
+							</div>
+						</div>
+						<div class="input-box">
+							<div class="left">
+								<input class="input small-input" type="password" name="password" id="pas-password"  value="" maxlength="18" oninput="if(value.length>18)value=value.slice(0,18)" placeholder="请输入6到18位密码"/>
+							</div>
+							<div class="right" style="width: 2.2rem; text-align: right;padding-right: 0.2rem;"  onclick="showPassword(2)">
+								<span class="label"><span class="icon icon-64"></span></span>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+					
+				</div>
+				<div class="btn confirm-login" onclick="confirmPassword()">提交</div>
+			</div>
+		</div>
+			
+		
+		<script type="text/javascript">
+			//获取链接参数
+			var urlsearch = window.location.href;
+				urlsearch = decodeURIComponent(urlsearch);
+			var url_arr = urlsearch.split("returnUrl=");
+			function GetRequest() {  
+			   var url = location.search; //获取url中"?"符后的字串  
+			   url = decodeURIComponent(url);
+			   var theRequest = new Object();  
+			   if (url.indexOf("?") != -1) {  
+			      var str = url.substr(1);  
+			      strs = str.split("&");  
+			      for(var i = 0; i < strs.length; i ++) {  
+			         theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);  
+			      }  
+			   }  
+			   return theRequest;  
+			}  
+			function GetQueryString(name)
+			{
+				if(urlsearch.split("returnUrl=").length>1){
+					urlsearch = urlsearch.split("returnUrl=")[1];
+					
+				}
+				console.log(urlsearch);
+				if(urlsearch.indexOf("LeaderUid")!=-1){
+					return urlsearch.split("LeaderUid=")[1];
+				}else{
+					return 0;
+				}
+				    
+				
+			}
+			$("#textnum").on("blur",function(){
+				var  num = $("#textnum").val();
+				console.log(isnNumber(num));
+			});
+			
+			var LeaderUid = '@ViewData["LeaderUid"]';
+			if(LeaderUid=="" || Number(LeaderUid)<=0){
+				//LeaderUid = GetQueryString("LeaderUid");
+				LeaderUid = GetRequest().LeaderUid;
+				if(LeaderUid=="" || Number(LeaderUid)<=0){
+					LeaderUid = $("#codeLogin .LeaderUid").val();
+					if(LeaderUid==""){
+						LeaderUid = 0;
+					}
+				}
+			}
+			
+			
+			
+			var url = window.location.href;
+			var backurl = url.split("returnUrl=")[1];
+			var type = 1;
+			var isClick = [0,0,0];
+			var codeType = 0;
+			var time = 60;
+			var timer;
+			var IsMobilieLogin = 0;
+			var isShowPassword = [0,0,0];
+			var selObj = [$("#login .send-code"),$("#register .send-code"),$("#setPassword .send-code")];
+			var imgSelObj = [$("#login .code-img"),$("#register .code-img"),$("#setPassword .code-img")];
+			//切换密码登录和手机登录
+			function tabLogin() {
+				if(type==1){
+					getImgCode(0);
+					type = 2;
+					IsMobilieLogin = 1;
+					$(".home .form-box").hide();
+					$(".home .form-phone").show();
+					$(".home .tab-login").text("密码登录");
+				}else if(type==2){
+					type=1;
+					IsMobilieLogin = 0;
+					$(".home .form-box").hide();
+					$(".home .form-user").show();
+					$(".home .tab-login").text("验证码登录");
+				}
+			}
+			//打开注册层
+			function registerShow() {
+				getImgCode(1);
+				$("#register").show();
+				setTimeout(function() {
+					$("#register").animate({"top":0},300);
+				},10);
+				
+			}
+			//关闭注册层
+			function registerBack() {
+				$("#register").animate({"top":"100%"},300);
+				setTimeout(function() {
+					$("#register").hide();
+				},300);
+			}
+			//打开找回密码层
+			function setPassword() {
+				getImgCode(2);
+				$("#setPassword").animate({"left":"50%","margin-left":"-3.75rem"},300);
+			}
+			//关闭找回密码层
+			function passwordBack() {
+				$("#setPassword").animate({"left":"100%","margin-left":0},300);
+			}
+			//是否显示输入的密码
+			function showPassword(index) {
+				if(isShowPassword[index]==0){
+					isShowPassword[index] = 1;
+					$(".icon-64").eq(index).css("color","#7e4393");
+					$('input[name="password"]').eq(index).attr("type","text");
+				}else if(isShowPassword[index]==1){
+					isShowPassword[index] = 0;
+					$(".icon-64").eq(index).css("color","#999");
+					$('input[name="password"]').eq(index).attr("type","password");
+				}
+				
+			}
+			//刷新图片验证码
+			function getImgCode(i) {
+				imgSelObj[i].attr('src', '/m/tool/verifyimage?width=100&height=25&T=' + Math.random());
+			}
+			//倒计时
+			function countDown(){
+				if(time>0){
+					time--;
+					selObj[codeType].html(time+"秒后重新发送");
+				}else{
+					clearInterval(timer);
+					time = 60;
+					isClick[codeType] = 0;
+					
+					selObj[codeType].html("发送验证码");
+				}
+			}
+			//手机验证函数
+            function IsTel(Tel) {
+                var re = new RegExp(/^1(3|4|5|6|7|8|9)\d{9}$/);
+                var retu = Tel.match(re);
+                if (retu) {
+                    return true;
+                } else {
+                    return false;
+                };
+            };
+            //验证n位数字
+            function isnNumber(num) {
+            	var re = new RegExp(/^\d{11}$/);
+                var retu = num.match(re);
+                if (retu) {
+                	
+                    return true;
+	                
+                    
+                } else {
+                    return false;
+                };
+            }
+            //验证m-n位数字
+            function isMnNumber(num) {
+            	var re = new RegExp(/^\d{6,18}$/);
+                var retu = num.match(re);
+                if (retu) {
+                    return true;
+                } else {
+                    return false;
+                };
+            }
+            //获取短信验证码
+			function getCode() {
+				var Tel = "";
+				if(codeType==0){
+					Tel = $("#phone").val();
+				}else if(codeType==1){
+					Tel = $("#reg-phone").val();
+				}else if(codeType==2){
+					Tel = $("#pas-phone").val();
+				}
+				
+				$.ajax({
+                    type: "post",
+                    url: "/m/tool/SendCode",
+                    async: false,
+                    data: { phone: Tel },
+                    dataType: "json",
+                    success: function (rel) {
+                        if (rel.Code == 0) {
+                            $.alert(rel.Message);
+                            return false;
+                        }else{
+                        	//$.toast("发送成功，请注意查收短信");
+                        	timer = setInterval(countDown, 1000);
+                        }
+                    }
+                });
+				
+			}
+			
+			//提交图片验证码，并验证
+			function ConfirmImgCode(i) {
+				codeType = i;
+				var Tel = "";
+				if(codeType==0){
+					Tel = $("#phone").val();
+				}else if(codeType==1){
+					Tel = $("#reg-phone").val();
+				}else if(codeType==2){
+					Tel = $("#pas-phone").val();
+				}
+				if(IsTel(Tel)){
+					var imgcode = "";
+					if(i==0){
+						imgcode = $("#imgcode").val();
+					}else if(i==1){
+						imgcode = $("#reg-imgcode").val();
+					}else if(i==2){
+						imgcode = $("#pas-imgcode").val();
+					}
+					
+					if(i==1){
+						$.ajax({
+		                    type: "get",
+		                    url: '/Api/User/GetUserByMobile?Mobile=' + Tel,
+		                    async: false,
+		                    success: function(rel) {
+		                        if(rel.code==1 && rel.data.userid>0){
+		                        	$.alert("该手机号已注册");
+		                        	return false;
+		                        }else{
+		                        	if(imgcode){
+										$.ajax({
+											type:"post",
+											url:"/m/tool/VerifyInputStr",
+											async:true,
+											data:{inputstr:imgcode},
+											dataType:"json",
+											success:function(rel) {
+												if(rel.Code==1){
+													isClick[codeType] = 1;
+													selObj[codeType].html("60秒后重新发送");
+													getCode();
+												}else{
+													$.alert(rel.Message);
+												}
+											}
+										});
+									}else{
+										$.alert("请填写图片验证码");
+									}
+		                        	
+		                        }
+		                        
+		                    }
+	                    });
+					}else{
+						
+							$.ajax({
+			                    type: "get",
+			                    url: '/Api/User/GetUserByMobile?Mobile=' + Tel,
+			                    async: true,
+			                    success: function(rel) {
+			                        if(rel.code==1 && rel.data.userid>0){
+			                        	if(imgcode){
+											$.ajax({
+												type:"post",
+												url:"/m/tool/VerifyInputStr",
+												async:true,
+												data:{inputstr:imgcode},
+												dataType:"json",
+												success:function(rel) {
+													if(rel.Code==1){
+														isClick[codeType] = 1;
+														selObj[codeType].html("60秒后重新发送");
+														getCode();
+													}else{
+														$.alert(rel.Message);
+													}
+												}
+											});
+										}else{
+											$.alert("请填写图片验证码");
+										}
+			                        }else{
+			                        	$.alert("用户不存在");
+			                        	return false;
+			                        }
+			                    }
+			                });
+						
+							
+					}
+					
+						
+				}else{
+					$.alert("手机号错误");
+				}
+			}
+			//账号密码登录
+			function accountLogin() {
+				var user = $("#user").val();
+				var password = $("#password").val();
+				if(IsTel(user)){
+					
+					$.ajax({
+	                    type: "get",
+	                    url: '/Api/User/GetUserByMobile?Mobile=' + user,
+	                    async: true,
+	                    success: function(rel) {
+	                        if(rel.code==1 && rel.data.userid>0){
+	                        	if(password.length>=6){
+									$.ajax({
+										type: "post",
+										url: "/m/account/login",
+										async: false,
+										data: {
+											phone: user,
+					                        password:password,
+					                        IsMobilieLogin:0
+										},
+										dataType: "json",
+										success: function(rel) {
+					                        if(rel.Code == 1){
+					                            $.toast(rel.Message);
+					                            if(url_arr.length>1){
+					                            	window.location.href=url_arr[1];
+					                            }else{
+					                            	window.location.href = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m/usercenter/home';
+					                            }
+					                        }else{
+					                            $.alert(rel.Message);
+					                        }
+										
+										}
+									});
+								}else{
+									$.alert("密码必须大于6位！");
+									return false;
+								}
+	                        }else{
+	                        	$.alert("用户不存在");
+	                        }
+	                    }
+	                });
+						
+				}else{
+					$.alert("手机号错误！");
+					return false;
+				}
+			}
+			//手机验证码登陆
+			function telLogin() {
+				var phone = $("#phone").val();
+				var code = $("#code").val();
+				if(IsTel(phone)){
+					if(code.length>=6){
+						var LeaderUid = '@ViewData["LeaderUid"]';
+						if(LeaderUid=="" || Number(LeaderUid)<=0){
+							//LeaderUid = GetQueryString("LeaderUid");
+							LeaderUid = GetRequest().LeaderUid;
+							if(LeaderUid=="" || Number(LeaderUid)<=0){
+								LeaderUid = $("#codeLogin .LeaderUid").val();
+								if(LeaderUid==""){
+									LeaderUid = 0;
+								}
+							}
+						}
+						$.ajax({
+							type: "post",
+							url: "/m/account/login",
+							async: false,
+							data: {
+								phone: phone,
+		                        code:code,
+		                        IsMobilieLogin:1,
+		                        LeaderUid:LeaderUid
+							},
+							dataType: "json",
+							success: function(rel) {
+		                        if(rel.Code == 1){
+		                        	$.ajax({
+					                    type: "get",
+					                    url: '/Api/User/GetUserByMobile?Mobile=' + phone,
+					                    async: false,
+					                    success: function(rst) {
+					                    	if(rst.data.password==""){
+					                    		$.confirm("为了方便登录，您可以去设置登录密码", "登录成功，去设置登录密码?", function() {
+										            window.location.href = "/m/user/setting";
+										        }, function() {
+										            $.toast(rst.Message);
+					                            	if(url_arr.length>1){
+						                            	window.location.href=url_arr[1];
+						                            }else{
+						                            	window.location.href = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m/usercenter/home';
+						                            }
+										        });
+					                    	}else{
+					                    		$.toast(rst.Message);
+				                            	if(url_arr.length>1){
+					                            	window.location.href=url_arr[1];
+					                            }else{
+					                            	window.location.href = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m/usercenter/home';
+					                            }
+					                    	}
+						                    	
+					                    }
+					                });
+		                        	
+				                        	
+		                            
+		                        }else{
+		                            $.alert(rel.Message);
+		                        }
+							
+							}
+						});
+					}else{
+						$.alert("短信验证码错误");
+						return false;
+					}
+				}else{
+					$.alert("手机号错误");
+					return false;
+				}
+			}
+			//登录
+			function login(){
+				if(IsMobilieLogin==1){
+					telLogin();
+				}else{
+					accountLogin();
+				}
+				
+            }
+			//验证手机号是否已注册
+			function phoneIsExit(mobile) {
+				$.ajax({
+                    type: "get",
+                    url: '/Api/User/GetUserByMobile?Mobile=' + mobile,
+                    async: true,
+                    success: function(rel) {
+                        if(rel.code==1 && rel.data.userid>0){
+                        	$.alert("该手机号已存在");
+                        	return false;
+                        }
+                       
+                    }
+                });
+			}
+			
+			
+			/*$("#reg-phone").on("input propertychange", function() {
+				var mobile = $(this).val();
+				if(){}
+				phoneIsExit(mobile);
+			});*/
+			
+			//提交注册
+			function confirmRegister() {
+				//验证手机号是否已注册
+				
+				var phone = $("#reg-phone").val();
+				var password = $("#reg-password").val();
+				var code = $("#reg-code").val();
+				var imgcode = $("#reg-imgcode").val();
+				if(IsTel(phone)){
+					var LeaderUid = '@ViewData["LeaderUid"]';
+					if(LeaderUid=="" || Number(LeaderUid)<=0){
+						LeaderUid = GetQueryString("LeaderUid");
+					}
+					if($("#register .LeaderUid").val()>0){
+						LeaderUid = $("#register .LeaderUid").val();
+						if(LeaderUid==""){
+							LeaderUid = 0;
+						}
+					}
+					console.log(LeaderUid);
+					$.ajax({
+	                    type: "get",
+	                    url: '/Api/User/GetUserByMobile?Mobile=' + phone,
+	                    async: true,
+	                    success: function(rel) {
+	                        if(rel.code==1 && rel.data.userid>0){
+	                        	$.alert("该手机号已注册");
+	                        	return false;
+	                        }else{
+	                        	console.log(password.length);
+	                        	
+	                        	var reg=/^(?![0-9]+$)(?![a-zA-Z]+$)(?!([^(0-9a-zA-Z)]|[\(\)])+$)([^(0-9a-zA-Z)]|[\(\)]|[a-zA-Z]|[0-9])(\S*){6,18}$/;
+							    var result=reg.test(password);
+							    if(result==false){
+							        $.alert("密码必须由不包含空格的字母、数字、符号任意两种组成6到18位密码！");
+							        return false;
+							    }else{
+							    	if(code.length>=6){
+										$.ajax({
+											type:"post",
+											url:"/m/account/register",
+											async:true,
+											data:{mobile:phone,password:password, verifyCode:imgcode, code:code,LeaderUid:LeaderUid},
+											dataType:"json",
+											success:function(rel) {
+												if(rel.Code==1){
+													$.toast(rel.Message);
+													if(url_arr.length>1){
+						                            	window.location.href=url_arr[1];
+						                            }else{
+						                            	window.location.href = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m/usercenter/home';
+						                            }
+												}else{
+													$.alert(rel.Message);
+													return false;
+												}
+											}
+										});
+									}else{
+										$.alert("短信验证码错误");
+										return false;
+									}
+							    }
+	                        	
+	                        	
+	                        	/*if(password.length>=6){
+									if(code.length>=6){
+										$.ajax({
+											type:"post",
+											url:"/m/account/register",
+											async:true,
+											data:{mobile:phone,password:password, verifyCode:imgcode, code:code,LeaderUid:LeaderUid},
+											dataType:"json",
+											success:function(rel) {
+												if(rel.Code==1){
+													$.toast(rel.Message);
+													if(url_arr.length>1){
+						                            	window.location.href=url_arr[1];
+						                            }else{
+						                            	window.location.href = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/m/usercenter/home';
+						                            }
+												}else{
+													$.alert(rel.Message);
+													return false;
+												}
+											}
+										});
+									}else{
+										$.alert("短信验证码错误");
+										return false;
+									}
+								}else{
+									$.alert("密码必须大于6位");
+									return false;
+								}*/
+	                        }
+	                       
+	                    }
+	                });
+					
+					
+					
+								
+						
+				}else{
+					
+					$.alert("手机号错误");
+					return false;
+				}
+			}
+			//提交修改密码
+			function confirmPassword() {
+				var phone = $("#pas-phone").val();
+				var password = $("#pas-password").val();
+				var code = $("#pas-code").val();
+				var imgcode = $("#pas-imgcode").val();
+				if(IsTel(phone)){
+					
+					$.ajax({
+	                    type: "get",
+	                    url: '/Api/User/GetUserByMobile?Mobile=' + phone,
+	                    async: true,
+	                    success: function(rel) {
+	                        if(rel.code==1 && rel.data.userid>0){
+	                        	var reg=/^(?![0-9]+$)(?![a-zA-Z]+$)(?!([^(0-9a-zA-Z)]|[\(\)])+$)([^(0-9a-zA-Z)]|[\(\)]|[a-zA-Z]|[0-9])(\S*){6,18}$/;
+							    var result=reg.test(password);
+							    if(result==false){
+							        $.alert("密码必须由不包含空格的字母、数字、符号任意两种组成6到18位密码！");
+							        return false;
+							    }else{
+	                        		if(code){
+										$.ajax({
+											type:"post",
+											url:"/m/account/ResetPassword",
+											async:true,
+											data:{mobile:phone,password:password, verifyCode:imgcode, code:code},
+											dataType:"json",
+											success:function(rel) {
+												if(rel.Code==1){
+													$.toast(rel.Message);
+													window.location.reload();
+												}else{
+													$.alert(rel.Message);
+													return false;
+												}
+											}
+										});
+									}else{
+										$.alert("短信验证码错误");
+										return false;
+									}
+	                        	
+	                        	}
+	                        	/*if(password.length>=6){
+									if(code){
+										$.ajax({
+											type:"post",
+											url:"/m/account/ResetPassword",
+											async:true,
+											data:{mobile:phone,password:password, verifyCode:imgcode, code:code},
+											dataType:"json",
+											success:function(rel) {
+												if(rel.Code==1){
+													$.toast(rel.Message);
+													window.location.reload();
+												}else{
+													$.alert(rel.Message);
+													return false;
+												}
+											}
+										});
+									}else{
+										$.alert("短信验证码错误");
+										return false;
+									}
+								}else{
+									$.alert("密码必须大于6位");
+									return false;
+								}*/
+	                        }else{
+	                        	$.alert("用户不存在");
+	                        	return false;
+					
+							}
+	                    }
+	                });
+								
+						
+				}else{
+					$.alert("手机号错误");
+					return false;
+				}
+			}
+			
+			$(function(){
+				console.log(GetRequest().LeaderUid);
+				if(LeaderUid==0 || LeaderUid==null || LeaderUid=="null"){
+					$(".span-leaderuid").css("display","none");
+					$(".LeaderUid").css("display","block");
+					
+				}else{
+					$(".span-leaderuid").text(LeaderUid);
+					$(".span-leaderuid").css("display","block");
+					$(".LeaderUid").css("display","none");
+					$("#register").css({"top":0,"display":"block"});
+					if($("#register").css('display')=='block'){
+						$("#register .code-img").click();
+					}
+				}
+				
+				$(".warp-box").css("display","block");
+			})
+		</script>
+		
+		
+	</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

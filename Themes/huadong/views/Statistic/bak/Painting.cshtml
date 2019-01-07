@@ -1,0 +1,296 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>用户画像-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+        <link rel="stylesheet" type="text/css" href="/Css/Mobile/s_init.css" />
+<style type="text/css">
+			body {
+				background: #FFFFFF;
+			}
+			
+			.guanjianci,
+			.starttime,
+			.endtime,
+			.diyu {
+				color: #18b4ed;
+				font-size: 14px;
+				text-decoration: underline;
+				margin: 0px 0.6rem;
+			}
+			
+			.s_fixed {
+				position: fixed;
+				left: 0;
+				right: 0;
+				top: 2.66rem;
+				z-index: 33;
+				background: #fff;
+				box-shadow: 1px 2px 3px #e1e1e1;
+			}
+			
+			.weui_media_box {
+				padding: 15px;
+				position: relative;
+				padding-top: 8px;
+			}
+			
+			.content {
+				padding-top: 7.6rem;
+			}
+		</style>
+</head>
+<body>
+   <header>
+			<i class="iconfont back" onclick="history.back()">&#xe647;</i>
+			<h3>用户画像</h3>
+
+		</header>
+		<div class="content">
+			<div class="weui_panel_bd s_fixed">
+				<div class="weui_media_box weui_media_text">
+					<h4 class="weui_media_title">人群属性</h4>
+					<p class="weui_media_desc">
+						<span class="guanjianci">奶粉一段</span>
+						<span class="starttime">2018-04-01</span> 至
+						<span class="endtime">2018-04-30</span>
+						<span class="diyu">全国</span>
+					</p>
+				</div>
+
+			</div>
+			<div id="canvasDiv">
+
+			</div>
+			<div class="weui_panel_bd">
+				<div class="weui_media_box weui_media_text">
+					<h4 class="weui_media_title">性别分布</h4>
+
+				</div>
+				<div id="canvasDiv1">
+
+				</div>
+			</div>
+			<div class="weui_panel_bd">
+				<div class="weui_media_box weui_media_text">
+					<h4 class="weui_media_title">地域分布</h4>
+
+				</div>
+				<div id="canvasDiv2">
+
+				</div>
+			</div>
+		</div>
+        <script src="/Js/Mobile/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/Mobile/ichart.latest.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/Mobile/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/Mobile/picker.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(function() {
+				var data = [{
+						name: '19岁及以下',
+						value: 35.75,
+						color: '#a5c2d5'
+					},
+					{
+						name: '20~29岁',
+						value: 29.84,
+						color: '#cbab4f'
+					},
+					{
+						name: '30~39岁',
+						value: 24.88,
+						color: '#76a871'
+					},
+					{
+						name: '40~49岁',
+						value: 6.77,
+						color: '#9f7961'
+					},
+					{
+						name: '50岁及以上',
+						value: 2.75,
+						color: '#a56f8f'
+					}
+				];
+
+				new iChart.Column2D({
+					render: 'canvasDiv',
+					data: data,
+					title: '',
+					showpercent: true,
+					decimalsnum: 2,
+					width: screen.availWidth,
+					height: 400,
+					coordinate: {
+						background_color: '#fefefe',
+						scale: [{
+							position: 'left',
+							start_scale: 0,
+							end_scale: 40,
+							scale_space: 8,
+							listeners: {
+								parseText: function(t, x, y) {
+									return {
+										text: t + "%"
+									}
+								}
+							}
+						}]
+					}
+				}).draw();
+			});
+			$(function() {
+				var data = [{
+						name: '男性',
+						value: 60,
+						color: '#a5c2d5'
+					},
+					{
+						name: '女性',
+						value: 40,
+						color: '#cbab4f'
+					}
+
+				];
+
+				new iChart.Column2D({
+					render: 'canvasDiv1',
+					data: data,
+					title: '',
+					showpercent: true,
+					decimalsnum: 2,
+					width: screen.availWidth,
+					height: 400,
+					coordinate: {
+						background_color: '#fefefe',
+						scale: [{
+							position: 'left',
+							start_scale: 0,
+							end_scale: 40,
+							scale_space: 8,
+							listeners: {
+								parseText: function(t, x, y) {
+									return {
+										text: t + "%"
+									}
+								}
+							}
+						}]
+					}
+				}).draw();
+			});
+			$(function() {
+				var data = [{
+						name: '北京',
+						value: 35.75,
+						color: '#a5c2d5'
+					},
+					{
+						name: '广东',
+						value: 29.84,
+						color: '#cbab4f'
+					},
+					{
+						name: '深圳',
+						value: 24.88,
+						color: '#76a871'
+					},
+					{
+						name: '上海',
+						value: 8.77,
+						color: '#9f7961'
+					},
+					{
+						name: '杭州',
+						value: 7.02,
+						color: '#a56f8f'
+					},
+					{
+						name: '南京',
+						value: 6.02,
+						color: '#a56f8f'
+					},
+					{
+						name: '天津',
+						value: 5.02,
+						color: '#a56f8f'
+					},
+					{
+						name: '石家庄',
+						value: 5.02,
+						color: '#a56f8f'
+					},
+					{
+						name: '西安',
+						value: 4.02,
+						color: '#a56f8f'
+					},
+					{
+						name: '沈阳',
+						value: 4.02,
+						color: '#a56f8f'
+					},
+					{
+						name: '扶余',
+						value: 3.02,
+						color: '#a56f8f'
+					},
+					{
+						name: '成都',
+						value: 3.02,
+						color: '#a56f8f'
+					},
+					{
+						name: '重庆',
+						value: 2.02,
+						color: '#a56f8f'
+					},
+
+					{
+						name: '其他',
+						value: 0.73,
+						color: '#6f83a5'
+					}
+				];
+
+				new iChart.Bar2D({
+					render: 'canvasDiv2',
+					data: data,
+					title: '用户地域前十排名',
+					showpercent: true,
+					decimalsnum: 2,
+					width: 800,
+					height: 400,
+					coordinate: {
+						scale: [{
+							position: 'bottom',
+							start_scale: 0,
+							end_scale: 40,
+							scale_space: 8,
+							listeners: {
+								parseText: function(t, x, y) {
+									return {
+										text: t + "%"
+									}
+								}
+							}
+						}]
+					}
+				}).draw();
+			});
+		</script>
+
+</body>
+</html>

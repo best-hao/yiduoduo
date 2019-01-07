@@ -1,0 +1,294 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>积分购-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta content="@WorkContext.ShopConfig.SEODescription" name="description">
+    <meta content="@WorkContext.ShopConfig.SEOKeyword" name="keywords">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/swiper.min.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css"/>
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css"/>
+     <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/Newlyweds.css" />
+	<link rel="stylesheet" type="text/css" href="/Css/Mobile/youshang.css" />
+	<script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script> 
+	<script src="/Mobile/Themes/huadong/static/weui/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/loading.css"/>
+<style>
+.chakan{text-align: center;color: #666;margin-top: 1.6rem;}
+.goods_items {padding-top: 7px;}
+body{background: #f5f5f5;}
+.geren{position: absolute;top: 0;right: 0;padding: 0 0.6rem;line-height: 2.6rem;}
+.sp_list0{font-size: 0.8rem;color: #ff4800;float: left;}
+.sp_list1{font-size: 14px;}
+.list_right .mark{width:17px;height:17px;line-height: 17px;border-radius: 3px;margin:0 2px;}
+.p_list2{padding:0 2px}
+#cateNav {padding: 10px 0;margin-bottom: 5px;}
+#cateNav .swiper-slide {width: auto;text-align: center;}
+#cateNav a {padding: 6px 10px;font-size:14px}
+.cur a {border-bottom: 2px solid #ff4800;}
+.sp_list1{color:#999;}
+body{display:none;}
+</style>
+</head>
+<body>
+	
+    	<header>
+			<i class="iconfont back" onclick="goToBack()">&#xe647;</i>
+			<h3>积分购</h3>
+			<i class="iconfont geren" onclick="gerenShow()"></i>
+		</header>
+		<div class="content">
+			<div class="goods_items">
+				<a href="javascript:;">
+					<img src="/images/jifenback.jpg"style="width:100%" alt="" />
+				</a>
+				 <div id="cateNav" class="swiper-container swiper-container-horizontal swiper-container-free-mode">
+				<div class="swiper-wrapper clear salegoods" id='cateList'>
+					<div class="swiper-slide swiper-slide-active">
+						<div class="classItem cur">
+							<a href="javascript:;" onclick="cateclick(0)">全部</a>
+						</div>
+					</div>
+					
+				</div>
+		</div>
+				<ul id="goods_content">
+				</ul>
+				<br>
+			</div>
+			<div class="chakan"></div>
+		</div>
+
+<script src="/Js/Mobile/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/Js/Mobile/youshang.js" type="text/javascript" charset="utf-8"></script>
+<script>
+	$.showLoading();
+			var IsApp = "@WorkContext.IsApp";
+			//返回交互
+			function goToBack() {
+
+				var _this = this;
+				if(IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+		                window.js.goBack();
+					}
+				}else{
+					window.history.back();
+				}
+					
+			}
+
+
+				//排序
+	           //     var  sort = DRequest.GetInt("sort", 0);
+                //搜索词
+                //var  search = DRequest.GetString("search");
+                //页码
+                //var page = DRequest.GetInt("page", 1);
+                //页数
+                //var size = DRequest.GetInt("size", 10);	
+			var pagelist=[]	
+			var cate=0;
+			var sort = '@ViewData["sort"]',
+				search = '@ViewData["search"]',
+				page = '@ViewData["page"]',
+				size = '@ViewData["size"]',
+				page = 1, 
+				size = 	20,
+				cateid=0
+				$(document).ready(function(){
+					 getGoods(sort,search,page,size,cateid);
+				
+				});
+
+		function getGoods(sort,search,page,size,cateid){
+			pagelist=[]
+				$.post('/m/activity/ScoreBuy',{
+						sort:sort,
+						search:search,
+						page:page,
+						size:size,
+						cateid:cateid,
+					},
+					function(data) {
+//						alert(cateid)
+						var datas = JSON.parse(data);
+						var dete = datas.Data;
+						pagelist=dete
+						$('body').css('display','block');
+                        $.hideLoading();
+					if(datas.Code != 0){
+						if(page==1&&dete.length<20){
+					    	$(".chakan").text("已加载全部商品");
+					    }
+						var html ='';
+						var img_url = "@(WorkContext.ShopConfig.ImageCDN)";
+						var chicun = '?w=200&h=200';
+						for(var i = 0; i< dete.length; i++){
+							if(dete[i].ShareImg == "" || dete[i].ShareImg == null){
+								dete[i].ShareImg = '/Images/wutu.png';
+								chicun = '';
+								img_url='';
+							}else{
+								 img_url = "@(WorkContext.ShopConfig.ImageCDN)";
+								 chicun = '?w=200&h=200';
+							};
+							if(dete[i].Title == ""){
+								dete[i].Title = dete[i].ProductName;
+							};
+							var ActivityPrice=dete[i].ActivityPrice*dete[i].Profits/100;
+							var profit_score=dete[i].ActivityPrice-ActivityPrice;
+							html +='<li class="list_items" data-ItemId="'+dete[i].ItemId+'" data-SellerId="">';
+							html += '<div class="list_content"><a href="/m/activity/ScoreBuyDetail?id='+dete[i].ItemId+'&IsApp=@{@WorkContext.IsApp}"><img class="setImg" src="'+img_url+dete[i].ShareImg+chicun+'"/><p class="p_list1">'+ dete[i].ProductName;
+							html +='</p><p class="p_list2"> <span class="sp_list1"><del>'+dete[i].ActivityPrice+'</del></span><span class="list_right"><span class="mark">+</span><span class="sorce-num">'+profit_score+'积分</span><span class="sp_list0">¥'+ActivityPrice+'</span></span></p></a></div></li>';
+						};
+					    if(page==1){
+					    	$("#goods_content").empty()
+					    }
+					    $("#goods_content").append(html);
+						setTimeout(function(){
+							setImg();
+						},200);
+					}else{
+						if(page==1){
+					    	$("#goods_content").empty()
+					    }
+						$(".chakan").addClass("disabled");
+						$(".chakan").text("已加载全部商品");
+//						$.toast("加载完毕");
+					}
+				}, 'JSON');
+		};
+		function setImg(){
+			if($("body .setImg").length >2){
+				for(var i = 1; i <$("body .setImg").length ; i++){
+					var width = $($("body .setImg")[0]).offset().width + 'px';
+					var height = $($("body .setImg")[0]).offset().height +'px';
+					$($("body .setImg")[i]).css({
+					  'width':width,
+					  'height':height,
+				  });
+				  var width = $($("body .list_items")[0]).offset().width + 'px';
+					var height = $($("body .list_items")[0]).offset().height +'px';
+					$($("body .list_items")[i]).css({
+					  'height':height,
+				  });
+				};
+			}else{
+
+			};
+			$($("body .setImg")[0]).css({
+					  'width': $($("body .setImg")[1]).offset().width + 'px',
+					  'height': $($("body .setImg")[1]).offset().height +'px',
+				  });
+			$($("body .list_items")[0]).css({					
+					'height':$($("body .list_items")[0]).offset().height +'px',
+							});
+		};
+//		$(".chakan").on("click",function(){
+//			if($('.chakan').hasClass('disabled')){
+//
+//			}else{
+//				page++;
+//		        getGoods(sort,search,page,size);
+//			}
+//			
+//		});
+		function gerenShow(){
+			$("#sub-title").toggle();
+			setTimeout(function(){
+				$("#sub-title").hide();
+			},3000)
+		};
+		function category(id){
+			      
+                     $.ajax({
+		    			type:"get",
+		    			url:"/Api/Category/GetScoreBuySysList",
+		    			async:true,
+		    			success: function(rel){
+		    				console.log(rel)
+		    				if(rel.code==1){
+		    					var html ='';
+		    					var data=rel.data
+		    					for(var i = 0; i< data.length; i++){
+			    						html +='<div class="swiper-slide swiper-slide-next">'
+										html +='	<div class="classItem" >'
+										html +='		<a href="javascript:;" onclick="cateclick('+data[i].cateid+')">'+data[i].name+'</a>'
+										html +='	</div>'
+						                html +='</div>'
+		    					}
+		    					$("#cateList").append(html);
+		    					 $('.classItem').on('click',function(){
+									console.log(1)
+									$(this).addClass('cur');
+									$(this).parent().siblings().find('.classItem').removeClass('cur');
+		                        })
+		    				}
+		    			}
+		    		});
+		}
+		category()
+		function cateclick(cateid){
+			page=1;
+			cate=cateid;
+			getGoods(sort,search,page,size,cate);
+		}
+		$(function(){
+			setTimeout(function(){
+				
+				var swiper = new Swiper('.swiper-container_focus', {
+				pagination: '.swiper-pagination',
+				paginationClickable: true,
+				loop: true,
+				autoplay: false,
+				autoplayDisableOnInteraction: false
+				});
+				var mySwiper = new Swiper('#cateNav', {
+					freeMode: true,
+					freeModeMomentumRatio: 0.5,
+					slidesPerView: 'auto',
+				});
+				},200)
+		})
+		$(function(){
+			  $(window).scroll(function() {
+		var scrollTop = $(this).scrollTop();
+		var scrollHeight = $(document).height();
+//		vm.windowHeight=scrollHeight;
+		var windowHeight = $(this).height();
+			if(scrollTop + windowHeight == scrollHeight) {
+	        	if(pagelist.length==0){
+//	        		$("#nomore").removeClass("hide");
+//	        	    $("#more").addClass("hide");
+	        		return false;
+	        	}else{
+//	        		$("#nomore").addClass("hide");
+//	        	    $("#more").removeClass("hide");
+	        	page++;
+		        getGoods(sort,search,page,size,cate);	
+	        	return false;
+	        	}
+			}else{
+			}
+		
+	});
+		})
+		
+		
+</script>  
+</body>
+</html>

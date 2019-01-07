@@ -1,0 +1,102 @@
+﻿@font-face {
+	font-family: 'iconfont';
+	src: url('/Css/Mobile/icon/iconfont.eot');
+	src: url('/Css/Mobile/icon/iconfont.eot?#iefix') format('embedded-opentype'), url('/Css/Mobile/icon/iconfont.woff') format('woff'), url('/Css/Mobile/icon/iconfont.ttf') format('truetype'), url('/Css/Mobile/icon/iconfont.svg#iconfont') format('svg');
+}
+
+.iconfont {
+	font-family: "iconfont" !important;
+	font-size: 16px;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	-webkit-text-stroke-width: 0.2px;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html {
+	-ms-touch-action: none;
+}
+
+::-webkit-scrollbar {
+	width: 1px;
+	float: right;
+}
+
+::-webkit-scrollbar:horizontal {
+	height: 0em;
+}
+
+ul li {
+	list-style: none;
+}
+
+body {
+	min-width: 320px;
+	max-width: 640px;
+	font-family: "微软雅黑", "microsoft yahei";
+	color: #323232;
+	overflow-x: hidden;
+	background: #f4f4f4;
+	margin: 0 auto;
+}
+header{
+	background: #F7F7F7;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 2.66rem;
+	line-height: 2.66rem;
+	box-shadow: 1px 3px 3px #E1E1E1;
+	text-align: center;
+}
+
+.back{
+	position: absolute;
+	left: 0.6rem;top: 0;
+}
+.back i{
+	font-size: 1.2rem;
+	position: relative;
+	top: 1px;
+}
+.tiao{
+	padding-top: 4rem;
+	background: #FFFFFF;
+	text-align: center;
+}
+#imgcode{
+	width: 90%;
+	margin:  0 auto;
+	padding-top: 0.8rem;
+}
+.Code_con{
+	text-align: center;
+	padding: 2rem 0.6rem 4rem 0.6rem;    
+	background: #FFFFFF;
+}
+#qrCode{
+	margin:  0 auto;
+}
+#qrCode img{
+	margin: 0  auto;
+}
+.footer{
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	background: #4CD964;
+	box-shadow: 0px -3px 3px #E1E1E1;
+	height: 2.6rem;
+	line-height: 2.6rem;
+	text-align: center;
+	color: #FFFFFF;
+}

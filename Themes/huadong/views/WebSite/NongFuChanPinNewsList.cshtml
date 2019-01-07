@@ -1,0 +1,236 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>新闻列表-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta content="@WorkContext.ShopConfig.SEODescription" name="description">
+    <meta content="@WorkContext.ShopConfig.SEOKeyword" name="keywords">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weuix.min.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/mobile/cart.css?v=0.4"/>
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="/Css/Mobile/NongHuChanPin/lists.css"/>
+	<link rel="stylesheet" type="text/css" href="/Css/Mobile/NongHuChanPin/apply.css?v=1.1"/>
+	<script src="/Js/Mobile/vue.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css">
+		#more{height: 40px;margin: 0;display: block;}
+		.weui-loadmore {
+    margin: 0 auto;
+    padding: 8.5px 0;
+}	</style>
+	</head>
+	<body>
+		<div class="warpper">
+			<div class="banner">
+				@if (@ViewData["CateId"].ToString() == "410")
+                {
+					<img src="/Images/Mobile/NongHuChanPin/news.jpg" alt="" class="banner" />
+				}
+                else if(@ViewData["CateId"].ToString() == "411")
+                {
+                    <img src="/Images/Mobile/NongHuChanPin/jiaoyu.jpg" alt="" class="banner" />
+                }
+                else if(@ViewData["CateId"].ToString() == "412")
+                {
+                	<img src="/Images/Mobile/NongHuChanPin/product.jpg" alt="" class="banner" />
+                }
+                else if(@ViewData["CateId"].ToString() == "407")
+                {
+                	<img src="/Images/Mobile/NongHuChanPin/stny.jpg" alt="" class="banner" />
+                }
+                else if(@ViewData["CateId"].ToString() == "405")
+                {
+                	<video width="100%" height="180px"  controls="controls" controls="controls"  poster="/Images/Mobile/NongHuChanPin/ecshop.jpg">
+                		<source src="http://file.yxtx100.com/media/video/yanfeinongye/yanfeinongye.mp4" type="video/mp4"></source>
+                		<!--<source src="myvideo.ogv" type="video/ogg"></source>
+                		<source src="myvideo.webm" type="video/webm"></source>
+                		<object width="" height="" type="application/x-shockwave-flash" data="myvideo.swf">
+                			<param name="movie" value="myvideo.swf" />
+                			<param name="flashvars" value="autostart=true&amp;file=myvideo.swf" />
+                		</object>-->
+                		当前浏览器不支持 video直接播放
+                	</video>
+                }
+                else if(@ViewData["CateId"].ToString() == "408")
+                {
+                	<a href="NongFuChanPinFuPin">
+                	<img src="/Images/Mobile/NongHuChanPin/fupin.png" alt="" class="banner" />
+                	</a>
+                }
+                else
+                {
+                	<img src="/Images/Mobile/NongHuChanPin/ecshop.jpg" alt="" class="banner" />
+                }
+			</div>
+			<div class="title">@ViewData["Name"] >></div>
+			
+			@if (@ViewData["CateId"].ToString() == "408")
+            {
+            	<div class="form" id="apply">
+					<div class="input-box">
+						<label for="">姓名：</label>
+						<input type="text" name="name" id="name" v-model="params.name" />
+					</div>
+					<div class="input-box">
+						<label for="">电话：</label>
+						<input type="tel" name="tel" id="tel" value="" maxlength="11"  v-model="params.tel"/>
+					</div>
+					<div class="input-box">
+						<label for="">身份证号：</label>
+						<input type="tel" name="number" id="number" value="" maxlength="18"  v-model="params.number"/>
+					</div>
+					<div class="input-box">
+						<label for="">现住址：</label>
+						<input type="tel" name="address" id="address" value="" v-model="params.address"/>
+					</div>
+					<div class="input-box">
+						<div class="title">个人介绍：</div>
+						<div class="info"><textarea name="intro"  v-model="params.intro"></textarea></div>
+					</div>
+					<div class="input-box">
+						<div class="title">是否在阎飞农业工作过：</div>
+						<div class="info work">
+							<input type="radio" name="isWork" id="isWork_1" value="1" v-on:change="checkWork(1)"/>
+							<label>是</label>
+							<input type="radio" name="isWork" id="isWork_0" value="0" checked v-on:change="checkWork(0)"/>
+							<label>否</label>
+						</div>
+					</div>
+					<a href="javascript:;" class="confirm" v-on:click="confirmApply()">提交申请</a>
+				</div>
+				
+				<script type="text/javascript">
+					var reg_tel=11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
+					var reg_number=/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+					
+					var vm = new Vue({
+						el: '#apply',
+						data: {  
+							params: {
+								name: '',
+								tel: '',
+								number: '',
+								address: '',
+								intro: '',
+								isWork: 0
+							}
+						},
+						methods: {
+							checkWork: function(val){
+								this.params.isWork = val;
+							},
+							confirmApply: function(){
+								if(!(this.params.name)){
+									$.toast("请填写姓名","cancel");return false;
+								}
+								if(!(this.params.tel) || !reg_tel.test(this.params.tel)){
+									$.toast("请填写正确的手机号","cancel");return false;
+								}
+								if(!(this.params.number) || !reg_number.test(this.params.number)){
+									$.toast("请填写正确的身份证号","cancel");return false;
+								}
+								if(!(this.params.address)){
+									$.toast("请填写现在的住址","cancel");return false;
+								}
+								let _this = this;
+								$.showLoading("提交中");
+								$.ajax({
+									type:"post",
+									url:"formsubmit",
+									async:false,
+									data: _this.params,
+									dataType: "json",
+									success: function(rel){
+										$.hideLoading();
+										if(rel.Code==0){
+											$.toast(rel.Message,"cancel");
+										}else{
+											$.toast(rel.Message);
+											location.reload();
+										}
+									}
+								});
+							}
+						}
+					});
+				</script>
+				
+				
+			}else{
+				<div class="lists">
+					<ul id="rank-list">
+						
+					</ul>
+				</div>
+				<div class="weui_cells_title hide tcenter" id="more"></div>
+				<script type="text/template" id="more_tpl">
+					<div class="weui-loadmore">
+			            <i class="weui-loading"></i>
+			            <span class="weui-loadmore-tips">正在加载</span>
+			        </div>
+				</script>
+				<script type="text/javascript">
+					function ajaxpage(page){
+					    $.ajax({
+				            type : "post",
+				            url : 'GetArticleList?t='+Math.random(),
+				            data: {page:page,cateid:@ViewData["CateId"]},
+				            dataType : "json",
+				            beforeSend:function(){
+				            	$("#more").html($("#more_tpl").html());
+								$("#more").show();
+							},
+					        success : function(rel) {
+					        	setTimeout(function(){
+					        		var html = '';
+						           	if(rel.Code==0){
+										$("#more").html("没有更多数据了");return false;	
+										return false;
+									}else{
+										$.each(rel.Data, function(i,v) {
+							        		html +='<li>';
+							        		html +='<a href="NongFuChanPinNewsDetail?Id='+v.ArticleId+'">';
+							        		html +=v.Title;
+							        		html +='</a>';
+							        		html +='</li>';
+							        	});
+						        		$("#rank-list").append(html);
+					        			page++;
+					        			$("#more").hide();
+									}
+								},500);
+					 		},
+				            timeout : 15000
+				        });
+					}
+					var page = 2;
+					$(window).scroll(
+					    function() {
+					        var scrollTop = $(this).scrollTop();
+					        var scrollHeight = $(document).height();
+					        var windowHeight = $(this).height();
+					        if (scrollTop + windowHeight == scrollHeight) {
+								ajaxpage(page);
+					        }
+					    });
+					$(function(){
+						ajaxpage(1);
+					})
+		
+				</script>
+			}
+		</div>
+				
+	</body>
+</html>

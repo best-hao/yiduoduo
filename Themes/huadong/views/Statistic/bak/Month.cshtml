@@ -1,0 +1,160 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>会员中心-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+     <link rel="stylesheet" type="text/css" href="/Css/Mobile/s_init.css" />
+<style type="text/css">
+			.content {
+				background: #FFFFFF;
+			}
+			
+			body {
+				background: #FFFFFF;
+			}
+			
+			.she_zhu {
+				margin-top: 1rem;
+				padding-left: 0.6rem;
+				font-size: 0.84rem;
+				color: #666666;
+			}
+			
+			.she_a {
+				color: #10AEFF;
+				text-decoration: underline;
+			}
+			
+			.she_select {
+				position: absolute;
+				right: 0;
+				top: 0;
+				padding: 0 .6rem;
+				font-size: 0.84rem color: #666;
+				line-height: 2.6rem;
+			}
+		</style>
+</head>
+<body>
+   	<header>
+			<i class="iconfont back" onclick="history.back()">&#xe647;</i>
+			<h3>按月查看</h3>
+			<span class="she_select">查看销量</span>
+		</header>
+		<div class="content">
+			<div id="canvasDiv">
+
+			</div>
+			<p class="she_zhu">注: 目前所显示数据是您旗下所有店铺统计到的、具体请在绩效管控查看。 请
+				<a href="" class="she_a">点击这里</a>
+			</p>
+			<p class="she_zhu">注: 当前所显示的时间是 2018-8-8 至 2018- 8-18。 切换日期请
+				<a href="JavaScript:;" class="she_a" id="text2">点击这里</a>
+			</p>
+		</div>
+		<script src="/Js/Mobile/jquery.min.js"></script>
+		<script src="/Js/Mobile/ichart.latest.min.js" type="text/javascript" charset="utf-8"></script>
+	
+		<script src="/Js/Mobile/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+			<script src="/Js/Mobile/picker.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+		$(function() {
+				var data = [{
+					name: '北京',
+					value: [9, 1, 12, 20, 26, 30, 32, 29, 22, 12, 0, 6],
+					color: '#1f7e92',
+					line_width: 2
+				}];
+
+				var chart = new iChart.Area2D({
+					render: 'canvasDiv',
+					data: data,
+					title: '2017年销量查看',
+					width: screen.availWidth,
+					height: 400,
+					coordinate: {
+						height: '90%',
+						background_color: '#edf8fa'
+					},
+					sub_option: {
+						hollow_inside: false, //设置一个点的亮色在外环的效果
+						point_size: 10
+					},
+					labels: ["一月", "二月", "三月", "四月", "五月", "六月"]
+				});
+
+				chart.draw();
+			});
+
+			$(document).on("click", ".she_select", function() {
+				$.actions({
+					title: "选择分类",
+					onClose: function() {
+						console.log("close");
+					},
+					actions: [{
+							text: "查看销量",
+							className: "color-primary",
+							onClick: function() {
+								$.showLoading();
+								$(".content").hide();
+								setTimeout(function() {
+									$(".content").show();
+									$.hideLoading();
+								}, 1500);
+							}
+						},
+						{
+							text: "查看订单数",
+							className: "color-warning",
+							onClick: function() {
+								$.showLoading();
+								$(".content").hide();
+								setTimeout(function() {
+									$(".content").show();
+									$.hideLoading();
+								}, 1500);
+							}
+						},
+						{
+							text: "查看收入来源",
+							className: 'color-danger',
+							onClick: function() {
+								$.showLoading();
+								$(".content").hide();
+								setTimeout(function() {
+									$(".content").show();
+									$.hideLoading();
+								}, 1500);
+							}
+						}
+					]
+				});
+			});
+
+			$(function() {
+
+				$("#text2").picker({
+					title: "选择月份",
+					toolbarCloseText: '确定',
+					cols: [{
+						textAlign: 'center',
+						values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+						displayValues: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+					}]
+				});
+			});
+		</script>
+</body>
+</html>

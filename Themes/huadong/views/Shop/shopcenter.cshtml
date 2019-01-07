@@ -1,0 +1,466 @@
+﻿@{ Layout = null; }
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="/Css/Mobile/shop/seller.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/shop/weui.css" />
+     <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/mobile/footer.css" />
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/Themes/huadong/static/weui/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+
+
+    body {
+        background: #f7f7f7;
+        font-family: 微软雅黑;
+    }
+    ul,
+    li,
+    p {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .xxmd_cont {
+        background: #fff;
+        padding-bottom: 0.3rem;
+        margin-bottom: 1px;
+    }
+    .xxmd_cont .xxmd_cont_tit {
+        overflow: hidden;
+        padding: 0 0.2rem;
+        ;
+        margin-bottom: 0.2rem;
+        padding-top: 0.2rem;
+        font-weight: bold;
+    }
+    .xxmd_cont .xxmd_cont_tit span {
+        float: left;
+        font-size: 0.32rem;
+    }
+
+    .xxmd_cont .xxmd_cont_tit a {
+        float: right;
+    }
+    .jysj_cont {
+        display: flex;
+        padding: 0 0.1rem;
+    }
+    .jysj_cont li {
+        flex: 1;
+        padding: 0 0.1rem;
+    }
+    .jysj_cont li div {
+        height: 1.4rem;
+        background: red;
+        text-align: center;
+        color: #fff;
+        border-radius: 0.12rem;
+        box-shadow: 0px 0.06rem 0.08rem rgba(0, 0, 0, 0.2);
+    }
+    .jysj_cont li a{
+        color:#fff;
+    }
+    .jysj_cont li div.color_1 {
+        background: linear-gradient(to top, #7b6fed, #b891fc);
+    }
+    .jysj_cont li div.color_2 {
+        background: linear-gradient(to top, #07cd8f, #46e8b6);
+    }
+    .jysj_cont li div.color_3 {
+        background: linear-gradient(to top, #f9535f, #ff70a5);
+    }
+    .jysj_cont li div.color_4 {
+        background: linear-gradient(to top, #f92a00, #fc9d8b);
+    }
+    .jysj_cont li div.color_5 {
+        background: linear-gradient(to top, #00acec, #88e2fc);
+    }
+    .jysj_cont li div.color_6 {
+        background: linear-gradient(to top, #eaa801, #fed877);
+    }
+    .jysj_cont li div p {
+        padding-top: 16px;
+        font-size: 12px;
+    }
+    .jysj_cont li div span {
+        font-size: 0.32rem;
+    }
+    .jysz {
+        overflow: hidden;
+        background: #fff;
+        margin-bottom: 0.3rem;
+        padding: 0.16rem 0 0.16rem 0;
+    }
+    .jysz li {
+        float: left;
+        width: 25%;
+        padding: 0.1rem 0;
+        text-align: center;
+    }
+    .jysz li a {
+        width: 1rem;
+        height: 1rem;
+        text-align: center;
+        line-height: 0.8rem;
+        border-radius: 0.5rem;
+        display: inline-block;
+    }
+    .jysz li a.c1 {
+        background: linear-gradient(to top, #f6b652, #fed15c);
+    }
+    .jysz li a.c2 {
+        background: linear-gradient(to top, #7762ff, #9099f4);
+    }
+    .jysz li a.c3 {
+        background: linear-gradient(to top, #28bdde, #49c7d5);
+    }
+    .jysz li a.c4 {
+        background: linear-gradient(to top, #62d515, #a8e434);
+    }
+    .jysz li a.c5 {
+        background: linear-gradient(to top, #fd2d61, #ff5b39);
+    }
+    .jysz li a i {
+        color: #fff;
+        font-size: 0.48rem;
+    }
+    .jysz li span {
+        display: block;
+        text-align: center;
+        font-size: 0.24rem;
+        color: #6f6f6f;
+        padding-top: 0.1rem;
+    }
+    .pd_cont {
+        padding-top: 0.3rem;
+    }
+    .pd_cont div {
+        color: #363A3B;
+    }
+    .return_btn {
+        background: #fff;
+        text-align: center;
+    }
+    .return_btn span {
+        display: inline-block;
+        padding-top: 0.24rem;
+        font-size: 0.32rem;
+        font-weight: bold;
+    }
+    .return_btn i {
+        float: left;
+        margin: 0.2rem 0 0 0.2rem;
+    }
+    #app{
+    	display: none;
+    	width:7.5rem;
+    	margin:0 auto;
+    	height: 100%;
+    background: #fff;
+    }
+    .input-box{
+    	width:7rem;
+    	margin:0 auto;
+    	display: flex;
+    	justify-content: space-between;
+    }
+    #inputvalue{
+    	display:inline-block;
+    	width:80%;
+    	resize:none;
+    	border:none;
+    	color:#E02E24;
+    }
+    #inputvalue:focus {
+    outline: none;
+    background: transparent;
+    }
+    .copybtn{
+    	padding:2%;
+    	background: #E02E24;
+    	color:#fff;
+    	border-radius: 0.06rem;
+    }
+    .stitle{width:7rem;margin:0 auto;border-bottom: 1px solid #ddd;color:#999;text-align: left;padding:1% 3%;margin-bottom: 0.2rem;font-size: 0.28rem;}
+    </style>
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/loading.css"/>
+</head>
+
+<body>
+    <div id="app">
+        <div class="return_btn clearfix">
+            <i class="icon iconfont" onclick="goToBack()">&#xe60e;</i><span>商家中心</span>
+        </div>
+        <div class="xxmd_cont">
+            <div class="xxmd_cont_tit">
+                <span>线下数据</span><a href="##"></a>
+            </div>
+            <ul class="jysj_cont">
+                <li>
+                    <div class="color_1">
+                        <p>今日交易</p><span><small>¥</small>{{sellerInfo.orderamountsumtodayshop}}</span></div>
+                </li>
+                <li>
+                    <div class="color_2">
+                        <p>今日让利</p><span><small></small>{{sellerInfo.giftprofitssumtodayshop}}</span></div>
+                </li>
+                <li>
+                    <div class="color_3">
+                        <p>今日销售积分</p><span><small></small>{{sellerInfo.giftprofitsscoreshop}}</span></div>
+                </li>
+            </ul>
+        </div>
+       
+        <div class="xxmd_cont">
+            <div class="xxmd_cont_tit">
+                <span>线上数据</span><a href="##"></a>
+            </div>
+            <ul class="jysj_cont">
+                <li>
+                    <div class="color_1">
+                        <p>今日交易</p><span><small>¥</small>{{sellerInfo.orderamountsumtodaymall}}</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="color_2">
+                        <p>今日让利</p><span><small></small>{{sellerInfo.giftprofitssumtodaymall}}</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="color_3">
+                        <p>今日销售积分</p><span><small></small>{{sellerInfo.giftprofitsscoremall}}</span>
+                    </div>
+                </li>
+            </ul>
+            <ul class="jysj_cont pd_cont">
+                <li>
+                    <a v-bind:href="'/m/seller/OrderToday?sellerid='+sellerid">
+                        <div class="color_4">
+                            <p>今日订单</p><span><small></small>{{sellerInfo.ordernumtodaymall}}</span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a v-bind:href="'/m/seller/OrderList?sellerid='+sellerid">
+                        <div class="color_5">
+                            <p>待发货订单</p><span><small></small>{{sellerInfo.unsendordernumtodaymall}}</span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a v-bind:href="'/m/seller/ProductList?sellerid='+sellerid">
+                        <div class="color_6 seller-id">
+                            <p>销售中商品</p><span><small></small>{{sellerInfo.productnum}}</span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!--<div class="xxmd_cont">
+            <div class="xxmd_cont_tit">
+                <span>线上商品管理</span><a href="##"></a>
+            </div>
+            <ul class="jysj_cont">
+                <li>
+                    <a href="/m/seller/ProductList">
+                        <div class="color_1">
+                            <p>商品管理</p><span><small>$</small>0</span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <div class="color_2">
+                        <p>今日交易</p><span><small>$</small>0</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="color_3">
+                        <p>今日交易</p><span><small>$</small>0</span>
+                    </div>
+                </li>
+            </ul>
+        </div>-->
+         <div class="jysz">
+            <ul>
+                <li>
+                	<a v-bind:href="'/m/shop/qrcode?shopid='+shopid" class="c1">
+                		<span>
+                			<i class="icon iconfont">&#xe642;</i>
+                		</span>
+                		                			
+                	</a>
+                	<span>收款码</span>
+                </li>
+                <li>
+                	<a :href="'/m/settlement/xianjinpay?shopid='+shopid" class="c2">
+                		<span>                			
+                			<i class="icon iconfont">&#xe612;</i>
+                		</span>
+                	</a>
+                	<span>现金交易</span>
+                </li>
+                <li>
+                	<a v-bind:href="'/m/shop/setprofits?shopid='+shopid" class="c3">
+                		<span>
+                			
+                			<i class="icon iconfont">&#xe611;</i>
+                		</span>
+                	</a>
+                	<span>折扣设置</span>
+                </li>
+                <li>
+                	<a href="/m/seller/PayInFlow" class="c4">
+                		<span class="">
+                		<i class="icon iconfont">&#xe62a;</i>
+                		</span>
+                	</a>
+                	<span>收款记录</span>
+                </li>
+                <li>
+                	<a href="/m/seller/edit" class="c4">
+                		<span class="">
+                		<i class="iconfont ">&#xe629;</i>
+                		</span>
+                	</a>
+                	<span>门店资料</span>
+                </li>
+                <li>
+                	<a href="/m/seller/payin" class="c2">
+                		<span>                			
+                			<i class="icon iconfont">&#xe612;</i>
+                		</span>
+                	</a>
+                	<span>商家营收</span>
+                </li>
+                <li>
+                	<a v-bind:href="'/m/settlement/joinpay?shopid='+shopid" class="c5">
+                		<span>
+                			<i class="icon iconfont">&#xe633;</i>
+                		</span>
+                	</a>
+                	<span>年费缴存</span>
+                </li>
+                <li>
+                	<a v-bind:href="'/m/shop/index?shopid='+shopid+'&IsApp='+IsApp" class="c1">
+                		<span>
+                			<i class="icon iconfont">&#xe613;</i>
+                		</span>
+                	</a>
+                	<span>我的店铺</span>
+                </li>
+            </ul>
+        </div>
+        <div class='stitle'>商家后台地址</div>
+        <div class='input-box'>
+        	
+	         <textarea id="inputvalue" readonly="readonly"></textarea>
+	         <div onClick="copyUrl2()" class='copybtn' >点击复制<div>
+         </div>
+    </div>
+    <div class="curtain hide">
+		<div class="loader Rotation"></div>
+		<div class="loadTit"><icon class='icon iconfont'>&#xe649;</icon></div>
+	</div>
+    <script>
+    
+//  $.showLoading();
+$('.curtain').removeClass("hide")
+    var IsApp = "@WorkContext.IsApp";
+		function goToBack() {
+			var _this = this;
+    		if(IsApp==1){
+				if(navigator.userAgent.indexOf("iPhone")>0){
+					gobacklastpage();
+				}
+				if(navigator.userAgent.indexOf("Android")>0){
+					window.js.goBack();
+				}
+			}else{
+				window.history.back();
+			}
+				
+		}
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            mobile: '@WorkContext.UserInfo.Mobile',
+            shopid: 0,
+            sellerid: '',
+            sellerInfo:{},
+            IsApp:"@WorkContext.IsApp",
+            
+        },
+        methods: {
+            getShopId: function() { //获取商品详情
+                var _this = this;
+                $.ajax({
+                    type: "get",
+                    url: '/Api/Seller/GetAdminSellerUser?Mobile=' + _this.mobile,
+                    async: true,
+                    success: function(rel) {
+                        console.log(rel)
+                        _this.shopid = rel.data.shopid;
+                        _this.sellerstatistic(rel.data.shopid);
+                        _this.sellerid = rel.data.sellerid;
+                    }
+                });
+            },
+            sellerstatistic:function(shopid){
+            	var _this = this;
+                $.ajax({
+                    type: "get",
+                    url: '/Api/Statistic/SellerStatistic?ShopId='+shopid,
+                    async: true,
+                    success: function(rel) {
+                        console.log(rel);
+                        _this.sellerInfo=rel.data;
+                    }
+                });
+            }
+
+        },
+        mounted: function() {
+            var _this = this;
+            _this.getShopId();
+
+        },
+        created: function() {
+
+        },
+    })
+    $(function(){
+    	setTimeout(function(){
+//  		$.hideLoading();
+        $('.curtain').addClass("hide")
+    		$('#app').css('display','block')
+    	},200)
+    	var pageurl='https://'+window.location.host+'/seller/login';
+    	$('#inputvalue').text(pageurl)
+    	console.log($('#inputvalue').val())
+    })
+function copyUrl2()
+{
+var Url2=document.getElementById("inputvalue");
+Url2.select();
+document.execCommand("Copy");
+$.toast("已复制");
+}
+    </script>
+</body>
+</html>

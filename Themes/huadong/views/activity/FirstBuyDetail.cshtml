@@ -1,0 +1,818 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>特惠专享详情-@{@WorkContext.SellerInfo.SellerName}</title>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css"/>
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css"/>
+		<script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/swipe.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.ell-1{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+			.ell-2{overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+			.color{color: #ff4800;}
+			.bg{background: #ff4800;}
+			.gary{color: #999;}
+			.common-header{position: relative; background: #fff;height: 0.8rem;line-height: 0.8rem;margin-bottom: 0.06rem; -moz-box-shadow:0px 2px 10px #d9d9d9; -webkit-box-shadow:0px 2px 10px #d9d9d9; box-shadow:0px 2px 10px #d9d9d9;}
+			.common-header .title{text-align: center;padding: 0 1rem;color: #ff4800;font-size: 0.3rem;}
+			.common-header .header-back{position: absolute;top: 0;left: 0;width: .6rem;text-align: center;}
+			.common-header .header-menu{position: absolute;top: 0;right: 0;width: .6rem;text-align: center;}
+			.shade{display: none; position: fixed;width: 7.5rem;height: 100%; top: 0;left: 50%;margin-left: -3.75rem;background: rgba(0,0,0,0.7);z-index: 100;}
+			.shade-mask{position: absolute;width: 100%;height: 100%; top: 0;left: 0;z-index: 101;}
+			.shade-content{position: absolute;bottom: 0;left: 0;height: 8rem;background: #fff;z-index: 102;width: 7.5rem;}
+			.weui_dialog_hd{padding: 0;}
+			.weui_toast{padding: 0 15px;font-size: 0.32rem;}
+			.xsg-detail{width: 7.5rem;font-size: 12px;margin: 0 auto;color: #333;}
+			.main{margin-bottom: 55px;}
+			.slide{height: 7.5rem;width: 7.5rem; max-height: 100%;}
+			.goods-infos{background: #fff;padding: 0.2rem;position: relative;}
+			.goods-infos .title{font-size: 0.3rem;line-height: 0.36rem;}
+			.goods-infos .price-box{margin-top: 0.2rem;padding-right: 2rem;height: 0.5rem;line-height: 0.5rem;}
+			.price{color: #ff4800;font-size: 0.32rem;}
+			.mark{padding: 2px 3px;background: #ff4800;color: #fff;font-size: 0.24rem;font-weight: bold;border-radius: 5px;}
+			.score{color: #999;font-size: 12px;}
+			.goods-infos .price-box .right{color: #999;}
+			.detail{width: 7.1rem;overflow: hidden;padding: 0.2rem;}
+			.detail img{max-width: 100%;display: block;border: none;padding: 0;margin: 0;}
+			.share-box{width: 0.6rem;position: absolute;right: 5px;bottom: 14px;width: 0.6rem;text-align: center;}
+			.share-box .icon-box{height: 17px;}
+			.share-box .share-txt{height: 19px;}
+			.spec-show-box{position: relative;height: 0.7rem;line-height: 0.7rem;padding: 0 0.2rem;background: #fff;margin-top: 0.1rem;}
+			.spec-show-box .icon-box{width: 0.6rem;position: absolute;right: 0;top: 0;text-align: center;}
+			.spec-show-box .spec-info{padding-right: 0.6rem;}
+			.goods-detail{background: #fff;margin-top: 0.1rem;}
+			.goods-detail .title{height: 0.7rem;line-height: 0.7rem;padding: 0 0.2rem;}
+			.footer-bar{text-align: center; height: 48px;background: #fff;position: fixed;bottom: 0;width: 7.5rem;left: 50%;margin-left: -3.75rem;-moz-box-shadow:0px 2px 10px #d9d9d9; -webkit-box-shadow:0px 2px 10px #d9d9d9; box-shadow:0px 2px 10px #d9d9d9;}
+			.footer-right{line-height: 48px;color: #fff;font-size: 0.32rem; -webkit-flex: 2; flex: 2;}
+			.footer-left .icon{color: #999;font-size: 20px;}
+			.footer-left .icon-box{height: 25px;line-height: 25px;}
+			.footer-right .join-cart{background: #FEBF14;}
+			.footer-right .buy-now{background: #ff4800;}
+			.shade-spec .header-box{padding: 0.2rem 0.2rem 0.2rem 2.4rem;position: relative;height: 1.4rem;-moz-box-shadow:0px 0px 8px #d9d9d9; -webkit-box-shadow:0px 0px 8px #d9d9d9; box-shadow:0px 0px 8px #d9d9d9;}
+			.shade-spec .header-box .img-box{width: 2rem;height: 2rem;position: absolute;top: -0.6rem;left: 0.2rem;border-radius: 5px;}
+			.shade-spec .header-box .img-box img{width: 2rem;height: 2rem;border-radius: 5px;}
+			.shade-spec .header-box .close{width: 0.6rem;height: 0.6rem;line-height: 0.6rem;text-align: center;position: absolute;top: 0;right: 0;vertical-align: middle;}
+			.shade-spec .header-box .close .icon{font-size: 0.48rem;vertical-align: middle;}
+			.shade-spec .spec-box{padding: 0.2rem;height: 5.4rem;overflow-y: auto;}
+			.shade-spec .spec-box .spec-list{margin-bottom: 0.2rem;}
+			.shade-spec .spec-item{line-height: 0.6rem;border-bottom: 1px solid #f2f2f2;}
+			.shade-spec .spec-item-val{padding-top: 0.2rem;}
+			.shade-spec .spec-item-val .spec-val{display: inline-block;background: #f5f5f5;color: #555;padding: 3px 10px;border-radius: 5px;margin: 0 5px 10px 0;}
+			.shade-spec .spec-item-val .spec-val.cur-spec{background: #ff4800;color: #fff;}
+			.confirm-spec{width: 7.5rem; color: #fff;font-size: 0.3rem;text-align: center; font-weight: 700;height: 0.8rem;line-height: 0.8rem;position: fixed;bottom: 0;z-index: 103;}
+			.shade-spec{height: 6.1rem;}
+			.wx-share{width:7.5rem;height:100%;position:fixed;left:50%;margin-left:-3.75rem;right:0;top:0;background-color:rgba(0,0,0,.7);z-index:100;display:none}
+			.wx-share .share-img{width:5rem;height:6rem;background:url(/Mobile/Themes/huadong/static/images/share.png);background-size:5rem 6rem;background-position:center;float:right;margin:.5rem .5rem 0 0}
+			.wx-share .share-tips{width:100%;text-align:center;line-height:2rem;color:#fff;font-size:0.6rem;float:left;margin-top:0.6rem}
+
+		</style>
+		<script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script>
+	    	//alert(wxobj);
+	        wx.config({
+	            debug: false, /* 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。*/
+	            appId: '@ViewData["AppId"]', /* 必填，公众号的唯一标识*/
+	            timestamp: '@ViewData["Timestamp"]', /* 必填，生成签名的时间戳*/
+	            nonceStr: '@ViewData["NonceStr"]', /* 必填，生成签名的随机串*/
+	            signature: '@ViewData["Signature"]',/* 必填，签名*/
+	            jsApiList: [
+	                    'checkJsApi',
+	                    'onMenuShareTimeline',
+	                    'onMenuShareAppMessage',
+	                    'onMenuShareQQ',
+	                    'onMenuShareWeibo',
+	                    'hideMenuItems',
+	                    'showMenuItems',
+	                    'hideAllNonBaseMenuItem',
+	                    'showAllNonBaseMenuItem',
+	                    'translateVoice',
+	                    'startRecord',
+	                    'stopRecord',
+	                    'onRecordEnd',
+	                    'playVoice',
+	                    'pauseVoice',
+	                    'stopVoice',
+	                    'uploadVoice',
+	                    'downloadVoice',
+	                    'chooseImage',
+	                    'previewImage',
+	                    'uploadImage',
+	                    'downloadImage',
+	                    'getNetworkType',
+	                    'openLocation',
+	                    'getLocation',
+	                    'hideOptionMenu',
+	                    'showOptionMenu',
+	                    'closeWindow',
+	                    'scanQRCode',
+	                    'chooseWXPay',
+	                    'openProductSpecificView',
+	                    'addCard',
+	                    'chooseCard',
+	                    'openCard'
+	            ]
+	        });
+
+	        wx.error(function (res) {
+	            /*alert(res);*/
+	            /*console.log(res);*/
+	            /*alert('验证失败');*/
+	        });
+
+	        wx.ready(function () {
+	        	$(function(){
+	        		var link = window.location.href+'&LeaderUid='+'@WorkContext.Uid';
+		            var Logo = '@WorkContext.SellerInfo.Logo';
+		            var imgUrl = '';
+		            imgUrl = $("#slide li:last-child").find("img").attr("src");
+		            var desc = "消费不剁手，越花越富有!";
+	                /*转发到朋友圈*/
+	                wx.onMenuShareTimeline({
+	                    title: '@Model.ProductName',
+	                    link: link,
+	                    imgUrl: imgUrl,
+	                    success: function () {
+	                        /*alert('转发成功！');*/
+	                    },
+	                    cancel: function () {
+	                        /*alert('转发失败！');*/
+	                    }
+	                });
+
+	                wx.onMenuShareAppMessage({
+	                    title: '@Model.ProductName',
+	                    desc: desc,
+	                    link: link,
+	                    imgUrl: imgUrl,
+	                    type: 'link',
+	                    dataUrl: '',
+	                    success: function () {
+	                        /*alert('转发成功！');*/
+	                    },
+	                    cancel: function () {
+	                       /* alert('转发失败！');*/
+	                    }
+	                });
+	        	});
+            });
+            var sellerid = "@WorkContext.SellerInfo.SellerId";
+    </script>
+	</head>
+	<body>
+		<div class="xsg-detail">
+			<div class="common-header"> 
+				<div class="header-back" onclick="goToBack()"><span class="icon iconfont">&#xe60e;</span></div>
+			    <div class="title ell-1">详情</div> 
+			    <div class="header-menu" onclick="share()"><span class="icon iconfont">&#xe620;</span></div>
+		    </div>
+		    <div class="main">
+		    	<div class="slide" id="slide">
+				    <ul>
+				    	@{
+			                List<Yitao.Core.PicsInfo> PicsInfoList = (List<Yitao.Core.PicsInfo>)ViewData["PicsList"];
+			                Yitao.Core.ActivitySkuInfo activitySkuInfo = (Yitao.Core.ActivitySkuInfo)ViewData["ActivitySkuInfo"];
+			                Yitao.Core.FirstBuyInfo firstBuyInfo = (Yitao.Core.FirstBuyInfo)ViewData["FirstBuyInfo"];
+			            }
+		                <li>
+		                    <a href="#">
+		                        <img src="@(WorkContext.ShopConfig.ImageCDN)@{@Model.PicUrl}?h=320" />
+		                    </a>
+		                </li>
+		                @if (PicsInfoList.Count > 0)
+		                {
+		                    foreach (Yitao.Core.PicsInfo info in PicsInfoList)
+		                    {
+		                        if (info.ImgUrl.Length > 0)
+		                        {
+		                            <li>
+		                                <a href="#">
+		                                    <img src="@(WorkContext.ShopConfig.ImageCDN)@{@info.ImgUrl}?h=320&w=320" />
+		                                </a>
+		                            </li>
+					            }
+					        }
+					    }
+				    </ul>
+				    <div class="dot">
+				    	<span></span>
+				    	@if (PicsInfoList.Count > 0)
+		                {
+		                    foreach (Yitao.Core.PicsInfo info in PicsInfoList)
+		                    {
+		                        if (info.ImgUrl.Length > 0)
+		                        {
+				        			<span></span>
+				        		}
+					        }
+					    }
+				    </div>
+				</div>
+				<div class="goods-infos">
+					<div class="title ell-2">@Model.ProductName</div>
+					<div class="price-box">
+						<div class="left ell-1">
+							<span class="price">¥<span class="activity-price">@activitySkuInfo.ActivityPrice</span></span>
+							@if(Model.MarketPrice >= 0){
+			                    @: <span class="yuanjia gary">原价<del>￥@Model.SalePrice</del></span>
+			                }else{
+			   
+			                }
+							<span class="mark">送</span>
+							<span class="gary"><span class="score"></span>积分</span>
+						</div>
+						<div class="clearfix"></div>
+						
+					</div>
+					<div class="sale-count">
+						销量: <span class="sale-num"></span>
+					</div>
+					<div class="share-box color" onclick="share()">
+						<div class="icon-box"><span class="icon iconfont">&#xe63d;</span></div>
+						<div class="share-txt">分享</div>
+					</div>
+				</div>
+				<div class="spec-show-box" onclick="showShade()">
+					<div class="spec-info ell-1">
+						<span class="gary">已选：</span>
+						<span class="spec-text spec-name">(选择规格)</span>
+					</div>
+					<div class="icon-box">
+						<span class="icon iconfont">&#xe60d;</span>
+					</div>
+				</div>
+				<div class="goods-detail">
+					<div class="title">商品详情</div>
+					<div class="detail">
+						@Model.Description
+					</div>
+				</div>
+		    </div>
+			<div class="footer-bar">
+				<div class="weui-flex">
+					<div class="weui-flex-item footer-left">
+						<div class="weui-flex">
+							<!--<div class="weui-flex-item" onclick="favGoods()">
+								<div class="icon-box">
+									<span class="icon iconfont">&#xe618;</span>
+								</div>
+								<div class="title">收藏</div>
+							</div>-->
+							<div class="weui-flex-item" onclick="callTel()">
+								<div class="icon-box">
+									<span class="icon iconfont">&#xe7b0;</span>
+								</div>
+								<div class="title">客服</div>
+							</div>
+							<!--<div class="weui-flex-item">
+								<div class="icon-box">
+									<span class="icon iconfont">&#xe608;</span>
+								</div>
+								<div class="title">购物车</div>
+							</div>-->
+						</div>
+					</div>
+					<div class="weui-flex-item footer-right" onclick="buy()">
+						<div class="weui-flex">
+							<div class="weui-flex-item buy-now">
+								立即购买
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="shade">
+				<div class="shade-mask" onclick="closeShade()"></div>
+				<div class="shade-content">
+					<div class="shade-spec">
+						<div class="header-box">
+							<div class="img-box">
+								@if (Model.PicUrl != "")
+		                        {
+		                            <img src="@(WorkContext.ShopConfig.ImageCDN)@{@Model.PicUrl}?w=100&h=100&mode=pad" />
+		                        }
+		                        else
+		                        {
+		                            <img src="/Images/wutu.png" />
+		                        }
+							</div>
+							<div class="txt-box">
+								<div class="price color">¥<span class="price activity-price">@activitySkuInfo.ActivityPrice</span></div>
+								<div class="spec-selected ell-2">已选：<span class="spec-txt spec-name">@Model.SkuName</span></div>
+							</div>
+							<div class="close" onclick="closeShade()"><span class="icon iconfont">&#xe62d;</span></div>
+						</div>
+						<div class="spec-box">
+							
+							@foreach (Yitao.Core.ProductSpecInfo info in ViewData["ListProductSpecInfo"] as List<Yitao.Core.ProductSpecInfo>)
+			                {
+			                	<div class="spec-list">
+									<div class="spec-item">@info.SpecName</div>
+									<div class="spec-item-val">
+										@foreach (Yitao.Core.ProductSpecValueInfo v in ViewData["ListProductSpecValueInfo"] as List<Yitao.Core.ProductSpecValueInfo>)
+			                            {
+			                                if (info.SpecId == v.SpecId)
+			                                {
+												<a href="javascript:;"
+													@if (Model.SpecProps.Contains(v.SpecValueId.ToString())) { @: class="spec-val cur-spec"
+			                                        } else { @: class="spec-val"
+			                                        }
+													data-id="@v.SpecValueId" data-name="@v.SpecValue" onclick="selectSpec(this)">@v.SpecValue</a>
+											}
+										}
+									</div>
+								</div>
+			                }	
+						</div>
+					</div>
+					<!--<div class="weui_cell">
+						<div class="weui_cell_bd weui_cell_primary">
+							<p>
+								数量
+							</p>
+						</div>
+						<div style="font-size: 0px;" class="weui_cell_ft">
+							<a class="weui-number weui-number-sub needsclick">-</a>
+							<input pattern="[0-9]*" id="goods-num" class="weui-number-input" style="width: 50px;" value='1' data-min="1" data-max="100000" data-step="1">
+							<a class="weui-number weui-number-plus needsclick">+</a>
+						</div>
+						<div class="weui_cell_ft" style="display: none;">
+							 0
+						</div>
+					</div>-->
+					<div class="confirm-spec bg" onclick="confirmSpec()">确定</div>
+				</div>
+			</div>
+			<div class="wx-share" onclick="closeShare()">
+		        <div class="share-img"></div>
+		        <p class="share-tips">点击右上角分享</p>
+		    </div>
+			<form id="goods_form" action="/m/order/FirstBuyOrder" method="post">
+		        <input type="hidden" name="ProductId" id="ProductId" value="@Model.ProductId" />
+		        <input type="hidden" name="SkuId" id="SkuId" value="@Model.SkuId" />
+		        <input type="hidden" name="SpecProps" id="SpecProps" value="@Model.SpecProps" />
+		        <input type="hidden" name="Quantity" id="Quantity" value="1" />
+		        <input type="hidden" name="ItemId" id="ItemId" value="@activitySkuInfo.ItemId" />
+		        <input type="hidden" name="IsApp" value="@WorkContext.IsApp">
+		    </form>
+		</div>
+		<input type="hidden" name="SkuNum" id="SkuNum" value='@ViewData["SkuNum"]' />
+	    <input type="hidden" name="Uid" id="Uid" value='@WorkContext.Uid' />
+	    <input type="hidden" name="Stock" id="Stock" value="@Model.Stock" />
+	    <input type="hidden" name="Status" id="Status" value="@Model.Status" />
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script type="text/javascript">
+			var SaleNum = '@firstBuyInfo.SaleCount.ToString("#0")';
+			
+			var SellerId = "@Model.SellerId";
+	        var SkuId = "@Model.SkuId";
+	        var ProductId = "@Model.ProductId";
+	        var ItemId = "@firstBuyInfo.ItemId";
+	        var SpecProps = "@Model.SpecProps";
+	        var Quantity = 1;
+	        var isWeixin = "@WebHelper.IsWeiXin()";
+	        var Status = "@Model.Status";
+			var Specid = [];
+			var SkuName = [];
+			var Uid = "@WorkContext.Uid";
+			var IsApp = "@WorkContext.IsApp";
+			var Profits = "@Model.Profits";
+			Profits = Number(Profits);
+			var ActivityPrice = "@activitySkuInfo.ActivityPrice";
+			ActivityPrice = Number(ActivityPrice);
+			var GiftProfits = Number(5*ActivityPrice).toFixed(3);
+			function GetRequest() {  
+			   var url = location.search; //获取url中"?"符后的字串  
+			   url = decodeURIComponent(url);
+			   var theRequest = new Object();  
+			   if (url.indexOf("?") != -1) {  
+			      var str = url.substr(1);  
+			      strs = str.split("&");  
+			      for(var i = 0; i < strs.length; i ++) {  
+			         theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);  
+			      }  
+			   }  
+			   return theRequest;  
+			} 
+			function calc (arg1, op, arg2,dot) {
+		        var ra = 1, rb = 1, m;
+		        try {
+		            ra = arg1.toString().split('.')[1].length;
+		        } catch (e) {
+		        }
+		        try {
+		            rb = arg2.toString().split('.')[1].length;
+		        } catch (e) {
+		        }
+		        m = Math.pow(10, Math.max(ra, rb));
+		
+		        switch (op) {
+		            case '+':
+		            case '-':
+		                arg1 = Math.round(arg1 * m);
+		                arg2 = Math.round(arg2 * m);
+		                break;
+		            case '*':
+		                ra = Math.pow(10, ra);
+		                rb = Math.pow(10, rb);
+		                m = ra * rb;
+		                arg1 = Math.round(arg1 * ra);
+		                arg2 = Math.round(arg2 * rb);
+		                break;
+		            case '/':
+		                arg1 = Math.round(arg1 * m);
+		                arg2 = Math.round(arg2 * m);
+		                m = 1;
+		                break;
+		        }
+		        try {
+		            var result = eval('(' + '(' + arg1 + ')' + op + '(' + arg2 + ')' + ')/' + m);
+		        } catch (e) {
+		        }
+		        if(result.toString().indexOf(".")!=-1){
+		        	var strarr = result.toString().split(".");
+		        	if(strarr[1].length>dot){
+		        		result = strarr[0]+"."+strarr[1].substring(0,dot);
+		        	}
+		        }
+		        return result;
+		    };
+		    //计算销量
+		    SaleNum = calc(SaleNum,"+",100,0);
+			//返回交互
+			function goToBack() {
+				var _this = this;
+				if(IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+		                window.js.goBack();
+					}
+				}else{
+					window.history.back();
+				}
+					
+			}
+			//分享交互
+			function share(){
+				if(IsApp==1){
+					var type = 2;
+					var title = '@Model.ProductName';
+					//var url = window.location.href+'&LeaderUid='+'@WorkContext.Uid';
+					var url = '@(Request.Url.Scheme)://'+'@(WorkContext.ShopConfig.SiteUrl)'+'/m/activity/FirstBuyDetail?id=@activitySkuInfo.ItemId'+'&LeaderUid=@WorkContext.Uid';
+		            var Logo = '@WorkContext.SellerInfo.Logo';
+		            var imageUrl = $("#slide li:last-child").find("img").attr("src");
+		            var describe = "消费不剁手，越花越富有!";
+		            var text="";
+		            var json = {
+		            	type: type,
+		            	title: title,
+		            	imageUrl: imageUrl,
+		            	describe: describe,
+		            	url: url,
+		            	LeaderUid: '@WorkContext.Uid',
+		            	text: ""
+		            }
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						shareWithTypes(type,title,imageUrl,describe,url,text);
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+						window.js.shareWithTypes(JSON.stringify(json));
+					}
+				}else{
+					$(".wx-share").css("display","block");
+				}
+
+			}
+			//关闭分享
+			function closeShare() {
+				$(".wx-share").css("display","none");
+			}
+			//客服电话交互
+			function callTel() {
+				var phone = "4001134500";
+				if(Number(IsApp)==1){
+					
+					if(navigator.userAgent.indexOf("iPhone")>0){
+		                callPhone(phone);
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+						window.js.callPhone(phone)
+					}
+				}else{
+					window.location.href='tel:'+phone;
+				}
+			}
+			//收藏商品
+			function favGoods() {
+				//判断用户是否登录
+				if(Number(Uid)>0){
+					SkuId = $("#SkuId").val();
+					$.ajax({
+						type: "post",
+						url: "Favorite",
+						async: true,
+						data: {
+							SkuId: SkuId,
+							Status: Status
+						},
+						dataType: "json",
+						success: function(rel) {
+							$.toast("收藏成功");
+						}
+					});
+				}else{
+					if(Number(IsApp)==1){
+						if(navigator.userAgent.indexOf("iPhone")>0){
+							gotologinvc();
+						}
+						if(navigator.userAgent.indexOf("Android")>0){
+							window.js.goLogin();
+						}
+					}else{
+						/*if(isWeixin=="False"){
+							var url = window.location.href;
+							window.location.href = '/m/account/login?returnUrl='+url;
+						}else{
+							var url = window.location.href;
+							window.location.href = '/m/user/bind?returnUrl='+url;
+						}*/
+						var LeaderUid = GetRequest().LeaderUid;
+						var url;
+						if(isWeixin=="False"){
+							if(LeaderUid==null || typeof(LeaderUid)=="undefined"){
+								url = '/m/account/login?returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/activity/firstbuydetail?id=@{@firstBuyInfo.ItemId}&IsApp=@{@WorkContext.IsApp}';
+							}else{
+								url = '/m/account/login?LeaderUid='+GetRequest().LeaderUid+'&returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/activity/firstbuydetail?id=@{@firstBuyInfo.ItemId}&IsApp=@{@WorkContext.IsApp}';
+							}
+						}else{
+							if(LeaderUid==null || typeof(LeaderUid)=="undefined"){
+								url = '/m/user/bind&returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/activity/firstbuydetail?id=@{@firstBuyInfo.ItemId}&IsApp=@{@WorkContext.IsApp}';
+							}else{
+								url = '/m/user/bind?LeaderUid='+GetRequest().LeaderUid+'&returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/activity/firstbuydetail?id=@{@firstBuyInfo.ItemId}&IsApp=@{@WorkContext.IsApp}';
+							}
+						}
+						window.location.href = url;
+					}
+				}
+			}
+			//关闭规格层
+			function closeShade() {
+				$(".shade").css("display","none");
+			}
+			//打开规格层
+			function showShade() {
+				$(".shade").css("display","block");
+			}
+			//点击规格
+			function selectSpec(obj) {
+				$(obj).parent().find(".spec-val").removeClass("cur-spec");
+				$(obj).addClass("cur-spec");
+				Specid = [];
+				SkuName = [];
+				$(".cur-spec").each(function(i, v){
+					var id = $(this).attr("data-id");
+					var name = $(this).attr("data-name");
+					Specid.push(id);
+					SkuName.push(name);
+				});
+				SpecProps = String(Specid);
+				$("#SpecProps").val(SpecProps); 
+				var SkuNameStr = SkuName.join(",");
+				$(".spec-name").text(SkuNameStr);
+				getMoney();
+			}
+			//点击规格层确定按钮  提交form表单
+			function confirmSpec() {
+				var specLen = $(".spec-list").length;
+				var selSpecLen = $(".cur-spec").length;
+				if(selSpecLen<specLen){
+					if(selSpecLen==0){
+						$.toast("请选择规格", "forbidden");
+					}else{
+						$.toast("还有规格项未选择", "forbidden");
+					}
+				}else{
+					closeShade();
+					$.ajax({
+						type:"get",
+						url:"/Api/Activity/IsFirstBuy?UserId="+Uid,
+						async:true,
+						success: function(rel){
+//							if(rel.code==1){
+//								$.alert("您已购买过，或者有特惠订单还未支付");
+//							}else{
+								postOrder();
+//							}
+						}
+					});
+					
+					
+				}
+			}
+			//验证是否已经购买过
+			function IsFirstBuy() {
+				$.ajax({
+					type:"get",
+					url:"/Api/Activity/IsFirstBuy?UserId="+Uid,
+					async:true,
+					success: function(rel){
+						
+					}
+				});
+			}
+			//提交订单
+			function postOrder(){
+				//判断用户是否登录
+					if(Number(Uid)>0){
+						SkuId = $("#SkuId").val();
+						
+						/*$.showLoading("正在验证库存");
+						$.ajax({
+                    		type:"post",
+                    		url:"/m/product/GetStock",
+                    		async:true,
+                    		data:{ActivityType:"@activitySkuInfo.ActivityType", ProductId:"@Model.ProductId", SkuId:SkuId, ItemId:"@activitySkuInfo.ItemId", Quantity:Quantity},
+                    		dataType:"json",
+                    		success:function(rel) {
+                    			if(rel.Code>0){*/
+                    				$("#goods_form").submit();
+                    			/*}else{
+                    				$.hideLoading();
+                    				$.toast("库存不足","cancel");
+                    			}
+                    		}
+                    	});*/
+					}else{
+						if(Number(IsApp==1)){
+							if(navigator.userAgent.indexOf("iPhone")>0){
+								gotologinvc();
+							}
+							if(navigator.userAgent.indexOf("Android")>0){
+								window.js.goLogin();
+							}
+						}else{
+							/*if(isWeixin=="False"){
+								var url = window.location.href;
+								window.location.href = '/m/account/login?returnUrl='+url;
+							}else{
+								var url = window.location.href;
+								window.location.href = '/m/user/bind?returnUrl='+url;
+							}*/
+							var LeaderUid = GetRequest().LeaderUid;
+						var url;
+						if(isWeixin=="False"){
+							if(LeaderUid==null || typeof(LeaderUid)=="undefined"){
+								url = '/m/account/login?returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/activity/firstbuydetail?id=@{@firstBuyInfo.ItemId}&IsApp=@{@WorkContext.IsApp}';
+							}else{
+								url = '/m/account/login?LeaderUid='+GetRequest().LeaderUid+'&returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/activity/firstbuydetail?id=@{@firstBuyInfo.ItemId}&IsApp=@{@WorkContext.IsApp}';
+							}
+						}else{
+							if(LeaderUid==null || typeof(LeaderUid)=="undefined"){
+								url = '/m/user/bind&returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/activity/firstbuydetail?id=@{@firstBuyInfo.ItemId}&IsApp=@{@WorkContext.IsApp}';
+							}else{
+								url = '/m/user/bind?LeaderUid='+GetRequest().LeaderUid+'&returnUrl='+'@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' +'/m/activity/firstbuydetail?id=@{@firstBuyInfo.ItemId}&IsApp=@{@WorkContext.IsApp}';
+							}
+						}
+						window.location.href = url;
+						}
+					}
+			}
+			//立即购买
+			function buy() {
+				$.ajax({
+					type:"get",
+					url:"/Api/Activity/IsFirstBuy?UserId="+Uid,
+					async:true,
+					success: function(rel){
+//						if(rel.code==1){
+//							$.alert("您已购买过，或者有特惠订单还未支付");
+//						}else{
+							var SpecProps = $("#SpecProps").val();
+							if(SpecProps==""){
+								postOrder();
+							}else{
+								showShade();
+							}
+							
+//						}
+					}
+				});
+				
+			}
+			//获取规格价格
+			function getMoney() {
+				SkuId = $("#SkuId").val();
+				SpecProps = $("#SpecProps").val(); 
+				$.ajax({
+					type: "post",
+					url: "/m/product/getactivityskuinfo",
+					data: {
+                        SkuId:SkuId,
+                        ProductId:ProductId,
+                        ItemId:ItemId,
+                        SpecProps:SpecProps,
+                        ActivityType:3
+					},
+					dataType: 'json',
+					success: function(rel) {
+						if(rel.Code == 1) {
+							$(".activity-price").text(rel.Data.ActivityPrice);
+							$("#SkuId").val(rel.Data.SkuId);
+                            $(".spec-name").text(rel.Data.SkuName); 
+                            ActivityPrice = Number(rel.Data.ActivityPrice);
+							GiftProfits = Number(ActivityPrice).toFixed(2);
+							$(".score").text(GiftProfits);
+						}
+					}
+				});
+			}
+			
+			//weui+ 加减
+			function upDownOperation(element)
+		    {
+		        var _input = element.parent().find('input'),
+		            _value = _input.val(),
+		            _step = _input.attr('data-step') || 1;
+		        //检测当前操作的元素是否有disabled，有则去除
+		        element.hasClass('disabled') && element.removeClass('disabled');
+		        //检测当前操作的元素是否是操作的添加按钮（.input-num-up）‘是’ 则为加操作，‘否’ 则为减操作
+		        if ( element.hasClass('weui-number-plus') )
+		        {
+		            var _new_value = parseInt( parseFloat(_value) + parseFloat(_step) ),
+		                _max = _input.attr('data-max') || false,
+		                _down = element.parent().find('.weui-number-sub');
+		            
+		            //若执行‘加’操作且‘减’按钮存在class='disabled'的话，则移除‘减’操作按钮的class 'disabled'
+		            _down.hasClass('disabled') && _down.removeClass('disabled');
+		            if (_max && _new_value >= _max) {
+		                _new_value = _max;
+		                element.addClass('disabled');
+		            }
+		        } else {
+		            var _new_value = parseInt( parseFloat(_value) - parseFloat(_step) ),
+		                _min = _input.attr('data-min') || false,
+		                _up = element.parent().find('.weui-number-plus');
+		            //若执行‘减’操作且‘加’按钮存在class='disabled'的话，则移除‘加’操作按钮的class 'disabled'
+		            _up.hasClass('disabled') && _up.removeClass('disabled');
+		            if (_min && _new_value <= _min) {
+		                _new_value = _min;
+		                element.addClass('disabled');
+		            }
+		        }
+		        _input.val( _new_value );
+		        //$("#Quantity").val(_new_value);
+		    }
+			$(function(){
+				$(".sale-num").text(SaleNum);
+				//初始获取一次规格信息
+				getMoney();
+				$(".score").text(GiftProfits);
+				//weui +
+				$('.weui-number-plus').click(function(){
+			        upDownOperation( $(this) );
+			    });
+			    //weui -
+			    $('.weui-number-sub').click(function(){
+			        upDownOperation( $(this) );
+			    });
+			    /*$("#goods-num").on("change",function(){
+			    	var _this = $(this);
+			    	setTimeout(function(){
+			    		var value = _this.val();
+			    		$("#Quantity").val(value);
+			    	},10);
+			    });*/
+			    //轮播图
+				$('#slide').swipeSlide({
+					autoSwipe:true,//自动切换默认是
+					speed:3000,//速度默认4000
+					continuousScroll:true,//默认否
+					transitionType:'cubic-bezier(0.22, 0.69, 0.72, 0.88)',//过渡动画linear/ease/ease-in/ease-out/ease-in-out/cubic-bezier
+					lazyLoad:true,//懒加载默认否
+					firstCallback : function(i,sum,me){
+			            me.find('.dot').children().first().addClass('cur');
+			        },
+			        callback : function(i,sum,me){
+			            me.find('.dot').children().eq(i).addClass('cur').siblings().removeClass('cur');
+			        }
+				});
+			})
+		</script>
+	</body>
+</html>
+
+
+
+
+
+
+
+
+

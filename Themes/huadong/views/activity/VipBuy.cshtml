@@ -1,0 +1,85 @@
+﻿@{
+Layout = null;
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>独享专区-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta content="@WorkContext.ShopConfig.SEODescription" name="description">
+    <meta content="@WorkContext.ShopConfig.SEOKeyword" name="keywords">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/vip.css" />
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Js/Mobile/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+    <div class="vip-content" id="vipContent">
+        <div class="common-header">
+            <div class="header-back" v-on:click="goToBack()"><span class="icon iconfont">&#xe60e;</span></div>
+            <div class="title ell-1">独享专区</div>
+        </div>
+        <div class="content">
+            <div class="goods_items">
+                <!--a href="@(Request.Url.Scheme)://@(WorkContext.ShopConfig.SiteUrl)/m/article/detail?id=91"-->
+                <a href="javascript:;" class="banner-img">
+					<img src="/images/mobile/activity/vip_buy.jpg"style="width:100%" alt="" />
+				</a>
+                <div class="goods_lists">
+                	<!--银牌-->
+                	<div class="title-img-content">
+	            		<div class="title-img ag"></div>
+	            	</div>
+                    <div class="goods-lists style-4">
+                        <ul style="width: 27.5rem;">
+                            <li><a href="/m/product/detail?id=185625&amp;IsApp=0"><div class="goods-img-box weui-updown"><img src="https://img.huadong518.com//upload/public/1808/19/d6868c3049ea4886ab550f89d1e18a38.jpg?w=300&amp;h=300" alt="" class="goods-img"></div> <div class="goods-info-box"><div class="goods-title hidetxt1">华为（HUAWEI）荣耀10 GT游戏手机 幻影蓝 全网通6GB+64GB</div> <div class="goods-info"><span class="price">¥ 2399</span> <!----></div> <div class="goods-info"><span class="integral"><span class="mark">送</span> <span data-profits="1">119.95积分</span></span></div></div> <div class="clearfix"></div></a></li>
+                            <li><a href="/m/product/detail?id=185829&amp;IsApp=0"><div class="goods-img-box weui-updown"><img src="https://img.huadong518.com//upload/public/1808/20/9cf54ddbda6848f0ac0bd969684e59d6.jpg?w=300&amp;h=300" alt="" class="goods-img"></div> <div class="goods-info-box"><div class="goods-title hidetxt1">华为(HUAWEI)MateBook X 13英寸微边框轻薄本 笔记本电脑(i5-7200U 4G 256GB固态 内含拓展坞 2K高清屏 含正版office 流光金)</div> <div class="goods-info"><span class="price">¥ 6188</span> <!----></div> <div class="goods-info"><span class="integral"><span class="mark">送</span> <span data-profits="4">1237.6积分</span></span></div></div> <div class="clearfix"></div></a></li>
+                            <li><a href="/m/product/detail?id=187724&amp;IsApp=0"><div class="goods-img-box weui-updown"><img src="https://img.huadong518.com//upload/public/1808/30/d71ef8905ee945308bbb837e8decd32d.jpg?w=300&amp;h=300" alt="" class="goods-img"></div> <div class="goods-info-box"><div class="goods-title hidetxt1">热带新鲜水果红百香果5斤包邮</div> <div class="goods-info"><span class="price">¥ 65</span> <!----></div> <div class="goods-info"><span class="integral"><span class="mark">送</span> <span data-profits="20">65积分</span></span></div></div> <div class="clearfix"></div></a></li>
+                            <li><a href="/m/product/detail?id=185568&amp;IsApp=0"><div class="goods-img-box weui-updown"><img src="https://img.huadong518.com//upload/public/1808/18/fde6f62948644d40b1b2d697897c8259.jpg?w=300&amp;h=300" alt="" class="goods-img"></div> <div class="goods-info-box"><div class="goods-title hidetxt1">华为 HUAWEI P20 Pro 全面屏徕卡三摄游戏手机 6GB +64GB 亮黑色 全网通移动联通电信4G手机 双卡双待</div> <div class="goods-info"><span class="price">¥ 4888</span> <!----></div> <div class="goods-info"><span class="integral"><span class="mark">送</span> <span data-profits="5">1222积分</span></span></div></div> <div class="clearfix"></div></a></li>
+                            <li><a href="/m/product/detail?id=185544&amp;IsApp=0"><div class="goods-img-box weui-updown"><img src="https://img.huadong518.com//upload/public/1808/18/649b977739dd44368ebfbc74af4b81e8.jpg?w=300&amp;h=300" alt="" class="goods-img"></div> <div class="goods-info-box"><div class="goods-title hidetxt1">华为（HUAWEI） 荣耀V10 手机 魅丽红 全网通(6GB+128GB)</div> <div class="goods-info"><span class="price">¥ 2599</span> <!----></div> <div class="goods-info"><span class="integral"><span class="mark">送</span> <span data-profits="4">519.8积分</span></span></div></div> <div class="clearfix"></div></a></li>
+                        </ul>
+                    </div>
+                    <!--金牌-->
+                	<div class="title-img-content">
+	            		<div class="title-img au"></div>
+	            	</div>
+                    <div class="goods-lists style-4">
+                        <ul style="width: 27.5rem;">
+                            <li><a href="/m/product/detail?id=185625&amp;IsApp=0"><div class="goods-img-box weui-updown"><img src="https://img.huadong518.com//upload/public/1808/19/d6868c3049ea4886ab550f89d1e18a38.jpg?w=300&amp;h=300" alt="" class="goods-img"></div> <div class="goods-info-box"><div class="goods-title hidetxt1">华为（HUAWEI）荣耀10 GT游戏手机 幻影蓝 全网通6GB+64GB</div> <div class="goods-info"><span class="price">¥ 2399</span> <!----></div> <div class="goods-info"><span class="integral"><span class="mark">送</span> <span data-profits="1">119.95积分</span></span></div></div> <div class="clearfix"></div></a></li>
+                            <li><a href="/m/product/detail?id=185829&amp;IsApp=0"><div class="goods-img-box weui-updown"><img src="https://img.huadong518.com//upload/public/1808/20/9cf54ddbda6848f0ac0bd969684e59d6.jpg?w=300&amp;h=300" alt="" class="goods-img"></div> <div class="goods-info-box"><div class="goods-title hidetxt1">华为(HUAWEI)MateBook X 13英寸微边框轻薄本 笔记本电脑(i5-7200U 4G 256GB固态 内含拓展坞 2K高清屏 含正版office 流光金)</div> <div class="goods-info"><span class="price">¥ 6188</span> <!----></div> <div class="goods-info"><span class="integral"><span class="mark">送</span> <span data-profits="4">1237.6积分</span></span></div></div> <div class="clearfix"></div></a></li>
+                            <li><a href="/m/product/detail?id=187724&amp;IsApp=0"><div class="goods-img-box weui-updown"><img src="https://img.huadong518.com//upload/public/1808/30/d71ef8905ee945308bbb837e8decd32d.jpg?w=300&amp;h=300" alt="" class="goods-img"></div> <div class="goods-info-box"><div class="goods-title hidetxt1">热带新鲜水果红百香果5斤包邮</div> <div class="goods-info"><span class="price">¥ 65</span> <!----></div> <div class="goods-info"><span class="integral"><span class="mark">送</span> <span data-profits="20">65积分</span></span></div></div> <div class="clearfix"></div></a></li>
+                            <li><a href="/m/product/detail?id=185568&amp;IsApp=0"><div class="goods-img-box weui-updown"><img src="https://img.huadong518.com//upload/public/1808/18/fde6f62948644d40b1b2d697897c8259.jpg?w=300&amp;h=300" alt="" class="goods-img"></div> <div class="goods-info-box"><div class="goods-title hidetxt1">华为 HUAWEI P20 Pro 全面屏徕卡三摄游戏手机 6GB +64GB 亮黑色 全网通移动联通电信4G手机 双卡双待</div> <div class="goods-info"><span class="price">¥ 4888</span> <!----></div> <div class="goods-info"><span class="integral"><span class="mark">送</span> <span data-profits="5">1222积分</span></span></div></div> <div class="clearfix"></div></a></li>
+                            <li><a href="/m/product/detail?id=185544&amp;IsApp=0"><div class="goods-img-box weui-updown"><img src="https://img.huadong518.com//upload/public/1808/18/649b977739dd44368ebfbc74af4b81e8.jpg?w=300&amp;h=300" alt="" class="goods-img"></div> <div class="goods-info-box"><div class="goods-title hidetxt1">华为（HUAWEI） 荣耀V10 手机 魅丽红 全网通(6GB+128GB)</div> <div class="goods-info"><span class="price">¥ 2599</span> <!----></div> <div class="goods-info"><span class="integral"><span class="mark">送</span> <span data-profits="4">519.8积分</span></span></div></div> <div class="clearfix"></div></a></li>
+                        </ul>
+                    </div>
+                    <!--铂金-->
+                	<div class="title-img-content">
+	            		<div class="title-img pt"></div>
+	            	</div>
+                    <div class="goods-lists style-4">
+                        <ul style="width: 27.5rem;">
+                            <li><a href="/m/product/detail?id=185625&amp;IsApp=0"><div class="goods-img-box weui-updown"><img src="https://img.huadong518.com//upload/public/1808/19/d6868c3049ea4886ab550f89d1e18a38.jpg?w=300&amp;h=300" alt="" class="goods-img"></div> <div class="goods-info-box"><div class="goods-title hidetxt1">华为（HUAWEI）荣耀10 GT游戏手机 幻影蓝 全网通6GB+64GB</div> <div class="goods-info"><span class="price">¥ 2399</span> <!----></div> <div class="goods-info"><span class="integral"><span class="mark">送</span> <span data-profits="1">119.95积分</span></span></div></div> <div class="clearfix"></div></a></li>
+                            <li><a href="/m/product/detail?id=185829&amp;IsApp=0"><div class="goods-img-box weui-updown"><img src="https://img.huadong518.com//upload/public/1808/20/9cf54ddbda6848f0ac0bd969684e59d6.jpg?w=300&amp;h=300" alt="" class="goods-img"></div> <div class="goods-info-box"><div class="goods-title hidetxt1">华为(HUAWEI)MateBook X 13英寸微边框轻薄本 笔记本电脑(i5-7200U 4G 256GB固态 内含拓展坞 2K高清屏 含正版office 流光金)</div> <div class="goods-info"><span class="price">¥ 6188</span> <!----></div> <div class="goods-info"><span class="integral"><span class="mark">送</span> <span data-profits="4">1237.6积分</span></span></div></div> <div class="clearfix"></div></a></li>
+                            <li><a href="/m/product/detail?id=187724&amp;IsApp=0"><div class="goods-img-box weui-updown"><img src="https://img.huadong518.com//upload/public/1808/30/d71ef8905ee945308bbb837e8decd32d.jpg?w=300&amp;h=300" alt="" class="goods-img"></div> <div class="goods-info-box"><div class="goods-title hidetxt1">热带新鲜水果红百香果5斤包邮</div> <div class="goods-info"><span class="price">¥ 65</span> <!----></div> <div class="goods-info"><span class="integral"><span class="mark">送</span> <span data-profits="20">65积分</span></span></div></div> <div class="clearfix"></div></a></li>
+                            <li><a href="/m/product/detail?id=185568&amp;IsApp=0"><div class="goods-img-box weui-updown"><img src="https://img.huadong518.com//upload/public/1808/18/fde6f62948644d40b1b2d697897c8259.jpg?w=300&amp;h=300" alt="" class="goods-img"></div> <div class="goods-info-box"><div class="goods-title hidetxt1">华为 HUAWEI P20 Pro 全面屏徕卡三摄游戏手机 6GB +64GB 亮黑色 全网通移动联通电信4G手机 双卡双待</div> <div class="goods-info"><span class="price">¥ 4888</span> <!----></div> <div class="goods-info"><span class="integral"><span class="mark">送</span> <span data-profits="5">1222积分</span></span></div></div> <div class="clearfix"></div></a></li>
+                            <li><a href="/m/product/detail?id=185544&amp;IsApp=0"><div class="goods-img-box weui-updown"><img src="https://img.huadong518.com//upload/public/1808/18/649b977739dd44368ebfbc74af4b81e8.jpg?w=300&amp;h=300" alt="" class="goods-img"></div> <div class="goods-info-box"><div class="goods-title hidetxt1">华为（HUAWEI） 荣耀V10 手机 魅丽红 全网通(6GB+128GB)</div> <div class="goods-info"><span class="price">¥ 2599</span> <!----></div> <div class="goods-info"><span class="integral"><span class="mark">送</span> <span data-profits="4">519.8积分</span></span></div></div> <div class="clearfix"></div></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

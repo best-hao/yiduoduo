@@ -1,0 +1,265 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		
+	    <meta name="format-detection" content="telephone=no">
+	    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	    <meta name="apple-mobile-web-app-capable" content="yes" />
+	    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+	    <meta http-equiv="Pragma" content="no-cache" />
+	    <meta http-equiv="Cache-Control" content="no-cache" />
+	    <meta http-equiv="Expires" content="0" />
+	    <title>会员卡明细-@{@WorkContext.SellerInfo.SellerName}</title>
+		<link rel="stylesheet" href="/Mobile/weui/style/weui.css" />
+		<link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+		<script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Mobile/weui/picker.js"></script>
+		<script src="/Mobile/weui/picker-city.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+		<style type="text/css">
+			body{font-size: 0.24rem;width: 7.5rem;margin: 0 auto;}
+			.weui-header{background: #fff;}
+			.weui-header *{font-size: 0.32rem;}
+			.weui-header .weui-header-title{font-size: 0.32rem;color: #999;}
+			a:active{background-color: #afeeee;}
+			li{list-style: none;}
+			.fl{float:left}
+			.fr{float: right}
+			.clearfix:before,.clearfix:after {display: table;content: " "}
+			.clearfix:after {clear: both}
+			.clearfix{*zoom: 1}
+			.ellipsis{text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+			.ellipsis-2{display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;overflow: hidden;}
+			.lists{font-size: 0.28rem;margin-top: 1px;}
+			.lists li{height: 1.4rem;position: relative;}
+			.lists li:after{position: absolute;content: "";bottom: 0;left: 0.2rem;border-bottom: 1px solid #f2f2f2;width: 7.3rem;}
+			
+			.lists li a{height: 1.2rem;display: block;padding: 0.1rem .2rem;background: #fff;height: 1.2rem;overflow: hidden;color: #333;}
+			.div-title{height: 0.6rem;line-height: 0.6rem;}
+			.div-info{height: 0.6rem;line-height: 0.6rem;color: #999;}
+			
+			.loading{height: 1rem;line-height: .9rem;}
+			.weui_cells_title{margin: 0;}
+			.weui-loadmore{margin: 0 auto;height: 0.9rem; line-height: 0.9rem;}
+			.show{display: block;}
+			.shade{background: rgba(0,0,0,0.5);position: fixed;top: 47px;width: 7.5rem;height: 100%;z-index: 5;display: none;}
+			.shaixuan-box{background: #fff;position: absolute;top: 0;width: 7.5rem;z-index: 6;}
+			.shaixuan-box .weui-flex-item{text-align: center;height: 1.2rem;}
+			.shaixuan-box .weui-flex{width: 7.5rem;}
+			.shaixuan-box .weui-flex-item{width: 3.75rem;}
+			.shaixuan-box .weui-flex-item span{border: 1px solid #d9d9d9;border-radius: 5px;display: block;height: .7rem;line-height: .7rem;margin: .2rem auto;width: 3.5rem;}
+			.shaixuan-box .weui-flex-item span.cur{border-color: #18b4ed;}
+			.weui-picker-container.weui-picker-container-visible{z-index: 10;}
+			.weui-picker-modal{height: 6rem;}
+			.weui-picker-modal .toolbar-inner{height: .8rem;font-size:0.32rem ;}
+			.weui-picker-modal .picker-modal-inner{height: 5.6rem;font-size: 0.34rem;}
+			.weui_cell_bd.weui_cell_primary{height: 0.8rem;text-align: left;}
+			.weui_input{width: 2rem;height: 0.8rem;line-height: 0.8rem;margin-left: 0.2rem;}
+			.weui_cell:before{border: 0;height: 0;}
+			#confirm{display:block;background-color:#fff;width:1.6rem;color:#666;font-size:.28rem;height:.7rem;line-height:.7rem;margin:.2rem auto;border:1px solid #18b4ed;color:#18b4ed;text-align:center;border-radius:5px}
+
+		</style>
+</head>
+<body>
+	<div id="cardFlow">
+	<div class="weui-header"> 
+	    <div class="weui-header-left"> <a href="/m/usercenter/vipcard" class="icon icon-109">返回</a>  </div>
+	    	<div class="weui-header-title">会员卡流水</div>
+	    <div class="weui-header-right shaixuan"><a>筛选</a></div> 
+    </div>
+    <div class="shade">
+	    <div class="shaixuan-box">
+	    	<div class="weui-flex">
+	            <div class="weui-flex-item"><span data-type="1">充值</span></div>
+	            <div class="weui-flex-item"><span data-type="2">消费</span></div>
+	        </div>
+	        <div class="weui-flex">
+	            <div class="weui-flex-item"><span data-type="3">退款</span></div>
+	            <div class="weui-flex-item"><span data-type="0">全部</span></div>
+	        </div>
+	        <div class="weui_cell">
+	        	<div class="weui-flex-item">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                	<label>开始:</label>
+	                    <input class="weui_input" type="text" value="" id='start' placeholder="选择开始日期"/>
+	                </div>
+                </div>
+                <div class="weui-flex-item">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                	<label>结束:</label>
+	                    <input class="weui_input" type="text" value="" id='end' placeholder="选择结束日期"/>
+	                </div>
+                </div>
+            </div> 
+			<a id="confirm" v-on:click="shaixuanConfirm()" href="javascript:">确定</a>
+	        
+	        
+	    </div>
+    </div>
+    <div class="lists" >
+        <ul>
+        	
+        </ul>
+        
+        <div class="loading">
+			<div class="weui_cells_title hide tcenter" id="more">
+				<div class="weui-loadmore">
+		            <i class="weui-loading"></i>
+		            <span class="weui-loadmore-tips">正在加载</span>
+		        </div>
+			</div>
+		</div>
+    </div>
+    </div>
+    <script id="loadmore" type="text/html">
+		<div class="weui-loadmore">
+            <i class="weui-loading"></i>
+            <span class="weui-loadmore-tips">正在加载</span>
+        </div>
+	</script>
+	
+	
+	<script id="tpl" type="text/html">
+		
+		
+		
+		<% for(var i in Data) {   %>
+			<li>
+        		<a href="javascript:;">
+        			<div class="div-title">
+        				<div class="title fl ellipsis">
+        					<% if(Data[i].FlowType==1){ %>
+        					充值
+        					<% } else if(Data[i].FlowType==2){ %>
+        					消费
+        					<% } else if(Data[i].FlowType==3){ %>
+        					退款
+    						<% } %>
+        				</div>
+        				<div class="money fr ellipsis">
+        					<% if(Data[i].FlowType==1){ %>
+        					+<%=Data[i].SavingMoney%>
+        					<% } else if(Data[i].FlowType==2){ %>
+        					-<%=Data[i].SavingMoney%>	
+        					<% } else if(Data[i].FlowType==3){ %>
+        					+<%=Data[i].SavingMoney%>	
+    						<% } %>
+        				</div>
+        				<div class="clearfix"></div>
+        			</div>
+        			<div class="div-info">
+        				<div class="title fl ellipsis"><%=Data[i].AddTime.substring(0,10)+" "+Data[i].AddTime.substring(11,19)%></div>
+        				<div class="money fr ellipsis"><%=Data[i].RemainSavingMoney%></div>
+        				<div class="clearfix"></div>
+        			</div>
+        		</a>
+        	</li>
+        <% } %>
+	</script>
+	
+    <script type="text/javascript">
+    	Vue.config.productionTip = false;
+		var vm = new Vue({
+			el: '#cardFlow',
+			data: {
+				page:1,
+				size:10,
+				type:0,
+				starttime:"",
+				endtime:""
+			},
+			created: function() {
+				this.ajax_get_data();
+			},
+			methods: {
+				ajax_get_data: function() {
+					var _this = this;
+					$.ajax({
+						type:"post",
+						url:"",
+						async:true,
+						data:{page:_this.page,size:_this.size,type:_this.type,starttime:_this.starttime,endtime:_this.endtime},
+						dataType:"json",
+						beforeSend: function() {
+							var load_html = $("#loadmore").html();
+							$("#more").html(load_html);
+							$("#more").show();
+						},
+						success:function(rel){
+							if(rel.Code==1){
+								var id = 'tpl';
+								var tplx = document.getElementById(id).innerHTML;
+								var desc1 = tpl(tplx, rel);
+								setTimeout(function(){
+									$("#more").hide();
+									$(".lists ul").append(desc1);
+		    						_this.page++;
+								},100);
+							}else{
+								$("#more").html("没有更多数据了");
+		                        return false;
+							}
+						}
+					});
+				},
+				shaixuanConfirm: function() {
+					this.page = 1;
+					$(".shade").hide();
+					$(".lists ul").html("");
+	            	var type = $("span.cur").attr("data-type");
+	            	type = type?type:0;
+	            	this.type = type;
+	            	var starttime = $("#start").val();
+	            	starttime = starttime?starttime:"";
+	            	if(starttime){
+	            		starttime = starttime+" 00:00:00";
+	            	}
+	            	this.starttime = starttime;
+	            	var endtime = $("#end").val();
+	            	endtime = endtime?endtime:"";
+	            	if(endtime){
+	            		endtime = endtime+" 00:00:00";
+	            	}
+	            	this.endtime = endtime;
+	            	this.ajax_get_data();
+				}
+			}
+		});
+    	$(function(){
+    		var ctime = new Date().getTime();
+		    ctime = Date(parseInt(ctime) * 1000).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");      
+    		$("#start").datetimePicker({title:"选择日",m:1,min:'2017-01-01',max:ctime});
+    		$("#end").datetimePicker({title:"选择日期",m:1});
+            $(".shaixuan").on("click",function(e){
+            	$(".shade").show();
+            });
+            $(window).scroll(function () {
+                var scrollTop = $(this).scrollTop();
+                var scrollHeight = $(document).height();
+                var windowHeight = $(this).height();
+                if (scrollTop + windowHeight == scrollHeight) {
+                    vm.ajax_get_data();
+                }
+            });
+            $(".weui-flex-item").on("click","span",function(){
+            	if($(this).is(".cur")){
+            		$(this).removeClass("cur");
+            	}else{
+            		$(".weui-flex-item span").removeClass("cur");
+            		$(this).addClass("cur");
+            	}
+            	
+            });
+            $(".shaixuan-box").on("click",function(e){
+            	e.stopPropagation();
+            });
+            $(".shade").on("click",function(){
+            	$(".shade").hide();
+            });
+    	});
+    </script>
+</body>
+</html>

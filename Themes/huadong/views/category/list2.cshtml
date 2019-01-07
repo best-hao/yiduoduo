@@ -1,0 +1,392 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+	    <meta content="telephone=no" name="format-detection">
+	    <meta name="apple-touch-fullscreen" content="yes">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <title>分类列表-@{@WorkContext.SellerInfo.SellerName}</title>
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+	    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+	    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+	    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css"/>
+		<style type="text/css">
+			li{list-style: none;}
+			body{width: 7.5rem;margin: 0 auto;background: #f2f2f2;font-family: "微软雅黑";height: 100%;overflow: hidden;}
+			.wapper{height: 100%;display: none;}
+			.wapper *{z-index: 1;font-size: 0.24rem;}
+			.weui_mask_transparent *{font-size: 0.32rem;}
+			.weui_toast{font-size: 0.32rem;padding: 0;width: 2.6rem;height: 2.4rem;padding: 0 0.2rem 0.4rem 0.2rem;}
+			.searchbar_wrap{position: fixed;width: 7.5rem;top: 0;left: 50%;margin-left: -3.75rem;height: 44px;z-index: 2;}
+			.weui_search_bar{background: #fff;}
+			.weui_search_text{background: #f2f2f2;}
+			.cate-main{background: #fff;height: 100%;}
+			.cate{}
+			.cate.left{width: 1.8rem;text-align: center;position: relative;overflow-y: auto;margin-top: 44px;}
+			.cate.left:before{position: absolute;content: "";right: 0;top: 0;width: 1px;height: 100%;background: #f2f2f2;}
+			.left .cur-cate{height: 0.6rem;position: absolute;content: "";width: 3px;right: 0;top: 5px;bottom:5px;background: #E02E24;}
+			.left .cate-box{}
+			.left .cate-box .cate-li{height: 40px;line-height: 40px;}
+			.left .cate-box .cate-li a{display: block; color: #555;font-size: 0.28rem;height: 40px;line-height: 40px;}
+			.left .cate-box .cur-li a{color: #E02E24;}
+			.cate.left::-webkit-scrollbar{width: 0;}
+			
+			.cate.right{padding: 0.2rem 0.1rem;width: 5.4rem;overflow-y: auto;margin-top: 44px;}
+			.cate.right::-webkit-scrollbar{width: 0;}
+			.right .cate-box{}
+			.right .brand-box{}
+			.right .brand-box a{display: block;width: 100%;}
+			.right .brand{display: block;width: 100%;}
+			.cateTwo{text-align: center;}
+			.cateTwo .title{color: #555;font-size: 0.28rem;position: relative;height: 0.8rem;line-height: 0.8rem;padding: 0 0.2rem;text-align: center;margin: 0 auto;}
+			.cateTwo .title:before{position: absolute;content: "";top: 50%;left: -0.4rem;width: 0.4rem;height: 1px;background: #d9d9d9;}
+			.cateTwo .title:after{position: absolute;content: "";top: 50%;right: -0.4rem;width: 0.4rem;height: 1px;background: #d9d9d9;}
+			
+			.cateTwo li{width: 1.6rem;margin: 0.05rem;float: left;}
+			.cateTwo li .img-box{display: block;width: 100%;}
+			.cateTwo li .cate-img{width: 1.5rem;height: 1.5rem; margin: 0.0833rem auto;}
+			.cateTwo .cateThree{color: #555;display: block;}
+			
+			
+			
+			.footer{text-align: center;position: fixed;width: 7.5rem;height: 51px; bottom: 0;left: 50%;margin-left: -3.75rem;background: #fff;border-top: 1px solid #f2f2f2;}
+			.item-box{width: 85%;margin: 0 auto;color: #000;}
+			.footer .weui-flex{height: 51px;}
+			.footer .weui-flex .iconfont{font-size: 20px;}
+			.footer .title{line-height: 24px;}
+			.footer .img-box{line-height: 26px;height: 26px!important;}
+			.footer .img-box img{display: block;width: 24px;height: 24px;margin: 1px auto;}
+		</style>
+		<script type="text/javascript">
+		</script>
+	</head>
+	<body>
+		<div class="weui_mask_transparent"></div>
+		<div class="weui_toast weui_loading_toast weui_toast_visible" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);"><div class="weui_loading"><div class="weui_loading_leaf weui_loading_leaf_0"></div><div class="weui_loading_leaf weui_loading_leaf_1"></div><div class="weui_loading_leaf weui_loading_leaf_2"></div><div class="weui_loading_leaf weui_loading_leaf_3"></div><div class="weui_loading_leaf weui_loading_leaf_4"></div><div class="weui_loading_leaf weui_loading_leaf_5"></div><div class="weui_loading_leaf weui_loading_leaf_6"></div><div class="weui_loading_leaf weui_loading_leaf_7"></div><div class="weui_loading_leaf weui_loading_leaf_8"></div><div class="weui_loading_leaf weui_loading_leaf_9"></div><div class="weui_loading_leaf weui_loading_leaf_10"></div><div class="weui_loading_leaf weui_loading_leaf_11"></div></div><p class="weui_toast_content">数据加载中</p></div>
+		<div class="wapper">
+			<div id="category">
+				<div class="searchbar_wrap"></div>
+				<div class="cate-main">
+					<div class="cate left" :style="{'height': height+'px'}">
+						<!--<div class="cur-cate"></div>-->
+						<div class="cate-box">
+							<ul>
+								<li 
+									v-for="(item, index) of cateOne" 
+									:key="item.cateid" class="cate-li" 
+									v-on:click="clickCateOne(item, index)"
+									:data-id="item.cateid"
+									class="ell"
+									>
+									<a href="javascript:;" v-text="item.name"></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="cate right" :style="{'height': (height-20)+'px'}">
+						<div class="cate-content">
+							<div class="cate-box" v-for="(obj, i) of cateOne" :key="obj.cateid">
+								<div class="brand-box">
+									<a href="">
+										<img src="/Images/Mobile/slide.jpg" alt="" class="brand" />
+									</a>
+								</div>
+								<div class="cateTwo" v-for="(item, index) of cateTwo" :key="item.cateid" v-if="item.parentid==obj.cateid">
+									
+									<a class="title ell" v-text="item.name"></a>
+									<ul>
+										<li v-for="(itemLi, indexLi) of cateThree" :key="itemLi.cateid" v-if="itemLi.parentid==item.cateid">
+											<a class="img-box">
+												<img :src="itemLi.imgurl?'@(WorkContext.ShopConfig.ImageCDN)'+itemLi.imgurl:'/Images/Mobile/3.jpg'" alt="" class="cate-img" />
+											</a>
+											<a class="cateThree ell" v-text="itemLi.name"></a>
+										</li>
+									</ul>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				
+				
+				<div class="footer">
+					<div class="weui-flex">
+			            <div v-for="(item, index) of footer" class="weui-flex-item" :key="index">
+			            	<a :href="item.MenuUrl" class="item-box">
+			            		<div class="img-box">
+			            			<img :src="item.MenuPic+'?w=50&h=50'"/>
+			            		</div>
+			            		<div class="title">{{item.MenuName}}</div>
+			            	</a>
+			            </div>
+			        </div>
+				</div>
+				
+			</div>
+				
+			
+			
+			
+		</div>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script type="text/javascript">
+			
+			var vm = new Vue({
+				el: "#category",
+				data: {
+					cateData: [],
+					curCateId: 0,
+					curIndex: 0,
+					cssIndex: 0,
+					cateOne: [],
+					cateTwo: [],
+					cateThree: [],
+					heightArr: [],
+					sumHarr: [],
+					height: Number($("body").height()-100),
+					historyId: 0,
+					direction: 0,
+					scrollTop: 0,
+					historyHeight: 0,
+					upState: true,
+					downState: true,
+					footer: [],
+					allHeight: 0
+				},
+				created: function() {
+					this.getFooter();
+					this.getCateData();
+				},
+				methods: {
+					getCateData: function() {
+						var _this = this;
+						$.ajax({
+							type: "get",
+							url: "/Api/Category/SysList",
+							async: true,
+							dataType: "json",
+							success: function(rel) {
+								if(rel.code==1){
+									_this.cateData = rel.data;
+									rel.data.forEach(function(v, i){
+										if(v.layer==1){
+											_this.cateOne.push(v);
+										}else if(v.layer==2){
+											_this.cateTwo.push(v);
+										}else if(v.layer==3){
+											_this.cateThree.push(v);
+										}
+									});
+									
+									_this.curCateId = _this.cateOne[0].cateid;
+								}
+							}
+						});
+					},
+					clickCateOne: function(item, index) {
+						this.curCateId = item.cateid;
+						this.curIndex = index;
+						$(".cate-li").removeClass("cur-li");
+						$(".cate-li").eq(index).addClass("cur-li");
+						var top = parseInt(index*40+5);
+						var scolltop = $(".cate.right").scrollTop();
+						console.log(index);
+						if(index>0){
+							$(".left .cur-cate").animate({'top': top+'px'},0);
+							$(".cate-main .left").scrollTop($(".cate-main .left").scrollTop()+40);
+						}else{
+							$(".left .cur-cate").animate({'top': 0},0);
+							$(".cate-main .left").scrollTop(0);
+						}
+						
+						
+						if(index>0){
+							var topr = this.sumHarr[index-1];
+							console.log(topr);
+							$(".cate-main .right").scrollTop(topr);
+						}
+						/*var rharr = [];
+						var rh = 0;
+						for(var i=0; i<index; i++){
+							rharr[i] = $(".right .cate-box").eq(i).height();
+						}
+						rharr.forEach(function(vo, n){
+							rh = rh+vo;
+						});
+						$(".cate.right").scrollTop(rh);*/
+					},
+					getFooter: function() {
+						var _this = this;
+						$.ajax({
+			                type: "get",
+			                url: "/m/tool/navbar",
+			                async: true,
+			                success: function (rel) {
+			                    var rs = JSON.parse(rel);
+			                    if (rs.Code == 1) {
+			                        _this.footer = rs.Data;
+			                    }
+			                    //console.log(_this.footer);
+			                }
+			            });
+					}
+				}
+			});
+			$(function(){
+				
+			 	$('.searchbar_wrap').searchBar({
+				    cancelText:"取消",
+				    searchText:'搜索',
+				    onsubmit:function(value){
+				    	var search = value;
+						var url = '/m/product/list?cateid=0&search='+search;
+						window.location.href='/m/product/list?cateid=0&search='+search;
+				    }
+				});
+				
+				
+				
+				
+				
+				setTimeout(function(){
+					$.hideLoading();
+					$(".wapper").css("display","block");
+					$(".cate-li").eq(0).addClass("cur-li");
+					vm.cateOne.forEach(function(v, i){
+						var h = $(".right .cate-box").eq(i).height();
+						vm.heightArr.push(h);
+					});
+					vm.heightArr.forEach(function(n, m){
+						if(m==0){
+							vm.sumHarr.push(n);
+						}else{
+							vm.sumHarr.push(vm.sumHarr[m-1]+n);
+						}
+					})
+					console.log(vm.sumHarr);
+					//console.log(vm.heightArr);
+				},1500);
+				
+				
+				
+				
+				
+				var before = 0;
+				var after = 1;
+				$(".cate.right").on("scroll",function() {
+//					if(vm.curIndex==0){
+//						vm.allHeight = vm.heightArr[0];
+//					}
+					var scrollTop = $(".cate.right").scrollTop();
+					var len = $(".right .cate-box").length;
+                	var height = 0;
+            		after = scrollTop;
+            		if(after>before){
+            			//页面往上滚动
+            			before = after-1;
+            			vm.downState = true;
+            			if( scrollTop >= vm.sumHarr[vm.curIndex]-200){
+            				//console.log("scrollTop: "+scrollTop);
+            				//console.log("allHeight: "+vm.allHeight);
+            				if(vm.upState){
+            					vm.curIndex = vm.curIndex+1;
+            					$(".cate-li").removeClass("cur-li");
+								$(".cate-li").eq(vm.curIndex).addClass("cur-li");
+            					//vm.allHeight = vm.allHeight+vm.heightArr[vm.curIndex];
+            					//vm.curCateId = $(".cate-li").eq(vm.curIndex).data("id");
+	            				vm.upState = false;
+            				}
+            				//console.log("allHeight: "+vm.allHeight);
+            			}else{
+            				vm.upState = true;
+            			}
+            			
+            			/*vm.downState = true;
+	            		for(var i=0;i<=vm.curIndex;i++){
+	            			var h = $(".right .cate-box").eq(i).height();
+	            			height = height+h;
+	            		}
+	            		if( scrollTop >= (height-vm.height-100)){
+	            			if(vm.upState){
+	            				vm.curIndex = vm.curIndex+1;
+	            				vm.curCateId = $(".cate-li").eq(vm.curIndex).data("id");
+	            				vm.upState = false;
+	            				var leftH = 0;
+			                	var leftHArr = [];
+			                	for(var i=0; i<=vm.curIndex; i++){
+			                		leftHArr[i] = $(".cate-li").eq(i).height();
+			                	}
+			                	leftHArr.forEach(function(vo, n){
+									leftH = leftH+vo;
+								});
+								if(leftH+90>vm.height){
+									$(".cate.left").scrollTop(leftH);
+								}
+	            			}
+	            		}else{
+	            			vm.upState = true;
+	            		}*/
+                	}else{
+                		//页面往下滚动
+	                	before = after+1;
+	                	vm.upState = true;
+	                	console.log(scrollTop);
+	                	console.log(vm.sumHarr[vm.curIndex]);
+	                	
+            			if( scrollTop <= vm.sumHarr[vm.curIndex]+200){
+            				//console.log("scrollTop: "+scrollTop);
+            				//console.log("allHeight: "+vm.allHeight);
+            				if(vm.downState){
+            					//vm.allHeight = vm.allHeight-vm.heightArr[vm.curIndex];
+            					vm.curIndex = vm.curIndex-1;
+            					$(".cate-li").removeClass("cur-li");
+								$(".cate-li").eq(vm.curIndex).addClass("cur-li");
+            					//vm.curCateId = $(".cate-li").eq(vm.curIndex).data("id");
+	            				vm.downState = false;
+            				}
+            				//console.log("allHeight: "+vm.allHeight);
+            			}else{
+            				vm.downState = true;
+            			}
+	                	
+	                	
+	                	/*for(var i=vm.curIndex;i>=0;i--){
+	            			var h = $(".right .cate-box").eq(i).height();
+	            			height = height+h;
+	            		}
+	                	var stop = scrollTop+300;
+	                	height = height-$(".right .cate-box").eq(vm.curIndex).height();
+	                	if(stop<height){
+	                		if(vm.downState){
+	                			if(vm.curIndex>0){
+	                				
+	                				vm.curIndex = vm.curIndex-1;
+	                			}
+	            				vm.curCateId = $(".cate-li").eq(vm.curIndex).data("id");
+	            				vm.downState = false;
+								var leftTop = $(".cate-li.cur-li").offset().top;
+								if(leftTop-90<=$(".cate.left").scrollTop()){
+									$(".cate.left").scrollTop($(".cate.left").scrollTop()-45);
+								}
+	            			}
+	                	}else{
+	                		vm.downState = true;
+	                	}*/
+                	}
+	               // var top = parseInt(vm.curIndex*40+5);
+					//$(".left .cur-cate").animate({'top': top+"px"},0);	
+				});
+  			}); 
+		</script>
+	</body>
+</html>
+

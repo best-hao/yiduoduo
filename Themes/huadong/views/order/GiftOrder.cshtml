@@ -1,0 +1,1889 @@
+﻿@{
+    Layout = null;
+    Yitao.Core.ShipAddressInfo shipAddressInfo = ViewData["MyAddress"] as Yitao.Core.ShipAddressInfo;
+    Yitao.Core.ProductInfo productInfo = ViewData["ProductInfo"] as Yitao.Core.ProductInfo; Yitao.Core.ProductSkuInfo productSkuInfo = ViewData["ProductSkuInfo"] as Yitao.Core.ProductSkuInfo; 
+}
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+	<meta content="telephone=no" name="format-detection">
+	<meta name="apple-touch-fullscreen" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>提交订单-小石头孕婴童生活馆</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="stylesheet" href="/Css/mobile/weui.css" />
+	<link rel="stylesheet" href="/Css/mobile/weui2.css" />
+	<link rel="stylesheet" href="/Css/mobile/intejiesuan.css" />
+	<script type="text/javascript" src="/Js/Mobile/zepto.min.js"></script>
+	<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=nT6ySqHzG1p7QMRpZ1k9rMAT0weeSERr"></script>
+
+	<style>
+		.weui_dialog, .weui_toast{
+			z-index: 999;
+		}
+		.weui_mask{
+			z-index: 998;
+		}
+		.cell-input{
+			font-size: 0.94rem;
+		}
+		#pickuptimeContener {
+			position: fixed;
+			left: 0;
+			bottom: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 999;
+		}
+
+		#pickuptime {
+			position: fixed;
+			width: 100%;
+			bottom: 44px;
+			left: 0;
+			background: #fff;
+			max-height: 200px;
+		}
+
+		.pickuptime-box {
+			display: flex;
+			width: 100%;
+			height: 100%;
+		}
+
+		.pickuptime-title {
+			height: 44px;
+			line-height: 44px;
+			padding: 0px 10px;
+			color: #333;
+			font-size: 14px;
+			background: #eee;
+			text-align: center;
+		}
+
+		.pickuptime-box>ul {
+			width: 50%;
+			height: 160px;
+			overflow-y: scroll;
+			border-left: 1px solid #f2f2f2;
+		}
+
+		.pickuptime-data {
+			width: 50%;
+			padding: 0.6rem 0;
+			overflow-y: scroll;
+			height: 160px;
+		}
+
+		.pickuptime-datap {
+			height: 44px;
+			line-height: 44px;
+			padding: 0px 10px;
+			font-size: 12px;
+		}
+
+		.pickuptime-data-on {
+			color: #ff5701;
+		}
+
+		.pickuptime {
+			text-align: center;
+			height: 44px;
+			line-height: 44px;
+			padding: 0px 10px;
+		}
+
+		.pickuptime-on {
+			color: #ff5701;
+		}
+
+		.pickuptime-close {
+			position: fixed;
+			width: 100%;
+			bottom: 0;
+			left: 0;
+			background: linear-gradient(to right, #fd940f, #ff5701);
+			height: 44px;
+			line-height: 44px;
+			text-align: center;
+			font-size: 14px;
+			color: #fff;
+		}
+
+		#amount_formated::before {
+			content: "￥"
+		}
+
+		#goods_tags:before {
+			content: "￥"
+		}
+
+		.list-theme4 .list_items_con .list-item .list-img {
+			width: 100px;
+			padding: 3.2rem 0;
+			position: relative;
+		}
+
+		.list-img img {
+			position: absolute;
+			padding: 0;
+			top: 0;
+			width: 100px;
+			height: 100px;
+		}
+
+		#no_more {
+			line-height: 4rem;
+			text-align: center;
+		}
+
+		header h3 {
+			font-size: 1rem;
+		}
+
+		#settlement:disabled {
+			background: #eee;
+			color: #999999;
+		}
+	</style>
+</head>
+
+<body>
+	<form action="" method="post">
+		<input type="hidden" id="IsCart">
+		<input type="hidden" id="ShipTime" value="">
+		<input type="hidden" class="Weight">
+		<header>
+			<i class="iconfont back" onclick="history.back()">&#xe647;</i>
+			<h3>积分结算</h3>
+		</header>
+		<div class="content">
+			<div id="J_Tab" class="m-tab">
+				<ul class="tab-nav">
+					<li class="tab-nav-item tab-active">
+						<a href="javascript:;">快递</a>
+					</li>
+					<li class="tab-nav-item">
+						<a href="javascript:;">自提</a>
+					</li>
+				</ul>
+				<div class="tab-panel">
+					<div class="tab-panel-item tab-active">
+						<div class="map_contnt" id="map1">
+							<a id="no_more" style="display:block">+去选择地址</a>
+						</div>
+					</div>
+					<div class="tab-panel-item">
+				
+						<div class="m-cell">
+							<div class="cell-item">
+								<div class="cell-left">取货人：</div>
+								<div class="cell-right">
+									<input type="text" id="Consignee1" value="@WorkContext.UserInfo.UserName" class="cell-input" placeholder="取货人" autocomplete="off">
+								</div>
+							</div>
+
+							<div class="cell-item">
+								<div class="cell-left">联系电话：</div>
+								<div class="cell-right">
+									<input type="number" id="Mobile1" value="@WorkContext.UserInfo.Mobile" pattern="[0-9]*" class="cell-input" placeholder="请输入手机号"
+									    autocomplete="off">
+								</div>
+							</div>
+							<div class="cell-item">
+								<div class="cell-left">提货时间：</div>
+								<div class="cell-right">
+									<input id="pickTime" type="text" class="cell-input" placeholder="选择提货时间" autocomplete="off">
+								</div>
+							</div>
+
+							<div class="cell-item">
+								<div class="cell-left">自提店点：</div>
+								<div class="cell-right">
+									<input id="J_ShowActionSheet" type="text" class="cell-input" placeholder="请选择自提店点" autocomplete="off">
+								</div>
+							</div>
+						</div>
+
+			
+					</div>
+				</div>
+			</div>
+			  @foreach (Yitao.Core.CartItem info in ViewData["CartItemList"] as List
+            <Yitao.Core.CartItem>)
+            {
+			<article class="m-list list-theme4" id="Article">
+				<input type="hidden" class="SkuId" id="SkuId" value="@info.SkuId">
+				<input type="hidden" class="ItemId" id="ItemId" value="@info.CartId">
+				
+				<input type="hidden" class="ShipTime" id="ShipTime" value="">
+				<input type="hidden" class="Volume" id="Volume" value="@info.Volume">
+				<input type="hidden" class="Quantity" id="Quantity" value="@info.Volume">
+				
+            
+
+				<div class="list_items_con">
+
+					<div class="list-item" data-weight="@info.Weight">
+						<div class="list-img">
+                         @if (info.ImgUrl.Length > 0)
+                                {
+                                    <img src="@(WorkContext.ShopConfig.ImageCDN)/@{@info.ImgUrl}?w=160&h=160&mode=pad"> }
+                                else
+                                {
+                                   <img src="/Images/wupt.png">}
+
+							 </div>
+						<div class="list-mes">
+							<h3 class="list-title">@info.ProductName</h3>
+							<div class="list-mes-item">
+								<span>@info.SkuName  </span>
+								
+							</div>
+
+							<div class="list-mes_right">
+								
+						
+								<div class="price">积分<span class="list_price"> @info.StockSalePrice </span><span id="yuanjia" style="color: #999999">  原价 ￥@info.StockPurcPrice</span> </div>
+                             <div class="number">x<span class="list_number"> @info.Quantity </span></div>
+                         
+            
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</article>
+            }
+			<div class="cell-item Service_price textarea_con">
+				<div class="cell-left">商品留言：</div>
+				<div class="cell-right">
+					<input name="message[]" class="textarea" maxlength="50" placeholder="在这里给店家留言">
+				</div>
+			</div>
+			<ul class="ct-list order_total_ul">
+				<li class="order_total_li">
+					<div class="sub_con">
+						<span class="total-text">可用积分
+							<label class="total jifen">@WorkContext.UserInfo.UserScore</label>
+						</span>
+					</div>
+				</li>
+				<li>
+					<div class="subtotal">
+						<div class="sub_con">
+							<span class="total-text">使用积分</span>
+							<em class="total" id="goods_zong"></em>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="subtotal">
+						<div class="sub_con">
+							<span class="total-text">邮费</span>
+							<em class="total" id="goods_tags">16.00</em>
+						</div>
+					</div>
+				</li>
+			</ul>
+			<div class="payment-bar">
+				
+				<div class="settlement"  id="settlement" >提交订单</div>
+				<div class="paytot">
+					<span class="total-text">应付金额：</span>
+					<strong class="price_total">
+						<span id="amount_formated">0.00</span>      
+					</strong>
+				</div>
+			</div>
+		</div>
+	</form>
+<div class="" id="address_chioce">
+		<div class="m-navbar">
+			<span class="navbar-item select_back">
+				<i class="iconfont back">&#xe647;</i>
+			</span>
+			<div class="navbar-center">
+				<span class="navbar-title">收货地址</span>
+			</div>
+			<span id="address_remove">删除地址</span>
+		</div>
+		<div class="contents">
+			<div class="add_content">
+				<ul class="cont_ul" id="adddress_list">
+					<li class="con_li">
+						<div class="con_left">
+							<div class="con_top">
+								<span class="con_name">佘坤</span>
+								<span class="con_phon">18629364654</span>
+							</div>
+							<div class="con_down">陕西省西安市未央区凤城十二路</div>
+						</div>
+						<div class="con_right">
+							<img class="con_img" src="/Images/mobile/goods/right.png" alt="">
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div type="button" class="addMap" id="addMap">添加新地址</div>
+		</div>
+	</div>
+	
+	<div class="" id="select_add">
+		<div class="select_add_ab">
+			<div class="select_add_re">
+				<div class="m-navbar">
+				
+					<span class="navbar-item selectAdd_back"><i class="iconfont back"></i></span>
+					<div class="navbar-center">
+						<span class="navbar-title">地址管理</span>
+					</div>
+				</div>
+				
+				<div class="m-cell">
+					<div class="cell-item">
+						<div class="cell-left">收货人姓名:</div>
+						<div class="cell-right">
+							<input type="text" placeholder="收货人姓名" name="" value="" class="cell_input" id="Consignee_Name">
+						</div>
+					</div>
+					<div class="cell-item">
+						<div class="cell-left">联系方式:</div>
+						<div class="cell-right">
+							<input type="text" placeholder="联系方式" name="" value="" class="cell_input" id="Consignee_Phone">
+						</div>
+					</div>
+					<div class="cell-item">
+						<div class="cell-left">选择省市:</div>
+						<div class="cell-right cell-arrow">
+							<input type="text" class="cell-input J_Address2" data-province="" data-city="" data-county="" data-town="" readonly="" id="S_Address3"
+							    value="" placeholder="请选择收货地址">
+						</div>
+					</div>
+					<div class="cell-item textarea_cell">
+						<textarea name="" rows="" cols="" id="Consignee_Map" placeholder="详细地址"></textarea>
+					</div>
+					<div class="cell-item">
+						<span class="total-text">设置默认地址</span>
+						<div class="weui_cell_ft moren">
+							<input class="weui_switch" type="checkbox" id="morenMap">
+						</div>
+					</div>
+					<div class="hideBtn">保存</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="m-cityselect brouce-out" id="Show_City_Four">
+		<div class="cityselect-header">
+			<p class="cityselect-title">所在地区</p>
+			<div class="cityselect-nav">
+				<a href="javascript:;" class="crt">北京市</a>
+				<a href="javascript:;" class=""></a>
+				<a href="javascript:;" class=""></a>
+				<a href="javascript:;" class=""></a>
+			</div>
+		</div>
+		<ul class="cityselect-content cityselect-move-animate cityselect-prev" id="S_City_Show">
+			<li class="cityselect-item">
+				<div class="cityselect-item-box" id="Province_chioce">
+					<a class="crt" href="javascript:;" data-province="11">
+						<span>北京市</span>
+					</a>
+					<a class="" href="javascript:;" data-province="12">
+						<span>天津市</span>
+					</a>
+					<a class="" href="javascript:;" data-province="13">
+						<span>河北省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="14">
+						<span>山西省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="15">
+						<span>内蒙古自治区</span>
+					</a>
+					<a class="" href="javascript:;" data-province="21">
+						<span>辽宁省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="22">
+						<span>吉林省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="23">
+						<span>黑龙江省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="31">
+						<span>上海市</span>
+					</a>
+					<a class="" href="javascript:;" data-province="32">
+						<span>江苏省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="33">
+						<span>浙江省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="34">
+						<span>安徽省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="35">
+						<span>福建省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="36">
+						<span>江西省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="37">
+						<span>山东省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="41">
+						<span>河南省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="42">
+						<span>湖北省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="43">
+						<span>湖南省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="44">
+						<span>广东省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="45">
+						<span>广西壮族自治区</span>
+					</a>
+					<a class="" href="javascript:;" data-province="46">
+						<span>海南省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="50">
+						<span>重庆市</span>
+					</a>
+					<a class="" href="javascript:;" data-province="51">
+						<span>四川省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="52">
+						<span>贵州省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="53">
+						<span>云南省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="54">
+						<span>西藏自治区</span>
+					</a>
+					<a class="" href="javascript:;" data-province="61">
+						<span>陕西省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="62">
+						<span>甘肃省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="63">
+						<span>青海省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="64">
+						<span>宁夏回族自治区</span>
+					</a>
+					<a class="" href="javascript:;" data-province="65">
+						<span>新疆维吾尔自治区</span>
+					</a>
+					<a class="" href="javascript:;" data-province="71">
+						<span>台湾省</span>
+					</a>
+					<a class="" href="javascript:;" data-province="81">
+						<span>香港特别行政区</span>
+					</a>
+					<a class="" href="javascript:;" data-province="82">
+						<span>澳门特别行政区</span>
+					</a>
+				</div>
+			</li>
+			<li class="cityselect-item">
+				<div class="cityselect-item-box" id="City_chioce"></div>
+			</li>
+			<li class="cityselect-item">
+				<div class="cityselect-item-box" id="County_chioce"></div>
+			</li>
+			<li class="cityselect-item">
+				<div class="cityselect-item-box" id="Town_chioce"></div>
+			</li>
+		</ul>
+	</div>
+	<div id="l-map"></div>
+	<div id="allmap"></div>
+	<style>
+		#l-map {
+			width: 1px;
+			height: 1px;
+		}
+
+		#allmap {
+			width: 1px;
+			height: 1px;
+		}
+
+		.searchResultPanel {
+			z-index: 9999;
+			position: absolute;
+		}
+
+		#tangram-suggestion--TANGRAM__1m-main {
+			position: absolute;
+			z-index: 9999;
+		}
+
+		.tangram-suggestion-main {
+			position: absolute;
+			z-index: 9999;
+		}
+	</style>
+	<script src="/Js/Mobile/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/Js/Mobile/picker.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/Js/mobile/pickTime.min.js" type="text/javascript" charset="utf-8"></script>
+
+
+<script type="text/javascript">
+		/**
+		 * 设置默认值
+		 */
+		var AddressId ="", RegionId="", ShipMode ="", PayScore ="", IsCart ="", ItemId ="",
+				SkuId ="", Quantity ="", Weight ="", UserMoney ="", Memo ="", InvoiceId ="", Consignee ="",
+				Mobile ="", ShipTime ="", ShopId ="", Procince ="", City ="", County ="", Town ="", Address ="",
+				DiscountAmount = "",
+				OrderAmount = "",
+				ShipDate = "";
+
+		var ItemId = $("#ItemId").val();
+		var bianji = false;
+		var dizhiguanli = false;
+		var shanchu = false;
+		var ShipFee ;
+		var Weight=$("#Weight").val() * Number($(".list_number").text().trim());
+		var ship;
+	 	
+			
+		var Quantity =0;
+		var zongJIfen  =0; 
+		for(var i= 0; i<$(".list_number").length ; i++){
+			Quantity += Number($($(".list_number")[i]).text().trim());
+			zongJIfen += Quantity * Number($($($($(".list_number")[i]).parents(".list-mes_right")).find(".list_price")).text().trim());
+			
+			
+		};
+		console.log(Quantity);
+		$("#goods_zong").text(zongJIfen);
+		//  上拉菜单  选择自提店铺
+		$("#settlement").on("click", function () {
+			ship = $($("#J_Tab").find(".tab-active")).index();
+			OrderAmount = $("#amount_formated").text();
+			//  这里是快递方式
+			if (ship == 0) {
+				// 这里是快递  的提交方式   1、 是否选择地址 2、
+
+				ShipMode = 1;
+				// 已选地址
+				RegionId = $("#map_map").attr("data-Town");
+				AddressId = $("#map_map").attr("data-addressid");
+			
+		
+				if (AddressId == "" || AddressId == undefined) {
+					$.alert("当前选择地址无效、请重新编辑改地址");
+				} else {
+					// 可以提交
+					tijiao();
+				};
+			} else if (ship == 1) {
+				// 这里是自提的提交方式
+				Consignee = $("#Consignee1").val();
+				Mobile = $("#Mobile1").val();
+			   
+				ShopId = $("#J_ShowActionSheet").attr("data-ShopId");
+				 ShipTime = $("#ShipTime").val();
+			
+
+				ShipMode = 2;
+				
+				// ShipTime = 
+				//  验证手机号
+				if (isPoneAvailable(Mobile)) {
+					if (Consignee == "" || ShipTime == "" || ShopId == "" || ShopId == undefined || ShipTime == undefined || Consignee == undefined) {
+						$.alert("还有关键资料未填写、货物无法送达哦");
+					} else {
+						// 2018-05-22 00:00:00
+						// 资料验证通过   可以提交
+					
+						tijiao();
+
+
+					};
+				} else {
+					// 手机验证没通过
+					$.alert("请填写正确的手机号!");
+
+				};
+				// 验证收货人和分店
+			};
+
+		});
+	
+		$(".selectAdd_back").on("click",function(){
+			$("#select_add").hide();
+		});
+		$(".select_back").on("click",function(){
+			$("#address_chioce").hide();
+		});
+		
+
+		//  城市选择
+
+		//  tab
+		$(".tab-nav").on("click", ".tab-nav-item", function () {
+			$(".tab-nav-item").removeClass("tab-active");
+			$(this).addClass("tab-active");
+			$(".tab-panel-item").removeClass("tab-active");
+			$($(".tab-panel-item")[$(this).index()]).addClass("tab-active");
+			Total();
+		});
+
+
+		$("#S_Address3").on('click', function (event) {
+			$("#S_Address3").blur();
+			dizhiguanli = true;
+			var html = '<div class="mask-black"></div>';
+			$('body').append(html);
+			$("#Show_City_Four").addClass("brouce-in");
+			$("#Show_City_Four").removeClass("brouce-out");
+
+		});
+		$('body').on('click', '.mask-black', function () {
+			$("#Show_City_Four").removeClass("brouce-in");
+			$("#Show_City_Four").addClass("brouce-out");
+			$(".mask-black").remove();
+		});
+
+
+      
+		var actionsArr=[];
+		$(document).on("click", "#J_ShowActionSheet", function () {
+			$("#J_ShowActionSheet").blur();
+			$.get('/m/order/GetShops', {}, function (data) {
+				
+				var datas = JSON.parse(data);
+			//   示例菜单 - Javascript API
+			var dete = datas.Data;
+		
+			var html = "";
+			actionsArr=[];
+			for (var i = 0; i < dete.length; i++) {
+				var shop ={};
+				shop.text = dete[i].ShopName;
+				shop.className="color-warning";
+				shop.ShopId = dete[i].ShopId;
+				shop.onClick =function(){
+				
+					$("#J_ShowActionSheet").val(this.text);
+					$("#J_ShowActionSheet").attr("data-ShopId",this.ShopId);
+
+				};
+				actionsArr.push(shop);
+			}
+		
+			$.actions({
+				title: "选择分店",
+				onClose: function () {
+				
+				},
+				actions: actionsArr
+			});
+			}, 'JSON');
+		
+			
+		});
+
+
+
+
+
+
+
+		$("#addMap").on('click', function () {
+			bianji = false;
+			clearInput();
+			$("body #select_add").show();
+
+		});
+		$("#address_back").on('click', function () {
+			shanchu = false;
+			$("#address_chioce").hide();
+
+		});
+
+		$("#add_back").on('click', function () {
+
+			$("#select_add").hide();
+
+		});
+	
+	
+
+
+		//  选择地址
+		$("#map1").on('click', function () {
+
+			$.get('/m/order/Address', {}, function (data) {
+			
+				var datas = JSON.parse(data);
+				var data = datas.Data;
+
+				var html = "";
+				for (var i = 0; i < data.length; i++) {
+					var map3 = data[i].Address.split("__")[0];
+
+					var map4 = data[i].Address.split("__")[1];
+					if (data[i].IsDefault == 1) {
+
+						html +=
+							'<li class="con_li" style="border:1px solid #f13030;"><div class="con_left" onclick ="addchiceShow(this)">';
+						html += '<div class="con_top"><span class="con_name">' + data[i].Consignee + '</span><span class="con_phon">' +
+							data[i].Mobile;
+						html += '</span></div><div class="con_down" data-AddressId ="' + data[i].AddressId +
+							'"> <span class="shengshi" data-zone="' + data[i].ZoneId + '">';
+						html += map3 + '</span><span class="xiangxi">' + map4 +
+							'</span></div></div><div class="con_right" onclick="conRight(this)"';
+						html += 'data-AddressId ="' + data[i].AddressId + '"data-Province ="' + data[i].Province + '"' +
+							'data-City ="' + data[i].City + '"' + 'data-County ="' + data[i].County + '"' + 'data-Town ="' + data[i].Town +
+							'"' + 'data-IsDefault="' + data[i].IsDefault +
+							'"><img class="con_img" src="/Images/mobile/goods/right.png" alt=""></div></li>';
+					} else {
+
+						html += '<li class="con_li"><div class="con_left" onclick ="addchiceShow(this)">';
+						html += '<div class="con_top"><span class="con_name">' + data[i].Consignee + '</span><span class="con_phon">' +
+							data[i].Mobile;
+						html += '</span></div><div class="con_down" data-AddressId ="' + data[i].AddressId +
+							'"> <span class="shengshi" data-zone="' + data[i].ZoneId + '">';
+						html += map3 + '</span><span class="xiangxi">' + map4 +
+							'</span></div></div><div class="con_right" onclick="conRight(this)"';
+						html += 'data-AddressId ="' + data[i].AddressId + '"data-Province ="' + data[i].Province + '"' +
+							'data-City ="' + data[i].City + '"' + 'data-County ="' + data[i].County + '"' + 'data-Town ="' + data[i].Town +
+							'"' + 'data-IsDefault="' + data[i].IsDefault +
+							'"><img class="con_img" src="/Images/mobile/goods/right.png" alt=""></div></li>';
+					};
+				};
+				$($("#adddress_list").find(".con_li")).remove();
+				$("#adddress_list").append(html);
+
+			}, 'JSON');
+
+			$("#address_chioce").show();
+
+		});
+
+		//   保存地址
+		$(".hideBtn").on('click', function () {
+			//  保存
+			if (testing()) {
+				//  保存地址
+				var name = $("#Consignee_Name").val();
+				var phone = $("#Consignee_Phone").val();
+				//
+				var map1 = $("#S_Address3").val();
+				var map2 = $("#Consignee_Map").val();
+				var dom = $($("#adddress_list").find(".baocun"));
+			
+				var addressId = $($(dom).find(".con_right")).attr('data-AddressId');
+			
+				if (addressId == undefined || addressId == null) {
+					addressId = "";
+					$.alert("地址错误");
+				} else {
+					
+				};
+				var IsDefault = 0;
+				if ($("#morenMap").prop("checked")) {
+					IsDefault = 1;
+				} else {
+					IsDefault = 0;
+				};
+				var dete = {
+					City: $("#S_Address3").attr("data-City"),
+					County: $("#S_Address3").attr("data-County"),
+					Town: $("#S_Address3").attr("data-Town")
+				};
+
+				//  AddressId   Mobile  Address  Consignee  Province  City  County  Town
+				$.post('/m/Order/AddressSave', {
+					AddressId: addressId,
+					Mobile: phone,
+					Address: map1 + "__" + map2,
+					Consignee: name,
+					IsDefault: IsDefault,
+					Province: $("#S_Address3").attr("data-Province"),
+					City: $("#S_Address3").attr("data-City"),
+					County: $("#S_Address3").attr("data-County"),
+					Town: $("#S_Address3").attr("data-Town"),
+				}, function (datas) {
+					var datasa = JSON.parse(datas);
+
+				
+					//                  AddressSave
+					//   重新获取地址列表
+					$.get('Address', {}, function (data) {
+						var sheData = JSON.parse(data);
+						var data = sheData.Data;
+						var html = "";
+						for (var i = 0; i < data.length; i++) {
+							var map3 = data[i].Address.split("__")[0];
+							var map4 = data[i].Address.split("__")[1];
+
+							if (data[i].IsDefault == 1) {
+								html +=
+									'<li class="con_li" style="border:1px solid #f13030;"><div class="con_left" onclick ="addchiceShow(this)">';
+								html += '<div class="con_top"><span class="con_name">' + data[i].Consignee +
+									'</span><span class="con_phon">' + data[i].Mobile;
+								html += '</span></div><div class="con_down" data-AddressId ="' + data[i].AddressId +
+									'"> <span class="shengshi" data-zone="' + data[i].ZoneId + '">';
+								html += map3 + '</span><span class="xiangxi">' + map4 +
+									'</span></div></div><div class="con_right" onclick="conRight(this)"';
+								html += 'data-AddressId ="' + data[i].AddressId + '"data-Province ="' + data[i].Province + '"' +
+									'data-City ="' + data[i].City + '"' + 'data-County ="' + data[i].County + '"' + 'data-Town ="' + data[i]
+									.Town + '"' + 'data-IsDefault="' + data[i].IsDefault +
+									'"><img class="con_img" src="/Images/mobile/goods/right.png" alt=""></div></li>';
+							} else {
+								html += '<li class="con_li"><div class="con_left" onclick ="addchiceShow(this)">';
+								html += '<div class="con_top"><span class="con_name">' + data[i].Consignee +
+									'</span><span class="con_phon">' + data[i].Mobile;
+								html += '</span></div><div class="con_down" data-AddressId ="' + data[i].AddressId +
+									'"> <span class="shengshi" data-zone="' + data[i].ZoneId + '">';
+								html += map3 + '</span><span class="xiangxi">' + map4 +
+									'</span></div></div><div class="con_right" onclick="conRight(this)"';
+								html += 'data-AddressId ="' + data[i].AddressId + '"data-Province ="' + data[i].Province + '"' +
+									'data-City ="' + data[i].City + '"' + 'data-County ="' + data[i].County + '"' + 'data-Town ="' + data[i]
+									.Town + '"' + 'data-IsDefault="' + data[i].IsDefault +
+									'"><img class="con_img" src="/Images/mobile/goods/right.png" alt=""></div></li>';
+							};
+						};
+						$($("#adddress_list").find(".con_li")).remove();
+						$("#adddress_list").append(html);
+						$("#select_add").hide();
+						shanchu = false;
+						bianji = false;
+						$("#address_remove").text("删除地址");
+					}, 'JSON');
+				}, 'JSON');
+			} else {
+				$.alert("手机号不正确");
+			};
+		});
+
+
+		$(document).ready(function () {
+
+
+		 //   选择时间
+		 $("#pickTime").on('click', function (event) {
+        event.stopPropagation();
+        $("#pickTime").blur();
+        pickuptime.init(0, function (data) {
+            console.log(data);
+            var b = data.split(" ");
+            var datesss = new Date();
+            var year = datesss.getFullYear(); // 2018 
+            var month = b[0].split("月")[0];
+            if (month < 10) {
+                month = "0" + month;
+            }
+            var day = b[0].split("月")[1].split("日")[0];
+            if (day < 10) {
+                day = "0" + day;
+            }
+            var hours = b[3].split(":")[0];
+            var minutes = b[3].split(":")[1];
+            var ShipDates = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + "00";
+            $("#ShipTime").val(ShipDates);
+            $("#pickTime").val(data);
+     	   });
+
+   		 });
+			//  get 默认地址
+			$.get('Address', {
+				async: true
+			}, function (data) {
+
+				$("body #settlement").removeAttr("disabled");
+				var datas = JSON.parse(data);
+				var data = datas.Data;
+				var IsDefault = false;
+			
+
+				if (data.Code == 0) {
+					console.log("没有地址");
+				} else {
+					for (var i = 0; i < data.length; i++) {
+						if (data[i].IsDefault == 1) {
+							$("#map_map").attr("data-Province", data[i].Province);
+							$("#map_map").attr("data-City", data[i].City);
+							$("#map_map").attr("data-County", data[i].County);
+							$("#map_map").attr("data-Town", data[i].Town);
+							$("#map_map").attr("data-AddressId", data[i].AddressId);
+							var name = data[0].Consignee;
+							var phone = data[0].Mobile;
+							var map = data[0].Address;
+							var html = "";
+							$("#map_map").attr("data-Province", data[i].Province);
+							$("#map_map").attr("data-City", data[i].City);
+							$("#map_map").attr("data-County", data[i].County);
+							$("#map_map").attr("data-Town", data[i].Town);
+							$("#map_map").attr("data-AddressId", data[i].AddressId);
+							// 记录姓名 电话地址  并且赋值
+
+							html +=
+								'<div class="map_title cell-arrow" oncilck="MapChioce(this)"><p class="map_user"><span id="map_name">' +
+								name;
+							html += '</span><span id="map_phon">' + phone + '</span></p><p class="map_goods">';
+							html += '<span id="map_map" data-addressid="' + data[i].AddressId + '" data-province="' + data[i].Province;
+							html += '" data-city="' + data[i].City + '" data-county="' + data[i].County;
+							html += '" data-town="' + data[i].Town + '"> ' + map + '</span></p>';
+							$("#map1").append(html);
+							$("#no_more").hide();
+							IsDefault = true;
+							return true;
+						} else {
+
+						};
+					};
+				};
+
+				if (IsDefault == false && data.length > 0) {
+					//
+					IsDefault = true;
+					var name = data[0].Consignee;
+					var phone = data[0].Mobile;
+					var map = data[0].Address;
+					var html = "";
+					$("#map_map").attr("data-Province", data[0].Province);
+					$("#map_map").attr("data-City", data[0].City);
+					$("#map_map").attr("data-County", data[0].County);
+					$("#map_map").attr("data-Town", data[0].Town);
+					$("#map_map").attr("data-AddressId", data[0].AddressId);
+					// 记录姓名 电话地址  并且赋值
+
+					html += '<div class="map_title cell-arrow" oncilck="MapChioce(this)"><p class="map_user"><span id="map_name">' +
+						name;
+					html += '</span><span id="map_phon">' + phone + '</span></p><p class="map_goods">';
+					html += '<span id="map_map" data-addressid="' + data[0].AddressId + '" data-province="' + data[0].Province;
+					html += '" data-city="' + data[0].City + '" data-county="' + data[0].County;
+					html += '" data-town="' + data[0].Town + '"> ' + map + '</span></p>';
+					$("#map1").append(html);
+					$("#no_more").hide();
+					$("#address_chioce").hide();
+
+				} else {
+
+				};
+
+
+
+			}, 'JSON');
+
+
+		});
+
+		//  手机号验证
+		function isPoneAvailable(phone) {
+			var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+			if (!myreg.test(phone)) {
+				return false;
+			} else {
+				return true;
+			};
+		};
+		//  提交验证地址
+		function testing() {
+			var name = $("#Consignee_Name").val();
+			var phone = $("#Consignee_Phone").val();
+			var maps1 = $("#S_Address3").val();
+			var maps2 = $("#Consignee_Map").val();
+			if (name != "") {
+				// 姓名验证通过
+				if (isPoneAvailable(phone)) {
+					// 手机号验证通过
+					if (maps1 != "") {
+						// 省市区验证通过
+						if (maps2 != "") {
+							return true;
+						} else {
+							$.alert("请输入详细地址!");
+							return false;
+						}
+					} else {
+						$.alert("请选择省市区县!");
+						return false;
+					}
+				} else {
+					$.alert("请核对手机号是否正确!");
+					return false;
+				}
+
+			} else {
+				$.alert("请填写收货人姓名!");
+				return false;
+			};
+
+		};
+
+		$("#Coupon").on("click", ".back", function () {
+			$("#Coupon").hide();
+		});
+
+		//  优惠券
+		$(".Coupon_tab_ul li").on("click", function () {
+			if ($($(this).find("span")).hasClass("chioce")) {
+
+			} else {
+				$($(".Coupon_tab_ul li").find("span")).removeClass('chioce');
+				var index = $(this).index();
+				if (index == 0) {
+					$($($(".Coupon_tab_ul li")[0]).find("span")).addClass("chioce");
+					$(".Coupon_con2").hide();
+					$(".Coupon_con1").show();
+					if ($($(".Coupon_con1").find("li")).length == 0) {
+						var html = "";
+						html += '<div class="Cou_nomore"><div class="Cou_nomore_content"><i class="iconfont">&#xe611;</i>';
+						html += '<span>很遗憾</span><p>您暂无可用的优惠券</p></div></div>';
+						$(".Coupon_con1").append(html);
+
+					};
+				} else {
+					$($($(".Coupon_tab_ul li")[1]).find("span")).addClass("chioce");
+					$(".Coupon_con1").hide();
+					$(".Coupon_con2").show();
+					if ($($(".Coupon_con2").find("li")).length == 0) {
+						var html = "";
+						html += '<div class="Cou_nomore"><div class="Cou_nomore_content"><i class="iconfont">&#xe611;</i>';
+						html += '<span>很遗憾</span><p>您暂无可用的优惠券</p></div></div>';
+						$(".Coupon_con2").append(html);
+
+					};
+				};
+			};
+		});
+
+
+		$("#invoice").on("click", ".back", function () {
+			$("#invoice").hide();
+		});
+
+
+		$(".Coupon_chioce").on("click", function () {
+			$("#Coupon").show();
+		});
+		//   发票
+
+		$("#Determine").on("click", function () {
+
+			//  验证表单
+			if ($("#geren").prop("checked")) {
+				//  选择的是个人   判断选择的是普通发票还是电子普通发票
+				var putong = $($($(".invoice_type").find(".type_chioce")).parents("li")).index();
+				if (putong == 0) {
+					//	 这里是普通发票  收票人手机是否为空
+
+					if (isPoneAvailable($($($(".invoice_user").find("input"))[0]).val())) {
+						// 验证成功   获取发票类型和发票内容
+
+						var leixing = $($(".invoice_type").find(".type_chioce")).text().trim();
+						var S_neirong = $($(".invoice_neitong").find(".type_chioce")).text().trim();
+						$("#invoice_p_title").text("电子(" + leixing + "-" + S_neirong + ")");
+						//  提交表单
+						//  隐藏dom
+						$("#invoice").hide();
+					} else {
+						//  验证失败
+						$.alert("请填写正确的手机号码!");
+					};
+				} else {
+					//  这里是电子发票   验证收票人手机号是否为空
+					if (isPoneAvailable($($($(".invoice_user").find("input"))[0]).val())) {
+						// 验证成功   获取发票类型和发票内容
+
+						//  提交表单
+						//  隐藏dom
+						var leixing = $($(".invoice_type").find(".type_chioce")).text().trim();
+						var S_neirong = $($(".invoice_neitong").find(".type_chioce")).text().trim();
+						$("#invoice_p_title").text("电子(" + leixing + "-" + S_neirong + ")");
+						$("#invoice").hide();
+					} else {
+						//  验证失败
+						$.alert("请填写正确的手机号码!");
+					};
+				};
+
+			} else {
+				var putong = $($($(".invoice_type").find(".type_chioce")).parents("li")).index();
+				//  选择的是单位
+				if (putong == 0) {
+					//	 这里是普通发票  收票人手机是否为空
+
+					if (isPoneAvailable($($($(".invoice_user").find("input"))[0]).val())) {
+						//
+						if ($("#shibiehao").val() != "") { // 验证纳税人识别号是否填写
+							//  // 验证成功   获取发票类型和发票内容
+							var leixing = $($(".invoice_type").find(".type_chioce")).text().trim();
+							var S_neirong = $($(".invoice_neitong").find(".type_chioce")).text().trim();
+							$("#invoice_p_title").text("电子(" + leixing + "-" + S_neirong + ")" + $("#gongsi_name").val());
+
+							//  提交表单
+
+							$("#invoice").hide();
+							//  隐藏dom
+						} else {
+							//  验证失败
+							$.alert("请填写纳税人识别号!");
+						}
+
+					} else {
+						//  验证失败
+						$.alert("请填写正确的手机号码!");
+					}
+				} else {
+					//  这里是电子发票   验证收票人手机号是否为空
+					if (isPoneAvailable($($($(".invoice_user").find("input"))[0]).val())) {
+
+						//
+						if ($("#shibiehao").val() != "") { // 验证纳税人识别号是否填写
+							//  // 验证成功   获取发票类型和发票内容;
+							var leixing = $($(".invoice_type").find(".type_chioce")).text().trim();
+							var S_neirong = $($(".invoice_neitong").find(".type_chioce")).text().trim();
+							$("#invoice_p_title").text("电子(" + leixing + "-" + S_neirong + ")" + $("#gongsi_name").val());
+
+							//  提交表单
+
+							$("#invoice").hide();
+							//  隐藏dom
+						} else {
+							//  验证失败
+							$.alert("请填写纳税人识别号!");
+						}
+					} else {
+						//  验证失败
+						$.alert("请填写正确的手机号码!");
+					};
+				};
+
+			};
+
+			// 提交表单    赋值dom
+
+			//  隐藏这个界面
+
+
+		});
+
+		// 发票
+		$(".type_tab_ul").on('click', 'li', function () {
+
+			if ($(this).index() == 0) {
+				$(".invoice_user").hide();
+				$(".type_tab span").removeClass('type_chioce');
+				$($(this).find("span")).addClass("type_chioce");
+			}
+			if ($(this).index() == 1) {
+				$(".invoice_user").show();
+				$(".type_tab span").removeClass('type_chioce');
+				$($(this).find("span")).addClass("type_chioce");
+			}
+			if ($(this).index() == 2) {
+				$.alert("本商品不支持开增值税发票");
+			}
+		});
+		$("#geren").change(function () {
+			if ($(this).prop('checked')) {
+				$(".gongsi").hide();
+			} else {
+				$(".gongsi").show();
+			}
+		});
+
+		$("#company").change(function () {
+
+			if ($(this).prop('checked')) {
+				$(".gongsi").show();
+			} else {
+				$(".gongsi").hide();
+			}
+		});
+
+		//  头部
+		$(".cityselect-nav").on('click', 'a', function () {
+			$(".cityselect-nav a").removeClass('crt');
+			$(this).addClass("crt");
+			if ($(this).index() == 0) {
+				$("#S_City_Show").removeClass('cityselect-next');
+				$("#S_City_Show").removeClass('cityselect-end');
+				$("#S_City_Show").addClass('cityselect-prev');
+
+			}
+			if ($(this).index() == 1) {
+				$("#S_City_Show").removeClass('cityselect-next');
+				$("#S_City_Show").removeClass('cityselect-end');
+				$("#S_City_Show").addClass('cityselect-prev');
+			}
+			if ($(this).index() == 2) {
+				$("#S_City_Show").removeClass('cityselect-end');
+				$("#S_City_Show").removeClass('cityselect-prev');
+				$("#S_City_Show").addClass('cityselect-next');
+			}
+			if ($(this).index() == 3) {
+				$("#S_City_Show").removeClass('cityselect-next');
+				$("#S_City_Show").removeClass('cityselect-prev');
+				$("#S_City_Show").addClass('cityselect-end');
+			}
+
+		});
+		$(".invoice_chioce").on("click", function () {
+			$("#invoice").show();
+		});
+		$("#Consignee_Map").on("click", function () {
+			$("#Consignee_Map").focus();
+		});
+
+		$(".cell-input").click(function () {
+			$(this).focus();
+		});
+
+		//   这里是佘坤改的城市4联动
+		//  选择省   加载市区
+		$("#Province_chioce").on("click", "a", function () {
+			var dom = $(this).parents("#Province_chioce");
+			$($(dom).find("a")).removeClass('crt');
+			$(this).addClass('crt');
+			var Province = $(this).attr("data-Province");
+			$($(".cityselect-nav").find("a")).removeClass('crt');
+			$($($(".cityselect-nav").find("a"))[0]).addClass('crt');
+			$($($(".cityselect-nav").find("a"))[0]).text($($(this).find('span')).text().trim());
+			$($(".cityselect-nav a")[0]).attr("data-Province", Province);
+
+
+			$.get('/m/Order/GetCityList', {
+				'Province': Province
+			}, function (data) {
+				var datas = JSON.parse(data);
+				var dete = datas.Data;
+				var html1 = "";
+				for (var i = 0; i < dete.length; i++) {
+					html1 += '<a class="" href="javascript:;" data-City="' + dete[i].RegionId + '"><span>';
+					html1 += dete[i].RegionName + '</span></a>'
+				};
+				$($("#City_chioce").find("a")).remove();
+				$("#City_chioce").append(html1);
+			}, 'JSON');
+		});
+		//  选择市  加载区
+		$("#City_chioce").on('click', 'a', function () {
+			var dom = $(this).parents("#City_chioce");
+			$($(dom).find("a")).removeClass('crt');
+			$(this).addClass('crt');
+			$($(".cityselect-nav").find("a")).removeClass('crt');
+			$($($(".cityselect-nav").find("a"))[1]).addClass('crt');
+			$($($(".cityselect-nav").find("a"))[1]).text($($(this).find('span')).text().trim());
+			var City = $(this).attr("data-City");
+			$($(".cityselect-nav a")[1]).attr("data-City", City);
+
+
+			$.get('/m/Order/GetCountyList', {
+				'City': City
+			}, function (data) {
+				var datas = JSON.parse(data);
+				var dete = datas.Data;
+				var html1 = "";
+				for (var i = 0; i < dete.length; i++) {
+					html1 += '<a class="" href="javascript:;" data-County="' + dete[i].RegionId + '"><span>';
+					html1 += dete[i].RegionName + '</span></a>';
+				}
+				$($("#County_chioce").find("a")).remove();
+				$("#County_chioce").append(html1);
+				$("#S_City_Show").removeClass('cityselect-prev');
+				$("#S_City_Show").addClass('cityselect-next');
+			}, 'JSON');
+		});
+		//  选择区  加载城镇
+		$("#County_chioce").on('click', 'a', function () {
+			var dom = $(this).parents("#County_chioce");
+			$($(dom).find("a")).removeClass('crt');
+			$(this).addClass('crt');
+			var County = $(this).attr("data-County");
+			$($(".cityselect-nav a")[2]).attr("data-County", County);
+
+			$($(".cityselect-nav").find("a")).removeClass('crt');
+			$($($(".cityselect-nav").find("a"))[2]).addClass('crt');
+			$($($(".cityselect-nav").find("a"))[2]).text($($(this).find('span')).text().trim());
+			$.get('/m/Order/GetTownList', {
+				'County': County
+			}, function (data) {
+				var datas = JSON.parse(data);
+				var dete = datas.Data;
+				var html1 = "";
+				for (var i = 0; i < dete.length; i++) {
+					html1 += '<a class="" href="javascript:;" data-Town="' + dete[i].RegionId + '"><span>';
+					html1 += dete[i].RegionName + '</span></a>';
+				}
+				$($("#Town_chioce").find("a")).remove();
+				$("#Town_chioce").append(html1);
+				$("#S_City_Show").removeClass('cityselect-next');
+				$("#S_City_Show").addClass('cityselect-end');
+			}, 'JSON');
+		});
+		//  选择镇
+		$("#Town_chioce").on('click', 'a', function () {
+			var dom = $(this).parents("#Town_chioce");
+			$($(dom).find("a")).removeClass('crt');
+			$(this).addClass('crt');
+			var Town = $(this).attr("data-Town");
+			$($(".cityselect-nav a")[3]).attr("data-Town", Town);
+			$($(".cityselect-nav").find("a")).removeClass('crt');
+			$($($(".cityselect-nav").find("a"))[3]).addClass('crt');
+			$($($(".cityselect-nav").find("a"))[3]).text($($(this).find('span')).text().trim());
+
+			$("#Show_City_Four").removeClass("brouce-in");
+			$("#Show_City_Four").addClass("brouce-out");
+			$(".mask-black").remove();
+
+			if (dizhiguanli) {
+				$("#S_Address3").attr("data-Province", $($(".cityselect-nav a")[0]).attr("data-Province"));
+				$("#S_Address3").attr("data-City", $($(".cityselect-nav a")[1]).attr("data-City"));
+				$("#S_Address3").attr("data-County", $($(".cityselect-nav a")[2]).attr("data-County"));
+				$("#S_Address3").attr("data-Town", $($(".cityselect-nav a")[3]).attr("data-Town"));
+				$("#S_Address3").val($($(".cityselect-nav a")[0]).text() + '-' + $($(".cityselect-nav a")[1]).text() + '-' + $($(".cityselect-nav a")[2]).text() + '-' + $($(".cityselect-nav a")[3]).text());
+			} else {
+				$("#S_Address2").attr("data-Province", $($(".cityselect-nav a")[0]).attr("data-Province"));
+				$("#S_Address2").attr("data-City", $($(".cityselect-nav a")[1]).attr("data-City"));
+				$("#S_Address2").attr("data-County", $($(".cityselect-nav a")[2]).attr("data-County"));
+				$("#S_Address2").attr("data-Town", $($(".cityselect-nav a")[3]).attr("data-Town"));
+				$("#S_Address2").val($($(".cityselect-nav a")[0]).text() + '-' + $($(".cityselect-nav a")[1]).text() + '-' + $($(".cityselect-nav a")[2]).text() + '-' + $($(".cityselect-nav a")[3]).text());
+
+			};
+
+		});
+
+
+
+
+		//   删除地址
+		$("#address_remove").on("click", function () {
+
+			if (shanchu) {
+				shanchu = false;
+				$("#address_remove").text("删除地址");
+				$("body .con_img").attr("src", "/Images/mobile/goods/right.png");
+			} else {
+				shanchu = true;
+				$("#address_remove").text("选择地址");
+				$("body .con_img").attr("src", "/Images/mobile/goods/left1.png");
+			};
+
+			// 	AddressDetele
+		});
+
+		//  清空所有的input
+		function clearInput() {
+			$("#Consignee_Name").val("");
+			$("#Consignee_Phone").val("");
+			$("#Consignee_Map").val("");
+			//  省市区暂时不知道是个什么形式的  先空着
+		};
+
+	
+
+		function MapChioce(_this) {
+			$.get('/m/Order/Address', {}, function (data) {
+				var datas = JSON.parse(data);
+				var dete = datas.Data;
+				var html = "";
+				for (var i = 0; i < data.length; i++) {
+					var map3 = data[i].Address.split("__")[0];
+
+					var map4 = data[i].Address.split("__")[1];
+					html += '<li class="con_li"><div class="con_left" onclick ="addchiceShow(this)">';
+					html += '<div class="con_top"><span class="con_name">' + data[i].Consignee + '</span><span class="con_phon">' +
+						data[i].Mobile;
+					html += '</span></div><div class="con_down" data-AddressId ="' + data[i].AddressId +
+						'"> <span class="shengshi" data-zone="' + data[i].ZoneId + '">';
+					html += map3 + '</span><span class="xiangxi">' + map4 +
+						'</span></div></div><div class="con_right" onclick="conRight(this)"';
+					html += 'data-AddressId ="' + data[i].AddressId + '"data-Province ="' + data[i].Province + '"' + 'data-City ="' +
+						data[i].City + '"' + 'data-County ="' + data[i].County + '"' + 'data-Town ="' + data[i].Town + '"' +
+						'data-IsDefault="' + data[i].IsDefault +
+						'"><img class="con_img" src="/Images/mobile/goods/right.png" alt=""></div></li>';
+				}
+				$($("#adddress_list").find(".con_li")).remove();
+				$("#adddress_list").append(html);
+			}, 'JSON');
+			$("#address_chioce").show();
+		};
+		//  选择地址
+		function addchiceShow(_this) {
+
+
+			// 记录姓名 电话地址  并且赋值
+			var name = $($(_this).find(".con_name")).text().trim();
+			var phone = $($(_this).find(".con_phon")).text().trim();
+			var map = $($(_this).find(".con_down")).text().trim();
+			var dom = $($(_this).parents(".con_li"));
+			$($("#map1").find(".map_title")).remove();
+			$("#map_map").attr("data-Province", $($(dom).find(".con_right")).attr("data-Province"));
+			$("#map_map").attr("data-City", $($(dom).find(".con_right")).attr("data-City"));
+			$("#map_map").attr("data-County", $($(dom).find(".con_right")).attr("data-County"));
+			$("#map_map").attr("data-Town", $($(dom).find(".con_right")).attr("data-Town"));
+			$("#map_map").attr("data-AddressId", $($(dom).find(".con_right")).attr("data-AddressId"));
+			var html = "";
+			html += '<div class="map_title cell-arrow" oncilck="MapChioce(this)"><p class="map_user"><span id="map_name">' +
+				name;
+			html += '</span><span id="map_phon">' + phone + '</span></p><p class="map_goods">';
+			html += '<span id="map_map" data-addressid="' + $($(dom).find(".con_right")).attr("data-AddressId") +
+				'" data-province="' + $($(dom).find(".con_right")).attr("data-Province");
+			html += '" data-city="' + $($(dom).find(".con_right")).attr("data-City") + '" data-county="' + $($(dom).find(
+				".con_right")).attr("data-County");
+			html += '" data-town="' + $($(dom).find(".con_right")).attr("data-Town") + '"> ' + map + '</span></p>';
+
+
+
+
+			$("#map1").append(html);
+			$("#no_more").hide();
+			$("#address_chioce").hide();
+			getYou();
+		};
+
+		//  编辑地址
+		//  编辑地址
+		function conRight(_this) {
+
+			if (shanchu) {
+				var dom = $($(_this).parents(".con_li"));
+
+				$(".con_li").removeClass("baocun");
+				var addressId = $($(dom).find(".con_right")).attr('data-AddressId');
+
+				//  这里是删除的操作    这里传什么参数    重新获取列表;
+
+				//  这里是提示确定要删除此地址吗
+				//	$.toast
+				 $.confirm("您确定要删除吗?", "删除地址", function() {
+					$.post('/m/Order/AddressDelete', {
+								'AddressId': addressId
+							}, function (data) {
+						
+								var datas = JSON.parse(data);
+						
+								if (datas.Message == "删除成功") {
+									//  重新获取地址参数
+									dom.remove();
+									$.get('/m/Order/Address', {}, function (datas) {											
+										var detes =JSON.parse(datas);	
+										var datass = detes.Data;
+										if (datass.length != 0) {
+											var html = "";
+											for (var i = 0; i < datass.length; i++) {
+												var map3 = datass[i].Address.split("__")[0];
+
+												var map4 = datass[i].Address.split("__")[1];
+												html += '<li class="con_li"><div class="con_left" onclick ="addchiceShow(this)">';
+												html += '<div class="con_top"><span class="con_name">' + datass[i].Consignee +
+													'</span><span class="con_phon">' + datass[i].Mobile;
+												html += '</span></div><div class="con_down" data-AddressId ="' + datass[i].AddressId +
+													'"> <span class="shengshi" data-zone="' + datass[i].ZoneId + '">';
+												html += map3 + '</span><span class="xiangxi">' + map4 +
+													'</span></div></div><div class="con_right" onclick="conRight(this)"';
+												html += 'data-AddressId ="' + data[i].AddressId + '"data-Province ="' + datass[i].Province + '"' +
+													'data-City ="' + datass[i].City + '"' + 'data-County ="' + datass[i].County + '"' + 'data-Town ="' +
+													datass[i].Town + '"' + 'data-IsDefault="' + datass[i].IsDefault +
+													'"><img class="con_img" src="/Images/mobile/goods/left1.png" alt=""></div></li>';
+											}
+											$($("#adddress_list").find(".con_li")).remove();
+											$("#adddress_list").append(html);
+										} else {
+											//  这里是等于0  意味着没有地址
+											$.alert("当前没有地址，快去添加地址吧!");
+											var a = "";
+											//	a ='<a id="no_more" style="display:block">去选择地址</a>'
+											//	$("#map1").append(a);
+											$("#address_remove").text("删除地址");
+											shanchu = false;
+											$("body #no_more").show();
+
+											$(".map_title").remove();
+
+										}
+
+									}, 'JSON');
+									$("#address_chioce").show();
+
+								} else {
+									$.alert("删除失败");
+								}
+							}, 'JSON');
+					}, function() {
+					//取消操作
+					
+				});
+
+			
+
+			} else {
+				//  这里是编辑的操作     拿到默认的值	 在GET的时候就需要把默认的值赋上去
+				bianji = true;
+				//  拿值传给 input
+				var dom = $($(_this).parents(".con_li"));
+				$(".con_li").removeClass("baocun");
+				dom.addClass("baocun");
+
+				var addressId = $(dom.find(".con_right")).attr("data-AddressId");
+
+				var name = $($(dom).find(".con_name")).text().trim();
+				var phone = $($(dom).find(".con_phon")).text().trim();
+				var map = $($(dom).find(".xiangxi")).text().trim();
+
+				$("#Consignee_Name").val(name);
+				$("#Consignee_Phone").val(phone);
+				$("#Consignee_Map").val(map);
+				var Province = $(_this).attr("data-Province");
+				var City = $(_this).attr("data-City");
+				var County = $(_this).attr("data-County");
+				var Town = $(_this).attr("data-Town");
+				var IsDefault = $(_this).attr("data-IsDefault");
+				//  $.loading.close();
+				BSheng(Province, City, County, Town);
+				if (IsDefault == 1) {
+					$("#morenMap").prop("checked", "checked");
+				} else {
+					$("#morenMap").removeClass("checked");
+				}
+				$("body #select_add").show();
+			};
+
+		};
+
+		//  筛选省
+		function BSheng(Province, City, County, Town) {
+			//	$.loading.open('加载中');
+
+			for (var i = 0; i < $("#Province_chioce a").length; i++) {
+				var dom = $($("#Province_chioce a")[i]);
+				if (Province == $(dom).attr("data-Province")) {
+					$("#Province_chioce a").removeClass("crt");
+					$($(".cityselect-nav a")[0]).text(dom.text());
+					dom.addClass("crt");
+					// 筛选市
+					$.get('/m/Order/GetCityList', {
+						'Province': Province
+					}, function (data) {
+						var datas = JSON.parse(data);
+						var dete = datas.Data;
+						var html1 = "";
+						for (var i = 0; i < dete.length; i++) {
+							html1 += '<a class="" href="javascript:;" data-City="' + dete[i].RegionId + '"><span>';
+							html1 += dete[i].RegionName + '</span></a>'
+						};
+						$($("#City_chioce").find("a")).remove();
+						$("#City_chioce").append(html1);
+						BShi(City, County, Town);
+					}, 'JSON');
+
+				} else {
+
+				};
+			};
+
+		};
+		//  筛选市
+		function BShi(City, County, Town) {
+
+			for (var i = 0; i < $("#City_chioce a").length; i++) {
+				var dom = $($("#City_chioce a")[i]);
+				if (City == $(dom).attr("data-City")) {
+					$("#City_chioce a").removeClass("crt");
+					$($(".cityselect-nav a")[1]).text(dom.text());
+					dom.addClass("crt");
+					// 筛选市
+					$.get('/m/Order/GetCountyList', {
+						'City': City
+					}, function (data) {
+						var datas = JSON.parse(data);
+						var dete = datas.Data;
+						var html1 = "";
+						for (var i = 0; i < dete.length; i++) {
+							html1 += '<a class="" href="javascript:;" data-County="' + dete[i].RegionId + '"><span>';
+							html1 += dete[i].RegionName + '</span></a>';
+						}
+						$($("#County_chioce").find("a")).remove();
+						$("#County_chioce").append(html1);
+						$("#S_City_Show").removeClass('cityselect-prev');
+						$("#S_City_Show").addClass('cityselect-next');
+						BQu(County, Town);
+					}, 'JSON');
+
+				} else {
+
+				};
+			};
+		};
+
+		//  筛选区
+		function BQu(County, Town) {
+
+			for (var i = 0; i < $("#County_chioce a").length; i++) {
+				var dom = $($("#County_chioce a")[i]);
+				if (County == $(dom).attr("data-County")) {
+					$("#County_chioce a").removeClass("crt");
+					$($(".cityselect-nav a")[2]).text(dom.text());
+					dom.addClass("crt");
+					// 筛选市
+					$.get('/m/Order/GetTownList', {
+						'County': County
+					}, function (data) {
+						var datas = JSON.parse(data);
+						var dete = datas.Data;
+						var html1 = "";
+						for (var i = 0; i < dete.length; i++) {
+							html1 += '<a class="" href="javascript:;" data-Town="' + dete[i].RegionId + '"><span>';
+							html1 += dete[i].RegionName + '</span></a>';
+						}
+						$($("#Town_chioce").find("a")).remove();
+						$("#Town_chioce").append(html1);
+						$("#S_City_Show").removeClass('cityselect-next');
+						$("#S_City_Show").addClass('cityselect-end');
+						BTown(Town);
+					}, 'JSON');
+
+				} else {
+
+				};
+			};
+		};
+
+		//  筛选镇
+		function BTown(Town) {
+
+			for (var i = 0; i < $("#Town_chioce a").length; i++) {
+				var dom = $($("#Town_chioce a")[i]);
+				if (Town == $(dom).attr("data-Town")) {
+					$("#Town_chioce a").removeClass("crt");
+					$($(".cityselect-nav a")[3]).text(dom.text());
+					dom.addClass("crt");
+					$("#S_Address3").val($($(".cityselect-nav a")[0]).text() + "-" + $($(".cityselect-nav a")[1]).text() + "-" + $($(
+						".cityselect-nav a")[2]).text() + "-" + $($(".cityselect-nav a")[3]).text());
+
+					$(".cityselect-nav a").removeClass("crt");
+					$($(".cityselect-nav a")[3]).addClass("crt");
+					//	 $.loading.close()
+
+
+				} else {
+
+				};
+			};
+		};
+
+		//  计算价格
+		Total();
+
+		function Total() {
+			if($(".tab-active").index() == 0){
+				$("#amount_formated").text($("#goods_tags").text());
+				$("#goods_tags").parents("li").show();
+			}else{
+				$("#amount_formated").text("0.00");
+				$("#goods_tags").parents("li").hide();
+				$($(".sub_con")[1]).hide();
+			}
+		};
+	function getYou(){
+			$.get('/m/Order/GetShipTemplate?t='+Math.random, {
+						Province: $("#map_map").attr("data-province"),
+						City :$("#map_map").attr("data-city"),
+						 Country: $("#map_map").attr("data-county"),
+						 Town:$("#map_map").attr("data-town")
+					}, function (data) {
+				
+					var datas = JSON.parse(data);
+						console.log(datas);
+						if(datas.Code == 1){
+							console.log(111);
+                            var zongzhong = 0;
+                            for(var i = 0; i <$(".list-item").length; i++){
+                                zongzhong += $($(".list-item")[i]).attr("data-weight") * Number($($($(".list-item")[i]).find(".list_number")).text().trim());
+                            }
+							console.log(zongzhong);
+                            if((zongzhong - datas.Data.Weight) <= 0){
+                                $(".Weight").val(zongzhong);
+                                $("#goods_tags").text(datas.Data.Price);
+								console.log(datas.Data.Price);
+
+                            }else{
+                                    var gaicheng = zongzhong - datas.Data.Weight;
+                                    if(gaicheng % datas.Data.AddWeight !=0 && gaicheng % datas.Data.AddWeight <0.5){
+                                      var cheng =   Number((gaicheng/datas.Data.AddWeight).toFixed(0)) + 1;                                        
+                                        $("#goods_tags").text((datas.Data.Weight + cheng * datas.Data.AddPrice).toFixed(2));
+                                    }else{
+                                        var cheng =  Number((gaicheng/datas.Data.AddWeight).toFixed(0));
+                                        $("#goods_tags").text((datas.Data.Weight + cheng * datas.Data.AddPrice).toFixed(2));
+                                    }
+                            }
+
+
+                                Total();
+						}else{
+							 $.alert("网络错误");
+						}
+					}, 'JSON');
+		};   
+
+		setTimeout(function(){
+			getYou();
+		},1000);
+
+		function tijiao() {
+			
+			if($(".tab-active").index() == 0){
+				ShipFee = $("#goods_tags").text();
+			}else{
+				ShipFee = 0;
+			}
+			PayScore =zongJIfen;
+		//  积分抵扣的钱	PayCreditMoney 
+			 Weight = $(".Weight").val();
+			
+				//   邮费 重量 
+			 $.ajax({
+             type: "post",
+			 
+             url: "/m/Order/GiftOrderAdd",
+             data: {AddressId: AddressId, // 地址
+					RegionId: RegionId, // 地区邮寄地区的最后一个的id
+					ShipMode: ShipMode, // 配送方式   1  2  4				
+					PayScore :PayScore,  // 使用的积分
+					ItemId: ItemId, // 如果是直接过来穿商品ID					
+					Quantity: Quantity, // 如果是直接过来 这里穿数量				
+					Memo: Memo, // 订单备注				
+					Consignee: Consignee, // 收货人姓名
+					Mobile: Mobile, // 联系电话
+					ShipTime: ShipTime, // 提货时间
+					ShopId: ShopId, // 自提店铺
+					Procince: Procince, // 选择的省
+					City: City, // 选择的市
+					County: County, // 选择的区
+					Town: Town, // 选择的镇
+					Address: Address, // 详细地址				
+					OrderAmount: OrderAmount, // 订单结算后的总金额
+					ShipFee:ShipFee,
+					Weight:Weight
+				},
+             
+             success: function(data){
+		
+			var datas =JSON.parse(data);
+					if (datas.Message == "恭喜您，订单已成功提交！") {
+						
+						var url = datas.Data;
+
+						location.href = url;
+						return true;
+					} else {
+						$.alert(datas.Message);
+
+					}
+            },
+			error:function(res){
+				alert(res);
+			}
+           });	
+			
+	
+			};
+
+
+
+
+	
+	
+	</script>
+  <script type="text/javascript">
+	// 百度地图API功能
+	var cityNames = "";
+	var map = new BMap.Map("allmap");
+	var point = new BMap.Point(116.331398, 39.897445);
+	map.centerAndZoom(point, 12);
+
+	function myFun(result) {
+		var cityName = result.name;
+		map.setCenter(cityName);
+		//   这里是当前的城市
+		cityNames = cityName;
+		getCity(cityNames);
+		//	alert("当前定位城市:"+cityName);
+	};
+	var myCity = new BMap.LocalCity();
+	myCity.get(myFun);
+
+	function getCity(cityNames) {
+		// 百度地图API功能
+
+		var map = new BMap.Map("l-map");
+		console.log(cityNames);
+		map.centerAndZoom(cityNames, 12);
+	};
+
+	// 初始化地图,设置城市和地图级别。
+	function G(id) {
+		return document.getElementById(id);
+	};
+	var ac = new BMap.Autocomplete( //建立一个自动完成的对象
+		{
+			"input": "Consignee_Map",
+			"location": map
+		});
+
+	ac.addEventListener("onhighlight", function (e) { //鼠标放在下拉列表上的事件
+		var str = "";
+		var _value = e.fromitem.value;
+		var value = "";
+		if (e.fromitem.index > -1) {
+			value = _value.province + _value.city + _value.district + _value.street + _value.business;
+		};
+		str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+
+		value = "";
+		if (e.toitem.index > -1) {
+			_value = e.toitem.value;
+			value = _value.province + _value.city + _value.district + _value.street + _value.business;
+		};
+		str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+		G("searchResultPanel").innerHTML = str;
+	});
+
+	var myValue;
+	ac.addEventListener("onconfirm", function (e) { //鼠标点击下拉列表后的事件
+		var _value = e.item.value;
+		myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+		G("searchResultPanel").innerHTML = "onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+		console.log(myValue); // 这里是地图点击后的获取的汗汉字坐标信息
+
+		setPlace();
+	});
+
+
+	function setPlace() {
+		map.clearOverlays(); /*清除地图上所有覆盖物*/
+		function myFun() {
+			var pp = local.getResults().getPoi(0).point; //获取第一个智能搜索的结果
+			map.centerAndZoom(pp, 18);
+			map.addOverlay(new BMap.Marker(pp)); //添加标注
+		}
+		var local = new BMap.LocalSearch(map, { //智能搜索
+			onSearchComplete: myFun
+		});
+		local.search(myValue);
+	}; 
+</script>
+
+</body>
+
+</html>

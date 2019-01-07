@@ -1,0 +1,469 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>积分红包-@{@WorkContext.SellerInfo.SellerName} </title>
+    <link rel="stylesheet" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css" />
+    <link rel="stylesheet" type="text/css" href="/Css/Mobile/scoretopacket.css" />
+    <script type="text/javascript" charset="utf-8" src="/Js/Mobile/zepto.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/Mobile/weui/ydui.flexible.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/Js/vue/dist/vue.min.js"></script>
+    <script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script>
+    wx.config({
+        debug: false, /* 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。*/
+        appId: '@ViewData["AppId"]', /* 必填，公众号的唯一标识*/
+        timestamp: '@ViewData["Timestamp"]', /* 必填，生成签名的时间戳*/
+        nonceStr: '@ViewData["NonceStr"]', /* 必填，生成签名的随机串*/
+        signature: '@ViewData["Signature"]',/* 必填，签名*/
+        jsApiList: [
+            'checkJsApi',
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'onMenuShareQQ',
+            'onMenuShareWeibo',
+            'hideMenuItems',
+            'showMenuItems',
+            'hideAllNonBaseMenuItem',
+            'showAllNonBaseMenuItem',
+            'translateVoice',
+            'startRecord',
+            'stopRecord',
+            'onRecordEnd',
+            'playVoice',
+            'pauseVoice',
+            'stopVoice',
+            'uploadVoice',
+            'downloadVoice',
+            'chooseImage',
+            'previewImage',
+            'uploadImage',
+            'downloadImage',
+            'getNetworkType',
+            'openLocation',
+            'getLocation',
+            'hideOptionMenu',
+            'showOptionMenu',
+            'closeWindow',
+            'scanQRCode',
+            'chooseWXPay',
+            'openProductSpecificView',
+            'addCard',
+            'chooseCard',
+            'openCard'
+        ]
+    });
+    wx.error(function (res) {
+        console.log(res);
+    });
+    wx.ready(function () {
+        $(function(){
+            if("@WorkContext.Uid" < 1){
+                var link='https://'+window.location.host+'/m/account/Login?LeaderUid='+vm.leaderUid+'&ItemId='+itemid;
+            }else{
+                var link = window.location.href+'&LeaderUid='+vm.leaderUid;
+            }
+            var Logo = "@WorkContext.SellerInfo.Logo";
+            var imgUrl = '@(Request.Url.Scheme)://' + '@HttpContext.Current.Request.Url.Host' + '/Images/Mobile/redpacket_icon.png';
+            var desc = "消费增值 , 人人受益";
+            /*转发到朋友圈*/
+            wx.onMenuShareTimeline({
+                title: "秦商未来红包",
+                link: link,
+                imgUrl: imgUrl,
+                success: function () {
+                    /*alert('转发成功！');*/
+                },
+                cancel: function () {
+                    /*alert('转发失败！');*/
+                }
+            });
+            wx.onMenuShareAppMessage({
+                title: "秦商未来红包",
+                desc: desc,
+                link: link,
+                imgUrl: imgUrl,
+                type: "link",
+                dataUrl: "",
+                success: function () {
+                    /*alert('转发成功！');*/
+                },
+                cancel: function () {
+                   /* alert('转发失败！');*/
+                }
+            });
+        });
+    });
+</script>
+</head>
+
+<body>
+    <div class="container" id="app" v-cloak>
+    	<div class="weui-flex">
+            <div class="weui-flex-item lt" v-on:click="goToBack()"><span class="icon iconfont">&#xe60e;</span></div>
+            <div class="weui-flex-item center">积分红包</div>
+            <div class="weui-flex-item rt" v-on:click="share()"><span class="icon iconfont">&#xe620;</span></div>
+        </div>
+        <div class="header">
+            <div class="user-avatar">
+                <div class="tx">
+                    <img v-bind:src="headimgurl" />
+                </div>
+                <div class="information">
+                    <div class="username">{{userInfo.username}}<i class="pin-icon">拼</i></div>
+                    <div>{{Memo}}</div>
+                    <div class="open-amount" v-show="scoreView">
+                        <strong class="score">{{getRedPacket}}</strong>积分
+                        <div class="score-tips">已存入积分钱包, 可直接消费</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-bind:class="[scoreView ? 'weui_cells_open':'','weui_cells']">
+            <div class="weui_cells_title">
+                已领取{{already}}/{{userInfo.redpackecount}}个, 已拆{{dismantling}}/{{userInfo.redpacketsum}}积分
+            </div>
+            <div class="weui_cell" v-for="(item , index) of redPacketList" :key="index">
+                <div class="weui_cell_hd">
+                	<img v-bind:src="item.headimgurl" alt="" />
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p class="claim">{{item.username}}</p>
+                    <p class="receive_time">{{item.addtime}}</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <div>{{item.getredpacket}}积分</div>
+                    <div class="weui_cell_max" v-if="maxValue == item.getredpacket"><i class="icon iconfont">&#xe669;</i>手气最佳</div>
+                </div>
+            </div>
+        </div>
+		<div class="mask" v-show="openPacket">
+			<!--拆红包-->
+			<div class="open-packet" v-show="packetShow">
+				<div class="red-packet-title" v-show="titleStatus">{{titlePacket}}</div>
+                <div class="red-packet-title" v-show="memoStatus">{{Memo}}</div>
+				<div class="red-packet-text">{{userInfo.username}}</div>
+				<div class="red-packet-text2">发了一个积分红包 , 金额随机</div>
+				<div class="red-packet-tips" v-on:click="close()">查看领取详情<i class="icon iconfont">&#xe7f9;</i></div>
+				<div v-bind:class="[rotate? 'rotate': '','red-packet-btn']" v-show="nonePacket" v-on:click="open()">抢</div>
+				<div class="icon iconfont close-packet" v-on:click="close()">&#xe654;</div>
+			</div>
+			<!--分享-->
+			<div class="wx-share" v-show="shareShow" v-on:click="closeShare()">
+		        <div class="share-img"></div>
+		        <p class="share-tips">点击右上角分享</p>
+		    </div>
+            <!--登录-->
+            <div class="login-page" v-show="login">
+                请立即登录领取红包
+                <div class="login">
+                    <a v-bind:href="loginHref">{{loginText}}<i class="icon iconfont blink">&#xe660;</i></a>
+                </div>
+            </div>
+		</div>
+        <div class="score_packet_tips">未领取的积分,将于48小时后退回</div>
+    </div>
+</body>
+<script>
+    var itemid =  '@ViewData["ItemId"]';
+	var vm = new Vue({
+		el: "#app",
+		data: {
+            IsWeiXin: "@WebHelper.IsWeiXin()",
+			IsApp: "@WorkContext.IsApp",
+            userid: "@WorkContext.Uid",
+            leaderUid: 0,
+			openPacket: false,
+			scoreView: false,
+			packetShow: true,
+			shareShow: false,
+			nonePacket: true,
+			rotate:false,
+            login: false,
+			imageUrl: "/Images/Mobile/redpacket_icon.png",
+            getRedPacket: 0,
+			titlePacket: "消费增值 , 人人受益", //手慢了,积分抢完了
+            Memo: "",
+            titleStatus: true,
+            memoStatus: false,
+            redPacketList: [],
+            userInfo: {},
+            loginHref: "",
+            loginText: "去登录",
+            dismantling: 0,
+            already: 0,
+            headimgurl: "",
+            maxValue: 0,
+		},
+		created: function() {
+			var that = this;
+                that.getRedPacketList(0);
+                that.getSendRedPacketInfo();
+                that.initDetail(); //初始判断抢没抢红包
+		},
+		methods: {
+            initDetail: function(){
+                var that = this;
+                $.ajax({
+                    type:"get",
+                    url: "/Api/Activity/ScoreRedPacketDetail",
+                    dataType: "json",
+                    async: true,
+                    data: {
+                        ItemId: itemid,
+                        UserId: that.userid,
+                    },
+                    success: function(res){
+                        //console.log(res);
+                        if (res.code == 1) {  //  自己拆过
+                            that.openPacket = false;
+                            that.scoreView = !that.scoreView;
+                            that.getRedPacket = res.data.getredpacket;
+                        }else{
+                            that.openPacket = true; //  自己没有拆
+                        }
+                    },
+                    error: function(res){
+                        console.log("ajax error");
+                    }
+                });
+            },
+			close: function(){
+				var that = this;
+				that.openPacket = !that.openPacket;
+			},
+            toole:function(){
+                var that = this;
+                $.ajax({
+                    type:"post",
+                    url: "/Api/Activity/ScoreRedPacketGet",
+                    dataType: "json",
+                    async: true,
+                    data: {
+                        ItemId: itemid,
+                        GetUserId: that.userid,
+                    },
+                    success: function(res){
+                        //console.log(res);
+                        if (res.code == 1) {
+                            that.getRedPacket = res.data.getredpacket;
+                            that.openPacket = !that.openPacket;
+                            that.scoreView = !that.scoreView;
+                            that.getRedPacketList(1);
+                            that.getSendRedPacketInfo();
+                        }else if(res.code == 2){
+                            //判断红包已拆完
+                            that.nonePacket = false;
+                            that.titlePacket = res.message;
+                            that.titleStatus = true;
+                            that.memoStatus = false;
+                        }else if(res.code == 3){
+                            //判断红包过期
+                            that.nonePacket = false;
+                            that.titlePacket = res.message;
+                            that.titleStatus = true;
+                            that.memoStatus = false;
+                        }else{
+                            console.log(res.message);
+                        }
+                    },
+                    error: function(res){
+                        console.log("ajax error");
+                    }
+                });
+            },
+			open: function(){
+				var that = this;
+                if(that.userid > 0){
+                    that.rotate = !that.rotate;
+                    setTimeout(that.toole, 1000);
+                }else{
+                    that.packetShow = !that.packetShow;
+                    that.login = !that.login;
+                    if(that.IsWeiXin == "False"){
+                        that.loginHref = "/m/account/Login?LeaderUid="+that.leaderUid;
+                        that.loginText = "去注册";
+                    }else{
+                        that.loginHref = "/m/user/Bind?LeaderUid="+that.leaderUid;
+                        that.loginText = "去登录";
+                    }
+                }
+			},
+            getSendRedPacketInfo: function(){
+                var that = this;
+                $.ajax({
+                    type:"get",
+                    url: "/Api/Activity/ScoreRedPacket?v="+Math.random(),
+                    dataType: "json",
+                    async: false,  //设置false，否则that.leaderUid = res.data.userid; 获取不到
+                    data: {
+                        ItemId: itemid,
+                    },
+                    success: function(res){
+                        if (res.code == 1) {
+                            that.userInfo = res.data;
+                            that.leaderUid = res.data.userid;  //获取leaderUid;
+                            that.dismantling = (Number(res.data.redpacketsum) - Number(res.data.redpacketremain)).toFixed(2);
+                            that.already = Number(res.data.redpackecount) - Number(res.data.redpacketnum);
+                            // 判断memo
+                            if(res.data.memo == "" || res.data.memo == null){
+                                that.Memo = "消费增值 , 人人受益";
+                            }else{
+                                that.Memo = res.data.memo;
+                            }
+                            that.memoStatus = !that.memoStatus;
+                            that.titleStatus = !that.titleStatus;
+                            //判断自己头像
+                            if(res.data.headimgurl.indexOf("http") > -1){
+                                that.headimgurl = res.data.headimgurl;
+                            }else if (res.data.headimgurl.indexOf("upload") > -1) {
+                                that.headimgurl = '@(WorkContext.ShopConfig.ImageCDN)/'+res.data.headimgurl;
+                            }else{
+                                that.headimgurl = "/images/photo.png";
+                            }
+
+                            if(res.data.status == 2){
+                                //页面初始化时代表红包已经拆完了，并且遍历领取人列表获取领取最大面额积分
+                                var listContent = that.redPacketList;
+                                var valueList = [];
+                                var max = "";
+                                listContent.forEach(function(el , index){
+                                    valueList.push(el.getredpacket);
+                                    max = valueList[0];
+                                    valueList.forEach(function(o , v){
+                                        if(max < o){
+                                            max = o;
+                                        }
+                                    });
+                                });
+                                that.maxValue = max;
+                                //  初始判断红包已拆完时，按钮不显示
+                                that.nonePacket = false;
+                                that.titlePacket = "红包已拆完";
+                                that.titleStatus = true;
+                                that.memoStatus = false;
+                            }
+                            if(res.data.status == 3){
+                                //  初始判断红包已过期时，按钮不显示
+                                that.nonePacket = false;
+                                that.titlePacket = "红包已过期";
+                                that.titleStatus = true;
+                                that.memoStatus = false;
+                            }
+                        }else{
+                            that.nonePacket = !that.nonePacket;
+                            that.titlePacket = res.message;
+                        }
+                    },
+                    error: function(res){
+                        console.log("ajax error");
+                    }
+                });
+            },
+            getRedPacketList: function(num){
+                var that = this;
+                $.ajax({
+                    type: "get",
+                    url: "/Api/Activity/GetScoreRedPacketDetailList?v="+Math.random(),
+                    dataType: "json",
+                    async: false,  //设置false 使得getSendRedPacketInfo方法当res.data.status == 2时，遍历领取人列表领取最大面额积分
+                    data: {
+                        ItemId: itemid,
+                    },
+                    success: function(res){
+                        if (res.code == 1) {
+                            var data = res.data;
+                            if (num) {
+                                //点击抢红包时判断num以清空列表数组重新赋值
+                                that.redPacketList = [];
+                            }
+                            data.forEach(function(el, index){
+                                that.redPacketList.push(el);
+                                //判断列表头像
+                                if(el.headimgurl.indexOf("http") > -1){
+                                    el.headimgurl = el.headimgurl;
+                                }else if (el.headimgurl.indexOf("upload") > -1) {
+                                    el.headimgurl = '@(WorkContext.ShopConfig.ImageCDN)/'+el.headimgurl;
+                                }else{
+                                    el.headimgurl = "/images/photo.png";
+                                }
+                            });
+                        }else{
+                            console.log(res.message);
+                        }
+                    },
+                    error: function(res){
+                        console.log("ajax error");
+                    }
+                });
+            },
+			//分享交互
+			share: function(){
+				var that = this;
+				if(that.IsApp==1){
+					var type = 2;
+					var title = '秦商未来红包';
+					var url = '@(Request.Url.Scheme)://'+'@(WorkContext.ShopConfig.SiteUrl)'+'m/activity/ScoreOpenPacket?&LeaderUid='+that.leaderUid+'&ItemId='+itemid;
+		            var Logo = '@WorkContext.SellerInfo.Logo';
+		            var imageUrl = '@(Request.Url.Scheme)://'+'@(WorkContext.ShopConfig.SiteUrl)'+'/Images/Mobile/redpacket_icon.png';
+		            var describe = "消费增值 , 人人受益";
+		            var text="";
+		            var json = {
+		            	type: type,
+		            	title: title,
+		            	imageUrl: imageUrl,
+		            	describe: describe,
+		            	url: url,
+		            	LeaderUid: that.leaderUid,
+		            	text: ""
+		            }
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						shareWithTypes(type,title,imageUrl,describe,url,text);
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+						window.js.shareWithTypes(JSON.stringify(json));
+					}
+				}else{
+					that.openPacket = !that.openPacket;
+					that.shareShow = !that.shareShow;
+					that.packetShow = false;
+				}
+			},
+			closeShare: function(){
+				var that = this;
+					that.openPacket = !that.openPacket;
+					that.shareShow = !that.shareShow;
+			},
+			//返回交互
+			goToBack: function(){
+				var that = this;
+				if(that.IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+		                window.js.goBack();
+					}
+				}else{
+					// window.history.back();
+                    //self.location=document.referrer;
+                    window.location.href="/m/usercenter/home";
+				}
+			}
+		}
+	});
+</script>
+
+
+</html>

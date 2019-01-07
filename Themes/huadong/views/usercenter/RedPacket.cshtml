@@ -1,0 +1,243 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>我的余额-@{@WorkContext.SellerInfo.SellerName}</title>
+    <link rel="stylesheet" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css?v=0.113" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/usercenter/red-packet/red_packet.css?v=0.13"/>
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/zepto.min.js"></script>
+    <script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/loading.css"/>
+    <style>
+    	.weui_grid{
+    		width:50%
+    	}
+    	.link{
+    		margin-top:0;
+    	}
+    </style>
+</head>
+
+<body>
+	<div class="vue-loading" style="display: none;">
+		<div class="warp" id="red">
+			<div class="header">
+				<div class="weui-flex">
+		            <div class="weui-flex-item lt" v-on:click="goToBack()"><span class="icon iconfont">&#xe60e;</span></div>
+		            <a class="weui-flex-item rt" href="/m/usercenter/RedPacketDetail">余额明细</a>
+		        </div>
+		        <div class="infos">
+		        	<div class="title">我的余额</div>
+		        	<div class="money">￥<span v-text="userInfo.usermoney"></span></div>
+		        </div>
+		        <div class="infos-item-box">
+		        	<div class="weui-flex">
+		        		<div class="weui-flex-item">
+		        			<div class="item-box">
+		        				<div class="title">累计获得金额</div>
+		        				<div class="money" v-text="userInfo.payinamount"></div>
+		        			</div>
+		        		</div>
+		        		<div class="weui-flex-item">
+		        			<div class="item-box">
+		        				<div class="title">累计使用金额</div>
+		        				<div class="money" v-text="userInfo.payoutamount"></div>
+		        			</div>
+		        		</div>
+		        	</div>
+		        </div>
+			</div>
+			 <div class="weui_grids link"  style='margin-top:0.8rem'>
+		        <a href="/m/usercenter/MoneyToIDCardFlow?IsApp=@(WorkContext.IsApp)" class="weui_grid js_grid" >
+		            <div class="weui_grid_icon">
+		                <span class="icon iconfont">&#xe659;</span>
+		            </div>
+		            <p class="weui_grid_label">
+		                提现明细
+		            </p>
+		        </a>
+		         @if (WorkContext.IsApp==1){
+			        
+		        	<a href="javascript:;" v-on:click="jumpApp(1)" class="weui_grid js_grid" >
+			            <div class="weui_grid_icon">
+			                <span class="icon iconfont">&#xe651;</span>
+			            </div>
+			            <p class="weui_grid_label">
+			                充值
+			            </p>
+			        </a>
+		        }else{
+		        	<a href="/m/settlement/recharge" class="weui_grid js_grid" >
+			            <div class="weui_grid_icon">
+			                <span class="icon iconfont">&#xe651;</span>
+			            </div>
+			            <p class="weui_grid_label">
+			                充值
+			            </p>
+			        </a>
+		        }
+		      
+			</div>
+			<div class="weui_grids link"  >
+		       
+		        <a href="/m/usercenter/OpenPacket?IsApp=@(WorkContext.IsApp)" class="weui_grid js_grid" >
+		            <div class="weui_grid_icon">
+		                <span class="icon iconfont">&#xe66c;</span>
+		            </div>
+		            <p class="weui_grid_label">
+		                领分润
+		            </p>
+		        </a>
+		        
+		        @if (WorkContext.IsApp==1){
+			        <a href="javascript:;" v-on:click="jumpApp(2)" class="weui_grid js_grid" >
+			            <div class="weui_grid_icon">
+			                <span class="icon iconfont">&#xe768;</span>
+			            </div>
+			            <p class="weui_grid_label">
+			                提现
+			            </p>
+			        </a>
+		        }else{
+		        	<a href="javascript:;" v-on:click='goidcard()' class="weui_grid js_grid" >
+			            <div class="weui_grid_icon">
+			                <span class="icon iconfont">&#xe768;</span>
+			            </div>
+			            <p class="weui_grid_label">
+			                提现
+			            </p>
+			        </a>
+		        	
+		        }
+		       
+			</div>
+			<!--<div class="footer">
+				<div class="item-box">
+					<a href="" class="readme">余额说明</a>
+					<span>|</span>
+					<a href="" class="quest">常见问题</a>
+				</div>
+			</div>-->
+			
+		</div>
+	</div>
+	<div class="curtain hide">
+			<div class="loader Rotation"></div>
+			<div class="loadTit"><icon class='icon iconfont'>&#xe649;</icon></div>
+	</div>
+	<script type="text/javascript">
+//		$.showLoading();
+ $('.curtain').removeClass("hide")
+		var vm = new Vue({
+			el: "#red",
+			data: {
+				IsApp: '@WorkContext.IsApp',
+				userInfo: [],
+				isbind:false,
+				userId:'@WorkContext.Uid',
+			},
+			created: function() {
+				this.getUserInfo();
+			},
+			methods: {
+				judegebind:function(){//判断是否实名
+		    		var _this=this;
+		    		$.ajax({
+		    			type:"get",
+		    			url:"/Api/Account/IsAuthentication?v="+Math.random()+"&UserId="+_this.userId,
+		    			success: function(rel){
+		    				console.log(rel)
+		    				var data=rel;
+		    				if(data.code==1){
+		    					_this.isbind=true; 		    				    
+		    				}    				
+		    			}
+		    		});
+		    	},
+		    	goidcard:function(){
+		    		var _this=this;
+		    		if(_this.isbind){
+		    			window.location.href='/m/usercenter/MoneyToIDCard'
+		    		}else{
+		    			$.confirm("请先去实名认证", "未实名认证", function() {
+						    window.location.href='/m/usercenter/authentication'
+				        }, function() {
+				        });
+		    		}
+		    	},
+				goToBack: function() {
+					var _this = this;
+		    		if(this.IsApp==1){
+						if(navigator.userAgent.indexOf("iPhone")>0){
+							gobacklastpage();
+						}
+						if(navigator.userAgent.indexOf("Android")>0){
+				              window.js.goBack();
+			            }
+					}else{
+						window.history.back();
+					}
+					
+				},
+				getUserInfo: function() {
+					var _this = this;
+					$.ajax({
+						type:"get",
+						url:"/Api/User/GetUserByUserId?UserId="+"@WorkContext.Uid&t="+Math.random(),
+						async:true,
+						success: function(rel) {
+							if(rel.code==1){
+								_this.userInfo = rel.data;
+							}
+						}
+					});
+				},
+				jumpApp: function(type) {
+					if(type==1){
+						if(Number(this.IsApp)==1){
+							if(navigator.userAgent.indexOf("iPhone")>0){
+								RechargeWithAliPayOrWX();
+							}
+							if(navigator.userAgent.indexOf("Android")>0){
+								window.js.topMoney();
+							}
+						}
+					}else if(type==2){
+						if(Number(this.IsApp)==1){
+							if(navigator.userAgent.indexOf("iPhone")>0){
+								goWithdrawal();
+							}
+							if(navigator.userAgent.indexOf("Android")>0){
+								window.js.goWithdrawal();
+							}
+						}
+					}
+						
+				}
+			}
+		});
+		$(function(){
+			vm.judegebind();
+//			vm.jfgive();
+			setTimeout(function(){
+				$(".vue-loading").css("display","block");
+//				$.hideLoading();
+   $('.curtain').addClass("hide")
+			},200);
+		})
+	</script>
+</body>
+
+</html>

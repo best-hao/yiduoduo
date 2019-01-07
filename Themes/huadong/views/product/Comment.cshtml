@@ -1,0 +1,331 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+        <meta content="telephone=no" name="format-detection">
+        <meta name="apple-touch-fullscreen" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>评价-@{@WorkContext.SellerInfo.SellerName}</title>
+        <link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/weui.css" />
+        <link rel="stylesheet" type="text/css" href="/Css/Mobile/boss/weui2.css" />
+        <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css"/>
+        <link rel="stylesheet" type="text/css" href="/Mobile/Themes/huadong/static/skin/skin.css"/>
+        <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/loading.css"/>
+        <script src="/Js/Mobile/boss/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/Js/vue/dist/vue.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/Js/vue/dist/vue-photo-preview.js" type="text/javascript" charset="utf-8"></script>
+        <script src="@(Request.Url.Scheme)://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+        <style type="text/css" media="screen">
+            *{-webkit-box-sizing: border-box; box-sizing: border-box;}
+            .activity-top-page{width: 7.5rem; max-width: 7.5rem; margin: 0 auto; padding-bottom: 0.8rem;}
+            [v-cloak]{display: none;}
+            .common-header{position: fixed;background: #fff;height: 0.8rem;line-height: 0.8rem;margin-bottom: 0.06rem;-moz-box-shadow: 0px 2px 10px #d9d9d9;-webkit-box-shadow: 0px 2px 10px #d9d9d9;box-shadow: 0px 2px 10px #d9d9d9; z-index: 100; left:0; right: 0; top: 0; margin: 0 auto; width: 100%; max-width: 7.5rem;}
+            .comment-content{ margin-top: 1rem; }
+            .common-header .header-back{position: absolute;top: 0;left: 0;width: .6rem;text-align: center;}
+            .header-back .icon, .header-menu .icon{width: 0.6rem;height: 100%;}
+            .common-header .header-back span, .common-header .header-menu span{display: block;}
+            .ell-1{overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+            .common-header .title{text-align: center;padding: 0 1rem;color: #ff4800;font-size: 0.3rem;}
+            .comment-page{width: 7.5rem; max-width: 7.5rem; margin: 0 auto;}
+            .comment-header{width:100%; background-color: #fff; padding: 0.3rem 0.2rem; -webkit-display: flex; display: flex; position: fixed; left: 0;right: 0; top: 0.8rem; margin: 0 auto; width: 100%; max-width: 7.5rem; z-index: 9;}
+            .comment-header-left{ -webkit-flex: 2;flex: 2;}
+            .comment-header-right{ -webkit-flex: 1;flex: 1; font-size: 0.3rem; color:#ff4800; text-align: right; height: 0.6rem ;line-height: 0.6rem;}
+            .comment-header-left .comment-type{ width: 1.4rem;height: 0.6rem; color:#666; font-size: 0.3rem; text-align: center; line-height: 0.6rem; border-radius: 3px; border: 1px solid #666; background-color: #fff; margin-right: 0.2rem; float: left; }
+            .comment-header-left .active{  color:#fff; background-color: #ff4800; border-color:#ff4800;}
+            .comment-type:last-child{ margin-right: 0;}
+            .comment-body{ margin-top: 2.2rem; }
+            .weui_panel_bd{ background-color:#fff; margin-top: 0.2rem; padding-bottom: 0.2rem; }
+            .weui_media_box{padding: 0.2rem;}
+            .weui_media_box .weui_media_title{ color:#333; font-size: 0.35rem;}
+            .weui_media_box.weui_media_appmsg .weui_media_hd{ margin-right: 0.2rem; border-radius: 3px; overflow: hidden;}
+            .weui_media_footer{width: 100%;color: #333;font-size: 0.28rem;line-height: 1.7; padding: 0 0.2rem; word-wrap:break-word;}
+            .comment-star{ float: right;  color:#ff4800;}
+            .weui_media_append{ position: relative; padding-top: 0.2rem; margin-top: 0.2rem;}
+            .weui_media_append:before{ content:""; width:100%; height: 1px; background-color:#ececec; position: absolute; left: 0; right: 0; top: 0; margin: 0 auto;}
+            .weui_media_append h4{ font-size: 0.3rem; color:#ff4800; line-height: 1.2;}
+            .weui_media_append .weui_media_footer{ padding: 0.2rem 0; }
+            .weui_media_shop_reply{ width: 95%; margin: 0 auto; background-color:#EFEDEE; border-radius: 3px; padding: 0.2rem;color: #333; font-size: 0.28rem;line-height: 1.7; position: relative; word-wrap:break-word;}
+            .weui_media_shop_reply:before{ content: ''; position: absolute; top: -0.4rem; left: 1.5rem; border-top: 0.2rem solid transparent; border-bottom: 0.2rem solid #EFEDEE; border-left: 0.2rem solid transparent; border-right: 0.2rem solid transparent; }
+            .weui_media_comment_img_list { overflow: hidden; padding: 0 0.2rem; margin-bottom: 0.4rem;}
+            .weui_media_comment_img_list .img{ width: 32.3%; height: 2.5rem;margin: 0 0.1rem 0.1rem 0; float: left;}
+            .weui_media_comment_img_list .img:nth-child(3n){ margin-right: 0;}
+            .weui_media_comment_img_list .img img{ width: 100%; height: 100%; display: block;}
+            .no-comment img{ width: 2rem; height: 2.3rem; display: block; margin: 1rem auto 0.4rem;}
+            .nothing {height: 1rem; line-height: 1rem;}
+            .weui_cells_title {margin: 0 auto;}
+            .weui_media_review{ line-height: 1.8; margin-top:0.1rem;}
+        </style>
+    </head>
+
+    <body>
+        <div class="comment-page" id="app" v-cloak>
+            <div class="common-header">
+                <div class="header-back" v-on:click="goToBack()"><span class="icon iconfont">&#xe60e;</span></div>
+                <div class="title ell-1">评价</div>
+            </div>
+            <div class="comment-content">
+                <div class="comment-header">
+                    <div class="comment-header-left">
+                        <div v-bind:class="[isActive == index ? 'active' : '' ,'comment-type']" v-for="(item,index) of commentType" v-bind:key="index" v-bind:data-active="index" v-on:click="typeCheck(index, item.isPic, 0, 1, item.isreview)">{{item.type}}{{item.typeValue}}</div>
+                    </div>
+                    <div class="comment-header-right">综合评分 {{starNum}} 分</div>
+                </div>
+                <div class="comment-body">
+                    <div class="weui_panel_bd" v-for="(item,index) of commentList" v-bind:key="index">
+                        <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg">
+                            <div class="weui_media_hd">
+                                <img class="weui_media_appmsg_thumb" v-bind:src="item.commentinfo.avatar" alt="" />
+                            </div>
+                            <div class="weui_media_bd">
+                            <h4 class="weui_media_title">
+                            <!--item.commentinfo.isanonymous == 1 显示匿名-->
+                            <span v-if="item.commentinfo.isanonymous == 1">{{transform(item.commentinfo.nickname)}}</span>
+                            <span v-else>{{item.commentinfo.nickname}}</span>
+                                <div class="comment-star" v-if="item.commentinfo.goodsscore == 0">
+                                    <i class="icon iconfont">&#xe61e;</i>
+                                    <i class="icon iconfont">&#xe61e;</i>
+                                    <i class="icon iconfont">&#xe61e;</i>
+                                    <i class="icon iconfont">&#xe61e;</i>
+                                    <i class="icon iconfont">&#xe61e;</i>
+                                </div>
+                                <div class="comment-star" v-if="item.commentinfo.goodsscore == 1">
+                                    <i class="icon iconfont active">&#xe60f;</i>
+                                    <i class="icon iconfont">&#xe61e;</i>
+                                    <i class="icon iconfont">&#xe61e;</i>
+                                    <i class="icon iconfont">&#xe61e;</i>
+                                    <i class="icon iconfont">&#xe61e;</i>
+                                </div>
+                                <div class="comment-star" v-if="item.commentinfo.goodsscore == 2">
+                                    <i class="icon iconfont active">&#xe60f;</i>
+                                    <i class="icon iconfont active">&#xe60f;</i>
+                                    <i class="icon iconfont">&#xe61e;</i>
+                                    <i class="icon iconfont">&#xe61e;</i>
+                                    <i class="icon iconfont">&#xe61e;</i>
+                                </div>
+                                <div class="comment-star" v-if="item.commentinfo.goodsscore == 3">
+                                    <i class="icon iconfont active">&#xe60f;</i>
+                                    <i class="icon iconfont active">&#xe60f;</i>
+                                    <i class="icon iconfont active">&#xe60f;</i>
+                                    <i class="icon iconfont">&#xe61e;</i>
+                                    <i class="icon iconfont">&#xe61e;</i>
+                                </div>
+                                <div class="comment-star" v-if="item.commentinfo.goodsscore == 4">
+                                    <i class="icon iconfont active">&#xe60f;</i>
+                                    <i class="icon iconfont active">&#xe60f;</i>
+                                    <i class="icon iconfont active">&#xe60f;</i>
+                                    <i class="icon iconfont active">&#xe60f;</i>
+                                    <i class="icon iconfont">&#xe61e;</i>
+                                </div>
+                                <div class="comment-star" v-if="item.commentinfo.goodsscore == 5">
+                                    <i class="icon iconfont active">&#xe60f;</i>
+                                    <i class="icon iconfont active">&#xe60f;</i>
+                                    <i class="icon iconfont active">&#xe60f;</i>
+                                    <i class="icon iconfont active">&#xe60f;</i>
+                                    <i class="icon iconfont active">&#xe60f;</i>
+                                </div>
+                            </h4>
+                                <p class="weui_media_desc">{{item.commentinfo.addtime}}</p>
+                            </div>
+                        </a>
+                        <!--商品评价-->
+                        <div class="weui_media_footer">{{item.commentinfo.memo}}</div>
+                        <!--商品评价图片-->
+                        <div class="weui_media_comment_img_list" v-if="item.picsinfos != ''">
+                            <div class="img" v-for="(itemImg,indexImg) of item.picsinfos" v-bind:key="indexImg">
+                                <img v-bind:src="'@(WorkContext.ShopConfig.ImageCDN)'+itemImg.imgurl" alt="" v-bind:preview="itemImg.itemid" v-bind:preview-text="itemImg.imgtip" />
+                            </div>
+                        </div>
+                        <!-- <div class="weui_media_comment_img_list" v-else>
+                            <div class="img" v-for="(itemImg,indexImg) of item.picsinfos" v-bind:key="indexImg">
+                                <img src="/Images/Mobile/statistic/nopicture.jpg?w=120&h=120" alt="" preview="1" preview-text="秦商未来" />
+                            </div>
+                        </div>
+                         -->
+                        <!--用户追评-->
+                        <div class="weui_media_footer" v-for="(itemReview, indexReview) of item.commentreviewinfos" v-bind:key="indexReview">
+                            <div v-if="itemReview.isadmin == 0">
+                                <div class="weui_media_append">
+                                    <h4>用户追评</h4>
+                                    <div class="weui_media_review">{{itemReview.memo}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--店家回复-->
+                        <div v-for="(itemReviewAdmin, indexReviewAdmin) of item.commentreviewinfos" v-bind:key="indexReviewAdmin">
+                            <div v-if="itemReviewAdmin.isadmin == 1">
+                                <div class="weui_media_shop_reply">店家回复:{{itemReviewAdmin.memo}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--暂无评价-->
+                <!--div class="comment-body">
+                    <div class="no-comment">
+                        <img src="/Images/Mobile/goods/nocomment.png" />
+                    </div>
+                </div-->
+            </div>
+            <!--loading-->
+            <div class="curtain" v-if="loading">
+                <div class="loader Rotation"></div>
+                <div class="loadTit"><icon class='icon iconfont'>&#xe649;</icon></div>
+            </div>
+            <!--请求ajax无数据时显示-->
+            <div class="nothing">
+                <div class="weui_cells_title tcenter" v-show="nomore">
+                    没有更多评价了
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        var IsApp = '@WorkContext.IsApp',
+            productid = '@ViewData["ProductId"]';
+        var options={
+                fullscreenEl:false //关闭全屏按钮
+            };
+            Vue.use(vuePhotoPreview,options);
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                isActive: 0,
+                page: 1,
+                size: 4,
+                starNum: 0,
+                loading: true,
+                nomore: false,
+                //showList: true,
+                //hideList: false,
+                commentType: [
+                    {
+                        "type": "全部",
+                        "typeValue": 0,
+                        "isPic" : 99, //全部类型
+                        "isreview": 99,  // 追评+评论
+                    },
+                    {
+                        "type": "有图",
+                        "typeValue": 0,
+                        "isPic" : 1, //有图类型   无图类型为 0
+                    },
+                    {
+                        "type": "追评",
+                        "typeValue": 0,
+                        "isPic" : 99, //有图类型   无图类型为 0
+                        "isreview": 2,  //有追评
+                    },
+                ],
+                commentList:[],
+                //imgBox:[],
+            },
+            created: function() {
+                var that = this;
+                that.typeCheck(0, 99, 0, that.page, 99);
+            },
+            methods: {
+                typeCheck: function(index,ispic,isscroll,page,isreview){
+                    var that = this;
+                    that.loading = true;
+                    that.isActive = index;
+                    $.ajax({
+                        type: "get",
+                        url: "/Api/Product/CommentList?v="+Math.random(),
+                        dataType: "json",
+                        async: true,
+                        data: {
+                            ProductId: productid,
+                            Page: page,
+                            Size: that.size,
+                            IsPic: ispic,
+                            isreview: isreview,
+                        },
+                        success: function(res){
+                            //图片缩放
+                            var data = res.data;
+                            that.$previewRefresh();
+                            that.loading = false;
+                            if(res.code == 1){
+                                if(isscroll == 0){
+                                    that.nomore = false;
+                                    that.commentList = [];
+                                    that.page = 1;  // 切换状态下设置page == 1;
+                                }
+                                data.forEach(function(el, i){
+                                    that.commentList.push(el);
+                                    //console.log(that.commentList);
+                                    that.starNum = el.starnum;
+                                    //全部评价（有图+无图）
+                                    that.commentType[0].typeValue = el.commentallnum;
+                                    //有图评价
+                                    that.commentType[1].typeValue = el.commentispicnum;
+                                    //追评
+                                    that.commentType[2].typeValue= el.commentisreviewnum;
+                                    //判断头像
+                                    if(el.commentinfo.avatar.indexOf("http") > -1){
+                                        el.commentinfo.avatar = el.commentinfo.avatar+'?w=120&h=120';
+                                    }else if (el.commentinfo.avatar.indexOf("upload") > -1) {
+                                        el.commentinfo.avatar = '@(WorkContext.ShopConfig.ImageCDN)/'+el.commentinfo.avatar+'?w=120&h=120';
+                                    }else{
+                                        el.commentinfo.avatar = "/Images/Mobile/usercenter/head.png?w=120&h=120";
+                                    }
+                                });
+                            }else{
+                                if(isscroll == 0){   //切换时置空commentList
+                                    that.commentList = [];
+                                    that.page = 1;  // 切换状态下设置page == 1;
+                                }
+                                that.nomore = true;
+                            }
+                        },
+                        error: function(res){
+                            that.loading = false;
+                            console.log("ajax error");
+                        }
+                    });
+                },
+                //名字截取***
+                transform: function(text){
+                    var that = this;
+                    var reg = /^(.).+(.)$/g;
+                    return text.replace(reg, "$1***$2");
+                },
+                //返回交互
+                goToBack: function() {
+                    window.history.back();
+                    //window.location.href = "/m/product/detail?id="+productid+"&IsApp="+IsApp;
+                },
+            }
+        });
+
+
+        //上拉加载
+        $(function(){
+            $(window).scroll(function(){   //滚动加载商品列表
+                var isActive = $(".active").data("active");
+                var winScrollTop = $(this).scrollTop(),
+                    docHeight = $(document).height(),
+                    windowHeight = $(this).height();
+                    if (windowHeight + winScrollTop == docHeight) {
+                        //判断当前滚动是否为全部，有图，追评
+                        if(isActive == 0){
+                            vm.page++;
+                            vm.typeCheck(0, 99, 1, vm.page, 99);  //全部
+                        }else if(isActive == 1){
+                            vm.page++;
+                            vm.typeCheck(1, 1, 1, vm.page);   //有图
+                        }else{
+                            vm.page++;
+                            vm.typeCheck(2, 99, 1, vm.page, 2);   //追评
+                        }
+                    }
+            });
+        });
+    </script>
+</html>

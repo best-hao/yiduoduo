@@ -1,0 +1,88 @@
+
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    height: 1rem;
+    width: 100%;
+    max-width: 7.5rem;
+    z-index: 2;
+    background-color: #fff;
+    box-shadow: 0 3px 5px #cdcdcd;
+}
+
+.back {
+    line-height: 1rem;
+    display: inline-block;
+    position: absolute;
+    left: 0.2rem;
+    z-index: 4;
+}
+
+.title {
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+    font-size: 0.4rem;
+    line-height: 1rem;
+    font-weight: inherit;
+}
+
+.express-info{
+	padding: 0.3rem;
+	margin-top: 1rem;
+}
+
+.express-name,
+.express-number,
+.express-tel{
+	color: #333;
+	font-size: 0.36rem;
+	line-height: 0.7rem;
+}
+.express-name span,
+.express-number span,
+.express-tel span{
+	color: #ff4800;
+}
+
+.express-list{
+	margin-top: 0.5rem;
+}
+
+.express-list li .context,
+.express-list li .current{
+    background-color: #ddd;
+    border-radius: 2px;
+    padding: 0.2rem;
+    margin: 0.3rem 0;
+    color: #666;
+    font-size: 0.3rem;
+    line-height: 0.6rem;
+    position: relative;
+}
+
+.express-list li .context:before,
+.express-list li .current:before{
+    content: "";
+    width:0;
+    height:0;
+    border-width:0 0.2rem 0.2rem;
+    border-style:solid;
+    border-color:transparent transparent #ddd;
+    position:absolute;
+    left: 0.2rem;
+    top: -0.18rem;
+}
+
+.express-list li .current{
+	background-color: rgba(255 167 0);
+	color:#fff;
+}
+
+.express-list li .current:before{
+    border-color:transparent transparent rgba(255 167 0);
+}

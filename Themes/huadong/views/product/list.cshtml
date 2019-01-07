@@ -1,0 +1,278 @@
+﻿
+@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>商品列表-@{@WorkContext.SellerInfo.SellerName}</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<link rel="stylesheet" href="/Css/Mobile/order/weui.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/order/weui2.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/order/slist.css" />
+		<link rel="stylesheet" type="text/css" href="/Css/Mobile/footer.css" />
+        <style>
+        	.goback{position: absolute;left:0;color:#333!important;}
+        	.weui_panel{padding-top: 40px;}
+        	.list_right:before{content: "";}
+        	.mark{display: inline-block;width: 20px;height: 20px;line-height: 22px;border-radius: 7px;background-color: #ff4800;font-size: 0.8rem;font-weight: bold;color: #fff;text-align: center;}
+        </style>
+	</head>
+
+	<body>
+      <div id="sourch" >
+      	<i class="icon icon-109 goback" onclick="goToBack()"></i>
+      	<input type="text" id="sourch_input" placeholder="请输入商品名称或关键词">
+      	<span id="sousuos">搜索</span>
+      </div>
+		<!--<header id="header">
+			<div class="weui-flex">
+				<div class="weui-flex-item sort" data-type="3">价格&nbsp;▼</div>
+			</div><span id="qiehuan" ><i class="iconfont">&#xe609;</i></span></header>-->
+		<div class="sort-shade sort-all hide">
+			<div class="sort-box">
+				<div class="weui_cells weui_cells_radio"><label class="weui_cell weui_check_label" for="sort1"><div class="weui_cell_bd weui_cell_primary"><p>综合排序</p></div><div class="weui_cell_ft"><input type="radio" class="weui_check" name="sort_multiple" id="sort1"><span class="weui_icon_checked"></span></div></label><label class="weui_cell weui_check_label" for="sort2"><div class="weui_cell_bd weui_cell_primary"><p>按新品排序</p></div><div class="weui_cell_ft"><input type="radio" name="sort_multiple" class="weui_check" id="sort2" checked="checked"><span class="weui_icon_checked"></span></div></label><label class="weui_cell weui_check_label" for="sort3"><div class="weui_cell_bd weui_cell_primary"><p>按评论数量排序</p></div><div class="weui_cell_ft"><input type="radio" name="sort_multiple" class="weui_check" id="sort3"><span class="weui_icon_checked"></span></div></label></div>
+			</div>
+			<div class="close"></div>
+		</div>
+		<div class="sort-shade sort-price hide">
+			<div class="sort-box">
+				<div class="weui_cells weui_cells_radio"><label class="weui_cell weui_check_label" data-sort="3" for="sort4"><div class="weui_cell_bd weui_cell_primary"><p>按价格从高到低</p></div><div class="weui_cell_ft"><input type="radio" class="weui_check" name="sort_price" id="sort4"><span class="weui_icon_checked"></span></div></label><label class="weui_cell weui_check_label" data-sort="2" for="sort5"><div class="weui_cell_bd weui_cell_primary"><p>按价格从低到高</p></div><div class="weui_cell_ft"><input type="radio" name="sort_price" class="weui_check" id="sort5" checked="checked"><span class="weui_icon_checked"></span></div></label></div>
+			</div>
+			<div class="close"></div>
+		</div>
+		<div class="weui_panel weui_panel_access">
+			<div class="weui_panel_bd" id="Content">
+				<div class="m-list list-theme1" id="m_list"></div>
+			</div>
+		</div>
+		@if(WorkContext.IsApp==1){
+		
+    	}else{
+		<footer></footer>
+		}
+		<!--end-->
+		<script src="/Js/Mobile/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/Mobile/updown.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/Js/Mobile/lazyimg.js" type="text/javascript" charset="utf-8"></script>
+
+		<script type="text/javascript">
+			
+			
+			var IsApp = "@WorkContext.IsApp";
+			function goToBack() {
+				var _this = this;
+	    		if(IsApp==1){
+					if(navigator.userAgent.indexOf("iPhone")>0){
+						gobacklastpage();
+					}
+					if(navigator.userAgent.indexOf("Android")>0){
+						window.js.goBack();
+					}
+				}else{
+					window.history.back();
+				}
+					
+			}
+			var loadingStep = true;
+			var shou =true;
+
+			var cateid =@ViewData["cateid"],
+				sort = @ViewData["sort"],
+				search = '@ViewData["search"]',
+				page = @ViewData["page"],
+				size = @ViewData["size"],
+				tags = "@ViewData["tags"]",
+				direction = false;
+			var page = 2;
+            size = 7;
+		$(window).scroll(function() {
+			shou = false;   
+				var scrollTop = $(this).scrollTop();
+				var scrollHeight = $(document).height();
+				var windowHeight = $(this).height();
+			
+					if(scrollTop + windowHeight == scrollHeight) {
+						if(loadingStep) {
+							shou = false;
+							getList(cateid, sort, search, page, size,shou, tags);
+							page++;
+						} else {
+							return false;
+						}
+					}
+				
+			});
+			$(document).ready(function() {
+				setTimeout(function() {
+					getList(cateid, sort, search, 1, size, shou, tags);
+				}, 200);
+			});
+			$(".sort-box").on("tap", ".weui_check_label", function(event) {
+				$("body #sourch_input").val("");
+				loadingStep = true;
+				page = 1;
+				$($("body").find("#more")).remove();
+				sort = $(this).attr("data-sort");
+				$($("#m_list").find("a")).remove();
+				shou = true;
+				getList(cateid, sort, search, page, size, shou, tags);
+				$(".sort-shade").addClass("hide");
+				event.stopPropagation();
+			});
+			$(".close").on("click", function() {
+				$(".sort-price").addClass("hide");
+				$(".sort-all").addClass("hide");
+			});
+			$(".weui-flex").on("tap", ".weui-flex-item", function() {
+				$(".sort-price").removeClass("hide");
+				$(".sort-all").addClass("hide");
+			});
+
+			function getList(cateid, sort, search, page, size, shou, tags) {
+
+				if(loadingStep) {
+					$.get('goodslist', {
+						cateid: cateid,
+						sort: sort,
+						search: search,
+						page: page,
+                        size: size,
+                        tags:tags
+					}, function(data) {
+						var datas = JSON.parse(data);
+						var dete = datas.Data;
+						console.log(dete);
+						var html = "";
+						var img_url = '@(WorkContext.ShopConfig.ImageCDN)';
+						if(datas.Code == 0) {
+							if($($("body").find(".list-item")).length % 2 != 0 && $($("body").find(".list-item")).length >= 2) {
+								var heights = $($($("body").find(".list-item"))[0]).offset().height;
+								var widths = $($($("body").find(".list-item"))[0]).offset().width - 1;
+								html += '<a class="list-item duoyu" style="display: inline-block; width:' + widths + 'px; height:' + heights + 'px;"></a>';
+							} else {}
+							html += '<div id="more">没有更多数据了</div>';
+							loadingStep = false;
+							$('#m_list').append(html);
+							return false;
+						} else {
+						console.log(dete.length);
+							
+							for(var i = 0; i < dete.length; i++) {
+								if(dete[i].PicUrl == "") {
+									var no_img = '/Images/wutu.png';
+									html += '<a href="detail?id=' + dete[i].ProductId + '&IsApp=@WorkContext.IsApp"  class="list-item"><div class="list-img"><img class="list_img1" src="' + no_img + '" data-img="' + img_url + dete[i].PicUrl + '"></div>';
+								} else {
+									html += '<a href="detail?id=' + dete[i].ProductId + '&IsApp=@WorkContext.IsApp" class="list-item"><div class="list-img"><img class="list_img1" src="' + img_url + dete[i].PicUrl + '?w=300&h=300' + '" data-img="' + img_url + dete[i].PicUrl + '"></div>';
+								}
+								html += '<div class="list-mes"><h3 class="list-title">' + dete[i].ProductName + '</h3><div class="list-mes-item"><div><span class="list-price">';
+								html += '<em>¥</em>' + dete[i].SalePrice + '</span></div><div class="list_right"><span class="mark">送</span><span style="margin-right:10px">'+Number((dete[i].Profits/100)*dete[i].SalePrice*5).toFixed(2)+'积分</span></div></div></div></a>';
+							};
+							$($("body").find(".duoyu")).remove();
+							$('#m_list').append(html);
+							if($($("body").find(".list-item")).length % 2 != 0 && $($("body").find(".list-item")).length >= 2) {
+								var heights = $($($("body").find(".list-item"))[0]).offset().height;
+								var widths = $($($("body").find(".list-item"))[0]).offset().width - 1;
+								html += '<a class="list-item duoyu" style="display: inline-block; width:' + widths + 'px; height:' + heights + 'px;"></a>';
+							} else {};
+							if(shou) {
+								$($("#m_list").find("a")).remove();
+								$('#m_list').append(html);
+							} else {
+//								$('#m_list').append(html);
+								
+							};
+							setTimeout(function() {
+								var lazyloadImg = new LazyloadImg({
+									el: '.weui-updown [data-img]',
+									top: 50,
+									right: 50,
+									bottom: 50,
+									left: 50,
+									qriginal: false,
+									load: function(el) {
+										el.style.cssText += '-webkit-animation: fadeIn 01s ease 0.2s 1 both;animation: fadeIn 1s ease 0.2s 1 both;';
+									},
+									error: function(el) {}
+								});
+							}, 200);
+							widthImg();
+						};
+					}, "JSON");
+				} else {};
+			}
+			$("#qiehuan").on("tap", function() {
+				if($(".m-list").hasClass("list-theme1")) {
+					$(".m-list").removeClass("list-theme1");
+					$(".m-list").addClass("list-theme4");
+					widthImg();
+				} else {
+					$(".m-list").removeClass("list-theme4");
+					$(".m-list").addClass("list-theme1");
+					widthImg();
+				};
+			});
+			$("#sousuos").on("click", function() {
+				$("#more").remove();
+				shou = true;
+				$($("#m_list").find("a")).remove();
+				var vals = $("body #sourch_input").val();
+				loadingStep = true;
+				page = 1;
+				getList(cateid, sort, vals, page, size, shou, tags);
+			});
+
+			function widthImg() {
+				for(var i1 = 0; i1 < $($("body").find(".list_img1")).length; i1++) {
+					$($($("body").find(".list_img1"))[i1]).css({
+						"height": $($($("body").find(".list_img1"))[0]).offset().width
+					});
+				};
+				if($($("body").find(".duoyu")).length > 1) {
+					$($("body").find(".duoyu")).remove();
+					if($($("body").find(".list_img1")).length % 2 != 0) {
+						var html = '';
+						html += '<a class="list-item duoyu"style="display: inline-block; width:' + $($($("body").find(".list_img1"))[0]).offset().width + 'px; height:' + $($($("body").find(".list_img1"))[0]).offset().height + 'px;"></a>';
+						$('#m_list').append(html);
+					} else {}
+				} else {
+					$($("body").find(".duoyu")).css({
+						"height": $($($("body").find(".list-item"))[0]).offset().height,
+						"width": $($($("body").find(".list-item"))[0]).offset().width - 1,
+					});
+				};
+			};
+			$(function() {
+				$.ajax({
+					type: "get",
+					url: "/m/tool/navbar",
+					async: true,
+					success: function(rel) {
+						var dete = JSON.parse(rel);
+						console.log(dete);
+						if(dete.Code == 1) {
+							var html = '';
+							html += '<div class="weui_tabbar " style="padding-top: 0.1rem;">';
+							for(var i = 0; i < dete.Data.NavBar.length; i++) {
+								var doms = dete.Data.NavBar[i];
+								html += '<a href="' + doms.MenuUrl + '" class="weui_tabbar_item"><div class="weui_tabbar_icon">';
+								html += '<img src="' + doms.MenuPic + '?w=50&amp;h=50" style="display: block; width: 0.5rem; height: 0.5rem; margin: 0px auto;"></div>';
+								html += '<p class="weui_tabbar_label" style="margin: 0px; color:#000 !important;">' + doms.MenuName + '</p></a>';
+							}
+							html += '</div>';
+							$('footer').append(html);
+						} else {}
+					}
+				});
+			});
+		</script>
+	</body>
+
+</html>

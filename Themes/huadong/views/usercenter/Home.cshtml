@@ -1,0 +1,912 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>会员中心-@{@WorkContext.SellerInfo.SellerName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/weui2.css" />
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/icon/icon.css?v=0.13" />
+    <link rel="stylesheet" href="/Mobile/Themes/huadong/static/usercenter/home/usercenter.css?v=0.05">
+    <script src="/Mobile/weui/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/ydui.flexible.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mobile/weui/icon/iconfont.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="/Mobile/weui/style/loading.css"/>
+	<style type="text/css">
+		.logout-box{height: 2rem;}
+		.logout{}
+        .weui-flex{text-align: center;}
+        .br{border-right: 1px solid #ccc;}
+        .icon {
+          /* 通过设置 font-size 来改变图标大小 */
+          width: 1em; height: 1em;
+          /* 图标和文字相邻时，垂直对齐 */
+          vertical-align: -0.15em;
+          /* 通过设置 color 来改变 SVG 的颜色/fill */
+          fill: currentColor;
+          /* path 和 stroke 溢出 viewBox 部分在 IE 下会显示
+             normalize.css 中也包含这行 */
+          overflow: hidden;
+        }
+        .header .lt a{position: relative;z-index: 10000;}
+        .kefu{display:inline-block;width:20px;height:20px;font-size: 0.44rem!important;color:#56abe4!important; position: absolute; left: 0;right:0; bottom: 0.26rem; margin: 0 auto;}
+        .usericon{display:inline-block;width:0.3rem;height:0.3rem;background-size: cover;}
+        .iconr{background: url(/Images/Mobile/usercenter/rVIP.png)no-repeat center;background-size: cover;}
+        .iconm{background: url(/Images/Mobile/usercenter/mVIP.png)no-repeat center;background-size: cover;}
+        .iconv{background: url(/Images/Mobile/usercenter/VIP.png)no-repeat center;background-size: cover;}
+        .iconpr{background: url(/Images/Mobile/usercenter/provinceicon.png)no-repeat center;background-size: cover;}
+        .iconcy{background: url(/Images/Mobile/usercenter/cityicon.png)no-repeat center;background-size: cover;}
+        .iconcounty{background: url(/Images/Mobile/usercenter/countyicon.png)no-repeat center;background-size: cover;}
+        .position-re{position:relative}
+        .position-ab{position:absolute;right:-0.25rem;top:-0.1rem;}
+        .hide{display: none;}
+        .weui-badge{background-color: #ff4800;}
+	</style>
+</head>
+<body>
+    <div class="header">
+        <div class="weui-flex">
+            <div class="weui-flex-item lt">
+                <a href="/m/user/Setting">
+                    <span class="icon iconfont">&#xe637;</span>
+                </a>
+            </div>
+            <div class="weui-flex-item rt"><!--<span class="icon iconfont">&#xe6ac;</span>--></div>
+        </div>
+    </div>
+    <div class="user-infos">
+        <!--div class="open-packet rotate">
+            <a href="/m/activity/ScoreSendPacket?IsApp=@WorkContext.IsApp">
+                <img src="/Images/Mobile/usercenter/openPacket.png" />
+            </a>
+        </div-->
+        @if (WorkContext.WeChatUserInfo != null)
+        {
+            <div class="head-box">
+                <div class="user-id">
+                    <span>ID：</span>
+                    <span>@WorkContext.Uid</span>
+                </div>
+                <div class="user-img-box">
+                    @if (WorkContext.WeChatUserInfo.HeadImgUrl == "")
+                    {
+                        if (WorkContext.UserInfo.Avatar == "")
+                        {
+                            <img src="/images/photo.png" />
+                        }
+                        else
+                        {
+                            if (WorkContext.UserInfo.Avatar.Contains("http"))
+                            {
+                                <img src="@(WorkContext.UserInfo.Avatar)" />
+                            }
+                            else
+                            {
+                                <img src="@(WorkContext.ShopConfig.ImageCDN)@{@WorkContext.UserInfo.Avatar}?w=100&h=100" />
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (WorkContext.UserInfo.Avatar == "")
+                        {
+                            <img src="@WorkContext.WeChatUserInfo.HeadImgUrl">
+                        }
+                        else
+                        {
+                            if (WorkContext.UserInfo.Avatar.Contains("http"))
+                            {
+                                <img src="@(WorkContext.UserInfo.Avatar)" />
+                            }
+                            else
+                            {
+                                <img src="@(WorkContext.ShopConfig.ImageCDN)@{@WorkContext.UserInfo.Avatar}?w=100&h=100" />
+                            }
+                        }
+                    }
+
+                </div>
+                @if (WorkContext.WeChatUserInfo.UserId > 0)
+                {
+                    <div class="username">
+                        <span class="icon iconfont">&#xe60a;</span>
+                        @if (WorkContext.WeChatUserInfo.NickName == "未关注公众号用户")
+                        {
+                            @WorkContext.WeChatUserInfo.OpenId
+                        }
+                        else
+                        {
+                            @WorkContext.WeChatUserInfo.NickName
+                        }
+
+                        @if (WorkContext.UserInfo.UserType == 1)
+                        {
+                            <!--<span class="icon icon-120 level-1"></span>-->
+                            <span class="usericon iconr"></span>
+                            <span>普通用户</span>
+                        }
+                        else if (WorkContext.UserInfo.UserType == 3)
+                        {
+                            <!--<span class="icon icon-120 level-2"></span>-->
+                            <span class="usericon iconm"></span>
+                            <span>实体商家</span>
+                        }
+                        else if (WorkContext.UserInfo.UserType == 2)
+                        {
+                            <!--<span class="icon icon-120 level-3"></span>-->
+                            <span class="usericon iconv"></span>
+                            <span>vip</span>
+                        }
+                        else if (WorkContext.UserInfo.UserType == 4)
+                        {
+                            <!--<span class="icon icon-120 level-4"></span>-->
+                            <span class="usericon iconcounty"></span>
+                            <span>区县代理</span>
+                        }
+                        else if (WorkContext.UserInfo.UserType == 5)
+                        {
+                            <!--<span class="icon icon-120 level-5"></span>-->
+                            <span class="usericon iconcy"></span>
+                            <span>市代</span>
+                        }
+                        else if (WorkContext.UserInfo.UserType == 6)
+                        {
+                            <!--<span class="icon icon-120 level-6"></span>-->
+                            <span class="usericon iconpr"></span>
+                            <span>省代</span>
+                        }
+
+                    </div>
+                }
+                else
+                {
+                    <div class="username">
+                        <span class="icon iconfont">&#xe60a;</span>
+                        <span>@WorkContext.WeChatUserInfo.NickName</span>
+                        @if (WorkContext.UserInfo.UserType == 1)
+                        {
+                            <span class="usericon iconr"></span>
+                            <span>普通用户</span>
+                        }
+                        else if (WorkContext.UserInfo.UserType == 3)
+                        {
+                            <span class="usericon iconm"></span>
+                            <span>实体商家</span>
+                        }
+                        else if (WorkContext.UserInfo.UserType == 2)
+                        {
+                            <span class="usericon iconv"></span>
+                            <span>vip</span>
+                        }
+                        else if (WorkContext.UserInfo.UserType == 4)
+                        {
+                            <span class="usericon iconcounty"></span>
+                            <span>区县代理</span>
+                        }
+                        else if (WorkContext.UserInfo.UserType == 5)
+                        {
+                            <span class="usericon iconcy"></span>
+                            <span>市代</span>
+                        }
+                        else if (WorkContext.UserInfo.UserType == 6)
+                        {
+                            <span class="usericon iconpr"></span>
+                            <span>省代</span>
+                        }
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            if (Yitao.Core.WebHelper.IsWeiXin())
+            {
+                <div class="head-box">
+                    <div class="user-id">
+                        <span>ID：</span>
+                        <span>@WorkContext.Uid</span>
+                    </div>
+                    <div class="user-img-box">
+                        @if (WorkContext.WeChatUserInfo.HeadImgUrl == "")
+                        {
+                            if (WorkContext.UserInfo.Avatar == "")
+                            {
+                                <img src="images/photo.png" />
+                            }
+                            else
+                            {
+                                if (WorkContext.UserInfo.Avatar.Contains("http"))
+                                {
+                                    <img src="@(WorkContext.UserInfo.Avatar)" />
+                                }
+                                else
+                                {
+                                    <img src="@(WorkContext.ShopConfig.ImageCDN)@(WorkContext.UserInfo.Avatar)" />
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (WorkContext.UserInfo.Avatar == "")
+                            {
+                                <img src="@WorkContext.WeChatUserInfo.HeadImgUrl">
+                            }
+                            else
+                            {
+                                if (WorkContext.UserInfo.Avatar.Contains("http"))
+                                {
+                                    <img src="@(WorkContext.UserInfo.Avatar)" />
+                                }
+                                else
+                                {
+                                    <img src="@(WorkContext.ShopConfig.ImageCDN)@(WorkContext.UserInfo.Avatar)" />
+                                }
+                            }
+                        }
+
+                    </div>
+                    <div class="username">@Session["OpenId"].ToString()</div>
+                </div>
+            }
+            else
+            {
+
+                <div class="head-box">
+                    <div class="user-id">
+                        <span>ID：</span>
+                        <span>@WorkContext.Uid</span>
+                    </div>
+
+
+                    @if (WorkContext.UserInfo.Avatar == "")
+                    {
+                        <img src="/images/photo.png" />
+                    }
+                    else
+                    {
+                        if (WorkContext.UserInfo.Avatar.Contains("http"))
+                        {
+                            <img src="@(WorkContext.UserInfo.Avatar)" />
+                        }
+                        else
+                        {
+                            <img src="@(WorkContext.ShopConfig.ImageCDN)@{@WorkContext.UserInfo.Avatar}?w=100&h=100" />
+                        }
+                    }
+
+                    <div class="username">
+                        <span class="icon iconfont">&#xe782;</span>
+                        <span>@WorkContext.UserInfo.NickName</span>
+                        @if (WorkContext.UserInfo.UserType == 1)
+                        {
+                            <span class="usericon iconr"></span>
+                            <span>普通用户</span>
+                        }
+                        else if (WorkContext.UserInfo.UserType == 3)
+                        {
+                            <span class="usericon iconm"></span>
+                            <span>实体商家</span>
+                        }
+                        else if (WorkContext.UserInfo.UserType == 2)
+                        {
+                            <span class="usericon iconv"></span>
+                            <span>vip</span>
+                        }
+                        else if (WorkContext.UserInfo.UserType == 4)
+                        {
+                            <span class="usericon iconcounty"></span>
+                            <span>区县代理</span>
+                        }
+                        else if (WorkContext.UserInfo.UserType == 5)
+                        {
+                            <span class="usericon iconcy"></span>
+                            <span>市代</span>
+                        }
+                        else if (WorkContext.UserInfo.UserType == 6)
+                        {
+                            <span class="usericon iconpr"></span>
+                            <span>省代</span>
+                        }
+                    </div>
+                </div>
+            }
+        }
+
+        <div class="info-item" >
+            <div class="weui-flex">
+                @if (WorkContext.UserInfo.UserType > 2){
+                    <div class="weui-flex-item">
+                        <a href="/m/usercenter/ShareMoney" class="item-box">
+                            <div class="val">@WorkContext.UserInfo.UserShareMoney</div>
+                            <div class="name">我的货款</div>
+                        </a>
+                    </div>
+                }
+                <div class="weui-flex-item">
+                    <a href="/m/usercenter/RedPacket" class="item-box">
+                        <div class="val">@WorkContext.UserInfo.UserMoney</div>
+                        <div class="name">我的余额</div>
+                    </a>
+                </div>              
+                <!--<div class="weui-flex-item">
+                    <a class="item-box">
+                        <div class="val">0</div>
+                        <div class="name">华波链</div>
+                    </a>
+                </div>-->
+                <div class="weui-flex-item">
+                    <a href="/m/usercenter/MyScore" class="item-box">
+                        <div class="val">@WorkContext.UserInfo.UserScore</div>
+                        <div class="name">我的积分</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="order-box" style='padding:0.4rem 0.2rem'>
+    	<div class="info-item" >
+            <div class="weui-flex">                
+                <div class="weui-flex-item br" >
+                    <a href="/m/usercenter/OpenPacket" class="item-box">
+                        <div class="val"><span class="icon iconfont" style="color: #f00;">&#xe610;</span></div>
+                        <div class="name">领分润</div>
+                    </a>
+                </div>
+                <div class="weui-flex-item">
+                    <a href="/m/usercenter/sign" class="item-box">
+                        <div class="val"><span class="icon iconfont" style="color: #56abe4;">&#xe61d;</span></div>
+                        <div class="name">签到</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="order-box">
+        <div class="weui_cells weui_cells_access">
+            <a class="weui_cell " href="/m/order/list?way_type=0">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>商城订单</p>
+                </div>
+                <div class="weui_cell_ft weui_cell_ft_size">查看全部</div>
+            </a>
+        </div>
+        <div class="order-lists">
+            <div class="weui-flex">
+                <div class="weui-flex-item">
+                    <a class="item-box" href="/m/order/list?way_type=1">
+                        <div><span class="icon iconfont position-re" style="color: #ff9f50">&#xe623;<span class='weui-badge position-ab hide unpay' >1</span></span></div>
+                        <div class="title">待付款</div>
+                    </a>
+                </div>
+                <div class="weui-flex-item">
+                    <a class="item-box" href="/m/order/list?way_type=2">
+                        <div><span class="icon iconfont position-re" style="color: #ff9f50;">&#xe622;<span class='weui-badge position-ab hide unsend' >1</span></span></div>
+                        <div class="title">待发货</div>
+                        
+                    </a>
+                </div>
+                <div class="weui-flex-item">
+                    <a class="item-box" href="/m/order/list?way_type=3">
+                        <div><span class="icon iconfont position-re" style="color: #ff9f50">&#xe624;<span class='weui-badge position-ab hide unsave' >1</span></span></div>
+                        <div class="title">待收货</div>
+                    </a>
+                </div>
+                <div class="weui-flex-item">
+                    <a class="item-box" href="/m/order/list?way_type=4">
+                        <div><span class="icon iconfont position-re" style="color: #ff9f50">&#xe625;<span class='weui-badge position-ab hide uncomment' >1</span></span></div>
+                        <div class="title">待评价</div>
+                    </a>
+                </div>
+                <!--<div class="weui-flex-item">
+                    <a class="item-box">
+                        <div><span class="icon iconfont">&#xe643;</span></div>
+                        <div class="title">售后</div>
+                    </a>
+                </div>-->
+            </div>
+        </div>
+    </div>
+    <div class="order-box lists-box" >
+        <div class="weui_cells weui_cells_access">
+            <a class="weui_cell " href="javascript:;" style="padding-bottom: 0;">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>必看清单</p>
+                </div>
+
+            </a>
+        </div>
+        <div class="view-lists">
+            <div class="weui_grids grids-small">
+                @if (ViewData["ViewStatistic"].ToString() == "1")
+                {
+                    <!--<a href="/m/Statistic/index" class="grid">
+                        <div class="weui_grid_icon">
+                            <span class="icon iconfont">&#xe725;</span>
+                        </div>
+                        <p class="weui_grid_label">
+                            智能办公
+                        </p>
+                    </a>-->
+                }
+				@if (ViewData["IsWeiXin"]=="1"){
+                <!--<a href="/m/user/bind" class="grid">
+                    <div class="weui_grid_icon">
+                        <span class="icon iconfont">&#xe6f0;</span>
+                    </div>
+                    <p class="weui_grid_label">
+                        会员注册
+                    </p>
+                </a>-->
+               }
+               else
+               {
+               	<!--<a href="/m/account/login" class="grid">
+                    <div class="weui_grid_icon">
+                        <span class="icon iconfont">&#xe6f0;</span>
+                    </div>
+                    <p class="weui_grid_label">
+                        会员注册
+                    </p>
+                </a>-->
+               }
+                <!--<a href="/m/seller/service" class="grid">
+                    <div class="weui_grid_icon">
+                        <span class="icon iconfont">&#xed0d;</span>
+                    </div>
+                    <p class="weui_grid_label">
+                        服务中心
+                    </p>
+                </a>-->
+                <!--<a href="/m/activity/Gift" class="grid">
+                    <div class="weui_grid_icon">
+                        <span class="icon iconfont">&#xe756</span>
+                    </div>
+                    <p class="weui_grid_label">
+                        积分商城
+                    </p>
+                </a>-->
+                <a href="/m/usercenter/myscore" class="grid">
+                    <div class="weui_grid_icon">
+                        <svg class="icon" aria-hidden="true">
+	                        <use xlink:href="#icon-wodejifen"></use>
+	                    </svg>
+                    </div>
+                    <p class="weui_grid_label">
+                        我的积分
+                    </p>
+                </a>
+                <a href="/m/usercenter/MyGroup" class="grid">
+                    <div class="weui_grid_icon">
+                        <svg class="icon" aria-hidden="true">
+	                        <use xlink:href="#icon-wodetuandui"></use>
+	                    </svg>
+                    </div>
+                    <p class="weui_grid_label">
+                        我的好友
+                    </p>
+                </a>
+                <a href="/m/usercenter/Favorites?IsApp=@WorkContext.IsApp" class="grid">
+                    <div class="weui_grid_icon">
+                        <svg class="icon" aria-hidden="true">
+	                        <use xlink:href="#icon-wodeshoucang"></use>
+	                    </svg>
+                    </div>
+                    <p class="weui_grid_label">
+                        我的收藏
+                    </p>
+                </a>
+                
+                <a href="/m/cart/index" class="grid">
+                    <div class="weui_grid_icon">
+                        <svg class="icon" aria-hidden="true">
+	                        <use xlink:href="#icon-gouwuche3"></use>
+	                    </svg>
+                    </div>
+                    <p class="weui_grid_label">
+                        购物车
+                    </p>
+                </a>
+                <!--<a href="/m/activity/CountDown" class="grid">
+                    <div class="weui_grid_icon">
+                        <span class="icon iconfont">&#xe70e;</span>
+                    </div>
+                    <p class="weui_grid_label">
+                        限时购
+                    </p>
+                </a>-->
+                <!--<a href="/m/usercenter/MyCoupons" class="grid">
+                    <div class="weui_grid_icon" style="position: relative;">
+                        <svg class="icon" aria-hidden="true">
+	                        <use xlink:href="#icon-youhuiquan"></use>
+	                    </svg>
+                        <span class="cart-nums"></span>
+                    </div>
+                    <p class="weui_grid_label">
+                        优惠券
+                    </p>
+                </a>-->
+                <a href="/m/WebSite/ContactUs" class="grid">
+                    <div class="weui_grid_icon" style="position: relative;">
+                        <!--<svg class="icon" aria-hidden="true">
+	                        <use xlink:href="#icon-youhuiquan"></use>
+	                    </svg>-->
+	                    <icon class='iconfont kefu'>&#xe7b0;</icon>
+                        <span class="cart-nums" ></span>
+                    </div>
+                    <p class="weui_grid_label" >
+                        客服
+                    </p>
+                </a>
+                <!--<a href="/m/activity/bargain" class="grid">
+                    <div class="weui_grid_icon">
+                        <i class="iconfont icon8">&#xe611;</i>
+                    </div>
+                    <p class="weui_grid_label">
+                        砍价
+                    </p>
+                </a>-->
+                <!--<a href="/m/activity/group" class="grid">
+                    <div class="weui_grid_icon">
+                        <i class="iconfont icon8">&#xe635;</i>
+                    </div>
+                    <p class="weui_grid_label">
+                        拼团
+                    </p>
+                </a>
+                 <a href="/m/activity/groupbuy" class="grid">
+                    <div class="weui_grid_icon">
+                        <i class="iconfont icon8">&#xe608;</i>
+                    </div>
+                    <p class="weui_grid_label">
+                        团购
+                    </p>
+                </a>-->
+                <!--<a href="/m/activity/FirstBuy" class="grid">
+                    <div class="weui_grid_icon">
+                        <span class="icon iconfont">&#xe73b;</span>
+                    </div>
+                    <p class="weui_grid_label">
+                        新人专享
+                    </p>
+                </a>-->
+                
+				<a href="/m/usercenter/address" class="grid">
+                    <div class="weui_grid_icon">
+                        <svg class="icon" aria-hidden="true">
+	                        <use xlink:href="#icon-shouhuodizhi"></use>
+	                    </svg>
+                    </div>
+                    <p class="weui_grid_label">
+                        收货地址
+                    </p>
+                </a>
+                
+                <a href="/m/shop/shopcenter" class="grid">
+                    <div class="weui_grid_icon">
+                        <svg class="icon" aria-hidden="true">
+	                        <use xlink:href="#icon-shangjiazhongxin"></use>
+	                    </svg>
+                    </div>
+                    <p class="weui_grid_label">
+                        商家中心
+                    </p>
+                </a>
+                <a href="/m/usercenter/authentication" class="grid">
+                    <div class="weui_grid_icon">
+                        <svg class="icon" aria-hidden="true">
+	                        <use xlink:href="#icon-anquanzhongxin"></use>
+	                    </svg>
+                    </div>
+                    <p class="weui_grid_label">
+                        安全中心
+                    </p>
+                </a>
+                <a href="javascript:;" onclick="supercodeJump(0)" class="grid">
+                    <div class="weui_grid_icon">
+                        <svg class="icon" aria-hidden="true">
+	                        <use xlink:href="#icon-chaojima"></use>
+	                    </svg>
+                    </div>
+                    <p class="weui_grid_label">
+                        超级码
+                    </p>
+                </a>
+                <a href="/m/article/list?cateid=2715" class="grid">
+                    <div class="weui_grid_icon">
+                        <svg class="icon" aria-hidden="true">
+	                        <use xlink:href="#icon-bangzhuzhongxin"></use>
+	                    </svg>
+                    </div>
+                    <p class="weui_grid_label">
+                        帮助中心
+                    </p>
+                </a>
+                <a href="/m/user/qrcodead" class="grid">
+                    <div class="weui_grid_icon">
+                        <svg class="icon" aria-hidden="true">
+	                        <use xlink:href="#icon-tuiguangerweima"></use>
+	                    </svg>
+                    </div>
+                    <p class="weui_grid_label">
+                        推广二维码
+                    </p>
+                </a>
+                <a href="javascript:;" onclick="serviceJump()" class="grid">
+                    <div class="weui_grid_icon">
+                        <svg class="icon" aria-hidden="true">
+	                        <use xlink:href="#icon-fuwuzhongxin"></use>
+	                    </svg>
+                    </div>
+                    <p class="weui_grid_label">
+                        服务中心
+                    </p>
+                </a>
+                <!--<a href="/m/usercenter/sign" class="grid">
+                    <div class="weui_grid_icon">
+                        <span class="icon iconfont">&#xe780;</span>
+                    </div>
+                    <p class="weui_grid_label">
+                        签到
+                    </p>
+                </a>-->
+                
+
+                <!--<a href="/m/usercenter/vipcard" class="grid">
+                    <div class="weui_grid_icon">
+                        <span class="icon iconfont">&#xe887;</span>
+                    </div>
+                    <p class="weui_grid_label">
+                        会员卡
+                    </p>
+                </a>
+
+                <a href="/m/user/QrcodeAd" class="grid">
+                    <div class="weui_grid_icon">
+                        <span class="icon iconfont">&#xe6d0;</span>
+                    </div>
+                    <p class="weui_grid_label">
+                        微信二维码
+                    </p>
+                </a>
+                <a href="/m/usercenter/UserMoney" class="grid">
+                    <div class="weui_grid_icon">
+                        <span class="icon iconfont">&#xe77e;</span>
+                    </div>
+                    <p class="weui_grid_label">
+                        我的钱包
+                    </p>
+                </a>
+
+                <a href="/m/usercenter/ShareBonus" class="grid">
+                    <div class="weui_grid_icon">
+                        <span class="icon iconfont">&#xe77b;</span>
+                    </div>
+                    <p class="weui_grid_label">
+                        分享奖
+                    </p>
+                </a>-->
+
+                @if (ViewData["IsLeader"].ToString() == "1")
+                {
+                    <!--<a href="/m/usercenter/LeaderBonus" class="grid">
+                        <div class="weui_grid_icon">
+                            <span class="icon iconfont">&#xe74a;</span>
+                        </div>
+                        <p class="weui_grid_label">
+                            导购奖
+                        </p>
+                    </a>-->
+                }
+                @if (ViewData["IsLeader"].ToString() == "0")
+                {
+                    <!--<a href="/m/usercenter/LeaderJoin" class="grid">
+                        <div class="weui_grid_icon">
+                            <span class="icon iconfont">&#xe735;</span>
+                        </div>
+                        <p class="weui_grid_label">
+                            导购申请
+                        </p>
+                    </a>-->
+                }
+                
+                @if (ViewData["ViewStatistic"].ToString() == "1")
+                {
+                    <!--<a href="/m/Statistic/SaleSum" class="grid">
+                        <div class="weui_grid_icon">
+                            <span class="icon iconfont">&#xe718;</span>
+                        </div>
+                        <p class="weui_grid_label">
+                            数据分析
+                        </p>
+                    </a>-->
+                }
+                
+                
+                <!--<a href="/m/usercenter/MyScore" class="grid">
+                    <div class="weui_grid_icon">
+                        <span class="icon iconfont">&#xe729;</span>
+                    </div>
+                    <p class="weui_grid_label">
+                        我的积分
+                    </p>
+                </a>-->
+
+                
+                <!--<a href="javascript:;" class="grid">
+                    <div class="weui_grid_icon">
+                        <span class="icon iconfont">&#xe6ce;</span>
+                    </div>
+                    <p class="weui_grid_label">
+                        帮助中心
+                    </p>
+                </a>-->
+                <!--<a href="/m/usercenter/OpenPacket" class="grid">
+                    <div class="weui_grid_icon">
+                        <span class="icon iconfont">&#xe67f;</span>
+                    </div>
+                    <p class="weui_grid_label">
+                        拆红包
+                    </p>
+                </a>-->
+            </div>
+        </div>
+        
+    </div>
+    	<div class="logout-box">
+	@if (!Yitao.Core.WebHelper.IsWeiXin())
+    {
+	        <a href="/m/Account/Logout" class="logout">
+	            退出登录
+	        </a>
+    }
+    	</div>
+
+
+    @if (ViewData["IsWeiXin"]=="1"){
+    <div class="footer">
+        <div class="weui-flex">
+
+        </div>
+    </div>
+    }
+    else
+    {
+	    if(WorkContext.IsApp==1){
+	
+	    }else{
+	    <div class="footer">
+	        <div class="weui-flex">
+	
+	        </div>
+	    </div>
+	
+	    }
+    }
+    <div class="curtain hide">
+				<div class="loader Rotation"></div>
+				<div class="loadTit">
+					<icon class='icon iconfont'>&#xe649;</icon>
+				</div>
+	</div>
+    <script id="tpl-footer" type="text/html">
+        <% for(var i in NavBar) { %>
+		<div class="weui-flex-item">
+            <a href="<%=NavBar[i].MenuUrl%>" class="item-box">
+                <div>
+				<!--<img src="<%=NavBar[i].MenuPic%>?w=50&h=50" alt="" style="display: block; width: 0.5rem; height: 0.5rem; margin: 0.06rem auto;" />-->
+				<span class="icon iconfont"  style="color:<%=NavBar.Color%>"><%=NavBar[i].MenuCode%></span>
+				</div>
+                <div class="title"><%=NavBar[i].MenuName%></div>
+            </a>
+        </div>
+        <% } %>
+    </script>
+    <script type="text/javascript">
+        var IsApp = "@WorkContext.IsApp";
+    	function serviceJump(){
+    		$.ajax({
+                type: "get",
+                url: "/Api/Seller/IsAgentJoin?UserId=@{@WorkContext.Uid}&t="+Math.random(),
+                async: true,
+                success: function (rel) {
+					if(rel.code==1){
+						window.location.href="/m/seller/servicejoin?IsApp="+IsApp;
+					}else if(rel.code==2){
+						window.location.href="/m/seller/service?IsApp="+IsApp;
+					}else{
+						$.alert(rel.message);
+					}
+                   
+                }
+            });
+    	}
+    	var userType = "@WorkContext.UserInfo.UserType";
+    	function supercodeJump(val){
+            //val==0 暂时屏蔽超级玛  val==1开放此功能
+            if(val == 0){
+                $.alert("待开放");
+                return false;
+            }else{
+                if(Number(userType)<3){
+                    $.alert("您还不是商户，请先在‘商户中心’ 入驻商家，然后再申请超级码",function(){
+                        //window.location.href="/m/shop/shopcenter";
+                    });
+                }else{
+                    window.location.href="/m/seller/supercode?IsApp="+'@WorkContext.IsApp';
+                }
+                /*$.ajax({
+                    type: "get",
+                    url: "/Api/Seller/IsAgentJoin?UserId=@{@WorkContext.Uid}&t="+Math.random(),
+                    async: true,
+                    success: function (rel) {
+                        if(rel.code==1){
+                            window.location.href="/m/seller/servicejoin?IsApp=@{@WorkContext.Uid}";
+                        }else if(rel.code==2){
+                            window.location.href="/m/seller/service?IsApp=@{@WorkContext.Uid}";
+                        }else{
+                            $.alert(rel.message);
+                        }
+                       
+                    }
+                });*/
+            }
+    		
+    	}
+    	
+        $(function () {
+            $.ajax({
+                type: "get",
+                url: "/m/tool/navbar",
+                async: true,
+                success: function (rel) {
+
+                    var rs = JSON.parse(rel);
+                    if (rs.Code == 1) {
+                        var tplx = document.getElementById('tpl-footer').innerHTML;
+                        var html = tpl(tplx, rs.Data);
+                        $(".footer .weui-flex").append(html);
+                    }
+                }
+            });
+            $.ajax({
+                type: "get",
+                url: "/Api/Statistic/UserOrders?userid="+'@WorkContext.Uid',
+                async: true,
+                success: function (rel) {
+                     console.log(rel)
+                     if(rel.code==1){
+                     	var data=rel.data;
+                     	if(data.unsend!=0){
+                     		$('.unsend').removeClass('hide');
+                     		$('.unsend').text(data.unsend);
+                     	}
+                     	if(data.unsave!=0){
+                     		$('.unsave').removeClass('hide');
+                     		$('.unsave').text(data.unsave);
+                     	}
+                     	if(data.unpay!=0){
+                     		$('.unpay').removeClass('hide');
+                     		$('.unpay').text(data.unpay);
+                     	}
+                     	if(data.uncomment!=0){
+                     		$('.uncomment').removeClass('hide');
+                     		$('.uncomment').text(data.uncomment);
+                     	}
+                     }
+                }
+            });
+        });
+    </script>
+</body>
+
+
+</html>
+
